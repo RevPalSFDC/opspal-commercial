@@ -1,17 +1,35 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week focused on platform stability improvements that ensure your OpsPal workspace runs smoothly. We enhanced Salesforce deployment reliability with better error recovery and improved data validation to catch potential issues before they impact your workflows. Additionally, we expanded our skill catalog to 683 available automation skills across 25 categories, giving you more options for customizing your RevOps processes.",
-  "published_at": "2026-04-03T23:32:55.662Z",
+  "summary": "This week brought major workflow automation improvements with a new policy engine that lets you define how work should flow through your revenue operations processes. We also expanded our skill catalog to 683 capabilities across 25 categories and fixed critical deployment issues in Salesforce and HubSpot that were preventing automations from running properly.",
+  "published_at": "2026-04-04T01:17:12.810Z",
   "week_start": "2026-03-30",
-  "week_end": "2026-04-03",
+  "week_end": "2026-04-04",
   "has_breaking": false,
-  "total_commits": 126,
+  "total_commits": 128,
   "entries": [
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New skill promotion feature available",
+      "headline": "New policy engine automates work lifecycle management",
+      "details": null,
+      "commits": [
+        "a67a232"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Work tracking now captures all activity automatically",
+      "details": null,
+      "commits": [
+        "7b44e86"
+      ]
+    },
+    {
+      "category": "new",
+      "plugin": "Core Platform",
+      "headline": "New promote-skills command available",
       "details": null,
       "commits": [
         "5af9bf4"
@@ -20,7 +38,7 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Expanded skill catalog now includes 683 automation skills across 25 categories",
+      "headline": "Skill catalog expanded to 683 skills across 25 categories",
       "details": null,
       "commits": [
         "ef2ee1a"
@@ -29,7 +47,7 @@
     {
       "category": "improved",
       "plugin": "General",
-      "headline": "Enhanced data import reliability and process documentation",
+      "headline": "Enhanced data import reliability and workflow guidance",
       "details": null,
       "commits": [
         "b8f0ed3"
@@ -38,7 +56,7 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now recover automatically from errors",
+      "headline": "Salesforce deployments recover automatically from errors",
       "details": null,
       "commits": [
         "48d4393"
@@ -47,7 +65,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Plugin names now display consistently throughout the platform",
+      "headline": "Plugin names now display consistently",
       "details": null,
       "commits": [
         "510f9cc"
@@ -55,38 +73,20 @@
     },
     {
       "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Historical activity data for weeks 12 and 13 now displays correctly",
-      "details": null,
-      "commits": [
-        "fe104ff"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Platform updates now include latest marketplace features",
-      "details": null,
-      "commits": [
-        "d4d0188"
-      ]
-    },
-    {
-      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce validation catches state and country field configuration issues",
+      "headline": "Salesforce state and country fields now deploy correctly",
       "details": [
-        "Automatically detects when state and country fields might cause deployment problems",
-        "Validates field references before making changes to prevent errors"
+        "Detects state and country picklist configurations that could cause deployment failures",
+        "Enforces proper deployment paths and adds automatic retry capabilities"
       ],
       "commits": [
         "fcad945"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now run more reliably",
+      "headline": "Complex Salesforce deployments now process more reliably",
       "details": null,
       "commits": [
         "a1075f7"
@@ -95,7 +95,7 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "HubSpot automations now launch without errors",
+      "headline": "HubSpot automations work again after missing file restore",
       "details": null,
       "commits": [
         "c53235d"
