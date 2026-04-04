@@ -730,6 +730,30 @@ Example:
 - "Grant `State__c` FLS only" stays with `sfdc-permission-orchestrator`.
 - "Deploy Auto_Assign flow only" stays with `sfdc-deployment-manager`.
 
+### Desktop vs CLI: Token Store Split
+
+**Symptom:** `sf org list` shows fewer orgs on Claude Code Desktop than on CLI (WSL).
+
+**Root Cause:** Desktop (Git Bash) resolves `~/.sfdx/` to `C:\Users\<user>\.sfdx\` while WSL resolves it to `/home/<user>/.sfdx/`. These are separate physical directories with separate authenticated orgs.
+
+**Solution 1: Set `SF_DATA_DIR`** (quick)
+```bash
+# In your .env file or Windows System Environment Variables:
+export SF_DATA_DIR="/c/Users/<user>/.sfdx"
+```
+
+**Solution 2: Symlink stores** (recommended)
+```bash
+# From WSL — make WSL use the Windows store:
+rm -rf ~/.sfdx
+ln -s /mnt/c/Users/<user>/.sfdx ~/.sfdx
+```
+
+**Solution 3: Always use `--target-org`**
+Rather than relying on the default org (which is environment-specific), always qualify SF commands with `--target-org <alias>`.
+
+**See also:** `docs/CROSS_PLATFORM_GUIDE.md` for full Desktop/CLI compatibility details.
+
 ### "No source-backed components present"
 ```bash
 node scripts/lib/deployment-source-validator.js validate-source ./force-app

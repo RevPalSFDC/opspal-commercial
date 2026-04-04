@@ -4,14 +4,14 @@
 # =============================================================================
 # Purpose: Validate SOP config at session start. Emits system message with
 #          policy count or validation errors.
-# Feature flag: SOP_ENABLED (default: 0)
+# Feature flag: SOP_ENABLED (default: 1)
 # Mutation boundary: Read-only — only reads config files and emits messages.
 # =============================================================================
 
 set -euo pipefail
 
 # Feature flag
-SOP_ENABLED="${SOP_ENABLED:-0}"
+SOP_ENABLED="${SOP_ENABLED:-1}"
 [ "$SOP_ENABLED" != "1" ] && exit 0
 
 # Dispatcher guard

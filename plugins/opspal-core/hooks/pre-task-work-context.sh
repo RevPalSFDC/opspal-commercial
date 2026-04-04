@@ -92,7 +92,7 @@ WORK_INDEX_STALE_DAYS="${WORK_INDEX_STALE_DAYS:-7}"
 # Read hook input
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 normalize_pretool_agent_event "$HOOK_INPUT"

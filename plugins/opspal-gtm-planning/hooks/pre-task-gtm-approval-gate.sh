@@ -66,7 +66,7 @@ fi
 # Read hook input
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
-  HOOK_INPUT=$(cat)
+  HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 # Extract agent from input

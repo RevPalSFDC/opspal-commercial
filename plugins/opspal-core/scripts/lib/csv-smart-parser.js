@@ -740,4 +740,16 @@ Features:
     }
 }
 
-module.exports = { CSVSmartParser, SalesforceAliases };
+/**
+ * Normalize line endings in a string (CRLF/CR → LF).
+ * Shared utility for cross-platform CSV and text file handling.
+ * Desktop (Git Bash on Windows) produces CRLF more frequently than WSL/Linux.
+ * @param {string} content - Raw content to normalize
+ * @returns {string} Content with LF-only line endings
+ */
+function normalizeLineEndings(content) {
+  if (!content) return content;
+  return content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
+module.exports = { CSVSmartParser, SalesforceAliases, normalizeLineEndings };

@@ -53,7 +53,7 @@ if ! command -v node &> /dev/null; then
 fi
 
 # Read hook input
-HOOK_INPUT=$(cat)
+HOOK_INPUT=$(cat 2>/dev/null || true)
 
 # Extract tool information
 TOOL_NAME=$(echo "$HOOK_INPUT" | jq -r '.tool_name // ""' 2>/dev/null || echo "")

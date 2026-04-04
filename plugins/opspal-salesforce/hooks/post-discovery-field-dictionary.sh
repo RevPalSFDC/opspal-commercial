@@ -40,7 +40,7 @@ FIELD_DICT_SCRIPT="$PLUGIN_ROOT/scripts/lib/field-dictionary-generator.js"
 # Read hook input (Stop hook receives transcript info)
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 # Early exit if disabled

@@ -18,6 +18,16 @@
         "description": "Environment mode",
         "default": "production",
         "enum": ["development", "production", "test"]
+      },
+      {
+        "name": "NODE_BIN",
+        "description": "Explicit Node.js binary path — used by node-wrapper.sh on Desktop where node may not be on PATH",
+        "detection": "auto-discovered by node-wrapper.sh fallback chain"
+      },
+      {
+        "name": "OPSPAL_PLATFORM",
+        "description": "Detected platform identifier (git-bash, wsl, linux, macos)",
+        "detection": "auto-set by env-normalize.sh"
       }
     ],
     "dependencies": {
@@ -89,6 +99,17 @@
           "validation": {
             "pattern": "^\\d+\\.0$"
           }
+        },
+        {
+          "name": "SF_DATA_DIR",
+          "description": "Override SF token store location — use to share tokens between CLI (WSL) and Desktop (Git Bash) environments",
+          "example": "/c/Users/myuser/.sfdx"
+        },
+        {
+          "name": "SFDX_STATE_FOLDER",
+          "description": "Legacy override for .sfdx directory location (prefer SF_DATA_DIR)",
+          "deprecated": true,
+          "useInstead": "SF_DATA_DIR"
         }
       ],
       "auth": {

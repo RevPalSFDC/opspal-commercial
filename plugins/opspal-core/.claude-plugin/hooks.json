@@ -347,8 +347,8 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-dispatcher.sh",
-            "timeout": 30,
-            "description": "Sequential SessionStart dispatcher: first-run → init → silent-failure-check → envcheck → repo-sync → capture-init"
+            "timeout": 40,
+            "description": "Sequential SessionStart dispatcher: first-run → init → silent-failure-check → envcheck → repo-sync → capture-init → post-update"
           }
         ]
       }

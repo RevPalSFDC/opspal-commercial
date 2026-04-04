@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # Feature flag
-SOP_ENABLED="${SOP_ENABLED:-0}"
+SOP_ENABLED="${SOP_ENABLED:-1}"
 [ "$SOP_ENABLED" != "1" ] && exit 0
 
 # Dispatcher guard
@@ -19,7 +19,7 @@ SOP_ENABLED="${SOP_ENABLED:-0}"
 
 # Read input
 HOOK_INPUT=""
-[ ! -t 0 ] && HOOK_INPUT=$(cat)
+[ ! -t 0 ] && HOOK_INPUT=$(cat 2>/dev/null || true)
 [ -z "$HOOK_INPUT" ] && exit 0
 
 # jq required

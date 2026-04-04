@@ -60,7 +60,7 @@ if [[ "$ENABLED" != "1" ]]; then
 fi
 
 # Read hook input
-HOOK_INPUT=$(cat)
+HOOK_INPUT=$(cat 2>/dev/null || true)
 USER_MESSAGE=$(echo "$HOOK_INPUT" | jq -r '.user_message // .userPrompt // .prompt // .userMessage // .message // ""' 2>/dev/null || echo "")
 
 # Skip empty messages

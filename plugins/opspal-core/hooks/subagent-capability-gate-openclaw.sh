@@ -120,8 +120,8 @@ if [[ -z "$ORG_SLUG" ]]; then
   exit 0
 fi
 
-RESOLVER="${SUBAGENT_CAPABILITY_RESOLVER:-/home/chris/Desktop/RevPal/Agents/openclaw/scripts/lib/subagent_capability_policy.py}"
-WORKSPACE_ROOT="${SUBAGENT_CAPABILITY_WORKSPACE_ROOT:-/home/chris/Desktop/RevPal/workspace}"
+RESOLVER="${SUBAGENT_CAPABILITY_RESOLVER:-}"
+WORKSPACE_ROOT="${SUBAGENT_CAPABILITY_WORKSPACE_ROOT:-}"
 
 if [[ ! -f "$RESOLVER" ]]; then
   if [[ "$DEFAULT_MODE" == "enforce" ]]; then

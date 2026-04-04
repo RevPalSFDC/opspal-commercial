@@ -29,7 +29,7 @@ THRESHOLD="${PLANNING_THRESHOLD:-0}"
 # Read hook input from stdin if available (Stop hook interface)
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 # If no assessment file provided, try to find the most recent one

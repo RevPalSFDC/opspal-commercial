@@ -606,6 +606,10 @@ Scripts for distributed tracing, audit logging, taxonomy classification, API cac
 
 | Script | Purpose |
 |--------|---------|
+| `platform-helpers.sh` | Cross-platform shell detection (WSL, Git Bash, macOS, Linux) |
+| `platform-utils.js` | Cross-platform JS detection (mirrors platform-helpers.sh) |
+| `node-wrapper.sh` | Node.js binary discovery for Desktop/GUI contexts |
+| `env-normalize.sh` | Shared environment normalizer — source at top of hooks |
 | `trace-context.js` | Correlation IDs across tool calls |
 | `audit-log.js` | Track mutations with before/after state |
 | `taxonomy-classifier.js` | 12-category reflection classification |

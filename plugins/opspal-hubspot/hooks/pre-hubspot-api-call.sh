@@ -52,7 +52,7 @@ HOOK_INPUT=""
 if [ -t 0 ]; then
     REQUEST_JSON="${2:-}"
 else
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 
     if [[ -n "$HOOK_INPUT" ]] && echo "$HOOK_INPUT" | jq -e . >/dev/null 2>&1; then
         # Claude hook input shape

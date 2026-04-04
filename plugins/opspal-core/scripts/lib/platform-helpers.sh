@@ -19,6 +19,7 @@
 _PLATFORM_HELPERS_LOADED="${_PLATFORM_HELPERS_LOADED:-}"
 _PLATFORM_IS_WSL=""
 _PLATFORM_IS_MACOS=""
+_PLATFORM_IS_GIT_BASH=""
 _PLATFORM_TYPE=""
 
 # =============================================================================
@@ -56,7 +57,35 @@ is_macos() {
 }
 
 ##
-# Check if running on native Linux (not WSL)
+# Check if running in Git Bash / MINGW / MSYS2 / Cygwin (Windows native shell)
+# This is the typical shell for Claude Code Desktop on Windows.
+# Returns 0 (true) if Git Bash, 1 (false) otherwise
+##
+is_git_bash() {
+  if [ -z "$_PLATFORM_IS_GIT_BASH" ]; then
+    case "$(uname -s 2>/dev/null)" in
+      MINGW*|MSYS*|CYGWIN*)
+        _PLATFORM_IS_GIT_BASH="true"
+        ;;
+      *)
+        _PLATFORM_IS_GIT_BASH="false"
+        ;;
+    esac
+  fi
+  [ "$_PLATFORM_IS_GIT_BASH" = "true" ]
+}
+
+##
+# Check if running in a Desktop GUI context (Git Bash on Windows).
+# Alias for is_git_bash — use whichever reads better in your code.
+# Returns 0 (true) if Desktop mode, 1 (false) otherwise
+##
+is_desktop_mode() {
+  is_git_bash
+}
+
+##
+# Check if running on native Linux (not WSL, not Git Bash)
 # Returns 0 (true) if Linux, 1 (false) otherwise
 ##
 is_linux() {
@@ -69,7 +98,9 @@ is_linux() {
 ##
 get_platform() {
   if [ -z "$_PLATFORM_TYPE" ]; then
-    if is_wsl; then
+    if is_git_bash; then
+      _PLATFORM_TYPE="git-bash"
+    elif is_wsl; then
       _PLATFORM_TYPE="wsl"
     elif is_macos; then
       _PLATFORM_TYPE="macos"

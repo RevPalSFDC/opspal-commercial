@@ -38,6 +38,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+export CLAUDE_PLUGIN_ROOT="${PLUGIN_ROOT}"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
 LAST_JSON=""
 
@@ -172,6 +173,9 @@ run_child_hook "${PLUGIN_ROOT}/hooks/session-start-repo-sync.sh"
 
 # Phase 6: Ambient pipeline initialization — last, once session is stable
 run_child_hook "${PLUGIN_ROOT}/hooks/session-capture-init.sh"
+
+# Phase 7: Post-update deferred tasks (version-change-gated, auto-safe steps only)
+run_child_hook "${PLUGIN_ROOT}/hooks/session-start-post-update.sh"
 
 # ---------------------------------------------------------------------------
 # Emit merged result

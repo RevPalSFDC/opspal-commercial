@@ -30,6 +30,14 @@ function getActualHomeDir() {
 }
 
 function resolveGlobalSfdxDir() {
+  // Cross-environment override: Desktop users can point at the WSL token store
+  // (or a shared symlinked store) by setting SF_DATA_DIR or SFDX_STATE_FOLDER.
+  if (process.env.SF_DATA_DIR) {
+    return process.env.SF_DATA_DIR;
+  }
+  if (process.env.SFDX_STATE_FOLDER) {
+    return process.env.SFDX_STATE_FOLDER;
+  }
   const homeDir = getActualHomeDir();
   if (!homeDir) {
     return null;

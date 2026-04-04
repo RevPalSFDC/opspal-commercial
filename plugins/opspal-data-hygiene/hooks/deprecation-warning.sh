@@ -10,7 +10,7 @@ set -euo pipefail
 
 HOOK_INPUT="{}"
 if [ ! -t 0 ]; then
-  HOOK_INPUT=$(cat)
+  HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 # Check if the prompt mentions data hygiene keywords

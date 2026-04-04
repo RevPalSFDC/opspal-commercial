@@ -32,6 +32,7 @@ const { execSync } = require('child_process');
 
 let _cachedPlatform = null;
 let _cachedWSL = null;
+let _cachedGitBash = null;
 let _cachedUbuntuVersion = null;
 
 // =============================================================================
@@ -74,6 +75,35 @@ function isLinux() {
 }
 
 /**
+ * Detect if running in Git Bash / MINGW / MSYS2 / Cygwin on Windows.
+ * This is the typical shell for Claude Code Desktop on Windows.
+ * Node.js in Git Bash reports process.platform as 'linux' (via MSYS2),
+ * so we check OSTYPE and MSYSTEM env vars instead.
+ * @returns {boolean}
+ */
+function isGitBash() {
+  if (_cachedGitBash !== null) return _cachedGitBash;
+
+  const ostype = (process.env.OSTYPE || '').toLowerCase();
+  const msystem = (process.env.MSYSTEM || '').toUpperCase();
+
+  _cachedGitBash = ostype.startsWith('msys') ||
+                   ostype.startsWith('cygwin') ||
+                   msystem.startsWith('MINGW') ||
+                   msystem.startsWith('MSYS');
+  return _cachedGitBash;
+}
+
+/**
+ * Check if running in a Desktop GUI context (Git Bash on Windows).
+ * Alias for isGitBash.
+ * @returns {boolean}
+ */
+function isDesktopMode() {
+  return isGitBash();
+}
+
+/**
  * @returns {boolean}
  */
 function isWindows() {
@@ -87,7 +117,8 @@ function isWindows() {
 function getPlatform() {
   if (_cachedPlatform) return _cachedPlatform;
 
-  if (isWSL()) _cachedPlatform = 'wsl';
+  if (isGitBash()) _cachedPlatform = 'git-bash';
+  else if (isWSL()) _cachedPlatform = 'wsl';
   else if (isMacOS()) _cachedPlatform = 'macos';
   else if (isWindows()) _cachedPlatform = 'windows';
   else _cachedPlatform = 'linux';
@@ -262,6 +293,7 @@ function getPlatformInfo() {
     platform: os.platform(),
     release: os.release(),
     isWSL: isWSL(),
+    isGitBash: isGitBash(),
     ubuntuVersion: getUbuntuVersion(),
     descriptive: getPlatform(),
     arch: os.arch(),
@@ -303,9 +335,13 @@ if (require.main === module) {
       console.log(isWSL() ? 'true' : 'false');
       process.exit(isWSL() ? 0 : 1);
       break;
+    case 'is-git-bash':
+      console.log(isGitBash() ? 'true' : 'false');
+      process.exit(isGitBash() ? 0 : 1);
+      break;
     default:
       console.error(`Unknown command: ${cmd}`);
-      console.error('Usage: platform-utils.js [info|platform|tmpdir|homedir|shell|browser-cmd|is-wsl]');
+      console.error('Usage: platform-utils.js [info|platform|tmpdir|homedir|shell|browser-cmd|is-wsl|is-git-bash]');
       process.exit(1);
   }
 }
@@ -316,6 +352,8 @@ module.exports = {
   isMacOS,
   isLinux,
   isWindows,
+  isGitBash,
+  isDesktopMode,
   getPlatform,
   getPlatformInfo,
   getUbuntuVersion,

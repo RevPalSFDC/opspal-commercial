@@ -11,8 +11,8 @@
 
 set -euo pipefail
 
-# Feature flag — disabled by default
-SOP_ENABLED="${SOP_ENABLED:-0}"
+# Feature flag — enabled by default
+SOP_ENABLED="${SOP_ENABLED:-1}"
 [ "$SOP_ENABLED" != "1" ] && exit 0
 
 # jq required
@@ -21,7 +21,7 @@ command -v jq &>/dev/null || exit 0
 # Read hook input
 HOOK_INPUT=""
 if [ "${DISPATCHER_CONTEXT:-0}" = "1" ] || [ ! -t 0 ]; then
-  HOOK_INPUT=$(cat)
+  HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 [ -z "$HOOK_INPUT" ] && exit 0
 

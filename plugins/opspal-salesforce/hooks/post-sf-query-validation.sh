@@ -28,7 +28,7 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 CROSS_PLATFORM_ROOT="${PLUGIN_ROOT}/../opspal-core"
 
 # Read hook input from stdin
-HOOK_INPUT=$(cat)
+HOOK_INPUT=$(cat 2>/dev/null || true)
 
 # Extract the completed command and result payload
 COMMAND=$(echo "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")

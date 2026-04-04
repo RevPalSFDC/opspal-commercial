@@ -43,7 +43,7 @@ fi
 
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
-  HOOK_INPUT=$(cat)
+  HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 extract_user_message() {

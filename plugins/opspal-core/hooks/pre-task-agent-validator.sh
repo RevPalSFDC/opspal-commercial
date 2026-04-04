@@ -666,7 +666,7 @@ main() {
     log "Hook triggered"
 
     # Read hook input from stdin
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 
     # Check if we have jq available
     if ! command -v jq &> /dev/null; then

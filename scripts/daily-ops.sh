@@ -16,7 +16,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="/home/chris/Desktop/RevPal/Agents/opspal-internal-plugins"
+REPO_ROOT="${OPSPAL_INTERNAL_PLUGINS_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." 2>/dev/null && pwd)}"
 LOG_DIR="${REPO_ROOT}/.claude/logs/daily-ops"
 DATE=$(date +%Y-%m-%d)
 TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%S)

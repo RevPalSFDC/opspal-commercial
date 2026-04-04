@@ -324,7 +324,7 @@ extract_routing_session_key() {
 }
 
 # Read hook input
-HOOK_INPUT=$(cat)
+HOOK_INPUT=$(cat 2>/dev/null || true)
 ROUTING_SESSION_KEY="$(extract_routing_session_key "$HOOK_INPUT" 2>&1)"
 RAW_USER_MESSAGE=$(extract_primary_user_message "$HOOK_INPUT")
 NORMALIZED_MESSAGE="$(normalize_user_message "$RAW_USER_MESSAGE" 2>&1)"

@@ -76,7 +76,7 @@ emit_pretool_response() {
 # Read hook input from stdin if available
 HOOK_INPUT="${1:-}"
 if [[ ! -t 0 ]]; then
-    HOOK_INPUT=$(cat)
+    HOOK_INPUT=$(cat 2>/dev/null || true)
 fi
 
 # Extract task description from environment or arguments

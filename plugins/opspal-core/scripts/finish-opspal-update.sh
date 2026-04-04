@@ -18,7 +18,7 @@ source "$COMMON_HELPER"
 
 show_usage() {
   cat <<EOF
-Usage: $0 [--skip-fix] [--verbose] [--no-cache-prune] [--no-pull] [--strict] [--workspace path] [--claude-root path] [--json] [--help]
+Usage: $0 [--skip-fix] [--verbose] [--no-cache-prune] [--no-pull] [--strict] [--workspace path] [--claude-root path] [--json] [--single-step stepN] [--help]
 
 Options:
   --skip-fix         Run validation in check-only mode
@@ -29,6 +29,7 @@ Options:
   --workspace <path> Run validation against a specific workspace root
   --claude-root <path> Use a specific ~/.claude root instead of auto-detecting
   --json             Emit the final report JSON to stdout
+  --single-step <N>  Run only one step (e.g. step7) then exit — used by session-start auto-update
   --help             Show this help text
 EOF
 }
@@ -41,6 +42,7 @@ MARKETPLACE_PULL=true
 STRICT_MODE=false
 STRICT_FLAG=""
 JSON_OUTPUT=false
+SINGLE_STEP=""
 WORKSPACE_ROOT_INPUT="${OPSPAL_UPDATE_WORKSPACE:-}"
 CLAUDE_ROOT_OVERRIDE="${OPSPAL_UPDATE_CLAUDE_ROOT:-}"
 while [[ $# -gt 0 ]]; do
@@ -84,6 +86,14 @@ while [[ $# -gt 0 ]]; do
       ;;
     --json)
       JSON_OUTPUT=true
+      shift
+      ;;
+    --single-step)
+      SINGLE_STEP="$2"
+      shift 2
+      ;;
+    --single-step=*)
+      SINGLE_STEP="${1#*=}"
       shift
       ;;
     --help)
@@ -2132,6 +2142,39 @@ step11_runbook_automation() {
   return 0
 }
 
+# ---------------------------------------------------------------------------
+# Single-step mode: run one step and exit (used by session-start auto-update)
+# ---------------------------------------------------------------------------
+if [ -n "$SINGLE_STEP" ]; then
+  detect_claude_roots
+  SKIP_FIX=false
+  EXIT_CODE=0
+
+  case "$SINGLE_STEP" in
+    step2)  step2_clean_stale_hooks ;;
+    step4)  step4_cache_prune ;;
+    step7)  step7_sync_claudemd ;;
+    step8)  step8_routing_promotion ;;
+    step9)  step9_subagent_remediation ;;
+    step10) step10_customization_migration ;;
+    step11) step11_runbook_automation ;;
+    *)
+      echo "Unknown step: $SINGLE_STEP (valid: step2, step4, step7, step8, step9, step10, step11)" >&2
+      exit 1
+      ;;
+  esac
+
+  exit $EXIT_CODE
+fi
+
+# ---------------------------------------------------------------------------
+# Full run: clear deferred auto-update queue (finish covers everything)
+# ---------------------------------------------------------------------------
+DEFERRED_TASKS_FILE="$OPSPAL_UPDATE_STATE_DIR/post-update-deferred-tasks.json"
+if [ -f "$DEFERRED_TASKS_FILE" ]; then
+  rm -f "$DEFERRED_TASKS_FILE" 2>/dev/null || true
+fi
+
 run_step "step0-marketplace-refresh" "Step 0: Marketplace refresh" "🔄 Step 0: Pulling latest from marketplace..." step0_marketplace_refresh
 run_step "step1-plugin-validation" "Step 1: Plugin Validation" "🔧 Step 1: Running plugin validation..." step1_plugin_validation
 run_step "step2-clean-stale-hooks" "Step 2: Clean stale plugin hooks and activate statusline" "🧹 Step 2: Cleaning stale plugin hooks and activating the OpsPal statusline..." step2_clean_stale_hooks
@@ -2192,6 +2235,12 @@ echo "   3. Commit updates to version control:"
 echo "      git add CLAUDE.md plugins/ .claude-plugins/"
 echo "      git commit -m 'chore: Update OpsPal plugins'"
 echo ""
+
+# Snapshot current plugin versions so session-start won't re-detect this update
+SNAPSHOT_SCRIPT="$SCRIPT_DIR/lib/post-update-version-snapshot.js"
+if [ -f "$SNAPSHOT_SCRIPT" ] && command -v node &>/dev/null; then
+  node "$SNAPSHOT_SCRIPT" --mode clear >/dev/null 2>&1 || true
+fi
 
 if [ $EXIT_CODE -eq 0 ]; then
   finalize_finish_script 0 "finish_completed" "Post-update validation completed successfully"
