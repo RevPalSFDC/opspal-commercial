@@ -1,0 +1,37 @@
+name: Sync Desktop Mirror
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-mirror:
+    name: Sync to opspal-claude-desktop-int
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Remove encrypted assets
+        run: |
+          ENC_COUNT=$(find . -name "*.enc" | wc -l)
+          find . -name "*.enc" -delete
+          echo "Removed $ENC_COUNT encrypted asset(s)"
+
+      - name: Push to Desktop mirror
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.DESKTOP_MIRROR_DEPLOY_KEY }}
+        with:
+          source-directory: '.'
+          destination-github-username: 'RevPalSFDC'
+          destination-repository-name: 'opspal-claude-desktop-int'
+          target-branch: 'main'
+          commit-message: 'Mirror sync from opspal-commercial ${{ github.sha }}'
+          create-target-branch-if-needed: true
