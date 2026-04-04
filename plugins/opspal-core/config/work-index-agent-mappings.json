@@ -110,6 +110,7 @@
     "customer-health-scorer": "report:health-scoring",
 
     "intelligent-intake-orchestrator": "consultation:project-intake",
+    "task-graph-orchestrator": "consultation:project-planning",
     "notebooklm-knowledge-manager": "report:knowledge-base",
     "client-notebook-orchestrator": "report:client-briefing",
     "field-dictionary-manager": "configuration:field-dictionary",

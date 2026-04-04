@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-03T00:59:36.066Z",
+  "buildDate": "2026-04-04T01:01:01.255Z",
   "totalAgents": 297,
   "totalAgentsFull": 300,
-  "totalCommands": 272,
-  "totalHooks": 261,
+  "totalCommands": 283,
+  "totalHooks": 265,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -46246,6 +46246,83 @@
       "triggerKeywords": [],
       "filePath": "opspal-core/commands/solution-validate.md"
     },
+    "opspal-core:sop-disable": {
+      "plugin": "opspal-core",
+      "name": "sop-disable",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-disable.md"
+    },
+    "opspal-core:sop-enable": {
+      "plugin": "opspal-core",
+      "name": "sop-enable",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-enable.md"
+    },
+    "opspal-core:sop-explain": {
+      "plugin": "opspal-core",
+      "name": "sop-explain",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-explain.md"
+    },
+    "opspal-core:sop-health": {
+      "plugin": "opspal-core",
+      "name": "sop-health",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-health.md"
+    },
+    "opspal-core:sop-init": {
+      "plugin": "opspal-core",
+      "name": "sop-init",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-init.md"
+    },
+    "opspal-core:sop-map": {
+      "plugin": "opspal-core",
+      "name": "sop-map",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-map.md"
+    },
+    "opspal-core:sop-new": {
+      "plugin": "opspal-core",
+      "name": "sop-new",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-new.md"
+    },
+    "opspal-core:sop-replay": {
+      "plugin": "opspal-core",
+      "name": "sop-replay",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-replay.md"
+    },
+    "opspal-core:sop-review": {
+      "plugin": "opspal-core",
+      "name": "sop-review",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-review.md"
+    },
+    "opspal-core:sop-test": {
+      "plugin": "opspal-core",
+      "name": "sop-test",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-test.md"
+    },
+    "opspal-core:sop-validate": {
+      "plugin": "opspal-core",
+      "name": "sop-validate",
+      "description": "",
+      "triggerKeywords": [],
+      "filePath": "opspal-core/commands/sop-validate.md"
+    },
     "opspal-core:startopspalupdate": {
       "plugin": "opspal-core",
       "name": "startopspalupdate",
@@ -48462,6 +48539,34 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "sop-lifecycle-dispatcher",
+        "description": "",
+        "file": "opspal-core/hooks/sop-lifecycle-dispatcher.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "sop-prompt-lifecycle-detector",
+        "description": "",
+        "file": "opspal-core/hooks/sop-prompt-lifecycle-detector.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "sop-session-init",
+        "description": "",
+        "file": "opspal-core/hooks/sop-session-init.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
+        "name": "sop-subagent-completion",
+        "description": "",
+        "file": "opspal-core/hooks/sop-subagent-completion.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "subagent-capability-gate-openclaw",
         "description": "",
         "file": "opspal-core/hooks/subagent-capability-gate-openclaw.sh",
@@ -49267,8 +49372,8 @@
   "stats": {
     "totalAgents": 297,
     "totalAgentsFull": 300,
-    "totalCommands": 272,
-    "totalHooks": 261,
+    "totalCommands": 283,
+    "totalHooks": 265,
     "totalRoutingRules": 0,
     "totalKeywords": 2607,
     "totalKeywordsFull": 2607,
@@ -49290,7 +49395,7 @@
       "SubagentStop": 7,
       "TaskCompleted": 1,
       "Stop": 8,
-      "Unknown": 138,
+      "Unknown": 142,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,

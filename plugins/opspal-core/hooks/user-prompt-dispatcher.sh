@@ -163,6 +163,7 @@ fi
 run_child_hook "${PLUGIN_ROOT}/hooks/user-prompt-first-run.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/routing-context-refresher.sh"
+run_child_hook "${PLUGIN_ROOT}/hooks/sop-prompt-lifecycle-detector.sh"
 
 # Phase 2: Primary governance engine — WRITES routing-state
 run_child_hook env \

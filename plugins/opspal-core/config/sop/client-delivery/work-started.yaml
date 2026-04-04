@@ -1,0 +1,30 @@
+id: sop-client-work-started
+schema_version: "1.0.0"
+version: "1.0.0"
+enabled: true
+scope: client-delivery
+event: work.started
+mode: recommend
+priority: 50
+description: "Sync Asana and work index when client delivery work begins. Starter policy — promote to enforce after /sop-map."
+when:
+  - field: context.work_item.classification
+    op: in
+    values: [audit, build, report, migration, configuration, consultation, support]
+  - field: event.confidence
+    op: in
+    values: [explicit, inferred_high]
+actions:
+  - type: asana
+    params:
+      action_type: add_comment
+      comment_text: "Work started: {{context.work_item.title}} ({{context.work_item.classification}})"
+  - type: work-index
+    params:
+      action_type: update_status
+      new_status: in-progress
+  - type: log
+    params:
+      level: info
+      message: "Client delivery work started: {{context.work_item.title}} for {{context.org_slug}}"
+mapping_ref: standard-client-boards

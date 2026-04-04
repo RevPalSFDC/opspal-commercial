@@ -176,6 +176,7 @@ if [ -z "$HOOK_INPUT" ]; then
 fi
 
 run_child_hook "${PLUGIN_ROOT}/hooks/post-assessment-work-index.sh"
+run_child_hook "${PLUGIN_ROOT}/hooks/sop-lifecycle-dispatcher.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/post-task-runbook-compliance-check.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/post-tool-use.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/post-tool-use-contract-validation.sh"

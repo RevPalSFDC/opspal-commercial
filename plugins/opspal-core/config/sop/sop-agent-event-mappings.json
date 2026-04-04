@@ -1,0 +1,87 @@
+{
+  "$schema": "https://revpal.io/schemas/sop-agent-event-mappings.json",
+  "version": "1.0.0",
+  "description": "Maps agent names to SOP event types and confidence levels for hook-based event emission",
+  "mappings": {
+    "intelligent-intake-orchestrator": {
+      "event": "intake.created",
+      "confidence": "inferred_high"
+    },
+    "task-graph-orchestrator": {
+      "event": "task_graph.created",
+      "confidence": "inferred_high"
+    },
+    "sfdc-cpq-assessor": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "audit",
+      "sub_type": "cpq-assessment"
+    },
+    "sfdc-revops-auditor": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "audit",
+      "sub_type": "revops-audit"
+    },
+    "sfdc-automation-auditor": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "audit",
+      "sub_type": "automation-audit"
+    },
+    "sfdc-architecture-auditor": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "audit",
+      "sub_type": "architecture-audit"
+    },
+    "hubspot-assessment-analyzer": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "audit",
+      "sub_type": "hubspot-assessment"
+    },
+    "sfdc-automation-builder": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "build",
+      "sub_type": "automation-build"
+    },
+    "sfdc-apex-developer": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "build",
+      "sub_type": "apex-development"
+    },
+    "sfdc-deployment-manager": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "build",
+      "sub_type": "deployment"
+    },
+    "sfdc-data-operations": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "migration",
+      "sub_type": "data-operations"
+    },
+    "sfdc-reports-dashboards": {
+      "event": "work.started",
+      "confidence": "inferred_high",
+      "classification": "report",
+      "sub_type": "dashboard-build"
+    }
+  },
+  "completion_agents": [
+    "sfdc-cpq-assessor",
+    "sfdc-revops-auditor",
+    "sfdc-automation-auditor",
+    "sfdc-architecture-auditor",
+    "hubspot-assessment-analyzer",
+    "sfdc-automation-builder",
+    "sfdc-apex-developer",
+    "sfdc-deployment-manager",
+    "sfdc-data-operations",
+    "sfdc-reports-dashboards"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://revpal.io/schemas/sop-mapping.schema.json",
+  "title": "SopMapping",
+  "description": "Schema for SOP target mapping definitions",
+  "type": "object",
+  "required": ["id", "schema_version", "targets"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Unique mapping identifier (kebab-case)"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version for forward compatibility"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Mapping content version"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable mapping description"
+    },
+    "workspace_gid": {
+      "type": "string",
+      "description": "Asana workspace GID (optional, for validation)"
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/MappingTarget" },
+      "description": "One-to-many target definitions"
+    }
+  },
+  "definitions": {
+    "MappingTarget": {
+      "type": "object",
+      "required": ["asana_project_gid"],
+      "additionalProperties": false,
+      "properties": {
+        "asana_project_gid": {
+          "type": "string",
+          "description": "Asana project GID"
+        },
+        "asana_section_gid": {
+          "type": "string",
+          "description": "Default section GID within the project"
+        },
+        "board_name": {
+          "type": "string",
+          "description": "Human-readable board/project name"
+        },
+        "match_criteria": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "classification": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Work classifications this target applies to"
+            },
+            "scope": {
+              "type": "string",
+              "enum": ["global", "revpal-internal", "client-delivery"],
+              "description": "Scope filter for this target"
+            },
+            "sub_type": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Sub-type filter for this target"
+            },
+            "org_slug": {
+              "type": "string",
+              "description": "Org-specific target"
+            }
+          },
+          "description": "Criteria for matching this target"
+        },
+        "field_defaults": {
+          "type": "object",
+          "description": "Default field values for Asana tasks created in this target"
+        }
+      }
+    }
+  }
+}

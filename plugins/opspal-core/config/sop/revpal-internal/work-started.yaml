@@ -1,0 +1,22 @@
+id: sop-revpal-work-started
+schema_version: "1.0.0"
+version: "1.0.0"
+enabled: true
+scope: revpal-internal
+event: work.started
+mode: recommend
+priority: 50
+description: "Log when RevPal internal work begins. Starter policy — promote to enforce after testing."
+when:
+  - field: event.confidence
+    op: in
+    values: [explicit, inferred_high]
+actions:
+  - type: log
+    params:
+      level: info
+      message: "RevPal internal work started: {{context.work_item.title}} ({{context.work_item.classification}})"
+  - type: work-index
+    params:
+      action_type: update_status
+      new_status: in-progress

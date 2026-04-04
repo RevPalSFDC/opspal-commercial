@@ -1,0 +1,9 @@
+id: standard-client-boards
+schema_version: "1.0.0"
+version: "1.0.0"
+description: "Default client delivery board routing. Configure targets via /sop-map."
+targets:
+  - asana_project_gid: "CONFIGURE_VIA_SOP_MAP"
+    board_name: "Client Delivery (configure via /sop-map)"
+    match_criteria:
+      classification: [audit, build, report, migration, configuration, consultation, support]

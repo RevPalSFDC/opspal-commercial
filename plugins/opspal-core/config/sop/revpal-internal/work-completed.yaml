@@ -1,0 +1,22 @@
+id: sop-revpal-work-completed
+schema_version: "1.0.0"
+version: "1.0.0"
+enabled: true
+scope: revpal-internal
+event: work.completed
+mode: recommend
+priority: 50
+description: "Log and update work index when RevPal internal work completes."
+when:
+  - field: event.confidence
+    op: in
+    values: [explicit, inferred_high]
+actions:
+  - type: log
+    params:
+      level: info
+      message: "RevPal internal work completed: {{context.work_item.title}}"
+  - type: work-index
+    params:
+      action_type: update_status
+      new_status: completed

@@ -1,0 +1,18 @@
+id: sop-global-work-blocked
+schema_version: "1.0.0"
+version: "1.0.0"
+enabled: true
+scope: global
+event: work.blocked
+mode: recommend
+priority: 30
+description: "Log blocked work events. Uses recommend mode for inferred_low confidence from prompt detection."
+actions:
+  - type: log
+    params:
+      level: warn
+      message: "Work blocked: {{context.work_item.title}} for {{context.org_slug}}"
+  - type: work-index
+    params:
+      action_type: update_status
+      new_status: blocked

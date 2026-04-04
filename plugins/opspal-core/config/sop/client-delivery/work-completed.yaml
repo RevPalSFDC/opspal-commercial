@@ -1,0 +1,27 @@
+id: sop-client-work-completed
+schema_version: "1.0.0"
+version: "1.0.0"
+enabled: true
+scope: client-delivery
+event: work.completed
+mode: recommend
+priority: 50
+description: "Update Asana and work index when client delivery work completes."
+when:
+  - field: event.confidence
+    op: in
+    values: [explicit, inferred_high]
+actions:
+  - type: asana
+    params:
+      action_type: add_comment
+    template: completion-update
+  - type: work-index
+    params:
+      action_type: update_status
+      new_status: completed
+  - type: log
+    params:
+      level: info
+      message: "Client delivery work completed: {{context.work_item.title}} for {{context.org_slug}}"
+mapping_ref: standard-client-boards

@@ -153,6 +153,9 @@ run_child_hook "${PLUGIN_ROOT}/hooks/post-investigation-execution-proof.sh"
 # Phase 4: Extract ambient signals — after all capture/verification is done
 run_child_hook "${PLUGIN_ROOT}/hooks/ambient-candidate-extractor.sh"
 
+# Phase 5: SOP lifecycle events
+run_child_hook "${PLUGIN_ROOT}/hooks/sop-subagent-completion.sh"
+
 # ---------------------------------------------------------------------------
 # Emit merged result
 # ---------------------------------------------------------------------------

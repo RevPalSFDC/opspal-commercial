@@ -158,6 +158,9 @@ if [[ "${SESSION_INIT_SHARED_STATE:-1}" == "1" ]] && [[ -s "$_SHARED_STATE" ]]; 
     source "$_SHARED_STATE" 2>/dev/null || true
 fi
 
+# Phase 2c: SOP registry initialization
+run_child_hook "${PLUGIN_ROOT}/hooks/sop-session-init.sh"
+
 # Phase 3: Early warning systems — detect failures before proceeding
 run_child_hook "${PLUGIN_ROOT}/hooks/pre-session-silent-failure-check.sh"
 

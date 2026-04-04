@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-01T17:56:01.040Z",
+  "generatedAt": "2026-04-04T01:09:43.722Z",
   "totals": {
-    "activeHooks": 98,
-    "coveredHooks": 86,
+    "activeHooks": 99,
+    "coveredHooks": 87,
     "allowlistedUntested": 12,
     "missingCoverage": 0
   },
@@ -470,6 +470,17 @@
       "matcher": "Agent",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/pre-task-runbook-policy-enforcer.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-core/hooks/pre-task-work-context.sh",
+      "plugin": "opspal-core",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/pre-task-work-context.test.js"
       ],
       "covered": true,
       "allowReason": null
@@ -1184,6 +1195,17 @@
       "allowReason": null
     },
     {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-deploy-manager-stop.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-deployment-manager",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
       "hookPath": "plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh",
       "plugin": "opspal-salesforce",
       "eventType": "SubagentStop",
@@ -1220,26 +1242,12 @@
       "allowReason": null
     },
     {
-      "hookPath": "plugins/opspal-salesforce/hooks/pre-task-context-loader.sh",
+      "hookPath": "plugins/opspal-salesforce/hooks/session-start-sf-context.sh",
       "plugin": "opspal-salesforce",
       "eventType": "SessionStart",
       "matcher": "*",
       "matchedTests": [
-        "plugins/opspal-core/test/hooks/unit/hubspot-pre-task-context-loader.test.js",
-        "plugins/opspal-core/test/hooks/unit/pre-task-context-loader.test.js",
         "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
-      ],
-      "covered": true,
-      "allowReason": null
-    },
-    {
-      "hookPath": "plugins/opspal-salesforce/hooks/session-start-agent-reminder.sh",
-      "plugin": "opspal-salesforce",
-      "eventType": "SessionStart",
-      "matcher": "*",
-      "matchedTests": [
-        "plugins/opspal-core/test/hooks/unit/salesforce.test.js",
-        "plugins/opspal-core/test/hooks/unit/session-start-agent-reminder.test.js"
       ],
       "covered": true,
       "allowReason": null
