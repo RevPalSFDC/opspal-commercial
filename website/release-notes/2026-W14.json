@@ -1,18 +1,31 @@
 {
   "slug": "2026-W14",
   "title": "Week of March 30, 2026",
-  "summary": "This week brought major improvements to automation reliability and Salesforce deployment handling. OpsPal now automatically recovers from deployment errors and better detects configuration issues that could break your workflows. The platform also expanded its skill library to 683 skills across 25 categories, giving you more automation capabilities for complex RevOps processes.",
-  "published_at": "2026-04-04T15:42:28.211Z",
+  "summary": "This week brought major improvements to OpsPal's automation capabilities with the launch of a new policy engine that lets you set up automated workflows for your revenue processes. We also expanded our skill catalog to 683 skills across 25 categories and fixed critical issues that were preventing Salesforce deployments and HubSpot integrations from working properly.",
+  "published_at": "2026-04-04T15:59:22.974Z",
   "week_start": "2026-03-30",
   "week_end": "2026-04-04",
   "has_breaking": false,
-  "total_commits": 132,
+  "total_commits": 135,
   "entries": [
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Enhanced desktop app compatibility across different operating systems",
+      "details": [
+        "The desktop application now works more reliably across Windows, Mac, and Linux systems"
+      ],
+      "commits": [
+        "55379e9"
+      ]
+    },
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Automated workflow policies now handle complex business rules",
-      "details": null,
+      "headline": "Added automated policy engine for work lifecycle management",
+      "details": [
+        "You can now set up automated rules that trigger actions based on specific conditions in your revenue processes"
+      ],
       "commits": [
         "a67a232"
       ]
@@ -20,16 +33,27 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved startup errors that prevented platform launch",
+      "headline": "Resolved startup errors that prevented OpsPal from launching",
       "details": null,
       "commits": [
         "75f2cf3"
       ]
     },
     {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restored automatic work tracking and context capture",
+      "details": [
+        "OpsPal now properly tracks your work progress and captures context for better automation"
+      ],
+      "commits": [
+        "7b44e86"
+      ]
+    },
+    {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "New command to promote skills across your automation library",
+      "headline": "Added promote skills command for capability management",
       "details": null,
       "commits": [
         "5af9bf4"
@@ -38,8 +62,10 @@
     {
       "category": "new",
       "plugin": "Core Platform",
-      "headline": "Expanded automation skills library to 683 skills across 25 categories",
-      "details": null,
+      "headline": "Expanded skill catalog to 683 skills across 25 categories",
+      "details": [
+        "OpsPal can now handle a much wider range of revenue operations tasks with improved automation capabilities"
+      ],
       "commits": [
         "ef2ee1a"
       ]
@@ -47,17 +73,21 @@
     {
       "category": "improved",
       "plugin": "General",
-      "headline": "Enhanced data import reliability and workflow documentation",
-      "details": null,
+      "headline": "Enhanced data import reliability and workspace authentication",
+      "details": [
+        "Data imports are now more reliable and workspace connections are more stable"
+      ],
       "commits": [
         "b8f0ed3"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce deployments now automatically recover from errors",
-      "details": null,
+      "headline": "Salesforce deployments now recover automatically from errors",
+      "details": [
+        "Failed Salesforce deployments can now retry and recover without manual intervention"
+      ],
       "commits": [
         "48d4393"
       ]
@@ -65,19 +95,65 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Standardized display labels across all plugins for consistency",
+      "headline": "Restored runbook functionality and cleaned up background processes",
+      "details": null,
+      "commits": [
+        "cdfc24d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Standardized plugin names for consistent display",
       "details": null,
       "commits": [
         "510f9cc"
       ]
     },
     {
-      "category": "improved",
-      "plugin": "Salesforce",
-      "headline": "Better Salesforce state and country field detection prevents deployment issues",
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Improved text formatting in automated communications",
+      "details": null,
+      "commits": [
+        "67a2961"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Restored missing historical data from weeks 12 and 13",
+      "details": null,
+      "commits": [
+        "fe104ff"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Critical",
+      "headline": "Updated internal references to resolve plugin conflicts",
       "details": [
-        "OpsPal now detects when flows reference state/country picklists incorrectly",
-        "Deployment validation catches permission issues before they cause failures"
+        "Fixed issues where plugins couldn't find each other, improving overall system stability"
+      ],
+      "commits": [
+        "2842042"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Updates now include latest marketplace features automatically",
+      "details": null,
+      "commits": [
+        "d4d0188"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Improved Salesforce deployment validation and error handling",
+      "details": [
+        "Better detection of Salesforce configuration issues and more reliable deployment processes"
       ],
       "commits": [
         "fcad945"
@@ -86,8 +162,10 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Complex Salesforce deployments now follow optimized workflow paths",
-      "details": null,
+      "headline": "Enhanced Salesforce deployment workflow management",
+      "details": [
+        "Multi-step Salesforce deployments now run more smoothly with better coordination"
+      ],
       "commits": [
         "a1075f7"
       ]
@@ -95,10 +173,21 @@
     {
       "category": "fixed",
       "plugin": "HubSpot",
-      "headline": "Restored HubSpot automation capabilities that were temporarily broken",
-      "details": null,
+      "headline": "Restored HubSpot integration functionality",
+      "details": [
+        "Fixed a critical issue that was preventing all HubSpot automations from working"
+      ],
       "commits": [
         "c53235d"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Resolved Salesforce query validation errors",
+      "details": null,
+      "commits": [
+        "fb2b10d"
       ]
     }
   ]
