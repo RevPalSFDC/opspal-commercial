@@ -173,6 +173,7 @@ function isPackageInstalled(pluginDir, packageName) {
 function discoverPlugins(specificPlugin = null) {
   const plugins = [];
   const seenDirs = new Set();
+  const seenNames = new Set();
 
   const addPlugin = (pluginDir, source) => {
     if (!pluginDir || !fs.existsSync(pluginDir)) return;
@@ -202,6 +203,10 @@ function discoverPlugins(specificPlugin = null) {
     if (seenDirs.has(realPath)) return;
     seenDirs.add(realPath);
 
+    // Deduplicate by plugin name — first discovery wins (local > marketplace > cache)
+    if (seenNames.has(name)) return;
+    seenNames.add(name);
+
     plugins.push({
       name,
       dir: pluginDir,
@@ -223,6 +228,7 @@ function discoverPlugins(specificPlugin = null) {
       if (!entry.isDirectory()) continue;
       if (entry.name === 'node_modules') continue;
       if (entry.name.startsWith('.')) continue;
+      if (isSemver(entry.name)) continue;
       addPlugin(path.join(PLUGINS_DIR, entry.name), 'local');
     }
   }
@@ -252,6 +258,9 @@ function discoverPlugins(specificPlugin = null) {
       for (const pluginName of fs.readdirSync(marketplaceRoot)) {
         const pluginCacheRoot = path.join(marketplaceRoot, pluginName);
         if (!fs.existsSync(pluginCacheRoot) || !fs.statSync(pluginCacheRoot).isDirectory()) continue;
+
+        // Skip cache copy if this plugin was already found via marketplace or local
+        if (seenNames.has(pluginName)) continue;
 
         let latestVersion = '';
         let latestPath = '';
