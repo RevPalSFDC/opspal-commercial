@@ -1,0 +1,21 @@
+{
+  "slug": "2026-W15",
+  "title": "Week of April 6, 2026",
+  "summary": "This week we resolved a startup error that was incorrectly appearing when launching OpsPal sessions. The platform now starts more reliably without displaying confusing error messages about missing components.",
+  "published_at": "2026-04-06T15:24:36.737Z",
+  "week_start": "2026-04-06",
+  "week_end": "2026-04-06",
+  "has_breaking": false,
+  "total_commits": 2,
+  "entries": [
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Fixed incorrect error message when starting OpsPal sessions",
+      "details": null,
+      "commits": [
+        "4255dd6"
+      ]
+    }
+  ]
+}
