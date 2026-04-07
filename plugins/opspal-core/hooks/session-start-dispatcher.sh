@@ -43,6 +43,86 @@ HOOK_INPUT="$(cat 2>/dev/null || true)"
 LAST_JSON=""
 
 # ---------------------------------------------------------------------------
+# Phase 0 (pre-init): Prune orphaned plugin references from installed_plugins.json
+# and settings.json files. Runs inline (no child hook) because it must complete
+# before the session fully initializes. Uses jq which is already required above.
+# Fast-exits (~1ms) when no orphans are found.
+# ---------------------------------------------------------------------------
+_prune_orphaned_plugins() {
+  local ip_file="${HOME}/.claude/plugins/installed_plugins.json"
+  [ -f "$ip_file" ] || return 0
+
+  # Find opspal-* keys whose marketplace plugin dir lacks a plugin.json
+  local orphans=()
+  while IFS= read -r key; do
+    local pname="${key%%@*}"
+    local mplace="${key#*@}"
+    local mp_dir="${HOME}/.claude/plugins/marketplaces/${mplace}/plugins/${pname}"
+    if [ ! -f "${mp_dir}/.claude-plugin/plugin.json" ] && [ ! -f "${mp_dir}/plugin.json" ]; then
+      orphans+=("$key")
+    fi
+  done < <(jq -r '.plugins // {} | keys[] | select(startswith("opspal-"))' "$ip_file" 2>/dev/null)
+
+  [ ${#orphans[@]} -eq 0 ] && return 0
+
+  # Build jq delete expression for installed_plugins.json
+  local jq_expr='.'
+  for key in "${orphans[@]}"; do
+    jq_expr="${jq_expr} | del(.plugins[\"${key}\"])"
+  done
+  local tmp_ip="${ip_file}.tmp.$$"
+  if jq "$jq_expr" "$ip_file" > "$tmp_ip" 2>/dev/null; then
+    mv "$tmp_ip" "$ip_file"
+  else
+    rm -f "$tmp_ip"
+  fi
+
+  # Clean enabledPlugins and hook commands from settings.json files
+  local pname_pattern=""
+  for key in "${orphans[@]}"; do
+    local pn="${key%%@*}"
+    [ -n "$pname_pattern" ] && pname_pattern="${pname_pattern}|"
+    pname_pattern="${pname_pattern}${pn}"
+  done
+
+  local settings_files=(
+    "${HOME}/.claude/settings.json"
+    "${HOME}/.claude/settings.local.json"
+    "${PWD}/.claude/settings.json"
+    "${PWD}/.claude/settings.local.json"
+  )
+  for sf in "${settings_files[@]}"; do
+    [ -f "$sf" ] || continue
+    local tmp_sf="${sf}.tmp.$$"
+    # Remove from enabledPlugins array and hook commands containing orphaned plugin paths
+    jq --arg orphans "$(printf '%s\n' "${orphans[@]}")" --arg pattern "$pname_pattern" '
+      # Remove from enabledPlugins
+      (if .enabledPlugins then .enabledPlugins |= map(select(. as $p | ($orphans | split("\n") | map(select(. != "")) | index($p)) == null)) else . end)
+      |
+      # Remove hook entries whose commands reference orphaned plugins
+      (if .hooks then .hooks |= with_entries(
+        .value |= if type == "array" then
+          map(select(
+            (.hooks // []) | all(.command // "" | test("/(" + $pattern + ")/") | not)
+          ))
+        else . end
+        | .value |= if . == [] then empty else . end
+      ) else . end)
+    ' "$sf" > "$tmp_sf" 2>/dev/null && mv "$tmp_sf" "$sf" || rm -f "$tmp_sf"
+  done
+
+  # Remove orphaned cache directories
+  for key in "${orphans[@]}"; do
+    local pn="${key%%@*}"
+    local mp="${key#*@}"
+    rm -rf "${HOME}/.claude/plugins/cache/${mp}/${pn}" 2>/dev/null || true
+  done
+
+  emit_stderr "Pruned ${#orphans[@]} orphaned plugin reference(s): ${orphans[*]}"
+}
+_prune_orphaned_plugins
+
+# ---------------------------------------------------------------------------
 # Utility functions
 # ---------------------------------------------------------------------------
 
