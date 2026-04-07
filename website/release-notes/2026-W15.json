@@ -1,21 +1,21 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on resolving critical platform stability issues that were causing workflow interruptions for RevOps teams. Key fixes prevent form field configuration errors in Salesforce and eliminate false error messages that were blocking user sessions from starting properly.",
-  "published_at": "2026-04-07T15:29:28.773Z",
+  "summary": "This week focused on improving platform stability and preventing common setup issues. OpsPal now automatically detects and prevents field conflicts when Salesforce Dynamic Forms are active, eliminates permission errors when creating record types, and automatically resolves missing dependencies that could cause sessions to fail.",
+  "published_at": "2026-04-07T15:54:06.111Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-07",
   "has_breaking": false,
-  "total_commits": 9,
+  "total_commits": 13,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed Salesforce form field and record type configuration errors",
+      "headline": "Prevents field conflicts and permission errors in Salesforce",
       "details": [
-        "Prevents hidden field addition errors when Dynamic Forms are enabled",
-        "Automatically assigns record types to System Administrator profiles to prevent configuration conflicts",
-        "Converts blocking routing errors into advisory warnings to keep workflows running"
+        "OpsPal now detects when Dynamic Forms are active and prevents adding fields that would become invisible",
+        "Automatically assigns proper permissions to System Administrator when creating new record types",
+        "Converts blocking routing conflicts into warnings so your sessions continue running smoothly"
       ],
       "commits": [
         "b85e3bf"
@@ -24,7 +24,19 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed false error messages blocking session startup",
+      "headline": "Automatically fixes missing dependencies at startup",
+      "details": [
+        "OpsPal now detects and installs missing components automatically when you start a session",
+        "Shows clear error messages and fix instructions when automatic installation fails"
+      ],
+      "commits": [
+        "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Eliminates false missing package errors",
       "details": null,
       "commits": [
         "4255dd6"
