@@ -374,16 +374,26 @@ function installDependencies(pluginDir, pluginName) {
     // Runtime validation only needs production dependencies.
     const result = spawnSync('npm', ['install', '--omit=dev'], {
       cwd: pluginDir,
-      stdio: 'inherit',
+      stdio: 'pipe',
       env,
-      shell: true
+      shell: true,
+      timeout: 120000
     });
+
+    if (result.error) {
+      console.log(`  ${icons.fail} npm install spawn error: ${result.error.message}`);
+      return false;
+    }
 
     if (result.status === 0) {
       console.log(`  ${icons.pass} Dependencies installed successfully`);
       return true;
     } else {
+      const stderr = (result.stderr || '').toString().trim();
+      const stdout = (result.stdout || '').toString().trim();
       console.log(`  ${icons.fail} npm install failed with exit code ${result.status}`);
+      if (stderr) console.log(`  ${colors.gray}stderr: ${stderr.split('\n').slice(-5).join('\n  ')}${colors.reset}`);
+      if (!stderr && stdout) console.log(`  ${colors.gray}stdout: ${stdout.split('\n').slice(-5).join('\n  ')}${colors.reset}`);
       return false;
     }
   } catch (e) {

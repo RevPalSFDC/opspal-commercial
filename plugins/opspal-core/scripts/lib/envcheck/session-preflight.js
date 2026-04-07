@@ -18,13 +18,30 @@
  * @version 1.0.0
  */
 
-const { loadCheckers, runCheckers } = require('./env-preflight-engine');
+const { loadCheckers, runCheckers, runRemediation } = require('./env-preflight-engine');
 
 async function main() {
   const checkers = loadCheckers({ quick: true });
   const { results, totalDurationMs } = await runCheckers(checkers, { quick: true });
 
-  // Only report issues (warnings and failures)
+  // Auto-fix safe issues in background (e.g., npm install for missing packages).
+  // Spawn detached so the session-start hook isn't blocked by slow installs.
+  const fixable = results.filter(r =>
+    (r.status === 'fail' || r.status === 'warn') && r.autoFixable && r.remediation && (!r.fixTier || r.fixTier === 'safe')
+  );
+  if (fixable.length > 0) {
+    const { spawn } = require('child_process');
+    for (const issue of fixable) {
+      try {
+        const child = spawn('sh', ['-c', issue.remediation], {
+          stdio: 'ignore', detached: true, env: { ...process.env, NO_COLOR: '1' }
+        });
+        child.unref();
+      } catch { /* best-effort */ }
+    }
+  }
+
+  // Report issues (fixes are running in background, will resolve by next session)
   const issues = results.filter(r => r.status === 'fail' || r.status === 'warn');
 
   if (issues.length === 0) {

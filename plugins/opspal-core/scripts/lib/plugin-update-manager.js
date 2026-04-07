@@ -488,6 +488,12 @@ class PluginUpdateManager {
         console.log(`\n${colors.cyan}Installing npm packages in ${plugin.name}...${colors.reset}`);
         if (depChecker.installDependencies(plugin.dir, plugin.name)) {
           this.fixesApplied.push(`Installed npm packages for ${plugin.name}`);
+        } else {
+          this.results.npmPackages.warnings.push({
+            name: plugin.name,
+            reason: `npm install --omit=dev failed in ${plugin.dir}`
+          });
+          console.log(`${icons.warn} npm install failed for ${plugin.name} — run manually: cd "${plugin.dir}" && npm install --omit=dev`);
         }
       }
     }
