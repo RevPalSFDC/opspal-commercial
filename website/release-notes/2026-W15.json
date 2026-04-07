@@ -1,21 +1,21 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on improving system stability and reliability behind the scenes. OpsPal now automatically detects and prevents common Salesforce configuration issues, including problems with Dynamic Forms and record type assignments that could block your workflows. The platform also got smarter about self-maintaining its components, reducing the chance of session startup errors.",
-  "published_at": "2026-04-07T17:40:02.233Z",
+  "summary": "This week focused on platform stability improvements that ensure OpsPal runs smoothly behind the scenes. The most significant enhancement prevents invisible field additions in Salesforce when Dynamic Forms is active, protecting your page layouts from unexpected changes. Additionally, automatic dependency management now resolves startup issues without manual intervention.",
+  "published_at": "2026-04-07T17:51:10.898Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-07",
   "has_breaking": false,
-  "total_commits": 19,
+  "total_commits": 23,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Prevents Salesforce configuration errors that block workflows",
+      "headline": "Improved Salesforce field management and record type handling",
       "details": [
-        "OpsPal now detects when Dynamic Forms are active and prevents field changes that would cause invisible additions",
-        "System Administrator profiles automatically receive proper record type access to prevent reference errors",
-        "Workflow routing issues no longer block your sessions and instead show helpful guidance"
+        "OpsPal now prevents invisible field additions when Dynamic Forms is active on your Salesforce pages",
+        "System Administrator profiles automatically receive proper permissions when creating new record types",
+        "Reduced session interruptions from routing conflicts"
       ],
       "commits": [
         "b85e3bf"
@@ -24,19 +24,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically maintains itself to prevent startup issues",
-      "details": [
-        "The platform now checks for and installs missing components when you start a session",
-        "You'll see clear error messages and fix instructions if any maintenance issues occur"
-      ],
-      "commits": [
-        "26f0866"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Eliminates false error messages during session startup",
+      "headline": "Fixed startup errors about missing packages",
       "details": null,
       "commits": [
         "4255dd6"
