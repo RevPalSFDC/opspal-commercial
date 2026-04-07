@@ -17,7 +17,7 @@
 | Plugin | Version | Status | Agents | Commands | Hooks | Notes |
 |--------|---------|--------|--------|----------|-------|-------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 3 | 1 | Cross-model AI consultation plugin - get second opinions from Google Gemini |
-| `opspal-core` | 2.54.4 | active | 80 | 126 | 93 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF gener... |
+| `opspal-core` | 2.54.5 | active | 80 | 126 | 93 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF gener... |
 | `opspal-gtm-planning` | 2.3.8 | active | 13 | 16 | 4 | GTM Annual Planning framework with strategic reporting templates and session governance hooks |
 | `opspal-hubspot` | 3.9.23 | active | 59 | 33 | 15 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform... |
 | `opspal-marketo` | 2.6.32 | active | 30 | 30 | 24 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic au... |
