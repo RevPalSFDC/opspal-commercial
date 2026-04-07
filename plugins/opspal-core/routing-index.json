@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-07T15:48:51.432Z",
+  "buildDate": "2026-04-07T17:48:39.433Z",
   "totalAgents": 297,
   "totalAgentsFull": 298,
   "totalCommands": 282,
-  "totalHooks": 270,
+  "totalHooks": 271,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -48366,6 +48366,13 @@
       },
       {
         "plugin": "opspal-core",
+        "name": "session-start-prune-orphaned-plugins",
+        "description": "",
+        "file": "opspal-core/hooks/session-start-prune-orphaned-plugins.sh",
+        "matcher": null
+      },
+      {
+        "plugin": "opspal-core",
         "name": "session-start-repo-sync",
         "description": "",
         "file": "opspal-core/hooks/session-start-repo-sync.sh",
@@ -49235,7 +49242,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 298,
     "totalCommands": 282,
-    "totalHooks": 270,
+    "totalHooks": 271,
     "totalRoutingRules": 0,
     "totalKeywords": 2600,
     "totalKeywordsFull": 2600,
@@ -49257,7 +49264,7 @@
       "SubagentStop": 11,
       "TaskCompleted": 1,
       "Stop": 8,
-      "Unknown": 144,
+      "Unknown": 145,
       "PostTask": 5,
       "PreCommit": 1,
       "PreTask": 17,
