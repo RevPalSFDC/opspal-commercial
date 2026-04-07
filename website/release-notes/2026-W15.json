@@ -1,21 +1,21 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on platform stability improvements that ensure OpsPal runs smoothly behind the scenes. The most significant enhancement prevents invisible field additions in Salesforce when Dynamic Forms is active, protecting your page layouts from unexpected changes. Additionally, automatic dependency management now resolves startup issues without manual intervention.",
-  "published_at": "2026-04-07T17:51:10.898Z",
+  "summary": "This week's updates focused on improving system reliability and preventing startup errors. OpsPal now automatically detects and fixes common configuration issues during startup, while enhanced Salesforce integration prevents data conflicts when Dynamic Forms are enabled and ensures proper record type permissions are automatically assigned.",
+  "published_at": "2026-04-07T18:01:24.951Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-07",
   "has_breaking": false,
-  "total_commits": 23,
+  "total_commits": 26,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Improved Salesforce field management and record type handling",
+      "headline": "Salesforce Dynamic Forms and Record Type fixes",
       "details": [
-        "OpsPal now prevents invisible field additions when Dynamic Forms is active on your Salesforce pages",
-        "System Administrator profiles automatically receive proper permissions when creating new record types",
-        "Reduced session interruptions from routing conflicts"
+        "OpsPal now detects when Salesforce Dynamic Forms are active and prevents field conflicts that could make fields invisible",
+        "New record types automatically receive proper System Administrator permissions, eliminating setup errors",
+        "Improved routing flexibility reduces session interruptions from keyword mismatches"
       ],
       "commits": [
         "b85e3bf"
@@ -24,7 +24,19 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed startup errors about missing packages",
+      "headline": "Automatic dependency installation at startup",
+      "details": [
+        "OpsPal now automatically detects and installs missing components when you start a session",
+        "Clear error messages show you exactly what to fix if automatic installation fails"
+      ],
+      "commits": [
+        "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Eliminated false missing package errors",
       "details": null,
       "commits": [
         "4255dd6"
