@@ -1,21 +1,42 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week's updates focused on improving system reliability and preventing startup errors. OpsPal now automatically detects and fixes common configuration issues during startup, while enhanced Salesforce integration prevents data conflicts when Dynamic Forms are enabled and ensures proper record type permissions are automatically assigned.",
-  "published_at": "2026-04-07T18:01:24.951Z",
+  "summary": "This week brought significant stability improvements to OpsPal's core platform. The system now automatically cleans up outdated plugins and resolves missing components during startup, reducing errors and ensuring smoother session launches. Additionally, Salesforce users will experience fewer workflow interruptions thanks to better handling of Dynamic Forms and RecordType assignments.",
+  "published_at": "2026-04-07T22:02:00.692Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-07",
   "has_breaking": false,
-  "total_commits": 26,
+  "total_commits": 29,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce Dynamic Forms and Record Type fixes",
+      "headline": "Platform automatically removes outdated plugins when you start sessions",
+      "details": null,
+      "commits": [
+        "479282c"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Improved Salesforce workflow reliability and reduced startup errors",
       "details": [
-        "OpsPal now detects when Salesforce Dynamic Forms are active and prevents field conflicts that could make fields invisible",
-        "New record types automatically receive proper System Administrator permissions, eliminating setup errors",
-        "Improved routing flexibility reduces session interruptions from keyword mismatches"
+        "Better cleanup of unused data quality tools",
+        "Enhanced monitoring for Salesforce architecture and quality checks"
+      ],
+      "commits": [
+        "ba25138"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Salesforce Dynamic Forms and RecordType management work more reliably",
+      "details": [
+        "Prevents invisible field issues when Dynamic Forms are active",
+        "Automatically assigns RecordTypes to System Administrator profiles",
+        "Reduces workflow blocking from routing conflicts"
       ],
       "commits": [
         "b85e3bf"
@@ -24,10 +45,10 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Automatic dependency installation at startup",
+      "headline": "Platform automatically installs missing components and reports issues clearly",
       "details": [
-        "OpsPal now automatically detects and installs missing components when you start a session",
-        "Clear error messages show you exactly what to fix if automatic installation fails"
+        "Detects and fixes missing dependencies during session startup",
+        "Provides clear error messages and suggested fixes when problems occur"
       ],
       "commits": [
         "26f0866"
@@ -36,7 +57,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminated false missing package errors",
+      "headline": "Eliminated false error messages about missing components during startup",
       "details": null,
       "commits": [
         "4255dd6"
