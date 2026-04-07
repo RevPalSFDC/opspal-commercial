@@ -1418,6 +1418,48 @@ class PostPluginUpdateFixes {
           this.log(`${icons.warn} Failed to write ${installedPluginsPath}: ${err.message}`);
         }
       }
+
+      // Also remove orphaned entries from enabledPlugins in settings.json files.
+      // Claude Code syncs enabledPlugins → installed_plugins.json on startup, so
+      // if we only clean installed_plugins.json the entry gets re-added next launch.
+      const orphanedKeys = new Set(keysToRemove.map(k => k.key));
+      if (orphanedKeys.size > 0) {
+        const settingsPaths = [
+          path.join(claudeRoot, 'settings.json'),
+          path.join(claudeRoot, 'settings.local.json')
+        ];
+        // Also check project-level settings if PWD/.claude/settings.json exists
+        const projectSettings = path.join(process.cwd(), '.claude', 'settings.json');
+        if (fs.existsSync(projectSettings)) {
+          settingsPaths.push(projectSettings);
+        }
+        const projectLocalSettings = path.join(process.cwd(), '.claude', 'settings.local.json');
+        if (fs.existsSync(projectLocalSettings)) {
+          settingsPaths.push(projectLocalSettings);
+        }
+
+        for (const sp of settingsPaths) {
+          if (!fs.existsSync(sp)) continue;
+          try {
+            const settings = JSON.parse(fs.readFileSync(sp, 'utf8'));
+            if (Array.isArray(settings.enabledPlugins)) {
+              const before = settings.enabledPlugins.length;
+              settings.enabledPlugins = settings.enabledPlugins.filter(p => !orphanedKeys.has(p));
+              const removed = before - settings.enabledPlugins.length;
+              if (removed > 0) {
+                if (this.dryRun) {
+                  this.log(`${icons.info} [DRY RUN] Would remove ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
+                } else {
+                  fs.writeFileSync(sp, JSON.stringify(settings, null, 2) + '\n');
+                  this.log(`${icons.fix} Removed ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
+                }
+              }
+            }
+          } catch (err) {
+            this.log(`${icons.warn} Could not clean enabledPlugins in ${sp}: ${err.message}`);
+          }
+        }
+      }
     }
 
     if (totalPruned === 0) {
