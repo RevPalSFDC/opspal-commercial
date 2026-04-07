@@ -1438,25 +1438,66 @@ class PostPluginUpdateFixes {
           settingsPaths.push(projectLocalSettings);
         }
 
+        // Build a set of orphaned plugin name fragments to match in hook commands
+        const orphanedPluginNames = new Set(keysToRemove.map(k => k.pluginName));
+
         for (const sp of settingsPaths) {
           if (!fs.existsSync(sp)) continue;
           try {
             const settings = JSON.parse(fs.readFileSync(sp, 'utf8'));
+            let settingsModified = false;
+
+            // 1. Remove orphaned enabledPlugins entries
             if (Array.isArray(settings.enabledPlugins)) {
               const before = settings.enabledPlugins.length;
               settings.enabledPlugins = settings.enabledPlugins.filter(p => !orphanedKeys.has(p));
               const removed = before - settings.enabledPlugins.length;
               if (removed > 0) {
-                if (this.dryRun) {
-                  this.log(`${icons.info} [DRY RUN] Would remove ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
-                } else {
-                  fs.writeFileSync(sp, JSON.stringify(settings, null, 2) + '\n');
-                  this.log(`${icons.fix} Removed ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
+                this.log(`${icons.fix} Removed ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
+                settingsModified = true;
+              }
+            }
+
+            // 2. Remove hook entries whose commands reference orphaned plugins.
+            //    Hook commands that contain paths like "plugins/opspal-data-hygiene/"
+            //    or "opspal-data-hygiene/hooks/" will fire and fail at runtime.
+            if (settings.hooks && typeof settings.hooks === 'object') {
+              for (const [eventType, entries] of Object.entries(settings.hooks)) {
+                if (!Array.isArray(entries)) continue;
+                const beforeLen = entries.length;
+                settings.hooks[eventType] = entries.filter(entry => {
+                  const hooks = entry.hooks || [];
+                  const hasOrphanRef = hooks.some(hook => {
+                    const cmd = hook.command || '';
+                    return [...orphanedPluginNames].some(name =>
+                      cmd.includes(`/${name}/`) || cmd.includes(`${name}/hooks/`)
+                    );
+                  });
+                  if (hasOrphanRef) {
+                    this.log(`${icons.fix} Removed orphaned ${eventType} hook referencing removed plugin from ${sp}`);
+                  }
+                  return !hasOrphanRef;
+                });
+                if (settings.hooks[eventType].length < beforeLen) {
+                  settingsModified = true;
+                }
+                // Clean up empty arrays
+                if (settings.hooks[eventType].length === 0) {
+                  delete settings.hooks[eventType];
                 }
               }
             }
+
+            if (settingsModified) {
+              if (this.dryRun) {
+                this.log(`${icons.info} [DRY RUN] Would update ${sp}`);
+              } else {
+                fs.writeFileSync(sp, JSON.stringify(settings, null, 2) + '\n');
+                this.log(`${icons.fix} Updated ${sp}`);
+              }
+            }
           } catch (err) {
-            this.log(`${icons.warn} Could not clean enabledPlugins in ${sp}: ${err.message}`);
+            this.log(`${icons.warn} Could not clean orphaned references in ${sp}: ${err.message}`);
           }
         }
       }
