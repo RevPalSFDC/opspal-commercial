@@ -174,7 +174,10 @@ run_child_hook "${PLUGIN_ROOT}/hooks/session-start-repo-sync.sh"
 # Phase 6: Ambient pipeline initialization — last, once session is stable
 run_child_hook "${PLUGIN_ROOT}/hooks/session-capture-init.sh"
 
-# Phase 7: Post-update deferred tasks (version-change-gated, auto-safe steps only)
+# Phase 7: Prune orphaned plugin references (fast — ~2ms when no orphans)
+run_child_hook "${PLUGIN_ROOT}/hooks/session-start-prune-orphaned-plugins.sh"
+
+# Phase 8: Post-update deferred tasks (version-change-gated, auto-safe steps only)
 run_child_hook "${PLUGIN_ROOT}/hooks/session-start-post-update.sh"
 
 # ---------------------------------------------------------------------------
