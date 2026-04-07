@@ -44,7 +44,8 @@ class RecordTypeManager extends EnhancedMCPTool {
             description = '',
             active = true,
             businessProcess,
-            picklistSettings = []
+            picklistSettings = [],
+            skipProfileAssignment = false
         } = params;
 
         this.logOperation('recordtype_create_start', { objectName, developerName, businessProcess });
@@ -70,6 +71,29 @@ class RecordTypeManager extends EnhancedMCPTool {
             const result = await this.executeCommand(command);
 
             this.logOperation('recordtype_create_success', { objectName, developerName });
+
+            // Auto-assign to System Administrator profile to prevent INVALID_CROSS_REFERENCE_KEY errors
+            if (!skipProfileAssignment) {
+                try {
+                    this.logOperation('recordtype_auto_assign_start', { objectName, developerName });
+                    await this.assignRecordTypeToProfiles({
+                        objectName,
+                        developerName,
+                        profileNames: ['Admin', 'System Administrator'],
+                        makeDefault: false,
+                        targetOrg: this.org
+                    });
+                    this.logOperation('recordtype_auto_assign_success', { objectName, developerName });
+                } catch (assignError) {
+                    // Log but don't fail the overall creation — profile assignment is best-effort
+                    this.logOperation('recordtype_auto_assign_warning', {
+                        objectName,
+                        developerName,
+                        error: assignError.message
+                    });
+                }
+            }
+
             return {
                 success: true,
                 output: this.parseJSON(result.stdout, { operation: 'createRecordType' }),

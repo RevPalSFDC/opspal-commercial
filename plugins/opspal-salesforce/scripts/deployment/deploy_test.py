@@ -71,7 +71,8 @@ def main():
     print("\n3️⃣  Checking if Count_of_DVMs__c field already exists...")
     field_check = run_cmd([
         'sf', 'data', 'query',
-        '--query', "SELECT DeveloperName, Label, DataType FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'",
+        '--query', "SELECT Id, DeveloperName, MasterLabel, TableEnumOrId FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'",
+        '--use-tooling-api',
         '--target-org', ORG_ALIAS,
         '--json'
     ])
@@ -99,7 +100,8 @@ def main():
         print("\n5️⃣  Verifying deployment...")
         verify_result = run_cmd([
             'sf', 'data', 'query',
-            '--query', "SELECT DeveloperName, Label, DataType FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'",
+            '--query', "SELECT Id, DeveloperName, MasterLabel, TableEnumOrId FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'",
+            '--use-tooling-api',
             '--target-org', ORG_ALIAS
         ])
         

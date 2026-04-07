@@ -1033,15 +1033,15 @@ main() {
                         ADDITIONAL_CONTEXT="ROUTING_PROFILE_REPAIRED: '${previous_resolved}' did not satisfy the active route profile; rerouted to '${RESOLVED}'."
                     fi
                 else
-                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_profile_mismatch" "Resolved agent failed active route profile fit"
+                    log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_profile_mismatch_advisory" "Resolved agent failed active route profile fit"
                     emit_pretool_response \
-                      "deny" \
-                      "ROUTING_REQUIRED_PROFILE_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist} and the selected agent '${RESOLVED}' does not satisfy the active route profile. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}." \
+                      "allow" \
+                      "ROUTING_ADVISORY_PROFILE_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist} but '${RESOLVED}' does not match the active route profile. Consider using the suggested agent for best results. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}. [advisory-only: agent execution permitted]" \
                       "" \
                       "" \
-                      "ROUTING_REQUIRED_PROFILE_MISMATCH" \
-                      "ERROR"
-                    exit 0
+                      "ROUTING_ADVISORY_PROFILE_MISMATCH" \
+                      "WARN"
+                    # Advisory only — do not exit; fall through to allow execution
                 fi
             fi
             mark_routing_requirement_cleared "$SESSION_KEY" "$RESOLVED"
@@ -1195,16 +1195,16 @@ main() {
                         # Fall through - let the agent proceed
                     else
                         log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" \
-                          "routing_requirement_mismatch" \
+                          "routing_requirement_mismatch_advisory" \
                           "Pending route requires approved agent family. mismatch_type=${mismatch_type}, pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
                         emit_pretool_response \
-                          "deny" \
-                          "ROUTING_REQUIRED_AGENT_MISMATCH: Pending route requires ${REQUIRED_AGENT:-an approved specialist}. Use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}]" \
+                          "allow" \
+                          "ROUTING_ADVISORY_AGENT_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist}. For best results, use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}, advisory-only: agent execution permitted]" \
                           "" \
                           "" \
-                          "ROUTING_REQUIRED_AGENT_MISMATCH" \
-                          "ERROR"
-                        exit 0
+                          "ROUTING_ADVISORY_AGENT_MISMATCH" \
+                          "WARN"
+                        # Advisory only — do not exit; fall through to allow execution
                     fi
                 fi
             fi

@@ -1336,6 +1336,7 @@ const executionOrder = graph.generateExecutionPhases();
 
 ### Page Layouts with Validation-Aware Design
 - **ALWAYS** validate field availability before adding to layouts
+- **ALWAYS** check for Dynamic Forms on target FlexiPages before adding fields to layouts (see Dynamic Forms Detection Gate)
 - Design and deploy page layouts with field existence validation
 - Configure record types with validation-aware associations
 - Manage picklist dependencies with value consistency validation
@@ -1381,6 +1382,39 @@ const executionOrder = graph.generateExecutionPhases();
 - "Analyze the Account object" → Route to `sfdc-object-auditor`
 - "Import data into Salesforce" → Route to `sfdc-data-operations`
 - "Write an Apex trigger" → Route to `sfdc-apex-developer`
+
+### Dynamic Forms Detection Gate (MANDATORY for Field-to-Layout Operations)
+
+**CRITICAL**: Before adding ANY field to a layout, you MUST check whether Dynamic Forms is enabled on the target object's FlexiPage. If Dynamic Forms is active, standard layout field additions are INVISIBLE in Lightning Experience — fields must be added directly to the FlexiPage XML as `fieldSection`/`fieldInstance` components instead.
+
+**Detection Query** (run BEFORE every field-to-layout operation):
+
+```bash
+sf data query \
+  --query "SELECT Id, DeveloperName FROM FlexiPage WHERE EntityDefinitionId = '<ObjectApiName>'" \
+  --target-org <org-alias> \
+  --use-tooling-api --json
+```
+
+**Decision Logic**:
+1. If a FlexiPage exists for the object → retrieve its XML and check for `<fieldSection>` or `<fieldInstance>` elements
+2. If Dynamic Forms elements found → **route to `sfdc-layout-deployer`** for FlexiPage XML field addition (NOT classic layout)
+3. If no FlexiPage exists OR no Dynamic Forms elements → proceed with standard `*-Layout.layout-meta.xml` modification
+
+**Common Failure Pattern** (from 9 production reflections):
+```
+❌ Field added to Account-Account Layout.layout-meta.xml
+   → FlexiPage has Dynamic Forms enabled
+   → Field is invisible in Lightning Experience
+   → User reports "field not showing up" despite successful deploy
+✅ Field added directly to FlexiPage XML as fieldInstance
+   → Visible immediately in Lightning Experience
+```
+
+**Routing Rules**:
+- Field addition with Dynamic Forms active → `sfdc-layout-deployer` (FlexiPage XML modification)
+- Full new FlexiPage generation → `sfdc-layout-generator` (7 personas, fieldInstance pattern v2.0.0)
+- Layout quality analysis → `sfdc-layout-analyzer`
 
 **🆕 Layout Generation & Analysis Specialists**:
 - **For NEW FlexiPage generation**: Delegate to `sfdc-layout-generator` agent

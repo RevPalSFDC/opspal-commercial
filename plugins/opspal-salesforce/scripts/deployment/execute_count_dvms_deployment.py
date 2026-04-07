@@ -87,7 +87,8 @@ def main():
         # Verify the deployment
         print("🔍 Verifying field deployment...")
         verify_cmd = f"""sf data query \
-            --query "SELECT DeveloperName, Label, DataType FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'" \
+            --query "SELECT Id, DeveloperName, MasterLabel, TableEnumOrId FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'" \
+            --use-tooling-api \
             --target-org {ORG_ALIAS}"""
         
         verify_result = run_command(verify_cmd)
@@ -109,7 +110,8 @@ def main():
         
         # Check if field already exists
         existing_check = run_command(f"""sf data query \
-            --query "SELECT DeveloperName, Label FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'" \
+            --query "SELECT Id, DeveloperName, MasterLabel, TableEnumOrId FROM CustomField WHERE TableEnumOrId = 'Account' AND DeveloperName = 'Count_of_DVMs__c'" \
+            --use-tooling-api \
             --target-org {ORG_ALIAS}""")
         
         if existing_check and "Count_of_DVMs__c" in existing_check.stdout:

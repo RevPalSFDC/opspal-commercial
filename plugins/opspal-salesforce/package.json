@@ -1,6 +1,6 @@
 {
   "name": "salesforce-flow-authoring",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Complete Salesforce Flow authoring system with CLI, templates, and batch operations",
   "main": "scripts/lib/flow-author.js",
   "bin": {
