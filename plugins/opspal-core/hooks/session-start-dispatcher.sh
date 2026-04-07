@@ -97,16 +97,36 @@ _prune_stale_references() {
   for sf in "${settings_files[@]}"; do
     [ -f "$sf" ] || continue
 
-    # 2a. Remove orphaned enabledPlugins entries
-    if [ ${#orphan_keys[@]} -gt 0 ]; then
-      local orphan_list
-      orphan_list=$(printf '%s\n' "${orphan_keys[@]}")
+    # 2a. Remove stale enabledPlugins entries — INDEPENDENTLY of installed_plugins.json.
+    #     Scan each enabledPlugins entry that looks like "name@marketplace" and check
+    #     whether the plugin exists in the marketplace on disk. This catches cases where
+    #     installed_plugins.json was already cleaned by a prior session but enabledPlugins
+    #     wasn't, causing the startup sync to re-add the stale entry every launch.
+    local stale_ep=()
+    while IFS= read -r ep_entry; do
+      [ -z "$ep_entry" ] && continue
+      case "$ep_entry" in
+        opspal-*@*)
+          local ep_pname="${ep_entry%%@*}"
+          local ep_mplace="${ep_entry#*@}"
+          local ep_dir="${HOME}/.claude/plugins/marketplaces/${ep_mplace}/plugins/${ep_pname}"
+          if [ ! -f "${ep_dir}/.claude-plugin/plugin.json" ] && [ ! -f "${ep_dir}/plugin.json" ]; then
+            stale_ep+=("$ep_entry")
+          fi
+          ;;
+      esac
+    done < <(jq -r '.enabledPlugins // [] | .[]' "$sf" 2>/dev/null)
+
+    if [ ${#stale_ep[@]} -gt 0 ]; then
+      local ep_list
+      ep_list=$(printf '%s\n' "${stale_ep[@]}")
       local tmp_sf="${sf}.tmp.$$"
-      jq --arg orphans "$orphan_list" '
+      jq --arg stale "$ep_list" '
         if .enabledPlugins then
-          .enabledPlugins |= map(select(. as $p | ($orphans | split("\n") | map(select(. != "")) | index($p)) == null))
+          .enabledPlugins |= map(select(. as $p | ($stale | split("\n") | map(select(. != "")) | index($p)) == null))
         else . end
       ' "$sf" > "$tmp_sf" 2>/dev/null && mv "$tmp_sf" "$sf" || rm -f "$tmp_sf"
+      pruned_count=$((pruned_count + ${#stale_ep[@]}))
     fi
 
     # 2b. Remove hook entries whose script files don't exist on disk.
