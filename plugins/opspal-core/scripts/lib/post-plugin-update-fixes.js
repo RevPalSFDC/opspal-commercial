@@ -1438,9 +1438,6 @@ class PostPluginUpdateFixes {
           settingsPaths.push(projectLocalSettings);
         }
 
-        // Build a set of orphaned plugin name fragments to match in hook commands
-        const orphanedPluginNames = new Set(keysToRemove.map(k => k.pluginName));
-
         for (const sp of settingsPaths) {
           if (!fs.existsSync(sp)) continue;
           try {
@@ -1458,25 +1455,34 @@ class PostPluginUpdateFixes {
               }
             }
 
-            // 2. Remove hook entries whose commands reference orphaned plugins.
-            //    Hook commands that contain paths like "plugins/opspal-data-hygiene/"
-            //    or "opspal-data-hygiene/hooks/" will fire and fail at runtime.
+            // 2. Remove hook entries whose script files don't exist on disk.
+            //    This is marketplace-agnostic and OS-agnostic — it catches any
+            //    stale hook regardless of which plugin or marketplace it referenced.
             if (settings.hooks && typeof settings.hooks === 'object') {
+              const corePluginRoot = this.findCorePluginRoot() || '';
               for (const [eventType, entries] of Object.entries(settings.hooks)) {
                 if (!Array.isArray(entries)) continue;
                 const beforeLen = entries.length;
                 settings.hooks[eventType] = entries.filter(entry => {
                   const hooks = entry.hooks || [];
-                  const hasOrphanRef = hooks.some(hook => {
+                  const hasDeadScript = hooks.some(hook => {
                     const cmd = hook.command || '';
-                    return [...orphanedPluginNames].some(name =>
-                      cmd.includes(`/${name}/`) || cmd.includes(`${name}/hooks/`)
-                    );
+                    // Resolve the script path: expand variables, take first token
+                    let resolved = cmd
+                      .replace(/\$\{CLAUDE_PLUGIN_ROOT\}/g, corePluginRoot)
+                      .replace(/~/g, process.env.HOME || '');
+                    // Extract just the script path (first whitespace-delimited token)
+                    const scriptPath = resolved.split(/\s+/)[0];
+                    // Only check absolute paths — skip inline bash -c, env, etc.
+                    if (scriptPath.startsWith('/') && !fs.existsSync(scriptPath)) {
+                      return true;
+                    }
+                    return false;
                   });
-                  if (hasOrphanRef) {
-                    this.log(`${icons.fix} Removed orphaned ${eventType} hook referencing removed plugin from ${sp}`);
+                  if (hasDeadScript) {
+                    this.log(`${icons.fix} Removed stale ${eventType} hook (script not found) from ${sp}`);
                   }
-                  return !hasOrphanRef;
+                  return !hasDeadScript;
                 });
                 if (settings.hooks[eventType].length < beforeLen) {
                   settingsModified = true;

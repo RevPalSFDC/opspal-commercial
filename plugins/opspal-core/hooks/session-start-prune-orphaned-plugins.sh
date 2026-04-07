@@ -113,8 +113,9 @@ for (const sp of settingsPaths) {
       }
     }
 
-    // Hook commands
+    // Hook commands — remove entries whose script files don't exist on disk
     if (settings.hooks && typeof settings.hooks === "object") {
+      const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT || "";
       for (const [evt, entries] of Object.entries(settings.hooks)) {
         if (!Array.isArray(entries)) continue;
         const before = entries.length;
@@ -122,7 +123,9 @@ for (const sp of settingsPaths) {
           const hooks = entry.hooks || [];
           return !hooks.some(h => {
             const cmd = h.command || "";
-            return [...orphanedNames].some(n => cmd.includes("/" + n + "/"));
+            let resolved = cmd.replace(/\$\{CLAUDE_PLUGIN_ROOT\}/g, pluginRoot).replace(/~/g, home);
+            const scriptPath = resolved.split(/\s+/)[0];
+            return scriptPath.startsWith("/") && !fs.existsSync(scriptPath);
           });
         });
         if (settings.hooks[evt].length < before) {
