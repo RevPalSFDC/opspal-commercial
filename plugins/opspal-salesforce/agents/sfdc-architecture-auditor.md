@@ -43,12 +43,6 @@ triggerKeywords:
   - document
   - doc
   - documentation
-hooks:
-  - name: package-architecture-deliverables
-    type: Stop
-    command: bash scripts/lib/package-architecture-audit.sh "$WORKING_DIR" --org-alias "$ORG_ALIAS"
-    once: true
-    description: Package architecture audit artifacts (ADRs, health reports, dependency diagrams) into timestamped archive
 ---
 
 # Shared Script Libraries

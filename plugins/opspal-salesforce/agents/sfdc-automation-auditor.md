@@ -42,22 +42,6 @@ triggerKeywords:
   - duplicate rule
   - assignment rule
   - escalation rule
-hooks:
-  - name: generate-automation-summary
-    type: Stop
-    command: node scripts/lib/automation-audit-summary.js "$TRANSCRIPT_PATH" --output-dir "$WORKING_DIR"
-    once: true
-    description: Generate automation audit summary with conflict detection and migration recommendations
-  - name: package-deliverables
-    type: Stop
-    command: bash scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --org-alias "$ORG_ALIAS"
-    once: true
-    description: Package all automation audit artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node scripts/lib/asana-status-updater.js "$WORKING_DIR/automation-audit-manifest.json"
-    once: true
-    description: Post automation conflict summary and migration recommendations to Asana
 ---
 
 # Error Prevention System (Automatic)

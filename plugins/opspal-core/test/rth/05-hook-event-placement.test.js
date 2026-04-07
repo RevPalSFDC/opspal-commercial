@@ -20,7 +20,9 @@ const AGENT_SPECIFIC_MATCHERS = [
   'sfdc-state-discovery',
   'sfdc-revops-auditor',
   'sfdc-cpq-assessor',
-  'sfdc-automation-auditor'
+  'sfdc-automation-auditor',
+  'sfdc-quality-auditor',
+  'sfdc-architecture-auditor'
 ];
 
 assert(fs.existsSync(SF_HOOKS_JSON), `Salesforce hooks.json not found at ${SF_HOOKS_JSON}`);

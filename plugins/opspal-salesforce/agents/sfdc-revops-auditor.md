@@ -38,22 +38,6 @@ triggerKeywords:
   - auditor
   - assess
   - assessment
-hooks:
-  - name: consolidate-revops-reports
-    type: Stop
-    command: node scripts/lib/revops-summary-consolidator.js "$TRANSCRIPT_PATH" --output-dir "$WORKING_DIR"
-    once: true
-    description: Generate consolidated RevOps executive summary with health scores
-  - name: package-deliverables
-    type: Stop
-    command: bash scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --org-alias "$ORG_ALIAS"
-    once: true
-    description: Package all RevOps audit artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node scripts/lib/asana-status-updater.js "$WORKING_DIR/revops-summary-manifest.json"
-    once: true
-    description: Post RevOps health score and recommendations to Asana
 ---
 
 # Error Prevention System (Automatic)

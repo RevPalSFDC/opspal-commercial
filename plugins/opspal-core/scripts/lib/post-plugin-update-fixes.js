@@ -1321,6 +1321,112 @@ class PostPluginUpdateFixes {
     return { fixed: totalRepaired > 0, count: totalRepaired };
   }
 
+  /**
+   * Prune stale opspal-* entries from installed_plugins.json when the plugin
+   * directory no longer exists in the marketplace.  This prevents Claude Code
+   * from emitting "plugin-not-found" errors on startup after a plugin has been
+   * deprecated and removed from the marketplace.
+   */
+  pruneOrphanedInstalledPluginEntries() {
+    this.log(`\n${colors.bold}## Orphaned Installed Plugin Entries${colors.reset}`);
+
+    const roots = this.getClaudeRoots();
+    let totalPruned = 0;
+
+    for (const claudeRoot of roots) {
+      const installedPluginsPath = this.getInstalledPluginsPath(claudeRoot);
+      if (!fs.existsSync(installedPluginsPath)) {
+        continue;
+      }
+
+      let installedPlugins;
+      try {
+        installedPlugins = this.readJsonFile(installedPluginsPath);
+      } catch (_err) {
+        // readJsonFile never throws — but be safe
+      }
+
+      if (!installedPlugins?.plugins || typeof installedPlugins.plugins !== 'object') {
+        continue;
+      }
+
+      const keysToRemove = [];
+
+      for (const key of Object.keys(installedPlugins.plugins)) {
+        if (!key.startsWith('opspal-')) {
+          continue;
+        }
+
+        const atIndex = key.indexOf('@');
+        if (atIndex === -1) {
+          continue;
+        }
+
+        const pluginName = key.slice(0, atIndex);
+        const marketplaceName = key.slice(atIndex + 1);
+
+        if (!pluginName || !marketplaceName) {
+          continue;
+        }
+
+        // Check whether the plugin exists in the marketplace directory.
+        // Accept either a .claude-plugin/plugin.json or a top-level plugin.json.
+        const marketplacePluginDir = path.join(
+          claudeRoot, 'plugins', 'marketplaces', marketplaceName, 'plugins', pluginName
+        );
+        const hasPluginJson =
+          fs.existsSync(path.join(marketplacePluginDir, '.claude-plugin', 'plugin.json')) ||
+          fs.existsSync(path.join(marketplacePluginDir, 'plugin.json'));
+
+        if (!fs.existsSync(marketplacePluginDir) || !hasPluginJson) {
+          keysToRemove.push({ key, pluginName, marketplaceName, marketplacePluginDir });
+        }
+      }
+
+      if (keysToRemove.length === 0) {
+        continue;
+      }
+
+      for (const { key, pluginName, marketplaceName } of keysToRemove) {
+        if (this.dryRun) {
+          this.log(`${icons.info} [DRY RUN] Would remove orphaned entry: ${key}`);
+        } else {
+          delete installedPlugins.plugins[key];
+          this.log(`${icons.fix} Removed orphaned installed entry: ${key}`);
+
+          // Also clean up the versioned cache directory if it exists.
+          const cachePluginDir = path.join(
+            claudeRoot, 'plugins', 'cache', marketplaceName, pluginName
+          );
+          if (fs.existsSync(cachePluginDir)) {
+            try {
+              fs.rmSync(cachePluginDir, { recursive: true, force: true });
+              this.log(`${icons.fix} Removed orphaned cache directory: ${cachePluginDir}`);
+            } catch (err) {
+              this.log(`${icons.warn} Could not remove cache directory ${cachePluginDir}: ${err.message}`);
+            }
+          }
+        }
+
+        totalPruned += 1;
+      }
+
+      if (!this.dryRun && keysToRemove.length > 0) {
+        try {
+          fs.writeFileSync(installedPluginsPath, JSON.stringify(installedPlugins, null, 2) + '\n');
+        } catch (err) {
+          this.log(`${icons.warn} Failed to write ${installedPluginsPath}: ${err.message}`);
+        }
+      }
+    }
+
+    if (totalPruned === 0) {
+      this.log(`${icons.pass} No orphaned installed plugin entries found`);
+    }
+
+    return { fixed: totalPruned > 0 && !this.dryRun, count: totalPruned };
+  }
+
   resolveManagedHooks(hookDefinitions, existingGroups) {
     const hooksByKey = new Map();
     const corePluginRoot = this.findCorePluginRoot();
@@ -2120,6 +2226,7 @@ class PostPluginUpdateFixes {
     const results = {
       installedRuntime: this.reconcileInstalledRuntime(),
       siblingCaches: this.reconcileSiblingPluginCaches(),
+      orphanedEntries: this.pruneOrphanedInstalledPluginEntries(),
       userLevelHooks: this.fixUserLevelHooks(),
       pluginCacheHooks: this.fixPluginCacheHooksJson(),
       pluginCacheAssets: this.syncPluginCacheRoutingAssets(),
@@ -2133,6 +2240,7 @@ class PostPluginUpdateFixes {
     const totalFixes =
       (results.installedRuntime?.fixed ? (results.installedRuntime.entries || results.installedRuntime.roots || 1) : 0) +
       (results.siblingCaches?.fixed ? results.siblingCaches.count || 1 : 0) +
+      (results.orphanedEntries?.fixed ? results.orphanedEntries.count || 1 : 0) +
       (results.userLevelHooks.fixed ? results.userLevelHooks.count || 1 : 0) +
       (results.pluginCacheHooks?.fixed ? results.pluginCacheHooks.count || 1 : 0) +
       (results.pluginCacheAssets?.fixed ? results.pluginCacheAssets.count || 1 : 0) +

@@ -20,25 +20,6 @@ triggerKeywords:
   - layout to production
   - profile assignment
   - layout assignment
-hooks:
-  - name: pre-deployment-layout-validation
-    type: PreToolUse
-    command: node scripts/lib/validators/layout-metadata-validator.js "$TOOL_INPUT"
-    matcher: "Bash(sf project deploy *)"
-    once: false
-    description: Validate layout metadata syntax and field references before deployment
-  - name: check-production-backup
-    type: PreToolUse
-    command: bash scripts/lib/validators/production-backup-checker.sh "$TARGET_ORG"
-    matcher: "Bash(sf project deploy * --target-org *production*)"
-    once: false
-    description: Ensure backup exists before deploying to production environments
-  - name: validate-profile-assignments
-    type: PreToolUse
-    command: node scripts/lib/validators/profile-assignment-validator.js "$TOOL_INPUT"
-    matcher: "Bash(sf org assign:permset *)"
-    once: false
-    description: Validate profile/permission set assignments before applying
 ---
 
 # Shared Script Libraries

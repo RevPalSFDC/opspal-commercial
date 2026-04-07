@@ -110,6 +110,19 @@
         ]
       }
     ],
+    "SubagentStop": [
+      {
+        "matcher": "hubspot-assessment-analyzer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "Package HubSpot assessment deliverables and update Asana status after assessment completes"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "mcp__hubspot*__*auth*",

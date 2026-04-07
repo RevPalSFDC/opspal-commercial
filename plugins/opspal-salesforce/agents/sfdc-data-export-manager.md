@@ -25,19 +25,6 @@ triggerKeywords:
   - download
   - streaming export
   - data dump
-hooks:
-  - name: validate-export-parameters
-    type: PreToolUse
-    command: node scripts/lib/validators/export-parameter-validator.js "$TOOL_INPUT"
-    matcher: mcp_salesforce_data_query
-    once: false
-    description: Validate export parameters (record count, field count, memory limits) before execution
-  - name: check-export-size
-    type: PreToolUse
-    command: node scripts/lib/validators/export-size-checker.js "$TOOL_INPUT"
-    matcher: "Bash(sf data query *)"
-    once: false
-    description: Check if export exceeds memory limits and recommend streaming approach
 ---
 
 # Salesforce Data Export Manager

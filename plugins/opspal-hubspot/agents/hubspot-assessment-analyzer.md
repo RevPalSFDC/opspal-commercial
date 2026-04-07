@@ -31,17 +31,6 @@ triggerKeywords:
   - revops
   - analyzer
   - issue
-hooks:
-  - name: package-deliverables
-    type: Stop
-    command: bash ${CLAUDE_PLUGIN_ROOT}/scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --platform hubspot
-    once: true
-    description: Package all HubSpot assessment artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-status-updater.js "$WORKING_DIR/assessment-manifest.json"
-    once: true
-    description: Post HubSpot assessment summary and recommendations to Asana
 ---
 
 # BLUF+4 Executive Summary Integration

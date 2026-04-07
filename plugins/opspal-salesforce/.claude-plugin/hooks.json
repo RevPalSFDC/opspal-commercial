@@ -118,6 +118,28 @@
             "description": "Detect orphaned in-flight deployments when deployment manager stops unexpectedly"
           }
         ]
+      },
+      {
+        "matcher": "sfdc-quality-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after quality audit"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-architecture-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after architecture audit"
+          }
+        ]
       }
     ]
   }

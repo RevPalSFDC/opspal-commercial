@@ -32,17 +32,6 @@ triggerKeywords:
   - lead score validation
   - lead completeness
 model: sonnet
-hooks:
-  - name: package-deliverables
-    type: Stop
-    command: bash ${CLAUDE_PLUGIN_ROOT}/scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --platform marketo
-    once: true
-    description: Package all Marketo lead quality assessment artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node ${CLAUDE_PLUGIN_ROOT}/scripts/lib/asana-status-updater.js "$WORKING_DIR/assessment-manifest.json"
-    once: true
-    description: Post Marketo lead quality findings and recommendations to Asana
 ---
 
 @import agents/shared/api-null-handling.md

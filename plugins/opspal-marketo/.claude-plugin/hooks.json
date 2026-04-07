@@ -126,6 +126,19 @@
         ]
       }
     ],
+    "SubagentStop": [
+      {
+        "matcher": "marketo-lead-quality-assessor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "Package Marketo lead quality assessment deliverables and update Asana status after assessment completes"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "mcp__marketo__campaign_create|mcp__marketo__campaign_clone",

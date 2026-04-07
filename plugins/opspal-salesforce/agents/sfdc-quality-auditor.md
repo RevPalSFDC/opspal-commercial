@@ -28,22 +28,6 @@ triggerKeywords:
   - auditor
   - data
   - check
-hooks:
-  - name: generate-executive-summary
-    type: Stop
-    command: node scripts/lib/quality-audit-summary-generator.js "$TRANSCRIPT_PATH" --output-dir "$WORKING_DIR"
-    once: true
-    description: Generate consolidated executive summary PDF from audit outputs
-  - name: package-deliverables
-    type: Stop
-    command: bash scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --org-alias "$ORG_ALIAS"
-    once: true
-    description: Package all audit artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node scripts/lib/asana-status-updater.js "$WORKING_DIR/quality-audit-manifest.json"
-    once: true
-    description: Post quality score and findings to Asana project
 ---
 
 # BLUF+4 Executive Summary Integration

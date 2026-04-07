@@ -1577,6 +1577,46 @@ step5_schema_migration() {
     echo "⏭️  Not in a workspace with orgs/ or migration script not found, skipping"
   fi
 
+  # Instance directory cleanup (remove dangling symlinks and empty dirs)
+  info "Checking for stale instance directory references..."
+  local instance_cleaned=0
+  for instances_dir in instances orgs/*/platforms/*/instances; do
+    if [ -d "$instances_dir" ] 2>/dev/null; then
+      # Remove dangling symlinks
+      while IFS= read -r -d '' broken_link; do
+        info "  [CLEAN] Removing dangling symlink: $broken_link"
+        rm -f "$broken_link" 2>/dev/null || true
+        instance_cleaned=$((instance_cleaned + 1))
+      done < <(find "$instances_dir" -type l ! -exec test -e {} \; -print0 2>/dev/null)
+
+      # Remove empty client directories (depth 2 = instances/platform/client)
+      while IFS= read -r -d '' empty_dir; do
+        info "  [CLEAN] Removing empty instance directory: $empty_dir"
+        rmdir "$empty_dir" 2>/dev/null || true
+        instance_cleaned=$((instance_cleaned + 1))
+      done < <(find "$instances_dir" -mindepth 2 -maxdepth 2 -type d -empty -print0 2>/dev/null)
+    fi
+  done
+
+  # Create .rgignore if workspace has instances/ but is not a git repo
+  if [ -d "instances" ] && [ ! -d ".git" ]; then
+    if [ ! -f ".rgignore" ]; then
+      echo "instances/" > .rgignore
+      info "  [FIX] Created .rgignore to exclude instances/ from file indexing"
+      instance_cleaned=$((instance_cleaned + 1))
+    elif ! grep -q "^instances/" .rgignore 2>/dev/null; then
+      echo "instances/" >> .rgignore
+      info "  [FIX] Added instances/ to .rgignore"
+      instance_cleaned=$((instance_cleaned + 1))
+    fi
+  fi
+
+  if [[ $instance_cleaned -eq 0 ]]; then
+    success "No stale instance references found"
+  else
+    success "Cleaned $instance_cleaned stale instance reference(s)"
+  fi
+
   return 0
 }
 
@@ -1960,6 +2000,27 @@ step9_subagent_remediation() {
   else
     checks_passed=$((checks_passed + 1))
     echo "✅ No legacy deploy contract bypass env vars set"
+  fi
+
+  # Check 5: Deprecated environment variables
+  info "Check 5: Deprecated environment variables"
+  DEPRECATED_VARS=(
+    "SFDX_STATE_FOLDER:SF_DATA_DIR:Salesforce CLI state directory"
+  )
+  local deprecated_count=0
+  for entry in "${DEPRECATED_VARS[@]}"; do
+    IFS=':' read -r old_var new_var description <<< "$entry"
+    if [[ -n "${!old_var:-}" ]]; then
+      warn "Deprecated env var: $old_var is set (value: ${!old_var})"
+      info "  Migration: Replace with $new_var ($description)"
+      info "  Action: Update your shell profile to use: export $new_var=\"${!old_var}\""
+      deprecated_count=$((deprecated_count + 1))
+    fi
+  done
+  if [[ $deprecated_count -eq 0 ]]; then
+    success "No deprecated environment variables detected"
+  else
+    warn "$deprecated_count deprecated environment variable(s) found — see migration guidance above"
   fi
 
   if [ "$checks_passed" -eq "$total_checks" ]; then

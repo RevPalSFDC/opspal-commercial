@@ -32,22 +32,6 @@ triggerKeywords:
   - salesforce
   - assessor
   - assessment
-hooks:
-  - name: generate-cpq-scorecard
-    type: Stop
-    command: node scripts/lib/cpq-scorecard-generator.js "$TRANSCRIPT_PATH" --output-dir "$WORKING_DIR"
-    once: true
-    description: Generate CPQ utilization scorecard with keep/optimize/remove recommendations
-  - name: package-deliverables
-    type: Stop
-    command: bash scripts/lib/package-audit-deliverables.sh "$WORKING_DIR" --org-alias "$ORG_ALIAS"
-    once: true
-    description: Package all CPQ assessment artifacts into timestamped archive
-  - name: post-to-asana
-    type: Stop
-    command: node scripts/lib/asana-status-updater.js "$WORKING_DIR/cpq-scorecard-manifest.json"
-    once: true
-    description: Post CPQ utilization score and recommendations to Asana
 ---
 
 # Live Validation Enforcement (STRICT - blocks responses without query evidence)

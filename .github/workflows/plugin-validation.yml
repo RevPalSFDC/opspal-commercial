@@ -34,7 +34,6 @@ jobs:
         plugin:
           - opspal-ai-consult
           - opspal-core
-          - opspal-data-hygiene
           - opspal-gtm-planning
           - opspal-hubspot
           - opspal-marketo
