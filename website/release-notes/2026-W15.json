@@ -1,29 +1,19 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on improving platform stability and reliability for RevOps teams. OpsPal now automatically cleans up outdated plugin configurations and missing dependencies when you start sessions, preventing common startup errors. The platform also gained smarter Salesforce protections, including better handling of Dynamic Forms and automatic record type assignments.",
-  "published_at": "2026-04-08T01:40:08.766Z",
+  "summary": "This week focused on platform stability improvements that make OpsPal more reliable for daily RevOps work. The platform now automatically detects and prevents common Salesforce configuration errors, like adding invisible fields when Dynamic Forms is active and missing record type assignments that cause workflow failures. Additionally, OpsPal now runs smoother with better plugin management and fewer startup issues.",
+  "published_at": "2026-04-08T02:14:08.132Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-08",
   "has_breaking": false,
-  "total_commits": 38,
+  "total_commits": 40,
   "entries": [
     {
       "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Platform automatically removes outdated plugins when starting sessions",
-      "details": null,
-      "commits": [
-        "479282c"
-      ]
-    },
-    {
-      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Improved Salesforce startup process removes outdated configurations",
+      "headline": "Platform runs cleaner with better background management",
       "details": [
-        "Platform now cleans up old data quality monitoring settings",
-        "Better organization of Salesforce quality and architecture monitoring tools"
+        "Improved startup process removes unnecessary components and organizes background tasks more efficiently"
       ],
       "commits": [
         "ba25138"
@@ -32,11 +22,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Enhanced Salesforce protections prevent common configuration errors",
+      "headline": "Prevents common Salesforce configuration errors",
       "details": [
-        "Prevents field additions when Salesforce Dynamic Forms is active",
-        "Automatically assigns new record types to administrator profiles",
-        "Reduces session interruptions from routing conflicts"
+        "Automatically detects when Dynamic Forms is active and prevents adding invisible fields to your pages",
+        "Assigns new record types to System Administrator profile to prevent workflow failures",
+        "Converts blocking routing errors into helpful warnings so your work continues smoothly"
       ],
       "commits": [
         "b85e3bf"
@@ -45,10 +35,10 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Platform automatically installs missing components during session startup",
+      "headline": "Automatically fixes missing components during startup",
       "details": [
-        "Shows clear error messages when installations fail",
-        "Provides step-by-step instructions to fix dependency issues manually"
+        "Platform detects and installs missing components in the background",
+        "Shows clear error messages and fix instructions when automatic repair fails"
       ],
       "commits": [
         "26f0866"
@@ -57,7 +47,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved false error messages about missing platform components",
+      "headline": "Eliminates false error about missing components",
       "details": null,
       "commits": [
         "4255dd6"
