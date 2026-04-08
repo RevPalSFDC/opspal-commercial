@@ -152,6 +152,14 @@ if [ -z "$TOOL_NAME" ]; then
     exit 0
 fi
 
+# Fast-exit for read-only tools that never have contract violations
+case "$TOOL_NAME" in
+  Read|Glob|Grep|LS|ToolSearch|WebSearch|WebFetch)
+    emit_pretool_noop
+    exit 0
+    ;;
+esac
+
 # Extract caller agent identity from hook JSON input.
 # Claude Code provides agent_type in the hook JSON when running inside a
 # sub-agent context. Fall back to env vars for backward compatibility.

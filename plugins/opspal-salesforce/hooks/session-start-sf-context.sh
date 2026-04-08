@@ -29,6 +29,7 @@ CACHE_FILE="${_TMPDIR}/sf-org-context.json"
 if [[ -f "$CACHE_FILE" ]]; then
     _cache_age=$(( $(date +%s) - $(stat -c %Y "$CACHE_FILE" 2>/dev/null || stat -f %m "$CACHE_FILE" 2>/dev/null || echo 0) ))
     if [[ $_cache_age -lt 10 ]]; then
+        printf '{}\n'
         exit 0
     fi
 fi
@@ -155,4 +156,5 @@ echo "$CONTEXT" > "$CACHE_FILE" 2>/dev/null || true
 export SF_TARGET_ORG="$ORG_ALIAS"
 export SF_ORG_CONTEXT="$CONTEXT"
 
+printf '{}\n'
 exit 0

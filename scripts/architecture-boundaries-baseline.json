@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T22:18:53.822Z",
+  "generatedAt": "2026-04-08T23:49:11.632Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -1259,10 +1259,10 @@
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/session-start-sf-context.sh|55|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/session-start-sf-context.sh|56|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/session-start-sf-context.sh",
-      "line": 55,
+      "line": 56,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },

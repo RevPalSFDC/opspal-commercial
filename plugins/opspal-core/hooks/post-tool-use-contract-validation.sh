@@ -18,7 +18,6 @@ set -euo pipefail
 if ! command -v jq &>/dev/null; then
     echo "[post-tool-use-contract-validation] jq not found, skipping" >&2
     printf '{}\n'
-    printf '{}\n'
     exit 0
 fi
 

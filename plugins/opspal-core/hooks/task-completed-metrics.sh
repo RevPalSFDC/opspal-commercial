@@ -79,6 +79,7 @@ SUCCESS="${SUCCESS:-${CLAUDE_TASK_SUCCESS:-true}}"
 
 # Skip if no agent identified
 if [[ "$AGENT_NAME" == "unknown" ]]; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -146,4 +147,5 @@ if [[ -f "$ROUTING_ENGINE" ]] && command -v node &> /dev/null; then
     node "$ROUTING_ENGINE" record "$AGENT_NAME" "$TOKENS" "$DURATION" "$TOOL_USES" "$SUCCESS" >/dev/null 2>&1 || true
 fi
 
+printf '{}\n'
 exit 0

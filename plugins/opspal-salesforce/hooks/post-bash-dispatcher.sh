@@ -4,6 +4,7 @@ set -euo pipefail
 
 if ! command -v jq &>/dev/null; then
     echo "[post-bash-dispatcher] jq not found, skipping" >&2
+    printf '{}\n'
     exit 0
 fi
 
@@ -94,6 +95,7 @@ run_child_hook() {
 }
 
 if [ -z "$COMMAND" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -107,6 +109,8 @@ fi
 
 if [ -n "$LAST_JSON" ] && [ "$LAST_JSON" != "{}" ]; then
   printf '%s\n' "$LAST_JSON"
+  exit 0
 fi
 
+printf '{}\n'
 exit 0

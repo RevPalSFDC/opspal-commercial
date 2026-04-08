@@ -128,11 +128,13 @@ fi
 
 # If no result or command, or if the failure was user interruption, pass through
 if [ -z "$RESULT" ] && [ -z "$COMMAND" ]; then
+    printf '{}\n'
     exit 0
 fi
 
 # User interruption does not need recovery guidance.
 if [ "$IS_INTERRUPT" = "true" ]; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -294,4 +296,10 @@ if command -v jq >/dev/null 2>&1; then
     safe_append_jsonl "$log_entry"
 fi
 
+# If structured guidance was already emitted to stdout, exit to avoid double JSON output
+if [ -n "$GUIDANCE" ]; then
+    exit 0
+fi
+
+printf '{}\n'
 exit 0
