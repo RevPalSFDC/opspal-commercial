@@ -54,6 +54,17 @@ if [ -f "$_LOCK_FILE" ]; then
 fi
 printf '%s' "$_NOW" > "$_LOCK_FILE" 2>/dev/null || true
 
+# ---------------------------------------------------------------------------
+# Auto-migrate deprecated SFDX_STATE_FOLDER → SF_DATA_DIR for this session.
+# The Salesforce CLI emits a noisy deprecation warning when SFDX_STATE_FOLDER
+# is set. Migrate the value so sf commands run clean.
+# ---------------------------------------------------------------------------
+if [[ -n "${SFDX_STATE_FOLDER:-}" ]] && [[ -z "${SF_DATA_DIR:-}" ]]; then
+  export SF_DATA_DIR="$SFDX_STATE_FOLDER"
+  unset SFDX_STATE_FOLDER
+  echo "[session-start-dispatcher] Migrated SFDX_STATE_FOLDER → SF_DATA_DIR=$SF_DATA_DIR" >&2
+fi
+
 if ! command -v jq >/dev/null 2>&1; then
   echo "[session-start-dispatcher] WARNING: jq not found — SessionStart child hooks disabled" >&2
   printf '{"suppressOutput":true,"systemMessage":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}\n'

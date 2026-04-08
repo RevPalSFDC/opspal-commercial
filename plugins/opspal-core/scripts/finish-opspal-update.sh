@@ -2315,7 +2315,19 @@ step12_runtime_housekeeping() {
     details="${details}  ✅ Cross-plugin path references validated\n"
   fi
 
-  # --- 5. Stale enabledPlugins entries (orphan check) ---
+  # --- 5. Deprecated environment variables ---
+  # Check for SFDX_STATE_FOLDER (deprecated by SF CLI in favor of SF_DATA_DIR).
+  # The dispatcher auto-migrates at runtime, but the user should fix their shell profile.
+  if [[ -n "${SFDX_STATE_FOLDER:-}" ]]; then
+    if [[ -z "${SF_DATA_DIR:-}" ]]; then
+      details="${details}  ⚠️  SFDX_STATE_FOLDER is set (deprecated by SF CLI). Replace with: export SF_DATA_DIR=\"$SFDX_STATE_FOLDER\" in your shell profile and remove SFDX_STATE_FOLDER.\n"
+    else
+      details="${details}  ⚠️  Both SFDX_STATE_FOLDER and SF_DATA_DIR are set. Remove SFDX_STATE_FOLDER from your shell profile.\n"
+    fi
+    checks_warned=$((checks_warned + 1))
+  fi
+
+  # --- 6. Stale enabledPlugins entries (orphan check) ---
   for root in "${CLAUDE_ROOTS[@]}"; do
     local settings_file="$root/settings.json"
     [ -f "$settings_file" ] || continue
