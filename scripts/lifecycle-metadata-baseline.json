@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-11T11:48:12.696Z",
+  "generatedAt": "2026-04-08T17:44:40.820Z",
   "ruleSetVersion": "1.0.0",
   "warnDays": 90,
   "failDays": 120,
@@ -440,6 +440,12 @@
       "signature": "agent-missing-dependencies|plugins/opspal-core/agents/unified-exec-dashboard-agent.md",
       "rule": "agent-missing-dependencies",
       "file": "plugins/opspal-core/agents/unified-exec-dashboard-agent.md",
+      "message": "[opspal-core] agent missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "agent-missing-dependencies|plugins/opspal-core/agents/unified-reporting-aggregator.md",
+      "rule": "agent-missing-dependencies",
+      "file": "plugins/opspal-core/agents/unified-reporting-aggregator.md",
       "message": "[opspal-core] agent missing frontmatter field: dependencies"
     },
     {
@@ -2090,6 +2096,12 @@
       "signature": "agent-missing-failure-modes|plugins/opspal-core/agents/unified-exec-dashboard-agent.md",
       "rule": "agent-missing-failure-modes",
       "file": "plugins/opspal-core/agents/unified-exec-dashboard-agent.md",
+      "message": "[opspal-core] agent missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "agent-missing-failure-modes|plugins/opspal-core/agents/unified-reporting-aggregator.md",
+      "rule": "agent-missing-failure-modes",
+      "file": "plugins/opspal-core/agents/unified-reporting-aggregator.md",
       "message": "[opspal-core] agent missing frontmatter field: failure_modes"
     },
     {
@@ -3761,6 +3773,12 @@
       "message": "[opspal-core] agent missing frontmatter field: intent"
     },
     {
+      "signature": "agent-missing-intent|plugins/opspal-core/agents/unified-reporting-aggregator.md",
+      "rule": "agent-missing-intent",
+      "file": "plugins/opspal-core/agents/unified-reporting-aggregator.md",
+      "message": "[opspal-core] agent missing frontmatter field: intent"
+    },
+    {
       "signature": "agent-missing-intent|plugins/opspal-core/agents/visual-regression-tester.md",
       "rule": "agent-missing-intent",
       "file": "plugins/opspal-core/agents/visual-regression-tester.md",
@@ -5021,6 +5039,12 @@
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/activate-license.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/activate-license.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/asana-checkpoint.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/asana-checkpoint.md",
@@ -5081,6 +5105,12 @@
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/clear-route.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/clear-route.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/complexity.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/complexity.md",
@@ -5090,6 +5120,12 @@
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/cs-ops.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/cs-ops.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/customize.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/customize.md",
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
@@ -5123,12 +5159,6 @@
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
-      "signature": "command-missing-dependencies|plugins/opspal-core/commands/deploy-to-commercial.md",
-      "rule": "command-missing-dependencies",
-      "file": "plugins/opspal-core/commands/deploy-to-commercial.md",
-      "message": "[opspal-core] command missing frontmatter field: dependencies"
-    },
-    {
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/diagnose-sales-funnel.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/diagnose-sales-funnel.md",
@@ -5150,6 +5180,12 @@
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/enablement.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/enablement.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/encrypt-assets.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/encrypt-assets.md",
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
@@ -5351,6 +5387,12 @@
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/opspalfirst.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/opspalfirst.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/pdf-health.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/pdf-health.md",
@@ -5396,6 +5438,12 @@
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/project-connect.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/project-connect.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/promote-skills.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/promote-skills.md",
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
@@ -5552,6 +5600,72 @@
       "signature": "command-missing-dependencies|plugins/opspal-core/commands/solution-validate.md",
       "rule": "command-missing-dependencies",
       "file": "plugins/opspal-core/commands/solution-validate.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-disable.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-disable.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-enable.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-enable.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-explain.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-explain.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-health.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-health.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-init.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-init.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-map.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-map.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-new.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-new.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-replay.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-replay.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-review.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-review.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-test.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-test.md",
+      "message": "[opspal-core] command missing frontmatter field: dependencies"
+    },
+    {
+      "signature": "command-missing-dependencies|plugins/opspal-core/commands/sop-validate.md",
+      "rule": "command-missing-dependencies",
+      "file": "plugins/opspal-core/commands/sop-validate.md",
       "message": "[opspal-core] command missing frontmatter field: dependencies"
     },
     {
@@ -6485,6 +6599,12 @@
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/activate-license.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/activate-license.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/asana-checkpoint.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/asana-checkpoint.md",
@@ -6545,6 +6665,12 @@
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/clear-route.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/clear-route.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/complexity.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/complexity.md",
@@ -6554,6 +6680,12 @@
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/cs-ops.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/cs-ops.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/customize.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/customize.md",
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
@@ -6587,12 +6719,6 @@
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
-      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/deploy-to-commercial.md",
-      "rule": "command-missing-failure-modes",
-      "file": "plugins/opspal-core/commands/deploy-to-commercial.md",
-      "message": "[opspal-core] command missing frontmatter field: failure_modes"
-    },
-    {
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/diagnose-sales-funnel.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/diagnose-sales-funnel.md",
@@ -6614,6 +6740,12 @@
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/enablement.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/enablement.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/encrypt-assets.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/encrypt-assets.md",
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
@@ -6815,6 +6947,12 @@
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/opspalfirst.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/opspalfirst.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/pdf-health.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/pdf-health.md",
@@ -6860,6 +6998,12 @@
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/project-connect.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/project-connect.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/promote-skills.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/promote-skills.md",
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
@@ -7016,6 +7160,72 @@
       "signature": "command-missing-failure-modes|plugins/opspal-core/commands/solution-validate.md",
       "rule": "command-missing-failure-modes",
       "file": "plugins/opspal-core/commands/solution-validate.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-disable.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-disable.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-enable.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-enable.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-explain.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-explain.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-health.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-health.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-init.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-init.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-map.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-map.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-new.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-new.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-replay.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-replay.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-review.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-review.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-test.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-test.md",
+      "message": "[opspal-core] command missing frontmatter field: failure_modes"
+    },
+    {
+      "signature": "command-missing-failure-modes|plugins/opspal-core/commands/sop-validate.md",
+      "rule": "command-missing-failure-modes",
+      "file": "plugins/opspal-core/commands/sop-validate.md",
       "message": "[opspal-core] command missing frontmatter field: failure_modes"
     },
     {
@@ -7949,6 +8159,12 @@
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/activate-license.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/activate-license.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
       "signature": "command-missing-intent|plugins/opspal-core/commands/asana-checkpoint.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/asana-checkpoint.md",
@@ -8009,6 +8225,12 @@
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/clear-route.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/clear-route.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
       "signature": "command-missing-intent|plugins/opspal-core/commands/complexity.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/complexity.md",
@@ -8018,6 +8240,12 @@
       "signature": "command-missing-intent|plugins/opspal-core/commands/cs-ops.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/cs-ops.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/customize.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/customize.md",
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
@@ -8051,12 +8279,6 @@
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
-      "signature": "command-missing-intent|plugins/opspal-core/commands/deploy-to-commercial.md",
-      "rule": "command-missing-intent",
-      "file": "plugins/opspal-core/commands/deploy-to-commercial.md",
-      "message": "[opspal-core] command missing frontmatter field: intent"
-    },
-    {
       "signature": "command-missing-intent|plugins/opspal-core/commands/diagnose-sales-funnel.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/diagnose-sales-funnel.md",
@@ -8078,6 +8300,12 @@
       "signature": "command-missing-intent|plugins/opspal-core/commands/enablement.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/enablement.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/encrypt-assets.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/encrypt-assets.md",
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
@@ -8279,6 +8507,12 @@
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/opspalfirst.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/opspalfirst.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
       "signature": "command-missing-intent|plugins/opspal-core/commands/pdf-health.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/pdf-health.md",
@@ -8324,6 +8558,12 @@
       "signature": "command-missing-intent|plugins/opspal-core/commands/project-connect.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/project-connect.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/promote-skills.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/promote-skills.md",
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
@@ -8480,6 +8720,72 @@
       "signature": "command-missing-intent|plugins/opspal-core/commands/solution-validate.md",
       "rule": "command-missing-intent",
       "file": "plugins/opspal-core/commands/solution-validate.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-disable.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-disable.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-enable.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-enable.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-explain.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-explain.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-health.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-health.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-init.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-init.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-map.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-map.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-new.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-new.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-replay.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-replay.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-review.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-review.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-test.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-test.md",
+      "message": "[opspal-core] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "command-missing-intent|plugins/opspal-core/commands/sop-validate.md",
+      "rule": "command-missing-intent",
+      "file": "plugins/opspal-core/commands/sop-validate.md",
       "message": "[opspal-core] command missing frontmatter field: intent"
     },
     {
@@ -9381,30 +9687,6 @@
       "rule": "command-missing-intent",
       "file": "plugins/opspal-salesforce/commands/win-loss.md",
       "message": "[opspal-salesforce] command missing frontmatter field: intent"
-    },
-    {
-      "signature": "plugin-missing-last-reviewed|plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "rule": "plugin-missing-last-reviewed",
-      "file": "plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "message": "[opspal-mcp-client] missing required lifecycle field: last_reviewed_at"
-    },
-    {
-      "signature": "plugin-missing-owner|plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "rule": "plugin-missing-owner",
-      "file": "plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "message": "[opspal-mcp-client] missing required lifecycle field: owner"
-    },
-    {
-      "signature": "plugin-missing-stability|plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "rule": "plugin-missing-stability",
-      "file": "plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "message": "[opspal-mcp-client] missing required lifecycle field: stability"
-    },
-    {
-      "signature": "plugin-missing-status|plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "rule": "plugin-missing-status",
-      "file": "plugins/opspal-mcp-client/.claude-plugin/plugin.json",
-      "message": "[opspal-mcp-client] missing required lifecycle field: status"
     }
   ]
 }
