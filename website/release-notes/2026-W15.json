@@ -1,21 +1,29 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on major platform stability improvements that make OpsPal more reliable for daily use. The platform now automatically cleans up outdated configurations and prevents common Salesforce setup errors, while ensuring all features work consistently across different operating systems and environments.",
-  "published_at": "2026-04-07T23:34:08.061Z",
+  "summary": "This week brought significant platform reliability improvements that will reduce session startup errors and interruptions. OpsPal now automatically detects and fixes missing components when you start a session, while enhanced Salesforce integrations prevent common configuration errors that could block your workflows.",
+  "published_at": "2026-04-08T00:29:20.784Z",
   "week_start": "2026-04-06",
-  "week_end": "2026-04-07",
+  "week_end": "2026-04-08",
   "has_breaking": false,
-  "total_commits": 32,
+  "total_commits": 35,
   "entries": [
     {
       "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Platform automatically cleans up outdated plugins when you start sessions",
+      "details": null,
+      "commits": [
+        "479282c"
+      ]
+    },
+    {
+      "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Platform cleans up outdated configurations automatically",
+      "headline": "Salesforce plugin startup works more reliably across all environments",
       "details": [
-        "OpsPal now removes unused features and settings that could cause conflicts",
-        "Works consistently across Windows, Mac, and Linux environments",
-        "Includes cleanup for Salesforce quality and architecture auditing tools"
+        "Removes outdated quality monitoring components that were causing conflicts",
+        "Streamlines plugin initialization to prevent startup failures"
       ],
       "commits": [
         "ba25138"
@@ -24,10 +32,10 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce metadata changes work more reliably",
+      "headline": "Enhanced Salesforce field and record type management prevents common errors",
       "details": [
-        "Prevents field addition errors when Dynamic Forms are active on pages",
-        "Automatically assigns record types to administrators to prevent setup errors",
+        "Prevents invisible field additions when Dynamic Forms is enabled on your pages",
+        "Automatically assigns new record types to System Administrator profile to avoid permission errors",
         "Reduces session interruptions from routing conflicts"
       ],
       "commits": [
@@ -37,7 +45,20 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminates false missing package errors at startup",
+      "headline": "Platform automatically installs missing components and shows clear error messages",
+      "details": [
+        "Detects and fixes missing dependencies when you start sessions",
+        "Provides clear instructions when manual fixes are needed",
+        "Runs automatic repairs in the background for common issues"
+      ],
+      "commits": [
+        "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Resolved false error messages about missing packages during session startup",
       "details": null,
       "commits": [
         "4255dd6"
