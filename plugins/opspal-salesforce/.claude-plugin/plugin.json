@@ -1,7 +1,7 @@
 {
   "name": "opspal-salesforce",
   "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-  "version": "3.87.4",
+  "version": "3.87.5",
   "author": {
     "name": "RevPal Engineering",
     "email": "engineering@gorevpal.com"

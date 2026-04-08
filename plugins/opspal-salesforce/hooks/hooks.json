@@ -1,0 +1,146 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
+            "timeout": 60,
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher \u2014 dispatcher fast-exits for non-SF commands within ~1ms"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-sf-context.sh",
+            "timeout": 10,
+            "description": "Canonical SF org detection \u2014 writes /tmp/sf-org-context.json (O1 consolidation)"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-dispatcher.sh",
+            "timeout": 30,
+            "description": "Dispatch Salesforce deploy and query post-processing with structured output"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-error-handler.sh",
+            "timeout": 5,
+            "description": "Provide recovery guidance after failed Salesforce Bash operations"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "sfdc-discovery",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 60,
+            "description": "Generate field dictionary after org discovery completes"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-state-discovery",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-discovery-field-dictionary.sh",
+            "timeout": 60,
+            "description": "Generate field dictionary after state discovery completes"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-revops-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after RevOps assessment"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-cpq-assessor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after CPQ assessment"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-automation-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after automation audit"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-deployment-manager",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-deploy-manager-stop.sh",
+            "timeout": 15,
+            "description": "Detect orphaned in-flight deployments when deployment manager stops unexpectedly"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-quality-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after quality audit"
+          }
+        ]
+      },
+      {
+        "matcher": "sfdc-architecture-auditor",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-assessment-planning-trigger.sh",
+            "timeout": 30,
+            "description": "QA-005: Trigger implementation planning after architecture audit"
+          }
+        ]
+      }
+    ]
+  }
+}
