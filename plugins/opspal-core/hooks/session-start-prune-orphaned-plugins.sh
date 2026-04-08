@@ -103,11 +103,23 @@ for (const sp of settingsPaths) {
     const settings = JSON.parse(fs.readFileSync(sp, "utf8"));
     let modified = false;
 
-    // enabledPlugins
+    // enabledPlugins — can be array ["key"] or object {"key": true}
     if (Array.isArray(settings.enabledPlugins)) {
       const before = settings.enabledPlugins.length;
       settings.enabledPlugins = settings.enabledPlugins.filter(p => !orphanedKeys.has(p));
       if (settings.enabledPlugins.length < before) {
+        pruned.push("ep:" + sp);
+        modified = true;
+      }
+    } else if (settings.enabledPlugins && typeof settings.enabledPlugins === "object") {
+      let removed = 0;
+      for (const key of Object.keys(settings.enabledPlugins)) {
+        if (orphanedKeys.has(key)) {
+          delete settings.enabledPlugins[key];
+          removed++;
+        }
+      }
+      if (removed > 0) {
         pruned.push("ep:" + sp);
         modified = true;
       }

@@ -1445,10 +1445,23 @@ class PostPluginUpdateFixes {
             let settingsModified = false;
 
             // 1. Remove orphaned enabledPlugins entries
+            //    enabledPlugins can be an array ["key1", "key2"] or an object {"key1": true, "key2": true}
             if (Array.isArray(settings.enabledPlugins)) {
               const before = settings.enabledPlugins.length;
               settings.enabledPlugins = settings.enabledPlugins.filter(p => !orphanedKeys.has(p));
               const removed = before - settings.enabledPlugins.length;
+              if (removed > 0) {
+                this.log(`${icons.fix} Removed ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
+                settingsModified = true;
+              }
+            } else if (settings.enabledPlugins && typeof settings.enabledPlugins === 'object') {
+              let removed = 0;
+              for (const key of Object.keys(settings.enabledPlugins)) {
+                if (orphanedKeys.has(key)) {
+                  delete settings.enabledPlugins[key];
+                  removed++;
+                }
+              }
               if (removed > 0) {
                 this.log(`${icons.fix} Removed ${removed} orphaned enabledPlugins entry(s) from ${sp}`);
                 settingsModified = true;

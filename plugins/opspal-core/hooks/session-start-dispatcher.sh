@@ -115,17 +115,16 @@ _prune_stale_references() {
           fi
           ;;
       esac
-    done < <(jq -r '.enabledPlugins // [] | .[]' "$sf" 2>/dev/null)
+    done < <(jq -r '.enabledPlugins // {} | if type == "object" then keys[] else .[] end' "$sf" 2>/dev/null)
 
     if [ ${#stale_ep[@]} -gt 0 ]; then
-      local ep_list
-      ep_list=$(printf '%s\n' "${stale_ep[@]}")
+      # Build jq del() expression — works for both object {"key":true} and array ["key"] formats
+      local del_expr='.'
+      for ep_key in "${stale_ep[@]}"; do
+        del_expr="${del_expr} | if .enabledPlugins | type == \"object\" then del(.enabledPlugins[\"${ep_key}\"]) elif .enabledPlugins | type == \"array\" then .enabledPlugins |= map(select(. != \"${ep_key}\")) else . end"
+      done
       local tmp_sf="${sf}.tmp.$$"
-      jq --arg stale "$ep_list" '
-        if .enabledPlugins then
-          .enabledPlugins |= map(select(. as $p | ($stale | split("\n") | map(select(. != "")) | index($p)) == null))
-        else . end
-      ' "$sf" > "$tmp_sf" 2>/dev/null && mv "$tmp_sf" "$sf" || rm -f "$tmp_sf"
+      jq "$del_expr" "$sf" > "$tmp_sf" 2>/dev/null && mv "$tmp_sf" "$sf" || rm -f "$tmp_sf"
       pruned_count=$((pruned_count + ${#stale_ep[@]}))
     fi
 
