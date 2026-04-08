@@ -121,8 +121,13 @@ if [ "$CRITICAL" -gt 0 ]; then
     # Output JSON for Claude
     echo "{\"systemMessage\":\"⚠️ SILENT FAILURE WARNING: $SUMMARY\",\"violations\":$VIOLATIONS,\"critical\":$CRITICAL}"
 elif [ "$VIOLATIONS" -gt 0 ]; then
-    # Non-critical issues - informational message
-    echo "{\"systemMessage\":\"ℹ️ $VIOLATIONS silent failure risk(s) detected. Run /silent-failure-check for details.\"}"
+    # Non-critical issues - log only, don't inject into session context.
+    # The /silent-failure-check command is always available on demand.
+    # Set SILENT_FAILURE_VERBOSE=1 to surface non-critical risks at startup.
+    log "Non-critical: $VIOLATIONS silent failure risk(s) detected"
+    if [[ "${SILENT_FAILURE_VERBOSE:-0}" == "1" ]]; then
+        echo "{\"systemMessage\":\"ℹ️ $VIOLATIONS silent failure risk(s) detected. Run /silent-failure-check for details.\"}"
+    fi
 fi
 
 # Exit codes:
