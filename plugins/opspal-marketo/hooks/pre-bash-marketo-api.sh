@@ -3,8 +3,44 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CORE_PLUGIN_ROOT="$(cd "$SCRIPT_DIR/../../opspal-core" && pwd)"
+
+# Resolve opspal-core plugin root. In versioned cache the sibling path includes
+# a version directory (e.g. cache/opspal-commercial/opspal-core/2.54.13/) so the
+# simple ../../opspal-core relative path doesn't work. Try CLAUDE_PLUGIN_ROOT
+# first (set by the dispatcher), then probe the versioned cache, then fallback.
+_resolve_core_root() {
+  # 1. If CLAUDE_PLUGIN_ROOT points to opspal-core, use its scripts directly
+  if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]] && [[ -f "${CLAUDE_PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh" ]]; then
+    printf '%s' "$CLAUDE_PLUGIN_ROOT"
+    return
+  fi
+  # 2. Versioned cache: go up to marketplace dir, find latest opspal-core version
+  local marketplace_dir
+  marketplace_dir="$(cd "$SCRIPT_DIR/../../.." 2>/dev/null && pwd)" || true
+  if [[ -d "${marketplace_dir}/opspal-core" ]]; then
+    local latest
+    latest="$(ls -1d "${marketplace_dir}/opspal-core"/*/ 2>/dev/null | sort -V | tail -1)"
+    if [[ -n "$latest" ]] && [[ -f "${latest}scripts/lib/classify-bash-command.sh" ]]; then
+      printf '%s' "${latest%/}"
+      return
+    fi
+  fi
+  # 3. Source-tree sibling (marketplace source or dev checkout)
+  local sibling
+  sibling="$(cd "$SCRIPT_DIR/../../opspal-core" 2>/dev/null && pwd)" || true
+  if [[ -n "$sibling" ]]; then
+    printf '%s' "$sibling"
+    return
+  fi
+}
+CORE_PLUGIN_ROOT="$(_resolve_core_root)"
 BASH_CLASSIFIER_LIB="${CORE_PLUGIN_ROOT}/scripts/lib/classify-bash-command.sh"
+
+if [[ ! -f "$BASH_CLASSIFIER_LIB" ]]; then
+  # Cannot locate opspal-core classify library — emit noop and exit cleanly
+  printf '{}\n'
+  exit 0
+fi
 
 # shellcheck source=/dev/null
 source "$BASH_CLASSIFIER_LIB"

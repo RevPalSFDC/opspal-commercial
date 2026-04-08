@@ -29,13 +29,13 @@
       "name": "opspal-hubspot",
       "source": "./plugins/opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.24"
+      "version": "3.9.25"
     },
     {
       "name": "opspal-marketo",
       "source": "./plugins/opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.33"
+      "version": "2.6.34"
     },
     {
       "name": "opspal-monday",
