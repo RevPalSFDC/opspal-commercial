@@ -71,13 +71,13 @@ git pull origin main
 | Plugin | Version | Status | Agents | Commands | Hooks |
 |--------|---------|--------|--------|----------|-------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 3 | 1 |
-| `opspal-core` | 2.54.10 | active | 80 | 126 | 94 |
+| `opspal-core` | 2.54.11 | active | 80 | 126 | 94 |
 | `opspal-gtm-planning` | 2.3.8 | active | 13 | 16 | 4 |
-| `opspal-hubspot` | 3.9.23 | active | 59 | 33 | 15 |
-| `opspal-marketo` | 2.6.32 | active | 30 | 30 | 24 |
+| `opspal-hubspot` | 3.9.24 | active | 59 | 33 | 15 |
+| `opspal-marketo` | 2.6.33 | active | 30 | 30 | 24 |
 | `opspal-monday` | 1.4.9 | experimental | 6 | 1 | 2 |
 | `opspal-okrs` | 3.0.11 | active | 14 | 14 | 4 |
-| `opspal-salesforce` | 3.87.4 | active | 94 | 59 | 45 |
+| `opspal-salesforce` | 3.87.5 | active | 94 | 59 | 45 |
 
 ## Support
 
