@@ -2203,6 +2203,157 @@ step11_runbook_automation() {
   return 0
 }
 
+step12_runtime_housekeeping() {
+  local core_plugin_root
+  core_plugin_root="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd)"
+  local checks_fixed=0
+  local checks_warned=0
+  local details=""
+
+  # --- 1. Prune stale ACE routing cache (>7 days) ---
+  local ace_cache="${HOME}/.claude/cache/ace-routing"
+  if [ -d "$ace_cache" ]; then
+    local stale_count=0
+    local stale_files=()
+    while IFS= read -r f; do
+      stale_files+=("$f")
+      stale_count=$((stale_count + 1))
+    done < <(find "$ace_cache" -name "*_stats.json" -mtime +7 2>/dev/null)
+    if [ "$stale_count" -gt 0 ]; then
+      if [ "$SKIP_FIX" != true ]; then
+        for f in "${stale_files[@]}"; do rm -f "$f" 2>/dev/null; done
+        details="${details}  ✅ Pruned ${stale_count} stale ACE routing cache file(s)\n"
+        checks_fixed=$((checks_fixed + 1))
+      else
+        details="${details}  ⚠️  ${stale_count} stale ACE routing cache file(s) found (>7d old)\n"
+        checks_warned=$((checks_warned + 1))
+      fi
+    else
+      details="${details}  ✅ ACE routing cache clean (no stale files)\n"
+    fi
+  else
+    details="${details}  ⏭️  ACE routing cache directory not found — skipping\n"
+  fi
+
+  # --- 2. Prune orphaned session lockfiles (>5 min) ---
+  local session_state="${HOME}/.claude/session-state"
+  if [ -d "$session_state" ]; then
+    local lock_pruned=0
+    local now_epoch
+    now_epoch=$(date +%s 2>/dev/null || echo 0)
+    for lockfile in "$session_state"/*.lock; do
+      [ -f "$lockfile" ] || continue
+      local lock_ts
+      lock_ts=$(cat "$lockfile" 2>/dev/null || echo 0)
+      local age=$(( now_epoch - lock_ts ))
+      if [ "$age" -gt 300 ] || [ "$age" -lt 0 ]; then
+        rm -f "$lockfile" 2>/dev/null
+        lock_pruned=$((lock_pruned + 1))
+      fi
+    done
+    if [ "$lock_pruned" -gt 0 ]; then
+      details="${details}  ✅ Cleaned ${lock_pruned} stale session lockfile(s)\n"
+      checks_fixed=$((checks_fixed + 1))
+    fi
+  fi
+
+  # --- 3. MEMORY.md line count check ---
+  local memory_md="${HOME}/.claude/projects/-$(echo "$PWD" | tr '/' '-')/memory/MEMORY.md"
+  # Also check common project memory paths
+  for candidate in "$memory_md" "${HOME}/.claude/MEMORY.md"; do
+    if [ -f "$candidate" ]; then
+      local line_count
+      line_count=$(wc -l < "$candidate" 2>/dev/null || echo 0)
+      if [ "$line_count" -gt 200 ]; then
+        details="${details}  ⚠️  MEMORY.md at ${line_count}/200 lines — entries beyond line 200 are truncated. Prune to keep under 200.\n"
+        checks_warned=$((checks_warned + 1))
+      else
+        details="${details}  ✅ MEMORY.md within limits (${line_count}/200 lines)\n"
+      fi
+      break
+    fi
+  done
+
+  # --- 4. Cross-plugin path validation ---
+  # Verify that scripts referencing ../../opspal-core can resolve in the current
+  # runtime environment (versioned cache or source tree). Check one representative
+  # script from each cross-referencing plugin.
+  local cross_plugin_issues=0
+  for plugin_hook in \
+      "opspal-hubspot/hooks/pre-bash-hubspot-api.sh" \
+      "opspal-marketo/hooks/pre-bash-marketo-api.sh"; do
+    # Find the script in cache or source tree
+    local found_script=""
+    for root in "${CLAUDE_ROOTS[@]}"; do
+      local cache_dir="$root/plugins/cache/opspal-commercial"
+      if [ -d "$cache_dir" ]; then
+        local pname="${plugin_hook%%/*}"
+        found_script="$(find "$cache_dir/$pname" -name "$(basename "$plugin_hook")" -type f 2>/dev/null | head -1)"
+        [ -n "$found_script" ] && break
+      fi
+    done
+    if [ -z "$found_script" ]; then
+      # Try marketplace source
+      for root in "${CLAUDE_ROOTS[@]}"; do
+        local mp_dir="$root/plugins/marketplaces/opspal-commercial/plugins"
+        if [ -f "$mp_dir/$plugin_hook" ]; then
+          found_script="$mp_dir/$plugin_hook"
+          break
+        fi
+      done
+    fi
+    if [ -n "$found_script" ]; then
+      # Check if the script still has the broken ../../opspal-core hard-cd pattern
+      if grep -q 'cd "\$SCRIPT_DIR/../../opspal-core"' "$found_script" 2>/dev/null; then
+        cross_plugin_issues=$((cross_plugin_issues + 1))
+        details="${details}  ⚠️  $plugin_hook uses hard-coded ../../opspal-core path (needs update)\n"
+        checks_warned=$((checks_warned + 1))
+      fi
+    fi
+  done
+  if [ "$cross_plugin_issues" -eq 0 ]; then
+    details="${details}  ✅ Cross-plugin path references validated\n"
+  fi
+
+  # --- 5. Stale enabledPlugins entries (orphan check) ---
+  for root in "${CLAUDE_ROOTS[@]}"; do
+    local settings_file="$root/settings.json"
+    [ -f "$settings_file" ] || continue
+    if command -v jq >/dev/null 2>&1; then
+      local orphan_count=0
+      while IFS= read -r ep_entry; do
+        [ -z "$ep_entry" ] && continue
+        case "$ep_entry" in
+          opspal-*@*)
+            local ep_pname="${ep_entry%%@*}"
+            local ep_mplace="${ep_entry#*@}"
+            local ep_dir="$root/plugins/marketplaces/${ep_mplace}/plugins/${ep_pname}"
+            if [ ! -f "${ep_dir}/.claude-plugin/plugin.json" ] && [ ! -f "${ep_dir}/plugin.json" ]; then
+              orphan_count=$((orphan_count + 1))
+            fi
+            ;;
+        esac
+      done < <(jq -r '.enabledPlugins // {} | if type == "object" then keys[] else .[] end' "$settings_file" 2>/dev/null)
+      if [ "$orphan_count" -gt 0 ]; then
+        details="${details}  ⚠️  ${orphan_count} orphaned enabledPlugins entry(s) in $(basename "$settings_file") — run /pluginupdate --fix\n"
+        checks_warned=$((checks_warned + 1))
+      fi
+    fi
+  done
+
+  echo -e "$details"
+
+  if [ "$checks_warned" -eq 0 ]; then
+    update_step_status "passed"
+    append_step_message "Runtime housekeeping clean (${checks_fixed} items auto-fixed)"
+  else
+    update_step_status "degraded"
+    append_step_message "Runtime housekeeping: ${checks_fixed} fixed, ${checks_warned} warning(s) — see details above"
+  fi
+
+  return 0
+}
+
 # ---------------------------------------------------------------------------
 # Single-step mode: run one step and exit (used by session-start auto-update)
 # ---------------------------------------------------------------------------
@@ -2219,8 +2370,9 @@ if [ -n "$SINGLE_STEP" ]; then
     step9)  step9_subagent_remediation ;;
     step10) step10_customization_migration ;;
     step11) step11_runbook_automation ;;
+    step12) step12_runtime_housekeeping ;;
     *)
-      echo "Unknown step: $SINGLE_STEP (valid: step2, step4, step7, step8, step9, step10, step11)" >&2
+      echo "Unknown step: $SINGLE_STEP (valid: step2, step4, step7, step8, step9, step10, step11, step12)" >&2
       exit 1
       ;;
   esac
@@ -2248,6 +2400,7 @@ run_step "step8-routing-promotion" "Step 8: Routing promotion verification" "�
 run_step "step9-subagent-remediation" "Step 9: Sub-agent tool access remediation" "🔓 Step 9: Verifying sub-agent tool access configuration..." step9_subagent_remediation
 run_step "step10-customization-migration" "Step 10: Customization migration" "🎨 Step 10: Running customization migrations..." step10_customization_migration
 run_step "step11-runbook-automation" "Step 11: Runbook automation enablement" "📔 Step 11: Verifying runbook automation wiring..." step11_runbook_automation
+run_step "step12-runtime-housekeeping" "Step 12: Runtime housekeeping" "🧹 Step 12: Runtime housekeeping (stale caches, lockfiles, orphans)..." step12_runtime_housekeeping
 
 # Summary
 CURRENT_STEP="summary"
