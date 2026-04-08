@@ -30,6 +30,30 @@ if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
   echo "[hook-debug] $(basename "$0") starting (pid=$$)" >&2
 fi
 
+# ---------------------------------------------------------------------------
+# Idempotency guard: Claude Code may load plugin hooks twice during startup,
+# causing this dispatcher to fire twice. Use a session-scoped lockfile to
+# ensure we only run once per startup cycle. The lock expires after 60s to
+# handle edge cases where the session PID gets reused.
+# ---------------------------------------------------------------------------
+_LOCK_DIR="${HOME}/.claude/session-state"
+mkdir -p "$_LOCK_DIR" 2>/dev/null || true
+_LOCK_FILE="${_LOCK_DIR}/session-start-dispatcher.lock"
+_NOW=$(date +%s 2>/dev/null || echo 0)
+if [ -f "$_LOCK_FILE" ]; then
+  _LOCK_AGE=$(cat "$_LOCK_FILE" 2>/dev/null || echo 0)
+  _ELAPSED=$(( _NOW - _LOCK_AGE ))
+  if [ "$_ELAPSED" -lt 60 ] && [ "$_ELAPSED" -ge 0 ]; then
+    # Already ran within the last 60 seconds — skip duplicate invocation
+    if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
+      echo "[hook-debug] session-start-dispatcher skipped (duplicate invocation, lock age=${_ELAPSED}s)" >&2
+    fi
+    printf '{}\n'
+    exit 0
+  fi
+fi
+printf '%s' "$_NOW" > "$_LOCK_FILE" 2>/dev/null || true
+
 if ! command -v jq >/dev/null 2>&1; then
   echo "[session-start-dispatcher] WARNING: jq not found — SessionStart child hooks disabled" >&2
   printf '{"suppressOutput":true,"systemMessage":"WARNING: SessionStart dispatcher skipped — jq not installed. Onboarding check, session initialization, and env validation are inactive."}\n'
