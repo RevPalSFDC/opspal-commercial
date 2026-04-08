@@ -1,12 +1,12 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on major platform stability improvements that make OpsPal more reliable for daily use. The platform now automatically cleans up old files and fixes connection issues in the background, while new safeguards prevent common Salesforce setup errors that could block your workflows. These behind-the-scenes improvements mean fewer interruptions and smoother automation runs.",
-  "published_at": "2026-04-08T13:36:56.235Z",
+  "summary": "This week focused on making OpsPal more reliable and self-healing. The platform now automatically cleans up old files and fixes common setup issues behind the scenes, while Salesforce users will see fewer errors when creating record types and working with Dynamic Forms on pages.",
+  "published_at": "2026-04-08T14:41:48.848Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-08",
   "has_breaking": false,
-  "total_commits": 48,
+  "total_commits": 49,
   "entries": [
     {
       "category": "improved",
@@ -14,34 +14,47 @@
       "headline": "Platform automatically cleans up old files during updates",
       "details": [
         "Removes outdated cache files older than 7 days",
-        "Clears stuck session files after 5 minutes",
-        "Warns when memory logs get too large"
+        "Cleans up abandoned session files older than 5 minutes",
+        "Alerts you when memory usage reports get too large"
       ],
       "commits": [
         "46d5153"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform removes broken plugin references automatically",
+      "headline": "Platform removes outdated add-ons automatically",
       "details": [
-        "Works across all operating systems including Windows, Linux, and Mac",
-        "Detects and removes any broken plugin connections",
-        "Prevents errors from outdated plugin configurations"
+        "Works across Windows, Mac, and Linux systems",
+        "Detects and removes any outdated marketplace add-ons",
+        "Keeps your plugin library clean and current"
       ],
       "commits": [
         "396a613"
       ]
     },
     {
+      "category": "improved",
+      "plugin": "Salesforce",
+      "headline": "Better startup reliability for Salesforce connections",
+      "details": [
+        "Removes outdated data quality tools from background processes",
+        "Migrates old audit configurations to new format",
+        "Adds quality and architecture auditing for Salesforce orgs"
+      ],
+      "commits": [
+        "ba25138"
+      ]
+    },
+    {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "New safeguards prevent common Salesforce configuration errors",
+      "headline": "Salesforce form and record type management works more reliably",
       "details": [
-        "Stops invisible field additions when Dynamic Forms is active",
-        "Automatically assigns new record types to prevent permission errors",
-        "Converts blocking routing errors to warnings to keep sessions running"
+        "Prevents invisible field additions when Dynamic Forms are active on pages",
+        "Automatically assigns new record types to System Administrator profile",
+        "Reduces session interruptions from routing conflicts"
       ],
       "commits": [
         "b85e3bf"
@@ -52,9 +65,9 @@
       "plugin": "Core Platform",
       "headline": "Platform automatically fixes missing dependencies at startup",
       "details": [
-        "Installs required components automatically in the background",
-        "Shows clear error messages when manual fixes are needed",
-        "Prevents session failures from missing dependencies"
+        "Detects and installs missing required components",
+        "Shows clear error messages when installations fail",
+        "Runs fixes in the background to avoid delays"
       ],
       "commits": [
         "26f0866"
@@ -63,7 +76,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved false missing package errors at session start",
+      "headline": "Eliminated false missing package errors at startup",
       "details": null,
       "commits": [
         "4255dd6"
