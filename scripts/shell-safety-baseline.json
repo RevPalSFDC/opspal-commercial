@@ -1,56 +1,7 @@
 {
-  "generatedAt": "2026-03-25T14:56:18.444Z",
+  "generatedAt": "2026-04-08T17:45:00.778Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
-    {
-      "signature": "curl-timeout-required|.claude/hooks/post-commit-reflection-closer.sh|RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X PATCH \\ \"$SUPABASE_URL/rest/v1/reflections?id=eq.$CLEAN_ID\" \\ -H \"apikey: $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Content-Type: application/json\" \\ -H \"Prefer: return=minimal\" \\ -d \"{",
-      "rule": "curl-timeout-required",
-      "file": ".claude/hooks/post-commit-reflection-closer.sh",
-      "line": 63,
-      "snippet": "RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X PATCH \\ \"$SUPABASE_URL/rest/v1/reflections?id=eq.$CLEAN_ID\" \\ -H \"apikey: $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY\" \\ -H \"Content-Type: application/json\" \\ -H \"Prefer: return=minimal\" \\ -d \"{"
-    },
-    {
-      "signature": "curl-timeout-required|.claude/hooks/post-git-push-slack-notifier.sh|RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$PAYLOAD\" 2>/dev/null)",
-      "rule": "curl-timeout-required",
-      "file": ".claude/hooks/post-git-push-slack-notifier.sh",
-      "line": 390,
-      "snippet": "RESPONSE=$(curl -s -w \"\\n%{http_code}\" -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$PAYLOAD\" 2>/dev/null)"
-    },
-    {
-      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -o /dev/null -w \"%{http_code}\" \"$url\")",
-      "rule": "curl-timeout-required",
-      "file": ".claude/scripts/lib/safe-curl.sh",
-      "line": 203,
-      "snippet": "local http_code=$(curl -s -o /dev/null -w \"%{http_code}\" \"$url\")"
-    },
-    {
-      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ $extra_opts \\ \"$url\")",
-      "rule": "curl-timeout-required",
-      "file": ".claude/scripts/lib/safe-curl.sh",
-      "line": 113,
-      "snippet": "local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" \\ -X POST \\ -H \"Content-Type: application/json\" \\ -d \"$payload\" \\ $extra_opts \\ \"$url\")"
-    },
-    {
-      "signature": "curl-timeout-required|.claude/scripts/lib/safe-curl.sh|local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" $extra_opts \"$url\")",
-      "rule": "curl-timeout-required",
-      "file": ".claude/scripts/lib/safe-curl.sh",
-      "line": 50,
-      "snippet": "local http_code=$(curl -s -w \"%{http_code}\" -D \"$temp_headers\" -o \"$temp_response\" $extra_opts \"$url\")"
-    },
-    {
-      "signature": "curl-timeout-required|diagnose-plugin-errors.sh|if curl -s --head \"$MARKETPLACE_URL\"",
-      "rule": "curl-timeout-required",
-      "file": "diagnose-plugin-errors.sh",
-      "line": 65,
-      "snippet": "if curl -s --head \"$MARKETPLACE_URL\""
-    },
-    {
-      "signature": "curl-timeout-required|diagnose-plugin-errors.sh|if curl -s -f \"$MANIFEST_URL\" > /tmp/test-manifest.json 2>&1",
-      "rule": "curl-timeout-required",
-      "file": "diagnose-plugin-errors.sh",
-      "line": 102,
-      "snippet": "if curl -s -f \"$MANIFEST_URL\" > /tmp/test-manifest.json 2>&1"
-    },
     {
       "signature": "curl-timeout-required|plugins/opspal-core/hooks/post-reflect-alerter.sh|if ! command -v curl &> /dev/null",
       "rule": "curl-timeout-required",
@@ -99,6 +50,20 @@
       "file": "plugins/opspal-core/scripts/lib/asana-connection-manager.sh",
       "line": 99,
       "snippet": "local response=$(curl -s -w \"\\n%{http_code}\" \\ -H \"Authorization: Bearer $token\" \\ \"https://app.asana.com/api/1.0/workspaces\")"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/classify-bash-command.sh|[[:space:]])curl([[:space:]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/classify-bash-command.sh",
+      "line": 366,
+      "snippet": "[[:space:]])curl([[:space:]]"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/classify-bash-command.sh|[[:space:]])curl([[:space:]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-core/scripts/lib/classify-bash-command.sh",
+      "line": 400,
+      "snippet": "[[:space:]])curl([[:space:]]"
     },
     {
       "signature": "curl-timeout-required|plugins/opspal-core/scripts/lib/safe-curl.sh|_curl_log debug \"HTTP $http_code, curl exit: $curl_exit\"",
@@ -188,8 +153,64 @@
       "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh|SLACK_RESPONSE=$(curl -s -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$SLACK_MESSAGE\" 2>&1)",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh",
-      "line": 175,
+      "line": 181,
       "snippet": "SLACK_RESPONSE=$(curl -s -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$SLACK_MESSAGE\" 2>&1)"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|[[ \"$_STDIN_PEEK\" != *\"curl \"* ]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+      "line": 51,
+      "snippet": "[[ \"$_STDIN_PEEK\" != *\"curl \"* ]]"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|[[ \"$_STDIN_PEEK\" != *\"curl\\\"\"* ]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+      "line": 51,
+      "snippet": "[[ \"$_STDIN_PEEK\" != *\"curl\\\"\"* ]]"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|CONTEXT=\"Direct HubSpot API mutations via curl bypass MCP-level validation. Read-only GET, search, and batch/read requests remain allowed.\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+      "line": 191,
+      "snippet": "CONTEXT=\"Direct HubSpot API mutations via curl bypass MCP-level validation. Read-only GET, search, and batch/read requests remain allowed.\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+      "line": 190,
+      "snippet": "REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|[[ \"$_STDIN_PEEK\" != *\"curl \"* ]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+      "line": 51,
+      "snippet": "[[ \"$_STDIN_PEEK\" != *\"curl \"* ]]"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|[[ \"$_STDIN_PEEK\" != *\"curl\\\"\"* ]]",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+      "line": 51,
+      "snippet": "[[ \"$_STDIN_PEEK\" != *\"curl\\\"\"* ]]"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|CONTEXT=\"Direct Marketo API mutations via curl bypass MCP-level validation. Read-only GET requests remain allowed.\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+      "line": 191,
+      "snippet": "CONTEXT=\"Direct Marketo API mutations via curl bypass MCP-level validation. Read-only GET requests remain allowed.\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+      "line": 190,
+      "snippet": "REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\""
     },
     {
       "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/analytics-automation.sh|response=$(curl -s -X POST \\ \"${instance_url}/services/data/v64.0/analytics/reports\" \\ -H \"Authorization: Bearer ${access_token}\" \\ -H \"Content-Type: application/json\" \\ -d @\"$metadata_file\")",
@@ -237,7 +258,7 @@
       "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/deploy-reports-production.sh|curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$message\" 2>/dev/null",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-salesforce/scripts/deploy-reports-production.sh",
-      "line": 543,
+      "line": 548,
       "snippet": "curl -X POST \"$SLACK_WEBHOOK_URL\" \\ -H \"Content-Type: application/json\" \\ -d \"$message\" 2>/dev/null"
     },
     {
@@ -381,52 +402,52 @@
       "snippet": "curl -s -H \"Authorization: Bearer $ASANA_ACCESS_TOKEN\" \\ -H \"Content-Type: application/json\" \\ \"https://app.asana.com/api/1.0/workspaces\""
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|curl -fsSL \"$CLAUDE_INSTALL_URL\"",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|curl -fsSL \"$CLAUDE_INSTALL_URL\"",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 220,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 219,
       "snippet": "curl -fsSL \"$CLAUDE_INSTALL_URL\""
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|DOWNLOADER=\"curl\"",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|DOWNLOADER=\"curl\"",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 164,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 163,
       "snippet": "DOWNLOADER=\"curl\""
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|echo -e \" ${YELLOW}[DRY-RUN]${NC} curl -fsSL $CLAUDE_INSTALL_URL",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|echo -e \" ${YELLOW}[DRY-RUN]${NC} curl -fsSL $CLAUDE_INSTALL_URL",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 217,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 216,
       "snippet": "echo -e \" ${YELLOW}[DRY-RUN]${NC} curl -fsSL $CLAUDE_INSTALL_URL"
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|error \"curl or wget is required\"",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|error \"curl or wget is required\"",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 170,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 169,
       "snippet": "error \"curl or wget is required\""
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|if [ \"$DOWNLOADER\" = \"curl\" ]",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|if [ \"$DOWNLOADER\" = \"curl\" ]",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 219,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 218,
       "snippet": "if [ \"$DOWNLOADER\" = \"curl\" ]"
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|if command -v curl &>/dev/null",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|if command -v curl &>/dev/null",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 163,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 162,
       "snippet": "if command -v curl &>/dev/null"
     },
     {
-      "signature": "curl-timeout-required|reports/website-mockup/bootstrap-opspal.sh|success \"curl: available\"",
+      "signature": "curl-timeout-required|scripts/bootstrap-opspal.sh|success \"curl: available\"",
       "rule": "curl-timeout-required",
-      "file": "reports/website-mockup/bootstrap-opspal.sh",
-      "line": 165,
+      "file": "scripts/bootstrap-opspal.sh",
+      "line": 164,
       "snippet": "success \"curl: available\""
     },
     {
