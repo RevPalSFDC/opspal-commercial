@@ -1,66 +1,46 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on improving OpsPal's stability and reliability behind the scenes. The platform now automatically cleans up outdated plugin configurations and handles dependency issues that could cause startup problems. Most importantly, Salesforce users will experience fewer errors when creating record types and adding fields to pages with Dynamic Forms enabled.",
-  "published_at": "2026-04-08T02:32:33.044Z",
+  "summary": "This week's updates focused on making OpsPal run more smoothly behind the scenes. The platform now automatically fixes missing dependencies when you start a session, preventing common startup errors. We also improved Salesforce integrations by preventing field conflicts with Dynamic Forms and automatically configuring new record types to avoid permission errors.",
+  "published_at": "2026-04-08T02:44:49.279Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-08",
   "has_breaking": false,
-  "total_commits": 42,
+  "total_commits": 44,
   "entries": [
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform automatically removes outdated plugin configurations",
+      "headline": "OpsPal now cleans up temporary files automatically",
       "details": [
-        "Works across all operating systems and plugin types",
-        "Prevents conflicts from old or broken plugin settings"
+        "Removes outdated cache files and session data to keep the platform running smoothly",
+        "Alerts you if memory usage logs become too large"
       ],
       "commits": [
-        "396a613"
+        "46d5153"
       ]
     },
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "OpsPal cleans up orphaned plugins automatically on startup",
-      "details": null,
-      "commits": [
-        "479282c"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Improved Salesforce plugin startup and configuration management",
+      "headline": "Salesforce integrations now handle Dynamic Forms and record types better",
       "details": [
-        "Better handling of quality auditing tools",
-        "Cleaner plugin migration process"
-      ],
-      "commits": [
-        "ba25138"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Three critical Salesforce fixes for smoother operations",
-      "details": [
-        "Dynamic Forms pages now prevent invisible field additions",
-        "Record types automatically get proper permissions after creation",
-        "Routing conflicts no longer block your sessions"
+        "Prevents field conflicts when Dynamic Forms are active on your pages",
+        "Automatically assigns new record types to System Administrator profile to avoid permission errors",
+        "Improves routing decisions to prevent session interruptions"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform automatically installs missing dependencies and shows clear error messages",
+      "headline": "OpsPal automatically fixes missing dependencies at startup",
       "details": [
-        "Runs background fixes for common dependency issues",
-        "Shows helpful commands when manual fixes are needed"
+        "Checks for missing components when you start a session",
+        "Installs needed dependencies in the background",
+        "Shows clear error messages and fix instructions when manual intervention is needed"
       ],
       "commits": [
         "26f0866"
@@ -69,7 +49,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved false missing package errors during startup",
+      "headline": "Fixed false error about missing packages during startup",
       "details": null,
       "commits": [
         "4255dd6"
