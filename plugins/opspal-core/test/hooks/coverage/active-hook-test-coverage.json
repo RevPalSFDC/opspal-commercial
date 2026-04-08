@@ -1,12 +1,19 @@
 {
-  "generatedAt": "2026-04-08T14:49:17.332Z",
+  "generatedAt": "2026-04-08T17:50:06.997Z",
   "totals": {
-    "activeHooks": 102,
+    "activeHooks": 103,
     "coveredHooks": 90,
     "allowlistedUntested": 12,
-    "missingCoverage": 0
+    "missingCoverage": 1
   },
-  "missingCoverage": [],
+  "missingCoverage": [
+    {
+      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+      "plugin": "opspal-data-hygiene",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*"
+    }
+  ],
   "allowlistedUntested": [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
@@ -574,6 +581,15 @@
         "plugins/opspal-core/test/hooks/unit/user-prompt-dispatcher.test.js"
       ],
       "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+      "plugin": "opspal-data-hygiene",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
       "allowReason": null
     },
     {
@@ -1284,6 +1300,13 @@
       ],
       "covered": true,
       "allowReason": null
+    }
+  ],
+  "exempt": [
+    {
+      "hook": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+      "event": "UserPromptSubmit",
+      "reason": "Deprecated plugin \u2014 hook only emits a deprecation warning banner, no functional logic to test"
     }
   ]
 }

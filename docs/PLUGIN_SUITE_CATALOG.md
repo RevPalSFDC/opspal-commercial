@@ -30,14 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.54.19 | active | 80 | 11 | 126 | 51 | 107 | 601 |
-| `opspal-data-hygiene` | 1.2.1 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
+| `opspal-core` | 2.54.20 | active | 80 | 11 | 126 | 51 | 107 | 601 |
+| `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
 | `opspal-gtm-planning` | 2.3.8 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.26 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.35 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.9 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.11 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.6 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.7 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 
 ## Registry
 
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.54.19`
+- Version: `2.54.20`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -470,7 +470,7 @@
 
 ### opspal-data-hygiene
 
-- Version: `1.2.1`
+- Version: `1.2.2`
 - Status: `deprecated`
 - Path: `plugins/opspal-data-hygiene`
 - Manifest: `plugins/opspal-data-hygiene/.claude-plugin/plugin.json`
@@ -965,7 +965,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.6`
+- Version: `3.87.7`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
@@ -1210,7 +1210,7 @@
 - `post-sf-command` (`post-sf-command.sh`): # Post-SF-Command Hook - API Usage Tracking
 - `post-sf-query-validation` (`post-sf-query-validation.sh`): Post-SF Query Validation Hook
 - `post-territory-operation-logger` (`post-territory-operation-logger.sh`): Post-Territory Operation Logger Hook
-- `pre-bash-dispatcher` (`pre-bash-dispatcher.sh`): Fast-exit for commands that don't involve Salesforce CLI — avoids sourcing
+- `pre-bash-dispatcher` (`pre-bash-dispatcher.sh`): Fast-exit for commands that don't involve Salesforce CLI or jq piping —
 - `pre-bash-jq-validator` (`pre-bash-jq-validator.sh`): Pre-Bash jq Validator Hook
 - `pre-bash-soql-validator` (`pre-bash-soql-validator.sh`): Pre-Bash SOQL Validator Hook
 - `pre-batch-validation` (`pre-batch-validation.sh`): Pre-Batch Validation Hook

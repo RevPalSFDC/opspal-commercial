@@ -78,7 +78,9 @@ async function runAllTests() {
     });
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    assert.strictEqual(result.output, null, 'Should stay silent for unrelated Bash commands');
+    // Fast-exit emits {} noop JSON (preferred) or stays silent (legacy)
+    assert(result.output === null || (typeof result.output === 'object' && Object.keys(result.output).length === 0),
+      'Should emit {} noop or stay silent for unrelated Bash commands');
   }));
 
   results.push(await runTest('Allows deploy report lifecycle commands to pass through without pre-deploy validation', async () => {
