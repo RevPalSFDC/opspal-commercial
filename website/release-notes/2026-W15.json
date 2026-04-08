@@ -1,12 +1,12 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on making OpsPal more reliable and self-healing. The platform now automatically cleans up old files and fixes common setup issues behind the scenes, while Salesforce users will see fewer errors when creating record types and working with Dynamic Forms on pages.",
-  "published_at": "2026-04-08T14:41:48.848Z",
+  "summary": "This week brought major platform stability improvements that make OpsPal more reliable for daily RevOps work. The platform now automatically cleans up outdated files and fixes missing dependencies during startup, preventing common session failures. Most importantly, OpsPal now prevents invisible field additions when Salesforce Dynamic Forms is active and automatically assigns record types to prevent configuration errors.",
+  "published_at": "2026-04-08T14:51:56.045Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-08",
   "has_breaking": false,
-  "total_commits": 49,
+  "total_commits": 51,
   "entries": [
     {
       "category": "improved",
@@ -15,20 +15,29 @@
       "details": [
         "Removes outdated cache files older than 7 days",
         "Cleans up abandoned session files older than 5 minutes",
-        "Alerts you when memory usage reports get too large"
+        "Warns when memory usage reports become too large"
       ],
       "commits": [
         "46d5153"
       ]
     },
     {
+      "category": "fixed",
+      "plugin": "HubSpot",
+      "headline": "HubSpot integration loads faster and more reliably",
+      "details": null,
+      "commits": [
+        "fee6aa8"
+      ]
+    },
+    {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform removes outdated add-ons automatically",
+      "headline": "Platform removes broken integrations automatically across all systems",
       "details": [
-        "Works across Windows, Mac, and Linux systems",
-        "Detects and removes any outdated marketplace add-ons",
-        "Keeps your plugin library clean and current"
+        "Works on Windows, Linux, and Mac computers",
+        "Detects and removes any broken marketplace integrations",
+        "Cleans up all plugin types, not just specific ones"
       ],
       "commits": [
         "396a613"
@@ -36,12 +45,21 @@
     },
     {
       "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Broken integrations get cleaned up automatically when you start OpsPal",
+      "details": null,
+      "commits": [
+        "479282c"
+      ]
+    },
+    {
+      "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better startup reliability for Salesforce connections",
+      "headline": "Salesforce integration starts up cleaner with better error handling",
       "details": [
-        "Removes outdated data quality tools from background processes",
-        "Migrates old audit configurations to new format",
-        "Adds quality and architecture auditing for Salesforce orgs"
+        "Removes outdated quality audit tools from testing workflows",
+        "Migrates older integration settings to new format",
+        "Adds proper cleanup for Salesforce quality and architecture auditing tools"
       ],
       "commits": [
         "ba25138"
@@ -50,11 +68,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce form and record type management works more reliably",
+      "headline": "Critical Salesforce configuration fixes prevent common errors",
       "details": [
-        "Prevents invisible field additions when Dynamic Forms are active on pages",
-        "Automatically assigns new record types to System Administrator profile",
-        "Reduces session interruptions from routing conflicts"
+        "Prevents invisible field additions when Dynamic Forms is active on Salesforce pages",
+        "Automatically assigns record types to System Administrator profile to prevent reference errors",
+        "Converts blocking routing errors to warnings so sessions continue running"
       ],
       "commits": [
         "b85e3bf"
@@ -63,11 +81,11 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform automatically fixes missing dependencies at startup",
+      "headline": "Platform automatically installs missing dependencies and shows clear error messages",
       "details": [
-        "Detects and installs missing required components",
-        "Shows clear error messages when installations fail",
-        "Runs fixes in the background to avoid delays"
+        "Captures detailed installation progress and error information",
+        "Shows warning and manual fix commands when automatic installation fails",
+        "Runs background fixes for safe dependency issues during startup"
       ],
       "commits": [
         "26f0866"
@@ -76,7 +94,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminated false missing package errors at startup",
+      "headline": "Eliminated false missing package errors during startup",
       "details": null,
       "commits": [
         "4255dd6"
