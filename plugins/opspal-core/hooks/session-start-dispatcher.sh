@@ -56,13 +56,16 @@ printf '%s' "$_NOW" > "$_LOCK_FILE" 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
 # Auto-migrate deprecated SFDX_STATE_FOLDER → SF_DATA_DIR for this session.
-# The Salesforce CLI emits a noisy deprecation warning when SFDX_STATE_FOLDER
-# is set. Migrate the value so sf commands run clean.
+# The Salesforce CLI and our env-config checker both warn when
+# SFDX_STATE_FOLDER is set. Always unset it; copy the value to SF_DATA_DIR
+# only if SF_DATA_DIR isn't already set.
 # ---------------------------------------------------------------------------
-if [[ -n "${SFDX_STATE_FOLDER:-}" ]] && [[ -z "${SF_DATA_DIR:-}" ]]; then
-  export SF_DATA_DIR="$SFDX_STATE_FOLDER"
+if [[ -n "${SFDX_STATE_FOLDER:-}" ]]; then
+  if [[ -z "${SF_DATA_DIR:-}" ]]; then
+    export SF_DATA_DIR="$SFDX_STATE_FOLDER"
+  fi
   unset SFDX_STATE_FOLDER
-  echo "[session-start-dispatcher] Migrated SFDX_STATE_FOLDER → SF_DATA_DIR=$SF_DATA_DIR" >&2
+  echo "[session-start-dispatcher] Removed deprecated SFDX_STATE_FOLDER (SF_DATA_DIR=$SF_DATA_DIR)" >&2
 fi
 
 if ! command -v jq >/dev/null 2>&1; then
