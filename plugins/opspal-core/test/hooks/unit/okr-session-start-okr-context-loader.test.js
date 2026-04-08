@@ -52,7 +52,8 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.status, 0, 'Should exit with 0');
-      assert.strictEqual(result.stdout.trim(), '', 'Should not emit output without ORG_SLUG');
+      const out = result.stdout.trim();
+      assert(out === '' || out === '{}', 'Should emit {} noop or stay silent without ORG_SLUG');
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -75,8 +76,9 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.status, 0, 'Should exit with 0');
-      assert(result.stdout.includes('OKR Context: org=acme'), 'Should print the OKR context banner');
-      assert(result.stdout.includes('active_cycle=FY2027'), 'Should identify the active cycle');
+      const combined = result.stdout + result.stderr;
+      assert(combined.includes('OKR Context: org=acme'), 'Should print the OKR context banner');
+      assert(combined.includes('active_cycle=FY2027'), 'Should identify the active cycle');
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }

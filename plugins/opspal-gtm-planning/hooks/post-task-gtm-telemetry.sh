@@ -8,6 +8,7 @@ set -euo pipefail
 
 # Skip if ORG_SLUG is not set
 if [ -z "${ORG_SLUG:-}" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -28,6 +29,7 @@ case "$AGENT_NAME" in
   *gtm-planning*|*gtm-strategy*|*gtm-territory*|*gtm-quota*|*gtm-comp*|*gtm-attribution*|*gtm-data*|*gtm-revenue*|*gtm-retention*|*gtm-market*|*gtm-strategic*|*forecast-orchestrator*)
     ;;
   *)
+    printf '{}\n'
     exit 0
     ;;
 esac
@@ -84,4 +86,5 @@ else
   echo "{\"timestamp\":\"$TIMESTAMP\",\"agent\":\"$AGENT_NAME\",\"org\":\"$ORG_SLUG\",\"cycle\":\"$CYCLE\",\"phase\":\"$PHASE\"}" >> "$TELEMETRY_FILE" 2>/dev/null || true
 fi
 
+printf '{}\n'
 exit 0

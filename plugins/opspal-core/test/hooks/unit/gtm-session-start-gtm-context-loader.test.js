@@ -52,7 +52,9 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.status, 0, 'Should exit with 0');
-      assert.strictEqual(result.stdout.trim(), '', 'Should not emit output without ORG_SLUG');
+      // Hook emits {} noop JSON (preferred) or stays silent (legacy)
+      const out = result.stdout.trim();
+      assert(out === '' || out === '{}', 'Should emit {} noop or stay silent without ORG_SLUG');
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }
@@ -82,9 +84,11 @@ async function runAllTests() {
       });
 
       assert.strictEqual(result.status, 0, 'Should exit with 0');
-      assert(result.stdout.includes('GTM Planning Context: org=acme'), 'Should print the GTM context banner');
-      assert(result.stdout.includes('cycle=FY2027'), 'Should identify the active cycle');
-      assert(result.stdout.includes('phase=quota-modeling'), 'Should include the active phase');
+      // Banner text is now emitted to stderr (not stdout) to avoid "Hook output does not start with {"
+      const combined = result.stdout + result.stderr;
+      assert(combined.includes('GTM Planning Context: org=acme'), 'Should print the GTM context banner');
+      assert(combined.includes('cycle=FY2027'), 'Should identify the active cycle');
+      assert(combined.includes('phase=quota-modeling'), 'Should include the active phase');
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     }

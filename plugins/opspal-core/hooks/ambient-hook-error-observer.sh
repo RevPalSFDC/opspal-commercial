@@ -14,11 +14,13 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 if ! command -v node >/dev/null 2>&1; then
+    printf '{}\n'
     exit 0
 fi
 
 # Skip in subagent context — error observation only valuable at main session level.
 if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -30,6 +32,7 @@ BUFFER_SCRIPT="$PLUGIN_ROOT/scripts/lib/ambient/reflection-candidate-buffer.js"
 
 if [[ -f "$INTERCEPTOR" ]]; then
     node "$INTERCEPTOR" >/dev/null 2>&1 || true
+    printf '{}\n'
     exit 0
 fi
 
@@ -38,4 +41,5 @@ if [[ -n "$CANDIDATES" ]] && [[ "$CANDIDATES" != "[]" ]]; then
     node "$BUFFER_SCRIPT" add "$CANDIDATES" >/dev/null 2>&1 || true
 fi
 
+printf '{}\n'
 exit 0

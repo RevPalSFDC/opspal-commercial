@@ -17,21 +17,25 @@ fi
 # exit cleanly rather than firing against ambient terminal input.
 if [[ "${DISPATCHER_CONTEXT:-0}" != "1" ]] && [[ -t 0 ]]; then
   echo "[$(basename "$0")] INFO: standalone invocation — no dispatcher context, skipping" >&2
+  printf '{}\n'
   exit 0
 fi
 
 # Skip in subagent context — reflection extraction only valuable at main session level.
 # Saves ~100-300ms node spawn overhead per subagent tool call.
 if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+  printf '{}\n'
   exit 0
 fi
 
 if ! command -v node >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then
+    printf '{}\n'
     exit 0
 fi
 
 INPUT="$(cat 2>/dev/null || true)"
 if [[ -z "$INPUT" ]] || ! echo "$INPUT" | jq -e . >/dev/null 2>&1; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -54,19 +58,23 @@ case "$HOOK_EVENT" in
         EXTRACTOR="$PLUGIN_ROOT/scripts/lib/ambient/extractors/task-completed-extractor.js"
         ;;
     *)
+        printf '{}\n'
         exit 0
         ;;
 esac
 
 if [[ ! -f "$EXTRACTOR" ]]; then
+    printf '{}\n'
     exit 0
 fi
 
 CANDIDATES="$(printf '%s' "$INPUT" | node "$EXTRACTOR" 2>/dev/null || echo '[]')"
 if [[ -z "$CANDIDATES" ]] || [[ "$CANDIDATES" == "[]" ]]; then
+    printf '{}\n'
     exit 0
 fi
 
 node "$PLUGIN_ROOT/scripts/lib/ambient/reflection-candidate-buffer.js" add "$CANDIDATES" >/dev/null 2>&1 || true
 
+printf '{}\n'
 exit 0

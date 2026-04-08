@@ -8,6 +8,7 @@ set -euo pipefail
 
 # Skip if ORG_SLUG is not set
 if [ -z "${ORG_SLUG:-}" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -15,6 +16,7 @@ fi
 GTM_BASE_DIR="${CLAUDE_PROJECT_ROOT:-$(pwd)}/orgs/${ORG_SLUG}/platforms/gtm-planning"
 
 if [ ! -d "$GTM_BASE_DIR" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -59,6 +61,7 @@ for cycle_dir in "$GTM_BASE_DIR"/*/; do
 done
 
 if [ -z "$ACTIVE_CYCLE" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -76,6 +79,7 @@ printf 'GTM_ACTIVE_CYCLE=%s\nGTM_ACTIVE_PHASE=%s\n' \
     >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
 
 # Print context banner
-echo "GTM Planning Context: org=${ORG_SLUG} | cycle=${ACTIVE_CYCLE} | phase=${ACTIVE_PHASE} | path=${ACTIVE_CYCLE_DIR}"
+echo "GTM Planning Context: org=${ORG_SLUG} | cycle=${ACTIVE_CYCLE} | phase=${ACTIVE_PHASE} | path=${ACTIVE_CYCLE_DIR}" >&2
 
+printf '{}\n'
 exit 0

@@ -30,13 +30,13 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.54.20 | active | 80 | 11 | 126 | 51 | 107 | 601 |
+| `opspal-core` | 2.54.21 | active | 80 | 11 | 126 | 51 | 107 | 601 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
-| `opspal-gtm-planning` | 2.3.8 | active | 13 | 1 | 16 | 4 | 4 | 2 |
-| `opspal-hubspot` | 3.9.26 | active | 59 | 6 | 33 | 23 | 15 | 109 |
-| `opspal-marketo` | 2.6.35 | active | 30 | 24 | 30 | 17 | 25 | 33 |
+| `opspal-gtm-planning` | 2.3.9 | active | 13 | 1 | 16 | 4 | 4 | 2 |
+| `opspal-hubspot` | 3.9.27 | active | 59 | 6 | 33 | 23 | 15 | 109 |
+| `opspal-marketo` | 2.6.36 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.9 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
-| `opspal-okrs` | 3.0.11 | active | 14 | 1 | 14 | 9 | 4 | 4 |
+| `opspal-okrs` | 3.0.12 | active | 14 | 1 | 14 | 9 | 4 | 4 |
 | `opspal-salesforce` | 3.87.7 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 
 ## Registry
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.54.20`
+- Version: `2.54.21`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -503,7 +503,7 @@
 
 ### opspal-gtm-planning
 
-- Version: `2.3.8`
+- Version: `2.3.9`
 - Status: `active`
 - Path: `plugins/opspal-gtm-planning`
 - Manifest: `plugins/opspal-gtm-planning/.claude-plugin/plugin.json`
@@ -568,7 +568,7 @@
 
 ### opspal-hubspot
 
-- Version: `3.9.26`
+- Version: `3.9.27`
 - Status: `active`
 - Path: `plugins/opspal-hubspot`
 - Manifest: `plugins/opspal-hubspot/.claude-plugin/plugin.json`
@@ -726,7 +726,7 @@
 
 ### opspal-marketo
 
-- Version: `2.6.35`
+- Version: `2.6.36`
 - Status: `active`
 - Path: `plugins/opspal-marketo`
 - Manifest: `plugins/opspal-marketo/.claude-plugin/plugin.json`
@@ -896,7 +896,7 @@
 
 ### opspal-okrs
 
-- Version: `3.0.11`
+- Version: `3.0.12`
 - Status: `active`
 - Path: `plugins/opspal-okrs`
 - Manifest: `plugins/opspal-okrs/.claude-plugin/plugin.json`

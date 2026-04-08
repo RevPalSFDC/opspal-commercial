@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T17:45:00.592Z",
+  "generatedAt": "2026-04-08T22:18:53.822Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -659,10 +659,10 @@
       "snippet": "\"$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh\"; do"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-context-loader.sh|24|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-context-loader.sh|25|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
-      "line": 24,
+      "line": 25,
       "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },

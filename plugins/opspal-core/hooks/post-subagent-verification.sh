@@ -49,12 +49,14 @@ log_debug() {
 # Check if verification should be skipped
 if [[ "${SKIP_SUBAGENT_VERIFICATION:-0}" == "1" ]]; then
     log_debug "Verification skipped via SKIP_SUBAGENT_VERIFICATION"
+    printf '{}\n'
     exit 0
 fi
 
 # Check if verifier script exists
 if [[ ! -f "$VERIFIER_SCRIPT" ]]; then
     log_debug "Verifier script not found: $VERIFIER_SCRIPT"
+    printf '{}\n'
     exit 0
 fi
 
@@ -291,6 +293,7 @@ main() {
     # Skip if output is too short to be meaningful
     if [[ ${#SUBAGENT_OUTPUT} -lt 50 ]]; then
         log_debug "Output too short to verify"
+        printf '{}\n'
         exit 0
     fi
 
@@ -461,6 +464,7 @@ EOF
         :
     fi
 
+    printf '{}\n'
     exit 0
 }
 

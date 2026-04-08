@@ -1,19 +1,12 @@
 {
-  "generatedAt": "2026-04-08T17:50:06.997Z",
+  "generatedAt": "2026-04-08T18:04:08.573Z",
   "totals": {
     "activeHooks": 103,
     "coveredHooks": 90,
-    "allowlistedUntested": 12,
-    "missingCoverage": 1
+    "allowlistedUntested": 13,
+    "missingCoverage": 0
   },
-  "missingCoverage": [
-    {
-      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-      "plugin": "opspal-data-hygiene",
-      "eventType": "UserPromptSubmit",
-      "matcher": "*"
-    }
-  ],
+  "missingCoverage": [],
   "allowlistedUntested": [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
@@ -84,6 +77,13 @@
       "eventType": "PreToolUse",
       "matcher": "^mcp__gong.*$",
       "reason": "Credentialed Gong API preflight still needs a service-stub harness."
+    },
+    {
+      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
+      "plugin": "opspal-data-hygiene",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "reason": "Deprecated plugin — hook only emits a deprecation warning banner, no functional logic to test"
     },
     {
       "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
@@ -590,7 +590,7 @@
       "matcher": "*",
       "matchedTests": [],
       "covered": false,
-      "allowReason": null
+      "allowReason": "Deprecated plugin — hook only emits a deprecation warning banner, no functional logic to test"
     },
     {
       "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
@@ -1300,13 +1300,6 @@
       ],
       "covered": true,
       "allowReason": null
-    }
-  ],
-  "exempt": [
-    {
-      "hook": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-      "event": "UserPromptSubmit",
-      "reason": "Deprecated plugin \u2014 hook only emits a deprecation warning banner, no functional logic to test"
     }
   ]
 }

@@ -18,6 +18,7 @@ set -euo pipefail
 if ! command -v jq &>/dev/null; then
     echo "[post-tool-use-contract-validation] jq not found, skipping" >&2
     printf '{}\n'
+    printf '{}\n'
     exit 0
 fi
 
@@ -135,11 +136,13 @@ if [ -z "$RESULT_DATA" ]; then
     TOOL_RESULT_RAW="${CLAUDE_TOOL_OUTPUT:-${CLAUDE_TOOL_RESULT:-${HOOK_TOOL_OUTPUT:-}}}"
 
     if [ -z "$TOOL_NAME_FALLBACK" ] && [ -z "$TOOL_RESULT_RAW" ]; then
+        printf '{}\n'
         exit 0
     fi
 
     if [ -z "$TOOL_RESULT_RAW" ] || ! is_json "$TOOL_RESULT_RAW"; then
         # Output isn't JSON - skip validation to avoid parse errors
+        printf '{}\n'
         exit 0
     fi
 
@@ -155,11 +158,13 @@ TOOL_RESULT=$(echo "$RESULT_DATA" | jq -c '.tool_response // .tool_result // {}'
 TOOL_SUCCESS=$(echo "$RESULT_DATA" | jq -r 'if has("success") then .success else true end' 2>/dev/null || echo "true")
 
 if [ -z "$TOOL_NAME" ]; then
+    printf '{}\n'
     exit 0
 fi
 
 # Skip validation for failed tool executions
 if [ "$TOOL_SUCCESS" = "false" ]; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -350,6 +355,7 @@ if [ -z "$VALIDATION_RESULT" ]; then
         --arg timestamp "$(date -Iseconds)" \
         '{timestamp: $timestamp, tool: $tool, status: $status, phase: "output"}')
     safe_append_jsonl "$log_entry"
+    printf '{}\n'
     exit 0
 fi
 
@@ -395,4 +401,5 @@ if [ "$IS_VALID" = "false" ]; then
 fi
 
 # Always exit 0 for post-hooks (don't block completed tool)
+printf '{}\n'
 exit 0

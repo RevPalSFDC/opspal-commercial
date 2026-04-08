@@ -5,6 +5,7 @@ set -euo pipefail
 # Pre-Task Context Loader Hook
 if ! command -v jq &>/dev/null; then
     echo "[pre-task-context-loader] jq not found, skipping" >&2
+    printf '{}\n'
     exit 0
 fi
 
@@ -53,6 +54,7 @@ fi
 
 if [[ -z "$PORTAL_NAME" ]]; then
     # No portal context available
+    printf '{}\n'
     exit 0
 fi
 
@@ -74,13 +76,14 @@ is_cache_valid() {
 if [[ "$LIVE_FIRST" != "true" ]] && is_cache_valid; then
     PORTAL_CONTEXT=$(cat "$CACHE_FILE")
     export PORTAL_CONTEXT
-    echo "✅ Portal context loaded from cache for: $PORTAL_NAME"
+    echo "✅ Portal context loaded from cache for: $PORTAL_NAME" >&2
+    printf '{}\n'
     exit 0
 fi
 
 if [[ -f "$CONTEXT_MANAGER" ]]; then
     if [[ "$LIVE_FIRST" == "true" ]]; then
-        echo "🔄 Live-first mode: loading fresh portal context"
+        echo "🔄 Live-first mode: loading fresh portal context" >&2
     fi
 
     # Load context and export as environment variable
@@ -91,14 +94,15 @@ if [[ -f "$CONTEXT_MANAGER" ]]; then
         export PORTAL_CONTEXT
         # Cache for fallback use
         echo "$PORTAL_CONTEXT" > "$CACHE_FILE" 2>/dev/null || true
-        echo "✅ Portal context loaded for: $PORTAL_NAME"
+        echo "✅ Portal context loaded for: $PORTAL_NAME" >&2
 
         # Show quick summary
         TOTAL_ASSESSMENTS=$(echo "$PORTAL_CONTEXT" | jq -r '.metadata.totalAssessments' 2>/dev/null)
         if [[ -n "$TOTAL_ASSESSMENTS" ]] && [[ "$TOTAL_ASSESSMENTS" != "null" ]]; then
-            echo "   Total assessments: $TOTAL_ASSESSMENTS"
+            echo "   Total assessments: $TOTAL_ASSESSMENTS" >&2
         fi
     fi
 fi
 
+printf '{}\n'
 exit 0

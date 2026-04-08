@@ -46,6 +46,7 @@ fi
 
 if [ "$HAS_ENV_CONFIG" -eq 0 ] && [ "$HAS_FILE_CONFIG" -eq 0 ]; then
     log_warning "Marketo not configured. Run: node ${MARKETO_PLUGIN_ROOT}/scripts/lib/add-instance-config.js"
+    printf '{}\n'
     exit 0
 fi
 
@@ -99,4 +100,5 @@ cat << 'EOF' >&2
 
 EOF
 
+printf '{}\n'
 exit 0

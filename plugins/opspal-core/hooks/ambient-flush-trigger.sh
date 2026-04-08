@@ -13,11 +13,13 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 if ! command -v node >/dev/null 2>&1; then
+    printf '{}\n'
     exit 0
 fi
 
 # Skip in subagent context — flush evaluation only valuable at main session level.
 if [[ -n "${CLAUDE_AGENT_CONTEXT:-}" ]] || [[ -n "${CLAUDE_SUBAGENT_NAME:-}" ]]; then
+    printf '{}\n'
     exit 0
 fi
 
@@ -58,4 +60,5 @@ if [[ "${AMBIENT_REFLECT_CAPTURE_RESULT:-0}" == "1" ]]; then
     printf '%s\n' "$RESULT" >&2
 fi
 
+printf '{}\n'
 exit 0

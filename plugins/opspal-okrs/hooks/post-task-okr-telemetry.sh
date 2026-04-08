@@ -22,6 +22,7 @@ if command -v jq &>/dev/null; then
 fi
 
 if [ -z "$IS_OKR" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -55,4 +56,5 @@ else
     >> "$LOG_FILE" 2>/dev/null || true
 fi
 
+printf '{}\n'
 exit 0

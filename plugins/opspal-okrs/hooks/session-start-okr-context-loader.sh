@@ -8,6 +8,7 @@ set -euo pipefail
 
 # Skip if ORG_SLUG is not set
 if [ -z "${ORG_SLUG:-}" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -15,6 +16,7 @@ fi
 OKR_BASE_DIR="${CLAUDE_PROJECT_ROOT:-$(pwd)}/orgs/${ORG_SLUG}/platforms/okr"
 
 if [ ! -d "$OKR_BASE_DIR" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -47,6 +49,7 @@ if [ -z "$ACTIVE_CYCLE" ]; then
 fi
 
 if [ -z "$ACTIVE_CYCLE" ]; then
+  printf '{}\n'
   exit 0
 fi
 
@@ -60,6 +63,7 @@ printf 'OKR_ACTIVE_CYCLE=%s\n' "$ACTIVE_CYCLE" \
     >> "${_STATE_DIR}/session-init-state.env" 2>/dev/null || true
 
 # Print context banner
-echo "OKR Context: org=${ORG_SLUG} | active_cycle=${ACTIVE_CYCLE} | path=${ACTIVE_CYCLE_DIR}"
+echo "OKR Context: org=${ORG_SLUG} | active_cycle=${ACTIVE_CYCLE} | path=${ACTIVE_CYCLE_DIR}" >&2
 
+printf '{}\n'
 exit 0
