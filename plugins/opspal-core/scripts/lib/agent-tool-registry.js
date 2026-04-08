@@ -293,13 +293,30 @@ function resolveAgentFilePath(agentName, explicitPluginRoot = '') {
     return null;
   }
 
+  const agentFile = `${shortName}.md`;
   const pluginsRoot = resolvePluginsRoot(explicitPluginRoot);
-  const directPath = path.join(pluginsRoot, pluginName, 'agents', `${shortName}.md`);
+  const home = process.env.HOME || '';
 
-  if (fs.existsSync(directPath)) {
-    return directPath;
+  // Build candidate paths in priority order
+  const candidates = [
+    // Primary: sibling plugin relative to resolved plugins root
+    path.join(pluginsRoot, pluginName, 'agents', agentFile),
+    // Fallback: relative to this script's location (../../<plugin>/agents/)
+    path.resolve(__dirname, '..', '..', '..', pluginName, 'agents', agentFile),
+    // Fallback: marketplace install path
+    home ? path.join(home, '.claude', 'plugins', 'marketplaces', 'opspal-commercial', 'plugins', pluginName, 'agents', agentFile) : null,
+    // Fallback: cwd-relative
+    path.resolve(process.cwd(), 'plugins', pluginName, 'agents', agentFile)
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && fs.existsSync(candidate)) {
+      return candidate;
+    }
   }
 
+  // Diagnostic logging to stderr when all candidates fail
+  process.stderr.write(`[agent-tool-registry] resolveAgentFilePath: no candidate found for ${agentName}. Tried: ${candidates.filter(Boolean).join(', ')}\n`);
   return null;
 }
 

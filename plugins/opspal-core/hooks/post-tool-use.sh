@@ -45,6 +45,7 @@ source "$SESSION_KEY_RESOLVER_LIB"
 
 if ! command -v jq &>/dev/null; then
     echo "[post-tool-use] jq not found, skipping" >&2
+    printf '{}\n'
     exit 0
 fi
 
@@ -64,7 +65,7 @@ read_stdin_json() {
   if [ -n "$data" ] && is_json "$data"; then
     echo "$data"
   else
-    echo ""
+    printf '{}\n'
   fi
 }
 
@@ -88,7 +89,7 @@ fi
 # Fast-exit for read-only tools that never produce actionable errors
 TOOL_NAME_QUICK="${CLAUDE_TOOL_NAME:-${HOOK_TOOL_NAME:-${TOOL_NAME:-}}}"
 case "$TOOL_NAME_QUICK" in
-  Read|Glob|Grep|LS|ToolSearch) exit 0 ;;
+  Read|Glob|Grep|LS|ToolSearch) printf '{}\n'; exit 0 ;;
 esac
 
 # Read hook input (JSON from Claude Code, if provided)

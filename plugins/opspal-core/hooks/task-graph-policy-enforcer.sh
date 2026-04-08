@@ -305,12 +305,14 @@ main() {
     case "$TOOL_NAME" in
         Read|Grep|Glob|LSP|WebSearch)
             log_decision "allow" "read_only_tool"
+            printf '{}\n'
             exit 0
             ;;
     esac
 
     if is_opspal_runtime_maintenance_command; then
         log_decision "allow" "opspal_runtime_maintenance"
+        printf '{}\n'
         exit 0
     fi
 
@@ -379,6 +381,7 @@ main() {
 
     # All checks passed
     log_decision "allow" "all_checks_passed"
+    printf '{}\n'
     exit 0
 }
 

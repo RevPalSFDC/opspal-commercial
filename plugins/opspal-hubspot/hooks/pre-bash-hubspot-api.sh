@@ -42,6 +42,17 @@ if [[ ! -f "$BASH_CLASSIFIER_LIB" ]]; then
   exit 0
 fi
 
+# Fast-exit: peek at stdin to check if command involves curl to HubSpot API.
+# Avoids sourcing the full classifier library for irrelevant commands (ls, git, sf, etc.)
+_STDIN_PEEK=""
+if [[ ! -t 0 ]]; then
+  _STDIN_PEEK="$(cat 2>/dev/null || true)"
+fi
+if [[ -n "$_STDIN_PEEK" ]] && [[ "$_STDIN_PEEK" != *"curl "* ]] && [[ "$_STDIN_PEEK" != *"curl\""* ]]; then
+  printf '{}\n'
+  exit 0
+fi
+
 # shellcheck source=/dev/null
 source "$BASH_CLASSIFIER_LIB"
 
@@ -129,10 +140,8 @@ if [[ "$HUBSPOT_BASH_API_GOVERNANCE_ENABLED" != "true" ]]; then
   exit 0
 fi
 
-HOOK_INPUT=""
-if [[ ! -t 0 ]]; then
-  HOOK_INPUT="$(cat 2>/dev/null || true)"
-fi
+# Use pre-read stdin from fast-exit check (stdin already consumed above)
+HOOK_INPUT="${_STDIN_PEEK:-}"
 
 COMMAND="$(extract_command)"
 if [[ -z "$COMMAND" ]]; then

@@ -1,6 +1,6 @@
 # OpsPal Commercial Marketplace
 
-This repository is the commercial OpsPal marketplace. It publishes 8 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
+This repository is the commercial OpsPal marketplace. It publishes 9 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
 
 ## Installation
 
@@ -17,13 +17,14 @@ This repository is the commercial OpsPal marketplace. It publishes 8 plugins and
 | Plugin | Version | Status |
 |--------|---------|--------|
 | `opspal-ai-consult` | 1.4.14 | active |
-| `opspal-core` | 2.54.17 | active |
+| `opspal-core` | 2.54.18 | active |
+| `opspal-data-hygiene` | 1.2.0 | active |
 | `opspal-gtm-planning` | 2.3.8 | active |
-| `opspal-hubspot` | 3.9.25 | active |
-| `opspal-marketo` | 2.6.34 | active |
+| `opspal-hubspot` | 3.9.26 | active |
+| `opspal-marketo` | 2.6.35 | active |
 | `opspal-monday` | 1.4.9 | experimental |
 | `opspal-okrs` | 3.0.11 | active |
-| `opspal-salesforce` | 3.87.5 | active |
+| `opspal-salesforce` | 3.87.6 | active |
 
 ## Updating
 
@@ -44,3 +45,14 @@ git pull origin main
 
 - Repository: https://github.com/RevPalSFDC/opspal-commercial
 - Issues: https://github.com/RevPalSFDC/opspal-commercial/issues
+
+## Repository Stats
+
+| Metric | Count |
+|--------|-------|
+| Plugins | 9 |
+| Agents | 300 |
+| Commands | 283 |
+| Skills | 163 |
+| Hooks | 205 |
+| Scripts | 1864 |

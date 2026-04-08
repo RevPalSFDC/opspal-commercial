@@ -85,3 +85,32 @@ git pull origin main
 - Setup guide: https://opspal.gorevpal.com/support.html#setup
 - Release notes: https://opspal.gorevpal.com/release-notes.html
 - Issues: https://github.com/RevPalSFDC/opspal-commercial/issues
+
+## Repository Stats
+
+| Metric | Count |
+|--------|-------|
+| Plugins | 9 |
+| Agents | 300 |
+| Commands | 283 |
+| Skills | 163 |
+| Hooks | 205 |
+| Scripts | 1864 |
+
+
+## Plugin Overview
+
+Install `opspal-core` first, then add only the domain plugins you actually need.
+
+| Plugin | Version | Status | Agents | Commands | Focus |
+|--------|---------|--------|--------|----------|-------|
+| [`opspal-ai-consult`](plugins/opspal-ai-consult) | 1.4.14 | active | 2 | 3 | Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemi... |
+| [`opspal-core`](plugins/opspal-core) | 2.54.18 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
+| [`opspal-data-hygiene`](plugins/opspal-data-hygiene) | 1.2.0 | deprecated | 2 | 1 | [DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functiona... |
+| [`opspal-gtm-planning`](plugins/opspal-gtm-planning) | 2.3.8 | active | 13 | 16 | GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes ter... |
+| [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.26 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
+| [`opspal-marketo`](plugins/opspal-marketo) | 2.6.35 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |
+| [`opspal-monday`](plugins/opspal-monday) | 1.4.9 | experimental | 6 | 1 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog genera... |
+| [`opspal-okrs`](plugins/opspal-okrs) | 3.0.11 | active | 14 | 14 | Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubS... |
+| [`opspal-salesforce`](plugins/opspal-salesforce) | 3.87.6 | active | 94 | 59 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout manageme... |
+

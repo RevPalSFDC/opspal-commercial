@@ -19,6 +19,15 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 SF_WRAPPER="${PLUGIN_ROOT}/scripts/lib/sf-wrapper.sh"
 HOOK_INPUT="$(cat 2>/dev/null || true)"
 COMMAND="$(printf '%s' "$HOOK_INPUT" | jq -r '.tool_input.command // ""' 2>/dev/null || echo "")"
+
+# Fast-exit for commands that don't involve Salesforce CLI — avoids sourcing
+# sf-wrapper.sh, defining helpers, and running Node.js validators for commands
+# like ls, git, node, cat, etc.
+if [[ -n "$COMMAND" ]] && [[ "$COMMAND" != *"sf "* ]] && [[ "$COMMAND" != *"sfdx "* ]] && [[ "$COMMAND" != *"sf\""* ]]; then
+  printf '{}\n'
+  exit 0
+fi
+
 LAST_JSON=""
 
 if [ -f "$SF_WRAPPER" ]; then

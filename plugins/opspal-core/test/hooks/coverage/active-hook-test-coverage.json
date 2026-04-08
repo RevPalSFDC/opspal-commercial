@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-04T15:39:51.652Z",
+  "generatedAt": "2026-04-08T14:49:17.332Z",
   "totals": {
-    "activeHooks": 99,
-    "coveredHooks": 87,
+    "activeHooks": 102,
+    "coveredHooks": 90,
     "allowlistedUntested": 12,
     "missingCoverage": 0
   },
@@ -577,17 +577,6 @@
       "allowReason": null
     },
     {
-      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-      "plugin": "opspal-data-hygiene",
-      "eventType": "UserPromptSubmit",
-      "matcher": "*",
-      "matchedTests": [
-        "plugins/opspal-core/test/hooks/unit/data-hygiene-deprecation-warning.test.js"
-      ],
-      "covered": true,
-      "allowReason": null
-    },
-    {
       "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
       "plugin": "opspal-gtm-planning",
       "eventType": "PostToolUse",
@@ -627,6 +616,17 @@
       "matcher": "*",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/gtm-session-start-gtm-context-loader.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-hubspot/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-hubspot",
+      "eventType": "SubagentStop",
+      "matcher": "hubspot-assessment-analyzer",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/hubspot.test.js"
       ],
       "covered": true,
       "allowReason": null
@@ -842,6 +842,17 @@
       "matcher": "mcp__marketo__bulk_*",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/marketo-observability-quota-monitor.test.js",
+        "plugins/opspal-core/test/hooks/unit/marketo.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-marketo/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-marketo",
+      "eventType": "SubagentStop",
+      "matcher": "marketo-lead-quality-assessor",
+      "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/marketo.test.js"
       ],
       "covered": true,
@@ -1163,6 +1174,28 @@
       "plugin": "opspal-salesforce",
       "eventType": "SubagentStop",
       "matcher": "sfdc-automation-auditor",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-quality-auditor",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-architecture-auditor",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
       ],

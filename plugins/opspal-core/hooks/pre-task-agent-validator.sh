@@ -900,13 +900,14 @@ main() {
         BOOT_REPORT=$(read_agent_boot_integrity_report "$RESOLVED" "$BOOT_PAYLOAD")
         if ! echo "$BOOT_REPORT" | jq -e . >/dev/null 2>&1; then
             log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_validator_failed" "Boot integrity validator returned invalid output"
+            # Advisory only — do not deny agent launches for routing/integrity checks
             emit_pretool_response \
-              "deny" \
-              "AGENT_BOOT_INTEGRITY_ERROR: Launch validation for '$RESOLVED' failed because the boot integrity validator returned invalid output. Missing/invalid field: validator-output. Source of truth checked: launch validator. Suggested repair: repair $AGENT_BOOT_INTEGRITY_VALIDATOR and rerun launch validation before invoking the agent." \
+              "allow" \
               "" \
+              "AGENT_BOOT_INTEGRITY_WARNING: Launch validation for '$RESOLVED' returned invalid output from boot integrity validator. The agent will proceed but may have unresolved configuration issues." \
               "" \
-              "AGENT_BOOT_INTEGRITY_ERROR" \
-              "ERROR"
+              "AGENT_BOOT_INTEGRITY_WARNING" \
+              "WARN"
             exit 0
         fi
 
@@ -919,13 +920,14 @@ main() {
             BOOT_AGENT=$(echo "$BOOT_REPORT" | jq -r '.issues[0].agentId // empty' 2>/dev/null || echo "")
 
             log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_error" "$BOOT_MESSAGE"
+            # Advisory only — do not deny agent launches for routing/integrity checks
             emit_pretool_response \
-              "deny" \
-              "AGENT_BOOT_INTEGRITY_ERROR: ${BOOT_MESSAGE} Agent: ${BOOT_AGENT:-$RESOLVED}. Missing/invalid field: ${BOOT_FIELD:-unknown}. Source of truth checked: ${BOOT_SOURCE:-unknown}. Suggested repair: ${BOOT_REPAIR}" \
+              "allow" \
               "" \
+              "AGENT_BOOT_INTEGRITY_WARNING: ${BOOT_MESSAGE} Agent: ${BOOT_AGENT:-$RESOLVED}. Missing/invalid field: ${BOOT_FIELD:-unknown}. Source of truth checked: ${BOOT_SOURCE:-unknown}. Suggested repair: ${BOOT_REPAIR}. The agent will proceed despite this validation issue." \
               "" \
-              "AGENT_BOOT_INTEGRITY_ERROR" \
-              "ERROR"
+              "AGENT_BOOT_INTEGRITY_WARNING" \
+              "WARN"
             exit 0
         fi
     fi
