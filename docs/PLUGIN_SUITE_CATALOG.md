@@ -12,7 +12,7 @@
 | Commands | 283 |
 | Skills | 163 |
 | Hooks | 205 |
-| Scripts | 1864 |
+| Scripts | 1859 |
 
 ## Regeneration
 
@@ -31,7 +31,7 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-core` | 2.54.18 | active | 80 | 11 | 126 | 51 | 107 | 601 |
-| `opspal-data-hygiene` | 1.2.0 | deprecated | 2 | 2 | 1 | 1 | 1 | 13 |
+| `opspal-data-hygiene` | 1.2.0 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
 | `opspal-gtm-planning` | 2.3.8 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.26 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.35 | active | 30 | 24 | 30 | 17 | 25 | 33 |

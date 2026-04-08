@@ -9942,18 +9942,6 @@
           "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-association-verifier.js"
         },
         {
-          "name": "dedup-canonical-selector",
-          "file": "lib/dedup-canonical-selector.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-canonical-selector.js"
-        },
-        {
-          "name": "dedup-clustering-engine",
-          "file": "lib/dedup-clustering-engine.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-clustering-engine.js"
-        },
-        {
           "name": "dedup-config-loader",
           "file": "lib/dedup-config-loader.js",
           "extension": ".js",
@@ -9964,12 +9952,6 @@
           "file": "lib/dedup-executor.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-executor.js"
-        },
-        {
-          "name": "dedup-guardrail-manager",
-          "file": "lib/dedup-guardrail-manager.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-guardrail-manager.js"
         },
         {
           "name": "dedup-ledger",
@@ -9988,18 +9970,6 @@
           "file": "lib/dedup-snapshot-generator.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-snapshot-generator.js"
-        },
-        {
-          "name": "dedup-validation-framework",
-          "file": "lib/dedup-validation-framework.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-validation-framework.js"
-        },
-        {
-          "name": "record-match-merge-service",
-          "file": "lib/record-match-merge-service.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/record-match-merge-service.js"
         }
       ]
     },
@@ -29585,6 +29555,6 @@
     "commands": 283,
     "skills": 163,
     "hooks": 205,
-    "scripts": 1864
+    "scripts": 1859
   }
 }
