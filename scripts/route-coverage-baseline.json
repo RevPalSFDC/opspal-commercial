@@ -1,13 +1,27 @@
 {
-  "generatedAt": "2026-03-16T12:16:53.316Z",
+  "generatedAt": "2026-04-08T17:43:14.962Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
+    {
+      "signature": "mandatory-agent-missing-route|opspal-core:conversation-intelligence-aggregator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:conversation-intelligence-aggregator",
+      "sourcePath": "plugins/opspal-core/agents/conversation-intelligence-aggregator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:conversation-intelligence-aggregator"
+    },
     {
       "signature": "mandatory-agent-missing-route|opspal-core:diagram-generator",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-core:diagram-generator",
       "sourcePath": "plugins/opspal-core/agents/diagram-generator.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:diagram-generator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-core:fireflies-integration-agent",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:fireflies-integration-agent",
+      "sourcePath": "plugins/opspal-core/agents/fireflies-integration-agent.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:fireflies-integration-agent"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-core:notebooklm-knowledge-manager",
@@ -17,11 +31,25 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:notebooklm-knowledge-manager"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-core:release-coordinator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:release-coordinator",
+      "sourcePath": "plugins/opspal-core/agents/release-coordinator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:release-coordinator"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-core:revops-maturity-orchestrator",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-core:revops-maturity-orchestrator",
       "sourcePath": "plugins/opspal-core/agents/revops-maturity-orchestrator.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:revops-maturity-orchestrator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-core:revops-reporting-assistant",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:revops-reporting-assistant",
+      "sourcePath": "plugins/opspal-core/agents/revops-reporting-assistant.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:revops-reporting-assistant"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-core:sales-funnel-diagnostic",
@@ -31,11 +59,25 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:sales-funnel-diagnostic"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-core:solution-deployment-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:solution-deployment-orchestrator",
+      "sourcePath": "plugins/opspal-core/agents/solution-deployment-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:solution-deployment-orchestrator"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-core:solution-template-manager",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-core:solution-template-manager",
       "sourcePath": "plugins/opspal-core/agents/solution-template-manager.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:solution-template-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-core:web-viz-generator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-core:web-viz-generator",
+      "sourcePath": "plugins/opspal-core/agents/web-viz-generator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-core:web-viz-generator"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-data-hygiene:contact-dedup-orchestrator",
@@ -52,6 +94,13 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-data-hygiene:sfdc-hubspot-dedup-orchestrator"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-gtm-planning:gtm-planning-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-gtm-planning:gtm-planning-orchestrator",
+      "sourcePath": "plugins/opspal-gtm-planning/agents/gtm-planning-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-gtm-planning:gtm-planning-orchestrator"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-app-developer",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-hubspot:hubspot-app-developer",
@@ -59,11 +108,32 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-hubspot:hubspot-app-developer"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-assessment-analyzer",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-hubspot:hubspot-assessment-analyzer",
+      "sourcePath": "plugins/opspal-hubspot/agents/hubspot-assessment-analyzer.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-hubspot:hubspot-assessment-analyzer"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-custom-action-builder",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-hubspot:hubspot-custom-action-builder",
       "sourcePath": "plugins/opspal-hubspot/agents/hubspot-custom-action-builder.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-hubspot:hubspot-custom-action-builder"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-data-operations-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-hubspot:hubspot-data-operations-manager",
+      "sourcePath": "plugins/opspal-hubspot/agents/hubspot-data-operations-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-hubspot:hubspot-data-operations-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-hubspot:hubspot-orchestrator",
+      "sourcePath": "plugins/opspal-hubspot/agents/hubspot-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-hubspot:hubspot-orchestrator"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-hubspot:hubspot-workflow-builder",
@@ -80,6 +150,20 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-analytics-assessor"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-automation-auditor",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-marketo:marketo-automation-auditor",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-automation-auditor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-automation-auditor"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-automation-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-marketo:marketo-automation-orchestrator",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-automation-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-automation-orchestrator"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-campaign-builder",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-marketo:marketo-campaign-builder",
@@ -92,6 +176,20 @@
       "target": "opspal-marketo:marketo-campaign-diagnostician",
       "sourcePath": "plugins/opspal-marketo/agents/marketo-campaign-diagnostician.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-campaign-diagnostician"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-data-operations",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-marketo:marketo-data-operations",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-data-operations.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-data-operations"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-email-deliverability-auditor",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-marketo:marketo-email-deliverability-auditor",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-email-deliverability-auditor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-email-deliverability-auditor"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-email-specialist",
@@ -136,6 +234,13 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-lead-manager"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-lead-quality-assessor",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-marketo:marketo-lead-quality-assessor",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-lead-quality-assessor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-lead-quality-assessor"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-lead-routing-diagnostician",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-marketo:marketo-lead-routing-diagnostician",
@@ -157,11 +262,11 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-mql-handoff-orchestrator"
     },
     {
-      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-observability-orchestrator",
+      "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-orchestrator",
       "rule": "mandatory-agent-missing-route",
-      "target": "opspal-marketo:marketo-observability-orchestrator",
-      "sourcePath": "plugins/opspal-marketo/agents/marketo-observability-orchestrator.md",
-      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-observability-orchestrator"
+      "target": "opspal-marketo:marketo-orchestrator",
+      "sourcePath": "plugins/opspal-marketo/agents/marketo-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-orchestrator"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-marketo:marketo-program-architect",
@@ -206,11 +311,11 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-marketo:marketo-webinar-orchestrator"
     },
     {
-      "signature": "mandatory-agent-missing-route|opspal-mcp-client:mcp-scoring-orchestrator",
+      "signature": "mandatory-agent-missing-route|opspal-okrs:okr-strategy-orchestrator",
       "rule": "mandatory-agent-missing-route",
-      "target": "opspal-mcp-client:mcp-scoring-orchestrator",
-      "sourcePath": "plugins/opspal-mcp-client/agents/mcp-scoring-orchestrator.md",
-      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-mcp-client:mcp-scoring-orchestrator"
+      "target": "opspal-okrs:okr-strategy-orchestrator",
+      "sourcePath": "plugins/opspal-okrs/agents/okr-strategy-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-okrs:okr-strategy-orchestrator"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:permission-orchestrator",
@@ -227,11 +332,25 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-architecture-auditor"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-automation-auditor",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-automation-auditor",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-automation-auditor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-automation-auditor"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-conflict-resolver",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-salesforce:sfdc-conflict-resolver",
       "sourcePath": "plugins/opspal-salesforce/agents/sfdc-conflict-resolver.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-conflict-resolver"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-cpq-assessor",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-cpq-assessor",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-cpq-assessor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-cpq-assessor"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-data-operations",
@@ -246,6 +365,13 @@
       "target": "opspal-salesforce:sfdc-deployment-manager",
       "sourcePath": "plugins/opspal-salesforce/agents/sfdc-deployment-manager.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-deployment-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-field-analyzer",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-field-analyzer",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-field-analyzer.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-field-analyzer"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-layout-deployer",
@@ -276,6 +402,20 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-orchestrator"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-permission-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-permission-orchestrator",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-permission-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-permission-orchestrator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-planner",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-planner",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-planner.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-planner"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-reports-dashboards",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-salesforce:sfdc-reports-dashboards",
@@ -283,11 +423,11 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-reports-dashboards"
     },
     {
-      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-security-admin",
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-revops-auditor",
       "rule": "mandatory-agent-missing-route",
-      "target": "opspal-salesforce:sfdc-security-admin",
-      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-security-admin.md",
-      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-security-admin"
+      "target": "opspal-salesforce:sfdc-revops-auditor",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-revops-auditor.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-revops-auditor"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-state-discovery",
@@ -297,11 +437,32 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-state-discovery"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-territory-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-territory-orchestrator",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-territory-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-territory-orchestrator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:sfdc-upsert-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:sfdc-upsert-orchestrator",
+      "sourcePath": "plugins/opspal-salesforce/agents/sfdc-upsert-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:sfdc-upsert-orchestrator"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-salesforce:trigger-orchestrator",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-salesforce:trigger-orchestrator",
       "sourcePath": "plugins/opspal-salesforce/agents/trigger-orchestrator.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:trigger-orchestrator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-salesforce:validation-rule-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-salesforce:validation-rule-orchestrator",
+      "sourcePath": "plugins/opspal-salesforce/agents/validation-rule-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-salesforce:validation-rule-orchestrator"
     }
   ]
 }
