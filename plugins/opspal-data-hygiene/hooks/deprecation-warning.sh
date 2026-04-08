@@ -60,5 +60,5 @@ EOF
 fi
 
 # Always pass through — this is a warning, not a blocker
-echo "$HOOK_INPUT"
+printf '{}\n'
 exit 0
