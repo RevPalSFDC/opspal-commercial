@@ -1,56 +1,47 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on platform reliability improvements that make OpsPal run more smoothly behind the scenes. The most significant enhancement is automated system maintenance that keeps your workspace clean and prevents common startup issues. Additionally, we strengthened data quality checks to ensure your automation rules work consistently across all connected systems.",
-  "published_at": "2026-04-09T13:15:53.164Z",
+  "summary": "This week brought significant improvements to platform stability and performance. OpsPal now automatically detects and fixes common setup issues that previously required manual troubleshooting, while several integrations received enhanced compatibility updates. The platform also added better quality checks to ensure your automations run more reliably.",
+  "published_at": "2026-04-09T14:43:58.254Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-09",
   "has_breaking": false,
-  "total_commits": 74,
+  "total_commits": 75,
   "entries": [
-    {
-      "category": "fixed",
-      "plugin": "HubSpot",
-      "headline": "HubSpot agents now have same access permissions as Salesforce agents",
-      "details": null,
-      "commits": [
-        "d7f3d38"
-      ]
-    },
     {
       "category": "improved",
       "plugin": "Rth",
-      "headline": "Enhanced automation rule validation prevents configuration errors",
+      "headline": "Enhanced automation quality checks prevent common workflow errors",
       "details": [
-        "Rules now validate properly before running to prevent failures",
-        "Advisory notifications work correctly without blocking other operations",
-        "Performance testing ensures rules respond quickly when needed"
+        "Automations now validate their outputs meet platform standards",
+        "Advisory-only workflows are properly distinguished from enforcement workflows",
+        "Faster processing when automations detect irrelevant data"
       ],
       "commits": [
         "ae9c3e3"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Automatic system maintenance keeps workspace clean and fast",
+      "headline": "Automatic cleanup removes outdated files and improves performance",
       "details": [
-        "Removes old temporary files that slow down performance",
-        "Cleans up incomplete processes that could cause errors",
-        "Warns when memory usage tracking files become too large"
+        "Removes old cached files older than 7 days",
+        "Cleans up abandoned session files older than 5 minutes",
+        "Warns when memory usage logs become too large"
       ],
       "commits": [
         "46d5153"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "System automatically removes broken automation components",
+      "headline": "Platform automatically removes broken automation components",
       "details": [
-        "Works across all operating systems and marketplace sources",
-        "Finds and removes any broken components regardless of origin",
-        "Applies to all plugins not just specific ones"
+        "Works across all operating systems including Windows, Mac, and Linux",
+        "Detects and removes non-functional automations from any source",
+        "Applies to all installed plugins, not just specific ones"
       ],
       "commits": [
         "396a613"
@@ -59,46 +50,24 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Broken plugins automatically removed during startup",
-      "details": null,
-      "commits": [
-        "479282c"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Salesforce",
-      "headline": "Salesforce startup process now more reliable and cleaner",
+      "headline": "Salesforce integration prevents field and profile configuration errors",
       "details": [
-        "Removed unnecessary testing components that caused confusion",
-        "Streamlined connection process for better performance",
-        "Added proper cleanup for quality and architecture monitoring tools"
-      ],
-      "commits": [
-        "ba25138"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Resolved three critical Salesforce automation issues",
-      "details": [
-        "Prevents invisible field errors when Dynamic Forms are active on pages",
-        "Automatically assigns proper permissions to new record types to prevent errors",
-        "Stops automation rules from blocking sessions due to keyword detection"
+        "Detects when Dynamic Forms are active and prevents invisible field issues",
+        "Automatically assigns new record types to administrator profiles",
+        "Converts blocking routing errors to warnings that won't stop your work"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Missing system components automatically installed during startup",
+      "headline": "Platform automatically installs missing dependencies and reports issues",
       "details": [
-        "Captures detailed information when installations fail",
-        "Provides clear instructions for manual fixes when needed",
-        "Runs automatic fixes in background for safe installations"
+        "Checks for missing components when sessions start",
+        "Provides clear error messages and fix instructions when problems occur",
+        "Automatically attempts to fix safe dependency issues in the background"
       ],
       "commits": [
         "26f0866"
@@ -107,7 +76,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminated false warnings about missing system packages",
+      "headline": "Resolved false error messages about missing packages at startup",
       "details": null,
       "commits": [
         "4255dd6"
