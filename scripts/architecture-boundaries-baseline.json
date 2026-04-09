@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T23:49:11.632Z",
+  "generatedAt": "2026-04-09T19:00:17.095Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -67,10 +67,10 @@
       "snippet": "GTM_ROOT=\"${PROJECT_ROOT}/plugins/opspal-gtm-planning\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/pre-operation-data-validator.sh|143|SALESFORCE_PLUGIN_DIR=\"$PROJECT_ROOT/plugins/opspal-salesforce\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/pre-operation-data-validator.sh|149|SALESFORCE_PLUGIN_DIR=\"$PROJECT_ROOT/plugins/opspal-salesforce\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
-      "line": 143,
+      "line": 149,
       "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
       "snippet": "SALESFORCE_PLUGIN_DIR=\"$PROJECT_ROOT/plugins/opspal-salesforce\""
     },
