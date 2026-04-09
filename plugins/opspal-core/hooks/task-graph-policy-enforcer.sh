@@ -136,9 +136,10 @@ emit_deny() {
                 }
             }'
     else
-        # Fallback: plain-text deny via exit 2 if jq is unavailable
-        echo "$reason" >&2
-        exit 2
+        # Fallback: minimal JSON deny without jq
+        local escaped_reason
+        escaped_reason="$(printf '%s' "$reason" | sed 's/\\/\\\\/g; s/"/\\"/g; s/	/\\t/g' | tr '\n' ' ')"
+        printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"%s"}}' "$escaped_reason"
     fi
     exit 0
 }
@@ -362,7 +363,7 @@ main() {
 
     # Check for production access
     local prod_result
-    if prod_result=$(check_production_access 2>&1); then
+    if prod_result=$(check_production_access 2>/dev/null); then
         if [[ "$RISK_LEVEL" != "critical" ]]; then
             log_decision "escalate" "$prod_result"
             emit_deny "ESCALATE: $prod_result - Task should be escalated to critical risk"
@@ -371,7 +372,7 @@ main() {
 
     # Check for destructive operations
     local destruct_result
-    if destruct_result=$(check_destructive_ops 2>&1); then
+    if destruct_result=$(check_destructive_ops 2>/dev/null); then
         case "$RISK_LEVEL" in
             low|medium)
                 log_decision "approval_required" "$destruct_result"

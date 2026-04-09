@@ -5,7 +5,7 @@ set -euo pipefail
 if ! command -v jq &>/dev/null; then
     echo "[pre-bash-dispatcher] WARNING: jq not found — Salesforce deploy/query hooks disabled for this call. Install jq for full protection." >&2
     # Emit structured warning so missing-dep is observable, not silent.
-    printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","additionalContext":"WARNING: Salesforce Bash dispatcher skipped — jq not installed. Deploy validation, SOQL correction, and deploy governance were NOT evaluated."}}\n'
+    printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"WARNING: Salesforce Bash dispatcher skipped — jq not installed. Deploy validation, SOQL correction, and deploy governance were NOT evaluated."}}\n'
     exit 0
 fi
 
@@ -50,7 +50,7 @@ emit_pretool_context() {
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "allow",
-          additionalContext: $context,
+          permissionDecisionReason: $context,
           updatedInput: {
             command: $command
           }
@@ -66,25 +66,27 @@ emit_pretool_context() {
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
         permissionDecision: "allow",
-        additionalContext: $context
+        permissionDecisionReason: $context
       }
     }'
 }
 
 emit_pretool_deny() {
   local reason="$1"
-  local context="$2"
+  local context="${2:-}"
+
+  if [ -n "$context" ]; then
+    reason="${reason}\n\n${context}"
+  fi
 
   jq -nc \
     --arg reason "$reason" \
-    --arg context "$context" \
     '{
       suppressOutput: true,
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
-        permissionDecisionReason: $reason,
-        additionalContext: $context
+        permissionDecisionReason: $reason
       }
     }'
 }
@@ -152,22 +154,20 @@ merge_hook_json() {
       --argjson current "$LAST_JSON" \
       --argjson next "$next_json" \
       '
-        def context($value): $value.hookSpecificOutput.additionalContext // "";
+        def reason($value): $value.hookSpecificOutput.permissionDecisionReason // "";
         def updated($value): $value.hookSpecificOutput.updatedInput // {};
         {
           suppressOutput: true,
           hookSpecificOutput: {
             hookEventName: "PreToolUse",
             permissionDecision: ($next.hookSpecificOutput.permissionDecision // $current.hookSpecificOutput.permissionDecision),
-            permissionDecisionReason: ($next.hookSpecificOutput.permissionDecisionReason // $current.hookSpecificOutput.permissionDecisionReason),
-            additionalContext: ([context($current), context($next)] | map(select(length > 0)) | join("\n\n")),
+            permissionDecisionReason: ([reason($current), reason($next)] | map(select(length > 0)) | join("\n\n")),
             updatedInput: (updated($current) + updated($next))
           }
         }
-        | if (.hookSpecificOutput.additionalContext == "") then del(.hookSpecificOutput.additionalContext) else . end
+        | if (.hookSpecificOutput.permissionDecisionReason == "") then del(.hookSpecificOutput.permissionDecisionReason) else . end
         | if (.hookSpecificOutput.updatedInput == {}) then del(.hookSpecificOutput.updatedInput) else . end
         | if (.hookSpecificOutput.permissionDecision == null) then del(.hookSpecificOutput.permissionDecision, .hookSpecificOutput.permissionDecisionReason) else . end
-        | if (.hookSpecificOutput.permissionDecisionReason == null) then del(.hookSpecificOutput.permissionDecisionReason) else . end
       ' 2>/dev/null || printf '%s' "$next_json"
   )"
 }

@@ -95,7 +95,7 @@ emit_allow_context() {
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
         permissionDecision: "allow",
-        additionalContext: $message
+        permissionDecisionReason: $message
       }
     }' >&3
 }
@@ -460,8 +460,7 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
           hookSpecificOutput: {
             hookEventName: "PreToolUse",
             permissionDecision: "deny",
-            permissionDecisionReason: $message,
-            additionalContext: ("Per-flow results and recovery hints available. " + $hints),
+            permissionDecisionReason: ($message + "\n\nPer-flow results and recovery hints available. " + $hints),
             perFlowResults: $perFlow,
             recoveryHints: $hints,
             usedFallbackScope: ($fallbackScope == 1)

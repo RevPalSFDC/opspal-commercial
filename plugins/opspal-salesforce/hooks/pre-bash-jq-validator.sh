@@ -34,7 +34,7 @@ emit_pretool_context() {
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "allow",
-          additionalContext: $context
+          permissionDecisionReason: $context
         }
       }'
 }

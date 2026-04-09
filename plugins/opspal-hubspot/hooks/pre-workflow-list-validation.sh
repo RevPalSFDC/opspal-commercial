@@ -30,7 +30,7 @@ emit_context() {
       suppressOutput: true,
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
-        additionalContext: $message
+        permissionDecisionReason: $message
       }
     }'
 }

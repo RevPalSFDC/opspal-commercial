@@ -69,7 +69,7 @@ jq -n \
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
       permissionDecision: "allow",
-      additionalContext: $context
+      permissionDecisionReason: $context
     }
   }'
 exit 0

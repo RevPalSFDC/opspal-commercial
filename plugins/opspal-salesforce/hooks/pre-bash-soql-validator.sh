@@ -38,7 +38,7 @@ emit_pretool_context() {
             hookSpecificOutput: {
               hookEventName: "PreToolUse",
               permissionDecision: "allow",
-              additionalContext: $context,
+              permissionDecisionReason: $context,
               updatedInput: {
                 command: $command
               }
@@ -54,7 +54,7 @@ emit_pretool_context() {
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "allow",
-          additionalContext: $context
+          permissionDecisionReason: $context
         }
       }'
 }
@@ -63,19 +63,19 @@ emit_pretool_deny() {
     local reason="$1"
     local context="${2:-}"
 
+    if [ -n "$context" ]; then
+      reason="${reason}\n\n${context}"
+    fi
+
     jq -nc \
       --arg reason "$reason" \
-      --arg context "$context" \
       '{
         suppressOutput: true,
-        hookSpecificOutput: (
-          {
-            hookEventName: "PreToolUse",
-            permissionDecision: "deny",
-            permissionDecisionReason: $reason
-          }
-          + (if $context != "" then { additionalContext: $context } else {} end)
-        )
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "deny",
+          permissionDecisionReason: $reason
+        }
       }'
 }
 

@@ -43,16 +43,21 @@ emit_stderr() {
 emit_pretool_deny() {
     local reason="$1"
     local context="$2"
+    if [[ -n "$context" ]]; then
+        if [[ -n "$reason" ]]; then
+            reason="${reason}\n\n${context}"
+        else
+            reason="$context"
+        fi
+    fi
     jq -nc \
         --arg reason "$reason" \
-        --arg context "$context" \
         '{
             suppressOutput: true,
             hookSpecificOutput: {
                 hookEventName: "PreToolUse",
                 permissionDecision: "deny",
-                permissionDecisionReason: $reason,
-                additionalContext: $context
+                permissionDecisionReason: $reason
             }
         }'
 }

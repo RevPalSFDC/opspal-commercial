@@ -14,7 +14,7 @@ set -euo pipefail
 
 if ! command -v jq &>/dev/null; then
     echo "[pre-tool-use-contract-validation] WARNING: jq not found — guardrails disabled for this call" >&2
-    echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"WARNING: jq not installed. PreToolUse guardrails (routing enforcement, Bash budget, inline-secret detection) are inactive. Install jq to restore protection."}}'
+    echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"WARNING: jq not installed. PreToolUse guardrails (routing enforcement, Bash budget, inline-secret detection) are inactive. Install jq to restore protection."}}'
     exit 0
 fi
 
@@ -395,17 +395,25 @@ emit_pretool_decision() {
     local permission_reason="$2"
     local additional_context="${3:-}"
 
+    # Merge additional_context into permissionDecisionReason for backward compatibility
+    local merged_reason="$permission_reason"
+    if [[ -n "$additional_context" ]]; then
+        if [[ -n "$merged_reason" ]]; then
+            merged_reason="${merged_reason}\n\n${additional_context}"
+        else
+            merged_reason="$additional_context"
+        fi
+    fi
+
     jq -nc \
       --arg decision "$permission_decision" \
-      --arg reason "$permission_reason" \
-      --arg context "$additional_context" \
+      --arg reason "$merged_reason" \
       '{
         suppressOutput: true,
         hookSpecificOutput: (
           { hookEventName: "PreToolUse" }
           + (if $decision != "" then { permissionDecision: $decision } else {} end)
           + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-          + (if $context != "" then { additionalContext: $context } else {} end)
         )
       }'
 }
@@ -1559,13 +1567,12 @@ if [ "$TOOL_NAME" = "Bash" ]; then
     fi
 
     if ! enforce_bash_loop_budget "$TOOL_COMMAND"; then
-        jq -n --arg msg "${BUDGET_BLOCK_MSG:-Bash command budget exceeded}" '{
+        jq -n --arg msg "${BUDGET_BLOCK_MSG:-Bash command budget exceeded}\n\nBASH_BUDGET_EXCEEDED: Pause, summarize findings, and reduce command frequency. The budget window resets automatically." '{
             suppressOutput: true,
             hookSpecificOutput: {
                 hookEventName: "PreToolUse",
                 permissionDecision: "deny",
-                permissionDecisionReason: $msg,
-                additionalContext: "BASH_BUDGET_EXCEEDED: Pause, summarize findings, and reduce command frequency. The budget window resets automatically."
+                permissionDecisionReason: $msg
             }
         }'
         exit 0

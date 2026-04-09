@@ -70,17 +70,25 @@ emit_pretool_decision() {
     return 0
   fi
 
+  # Merge additional_context into permissionDecisionReason for backward compatibility
+  local merged_reason="$permission_reason"
+  if [[ -n "$additional_context" ]]; then
+      if [[ -n "$merged_reason" ]]; then
+          merged_reason="${merged_reason}\n\n${additional_context}"
+      else
+          merged_reason="$additional_context"
+      fi
+  fi
+
   jq -nc \
     --arg decision "$permission_decision" \
-    --arg reason "$permission_reason" \
-    --arg context "$additional_context" \
+    --arg reason "$merged_reason" \
     '{
       suppressOutput: true,
       hookSpecificOutput: (
         { hookEventName: "PreToolUse" }
         + (if $decision != "" then { permissionDecision: $decision } else {} end)
         + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-        + (if $context != "" then { additionalContext: $context } else {} end)
       )
     }'
 }

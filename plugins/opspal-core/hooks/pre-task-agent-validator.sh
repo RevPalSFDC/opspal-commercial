@@ -92,11 +92,21 @@ emit_pretool_response() {
     local code="${5:-ROUTING_VALIDATION}"
     local level="${6:-INFO}"
 
+    # Merge additional_context into permissionDecisionReason for backward compatibility
+    # (additionalContext is valid per latest docs but not accepted by CC 2.1.97 runtime)
+    local merged_reason="$permission_reason"
+    if [[ -n "$additional_context" ]]; then
+        if [[ -n "$merged_reason" ]]; then
+            merged_reason="${merged_reason}\n\n${additional_context}"
+        else
+            merged_reason="$additional_context"
+        fi
+    fi
+
     if [[ -n "$updated_input_json" ]]; then
         jq -n \
           --arg decision "$permission_decision" \
-          --arg reason "$permission_reason" \
-          --arg context "$additional_context" \
+          --arg reason "$merged_reason" \
           --arg code "$code" \
           --arg level "$level" \
           --argjson updated "$updated_input_json" \
@@ -106,23 +116,14 @@ emit_pretool_response() {
               { hookEventName: "PreToolUse", updatedInput: $updated }
               + (if $decision != "" then { permissionDecision: $decision } else {} end)
               + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-              + (if $context != "" then { additionalContext: $context } else {} end)
-            ),
-            metadata: {
-              routingValidation: {
-                code: $code,
-                level: $level,
-                status: (if $decision == "deny" then "blocked" else "updated" end)
-              }
-            }
+            )
           }'
         return 0
     fi
 
     jq -n \
       --arg decision "$permission_decision" \
-      --arg reason "$permission_reason" \
-      --arg context "$additional_context" \
+      --arg reason "$merged_reason" \
       --arg code "$code" \
       --arg level "$level" \
       '{
@@ -131,15 +132,7 @@ emit_pretool_response() {
           { hookEventName: "PreToolUse" }
           + (if $decision != "" then { permissionDecision: $decision } else {} end)
           + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-          + (if $context != "" then { additionalContext: $context } else {} end)
-        ),
-        metadata: {
-          routingValidation: {
-            code: $code,
-            level: $level,
-            status: (if $decision == "deny" then "blocked" else "advised" end)
-          }
-        }
+        )
       }'
 }
 

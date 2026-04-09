@@ -58,7 +58,7 @@ merge_hook_json() {
       --argjson current "$LAST_JSON" \
       --argjson next "$next_json" \
       '
-        def context($value): $value.hookSpecificOutput.additionalContext // "";
+        def context($value): $value.hookSpecificOutput.permissionDecisionReason // "";
         def updated($value): $value.hookSpecificOutput.updatedInput // {};
         # Translate legacy blockExecution to canonical permissionDecision
         (if ($next.hookSpecificOutput.permissionDecision // $current.hookSpecificOutput.permissionDecision) != null
@@ -69,17 +69,17 @@ merge_hook_json() {
          then ($next.hookSpecificOutput.permissionDecisionReason // $current.hookSpecificOutput.permissionDecisionReason)
          elif ($next.blockMessage // $current.blockMessage // null) != null then ($next.blockMessage // $current.blockMessage)
          else null end) as $reason |
+        ([context($current), context($next)] | map(select(length > 0)) | join("\n\n")) as $mergedReason |
         {
           suppressOutput: true,
           hookSpecificOutput: {
             hookEventName: "PreToolUse",
             permissionDecision: $decision,
-            permissionDecisionReason: $reason,
-            additionalContext: ([context($current), context($next)] | map(select(length > 0)) | join("\n\n")),
+            permissionDecisionReason: (if $mergedReason != "" then $mergedReason elif $reason != null then $reason else null end),
             updatedInput: (updated($current) + updated($next))
           }
         }
-        | if (.hookSpecificOutput.additionalContext == "") then del(.hookSpecificOutput.additionalContext) else . end
+        | if (.hookSpecificOutput.permissionDecisionReason == "" or .hookSpecificOutput.permissionDecisionReason == null) then del(.hookSpecificOutput.permissionDecisionReason) else . end
         | if (.hookSpecificOutput.updatedInput == {}) then del(.hookSpecificOutput.updatedInput) else . end
         | if (.hookSpecificOutput.permissionDecision == null) then del(.hookSpecificOutput.permissionDecision, .hookSpecificOutput.permissionDecisionReason) else . end
       ' 2>/dev/null || printf '%s' "$next_json"

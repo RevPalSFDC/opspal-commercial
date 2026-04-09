@@ -461,8 +461,7 @@ if [ "$TOTAL_ERRORS" -gt 0 ]; then
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "deny",
-          permissionDecisionReason: $message,
-          additionalContext: $details,
+          permissionDecisionReason: ($message + "\n\n" + $details),
           recoveryHints: $hints
         }
       }' >&3

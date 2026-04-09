@@ -69,6 +69,14 @@ emit_pretool_response() {
     local permission_reason="$2"
     local additional_context="${3:-}"
 
+    if [[ -n "$additional_context" ]]; then
+        if [[ -n "$permission_reason" ]]; then
+            permission_reason="${permission_reason}\n\n${additional_context}"
+        else
+            permission_reason="$additional_context"
+        fi
+    fi
+
     if ! command -v jq >/dev/null 2>&1; then
         emit_pretool_noop
         return 0
@@ -77,14 +85,12 @@ emit_pretool_response() {
     jq -nc \
       --arg decision "$permission_decision" \
       --arg reason "$permission_reason" \
-      --arg context "$additional_context" \
       '{
         suppressOutput: true,
         hookSpecificOutput: (
           { hookEventName: "PreToolUse" }
           + (if $decision != "" then { permissionDecision: $decision } else {} end)
           + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
-          + (if $context != "" then { additionalContext: $context } else {} end)
         )
       }'
 }

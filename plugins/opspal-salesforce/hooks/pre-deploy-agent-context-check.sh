@@ -15,7 +15,7 @@ if ! command -v jq &>/dev/null; then
     # Emit a structured warning so the condition is observable, not silent.
     # We allow rather than block to avoid breaking environments without jq,
     # but the warning makes it clear governance was NOT evaluated.
-    printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","additionalContext":"WARNING: Deploy governance hook skipped — jq is not installed. Deploy safety checks were NOT evaluated. Install jq for full protection."}}\n'
+    printf '{"suppressOutput":true,"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"WARNING: Deploy governance hook skipped — jq is not installed. Deploy safety checks were NOT evaluated. Install jq for full protection."}}\n'
     exit 0
 fi
 
@@ -263,7 +263,6 @@ jq -nc '{
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "DEPLOY BLOCKED: sf project deploy needs approved deployment planning. Use Agent(subagent_type=\"opspal-salesforce:sfdc-deployment-manager\") to prepare a deployment handoff first. To bypass: export ALLOW_DIRECT_DEPLOY=1",
-    "additionalContext": "SCOPE OVERRIDE: This deploy governance directive takes precedence over any task-scope plugin preferences. You MUST use opspal-salesforce:sfdc-deployment-manager regardless of scope narrowing. Do not skip this agent because of scope restrictions."
+    "permissionDecisionReason": "DEPLOY BLOCKED: sf project deploy needs approved deployment planning. Use Agent(subagent_type=\"opspal-salesforce:sfdc-deployment-manager\") to prepare a deployment handoff first. To bypass: export ALLOW_DIRECT_DEPLOY=1\n\nSCOPE OVERRIDE: This deploy governance directive takes precedence over any task-scope plugin preferences. You MUST use opspal-salesforce:sfdc-deployment-manager regardless of scope narrowing. Do not skip this agent because of scope restrictions."
   }
 }' && exit 0

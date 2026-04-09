@@ -41,7 +41,7 @@ if [ -n "$REPORT" ]; then
         hookSpecificOutput: {
           hookEventName: "PreToolUse",
           permissionDecision: "allow",
-          additionalContext: ("WARNING: A deployment is already " + $status + " on " + $org + " (job: " + $jobId + "). Your deployment may queue behind it or fail with a metadata lock.\n\nOptions:\n1. Check status: sf project deploy report --job-id " + $jobId + " --target-org " + $org + "\n2. Cancel it: sf project deploy cancel --job-id " + $jobId + " --target-org " + $org + "\n3. Proceed anyway — Salesforce will queue yours behind the active one")
+          permissionDecisionReason: ("WARNING: A deployment is already " + $status + " on " + $org + " (job: " + $jobId + "). Your deployment may queue behind it or fail with a metadata lock.\n\nOptions:\n1. Check status: sf project deploy report --job-id " + $jobId + " --target-org " + $org + "\n2. Cancel it: sf project deploy cancel --job-id " + $jobId + " --target-org " + $org + "\n3. Proceed anyway — Salesforce will queue yours behind the active one")
         }
       }'
       ;;
@@ -62,7 +62,7 @@ if [ -f "$MARKER" ]; then
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
         permissionDecision: "allow",
-        additionalContext: ("WARNING: A SOQL field error occurred on " + $obj + " " + $age + " ago. If this deployment references the same object/field, it may fail. Verify the field exists before deploying.")
+        permissionDecisionReason: ("WARNING: A SOQL field error occurred on " + $obj + " " + $age + " ago. If this deployment references the same object/field, it may fail. Verify the field exists before deploying.")
       }
     }'
   fi
