@@ -1,34 +1,82 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on improving OpsPal's stability and reliability behind the scenes. The platform now automatically cleans up old files and resolves configuration issues that could slow down your workflows. Most importantly, OpsPal now prevents common Salesforce errors when working with Dynamic Forms and Record Types, making your data operations more reliable.",
-  "published_at": "2026-04-08T22:33:30.032Z",
+  "summary": "This week focused on improving platform reliability and data quality for RevOps teams. OpsPal now automatically maintains cleaner data by removing outdated configurations and preventing common Salesforce setup errors. The platform also runs more smoothly with better startup performance and automatic dependency management.",
+  "published_at": "2026-04-09T00:07:23.510Z",
   "week_start": "2026-04-06",
-  "week_end": "2026-04-08",
+  "week_end": "2026-04-09",
   "has_breaking": false,
-  "total_commits": 64,
+  "total_commits": 66,
   "entries": [
     {
       "category": "improved",
+      "plugin": "Rth",
+      "headline": "Enhanced data validation and quality checks",
+      "details": [
+        "Stricter validation ensures data transformations produce consistent results",
+        "Advisory-only recommendations no longer block your workflows",
+        "Faster processing when running unrelated commands"
+      ],
+      "commits": [
+        "ae9c3e3"
+      ]
+    },
+    {
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically cleans up old files during updates",
+      "headline": "Automatic platform maintenance during updates",
       "details": [
         "Removes outdated cache files older than 7 days",
-        "Cleans up abandoned session files older than 5 minutes",
-        "Warns you if memory usage files become too large"
+        "Cleans up abandoned sessions after 5 minutes",
+        "Warns when memory usage approaches limits"
       ],
       "commits": [
         "46d5153"
       ]
     },
     {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Better cleanup of outdated platform components",
+      "details": [
+        "Works across all operating systems including Windows",
+        "Removes any outdated marketplace components",
+        "Cleans up components from all installed plugins"
+      ],
+      "commits": [
+        "396a613"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Automatic removal of outdated plugins at startup",
+      "details": null,
+      "commits": [
+        "479282c"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Salesforce",
+      "headline": "Better Salesforce startup and quality monitoring",
+      "details": [
+        "Improved workflow processing for Salesforce connections",
+        "Automatic cleanup of outdated plugins",
+        "Enhanced quality and architecture monitoring for Salesforce orgs"
+      ],
+      "commits": [
+        "ba25138"
+      ]
+    },
+    {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Better handling of Salesforce Dynamic Forms and Record Types",
+      "headline": "Resolved critical Salesforce configuration issues",
       "details": [
-        "Prevents errors when adding fields to pages with Dynamic Forms enabled",
-        "Automatically assigns new Record Types to System Administrator profiles",
-        "Improves workflow routing to reduce session interruptions"
+        "Prevents field addition errors when Dynamic Forms are active",
+        "Automatically assigns record types to avoid permission errors",
+        "Reduces workflow blocking from routing decisions"
       ],
       "commits": [
         "b85e3bf"
@@ -37,14 +85,23 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically fixes missing dependencies at startup",
+      "headline": "Automatic dependency management at startup",
       "details": [
-        "Detects and installs missing components in the background",
-        "Shows clear error messages when installation fails",
-        "Provides manual fix commands when automatic repair isn't possible"
+        "Installs missing dependencies automatically when safe",
+        "Shows clear error messages when manual fixes are needed",
+        "Provides specific commands to resolve dependency issues"
       ],
       "commits": [
         "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Resolved false missing package errors at startup",
+      "details": null,
+      "commits": [
+        "4255dd6"
       ]
     }
   ]
