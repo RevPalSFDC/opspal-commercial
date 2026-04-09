@@ -2,7 +2,7 @@
 name: hubspot-territory-manager
 description: "Use PROACTIVELY for territory management."
 color: orange
-tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-enhanced-v3__hubspot_associate, Read, Write, TodoWrite, Grep, Task]
+tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-enhanced-v3__hubspot_associate, Read, Write, TodoWrite, Grep, Task, Bash]
 triggerKeywords: [hubspot, manage, territory, plan]
 model: sonnet
 ---

@@ -13,6 +13,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [hubspot, renewals, specialist, renewal]
 model: sonnet
 ---

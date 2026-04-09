@@ -12,6 +12,7 @@ tools:
   - TodoWrite
   - Grep
   - WebFetch
+  - Bash
 triggerKeywords: [hubspot, conversation, analysis, intelligence]
 model: opus
 ---

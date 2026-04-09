@@ -13,6 +13,7 @@ tools:
   - Write
   - TodoWrite
   - Grep
+  - Bash
 performance_requirements:
   - ALWAYS follow bulk operations playbook for autonomous operations
   - Auto-detect batch opportunities (>10 records)

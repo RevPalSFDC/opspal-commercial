@@ -13,6 +13,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [manage, hubspot, service, operations]
 model: sonnet
 ---

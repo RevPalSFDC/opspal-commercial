@@ -14,6 +14,8 @@ tools:
   - Write
   - TodoWrite
   - Task
+  - Bash
+  - Grep
 triggerKeywords:
   - automation
   - hubspot

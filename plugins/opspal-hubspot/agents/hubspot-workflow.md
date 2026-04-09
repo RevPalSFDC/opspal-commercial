@@ -8,6 +8,8 @@ tools:
   - mcp__hubspot-v4__workflow_get_all
   - Read
   - Write
+  - Bash
+  - Grep
 triggerKeywords:
   - workflow
   - flow

@@ -12,6 +12,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [hubspot, adoption, tracker, metrics]
 model: haiku
 ---

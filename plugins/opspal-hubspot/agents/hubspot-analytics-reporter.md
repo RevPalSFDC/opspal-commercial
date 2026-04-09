@@ -16,6 +16,7 @@ tools:
   - Grep
   - Task
   - WebFetch
+  - Bash
 triggerKeywords: [analytics, report, hubspot, analysis, reporter]
 model: sonnet
 ---

@@ -13,6 +13,7 @@ tools:
   - Write
   - TodoWrite
   - Grep
+  - Bash
 triggerKeywords:
   - form
   - form field

@@ -2,7 +2,7 @@
 name: hubspot-lead-scoring-specialist
 description: "Use PROACTIVELY for lead scoring setup."
 color: orange
-tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, Read, Write, TodoWrite, Grep, Task]
+tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, Read, Write, TodoWrite, Grep, Task, Bash]
 triggerKeywords: [hubspot, lead, scoring, specialist, dev]
 model: sonnet
 ---

@@ -13,6 +13,7 @@ tools:
   - Write
   - TodoWrite
   - Grep
+  - Bash
 performance_requirements:
   - ALWAYS follow bulk operations playbook for property operations
   - Use batch-property-metadata.js for property lookups

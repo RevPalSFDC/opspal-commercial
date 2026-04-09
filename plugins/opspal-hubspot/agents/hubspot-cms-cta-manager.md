@@ -14,6 +14,8 @@ tools:
   - Read
   - Write
   - TodoWrite
+  - Bash
+  - Grep
 triggerKeywords:
   - cta
   - call to action

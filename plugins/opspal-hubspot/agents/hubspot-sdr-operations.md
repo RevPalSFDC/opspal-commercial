@@ -14,6 +14,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [operations, hubspot, manage]
 model: sonnet
 ---

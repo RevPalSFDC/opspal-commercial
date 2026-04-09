@@ -21,6 +21,7 @@ tools:
   - Grep
   - Task
   - WebFetch
+  - Bash
 triggerKeywords:
   - assessment
   - assess

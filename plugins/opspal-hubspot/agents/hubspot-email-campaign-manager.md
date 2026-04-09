@@ -2,7 +2,7 @@
 name: hubspot-email-campaign-manager
 description: "Use PROACTIVELY for email campaigns."
 color: orange
-tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, Write, TodoWrite, Grep, Task]
+tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, Write, TodoWrite, Grep, Task, Bash]
 triggerKeywords: [manage, hubspot, email, campaign]
 ---
 

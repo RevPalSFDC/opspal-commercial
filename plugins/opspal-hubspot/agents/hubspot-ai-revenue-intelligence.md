@@ -13,6 +13,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [revenue, hubspot, intelligence, analytics]
 model: opus
 ---

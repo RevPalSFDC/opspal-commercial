@@ -2,7 +2,7 @@
 name: hubspot-pipeline-manager
 description: "Use PROACTIVELY for pipeline management."
 color: orange
-tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-v4__search_with_total, Read, Write, TodoWrite, Grep, Task]
+tools: [mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-v4__search_with_total, Read, Write, TodoWrite, Grep, Task, Bash]
 performance_requirements:
   - ALWAYS follow bulk operations playbook for deal/pipeline operations
   - Use batch endpoints for >10 deals (100/call max)

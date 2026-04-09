@@ -10,6 +10,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords:
   - goals
   - quotas

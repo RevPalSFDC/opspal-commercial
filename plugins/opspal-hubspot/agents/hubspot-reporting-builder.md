@@ -12,6 +12,7 @@ tools:
   - TodoWrite
   - Grep
   - Task
+  - Bash
 triggerKeywords: [report, hubspot, reporting, builder, dashboard]
 model: sonnet
 ---

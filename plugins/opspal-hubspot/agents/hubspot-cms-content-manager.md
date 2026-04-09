@@ -15,6 +15,7 @@ tools:
   - TodoWrite
   - Grep
   - WebFetch
+  - Bash
 triggerKeywords: [manage, hubspot, content, pages,]
 ---
 
