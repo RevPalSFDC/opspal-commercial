@@ -10724,7 +10724,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[hubspot, adoption, tracker, metrics]",
             "model": "haiku"
@@ -10749,7 +10750,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[revenue, hubspot, intelligence, analytics]",
             "model": "opus"
@@ -10777,7 +10779,8 @@
               "TodoWrite",
               "Grep",
               "Task",
-              "WebFetch"
+              "WebFetch",
+              "Bash"
             ],
             "triggerKeywords": "[analytics, report, hubspot, analysis, reporter]",
             "model": "sonnet"
@@ -10908,7 +10911,8 @@
               "TodoWrite",
               "Grep",
               "Task",
-              "WebFetch"
+              "WebFetch",
+              "Bash"
             ],
             "triggerKeywords": [
               "assessment",
@@ -10932,7 +10936,7 @@
             "name": "hubspot-attribution-analyst",
             "description": "Use PROACTIVELY for attribution analysis.",
             "color": "orange",
-            "tools": "[mcp__hubspot-v4__search_with_total, mcp__hubspot-v4__get_total_count, mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-v4__search_with_total, mcp__hubspot-v4__get_total_count, mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, Read, Write, TodoWrite, Grep, Task, Bash]",
             "triggerKeywords": "[hubspot, attribution, analyst, analysis]",
             "model": "sonnet"
           },
@@ -10956,7 +10960,8 @@
               "Read",
               "Write",
               "TodoWrite",
-              "Grep"
+              "Grep",
+              "Bash"
             ],
             "performance_requirements": [
               "ALWAYS follow bulk operations playbook for autonomous operations",
@@ -11091,7 +11096,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "WebFetch"
+              "WebFetch",
+              "Bash"
             ],
             "triggerKeywords": "[manage, hubspot, content, pages,]"
           },
@@ -11116,7 +11122,9 @@
               "mcp__hubspot-enhanced-v3__hubspot_search",
               "Read",
               "Write",
-              "TodoWrite"
+              "TodoWrite",
+              "Bash",
+              "Grep"
             ],
             "triggerKeywords": [
               "cta",
@@ -11212,7 +11220,8 @@
               "Read",
               "Write",
               "TodoWrite",
-              "Grep"
+              "Grep",
+              "Bash"
             ],
             "triggerKeywords": [
               "form",
@@ -11383,7 +11392,8 @@
               "Read",
               "Write",
               "TodoWrite",
-              "Grep"
+              "Grep",
+              "Bash"
             ],
             "triggerKeywords": [
               "manage",
@@ -11481,7 +11491,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "WebFetch"
+              "WebFetch",
+              "Bash"
             ],
             "triggerKeywords": "[hubspot, conversation, analysis, intelligence]",
             "model": "opus"
@@ -11647,7 +11658,7 @@
             "name": "hubspot-email-campaign-manager",
             "description": "Use PROACTIVELY for email campaigns.",
             "color": "orange",
-            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, Write, TodoWrite, Grep, Task, Bash]",
             "triggerKeywords": "[manage, hubspot, email, campaign]"
           },
           "sourcePath": "plugins/opspal-hubspot/agents/hubspot-email-campaign-manager.md"
@@ -11667,7 +11678,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": [
               "goals",
@@ -11702,7 +11714,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": [
               "hubspot",
@@ -11760,7 +11773,7 @@
             "name": "hubspot-lead-scoring-specialist",
             "description": "Use PROACTIVELY for lead scoring setup.",
             "color": "orange",
-            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, Read, Write, TodoWrite, Grep, Task, Bash]",
             "triggerKeywords": "[hubspot, lead, scoring, specialist, dev]",
             "model": "sonnet"
           },
@@ -11785,7 +11798,9 @@
               "Read",
               "Write",
               "TodoWrite",
-              "Task"
+              "Task",
+              "Bash",
+              "Grep"
             ],
             "triggerKeywords": [
               "automation",
@@ -11813,6 +11828,8 @@
               "Write",
               "TodoWrite",
               "ExitPlanMode",
+              "Bash",
+              "Grep",
               "mcp__playwright__browser_navigate",
               "mcp__playwright__browser_snapshot",
               "mcp__playwright__browser_click",
@@ -11854,7 +11871,7 @@
             "name": "hubspot-pipeline-manager",
             "description": "Use PROACTIVELY for pipeline management.",
             "color": "orange",
-            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-v4__search_with_total, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-v4__search_with_total, Read, Write, TodoWrite, Grep, Task, Bash]",
             "performance_requirements": [
               "ALWAYS follow bulk operations playbook for deal/pipeline operations",
               "Use batch endpoints for >10 deals (100/call max)",
@@ -11896,7 +11913,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[hubspot, foundation, prod]",
             "model": "sonnet"
@@ -11921,7 +11939,8 @@
               "Read",
               "Write",
               "TodoWrite",
-              "Grep"
+              "Grep",
+              "Bash"
             ],
             "performance_requirements": [
               "ALWAYS follow bulk operations playbook for property operations",
@@ -11965,7 +11984,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[hubspot, renewals, specialist, renewal]",
             "model": "sonnet"
@@ -11989,7 +12009,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[report, hubspot, reporting, builder, dashboard]",
             "model": "sonnet"
@@ -12013,7 +12034,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": [
               "revenue",
@@ -12067,7 +12089,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[operations, hubspot, manage]",
             "model": "sonnet"
@@ -12233,7 +12256,8 @@
               "Write",
               "TodoWrite",
               "Grep",
-              "Task"
+              "Task",
+              "Bash"
             ],
             "triggerKeywords": "[manage, hubspot, service, operations]",
             "model": "sonnet"
@@ -12354,7 +12378,7 @@
             "name": "hubspot-territory-manager",
             "description": "Use PROACTIVELY for territory management.",
             "color": "orange",
-            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-enhanced-v3__hubspot_associate, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-enhanced-v3__hubspot_associate, Read, Write, TodoWrite, Grep, Task, Bash]",
             "triggerKeywords": "[hubspot, manage, territory, plan]",
             "model": "sonnet"
           },
@@ -12398,7 +12422,9 @@
               "mcp__hubspot-v4__workflow_hydrate",
               "mcp__hubspot-v4__workflow_get_all",
               "Read",
-              "Write"
+              "Write",
+              "Bash",
+              "Grep"
             ],
             "triggerKeywords": [
               "workflow",
@@ -12484,7 +12510,7 @@
             "name": "hubspot-workflow-builder",
             "description": "MUST BE USED for HubSpot workflow creation.",
             "color": "orange",
-            "tools": "[mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, mcp__hubspot-v4__workflow_get_all, mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-enhanced-v3__hubspot_search, mcp__context7__*, Read, Write, TodoWrite, Grep, Task]",
+            "tools": "[mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, mcp__hubspot-v4__workflow_get_all, mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-enhanced-v3__hubspot_search, mcp__context7__*, Read, Write, TodoWrite, Grep, Task, Bash]",
             "performance_requirements": [
               "ALWAYS follow bulk operations playbook for workflow operations",
               "Use batch endpoints for >10 workflow operations",
