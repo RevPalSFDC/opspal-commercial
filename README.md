@@ -108,7 +108,7 @@ Install `opspal-core` first, then add only the domain plugins you actually need.
 | [`opspal-core`](plugins/opspal-core) | 2.54.22 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
 | [`opspal-data-hygiene`](plugins/opspal-data-hygiene) | 1.2.2 | deprecated | 2 | 1 | [DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functiona... |
 | [`opspal-gtm-planning`](plugins/opspal-gtm-planning) | 2.3.9 | active | 13 | 16 | GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes ter... |
-| [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.27 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
+| [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.28 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
 | [`opspal-marketo`](plugins/opspal-marketo) | 2.6.37 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |
 | [`opspal-monday`](plugins/opspal-monday) | 1.4.9 | experimental | 6 | 1 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog genera... |
 | [`opspal-okrs`](plugins/opspal-okrs) | 3.0.12 | active | 14 | 14 | Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubS... |
