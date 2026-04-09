@@ -30,7 +30,7 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.1 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-core` | 2.55.2 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.30 | active | 59 | 6 | 33 | 23 | 15 | 109 |
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.55.1`
+- Version: `2.55.2`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
