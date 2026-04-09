@@ -167,6 +167,7 @@ merge_hook_json() {
         | if (.hookSpecificOutput.additionalContext == "") then del(.hookSpecificOutput.additionalContext) else . end
         | if (.hookSpecificOutput.updatedInput == {}) then del(.hookSpecificOutput.updatedInput) else . end
         | if (.hookSpecificOutput.permissionDecision == null) then del(.hookSpecificOutput.permissionDecision, .hookSpecificOutput.permissionDecisionReason) else . end
+        | if (.hookSpecificOutput.permissionDecisionReason == null) then del(.hookSpecificOutput.permissionDecisionReason) else . end
       ' 2>/dev/null || printf '%s' "$next_json"
   )"
 }

@@ -1039,19 +1039,6 @@
           }
         ]
       }
-    ],
-    "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-bash-error-handler.sh",
-            "timeout": 5000,
-            "description": "Provide recovery guidance after failed Salesforce Bash operations"
-          }
-        ],
-        "matcher": "Bash"
-      }
     ]
   },
   "permissions": {

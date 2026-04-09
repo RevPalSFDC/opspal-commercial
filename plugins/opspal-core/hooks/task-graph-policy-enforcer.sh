@@ -10,9 +10,9 @@
 # 4. Log tool usage for audit trail
 #
 # Exit codes:
-#   0 - Allow operation
+#   0 - Allow operation (or structured JSON deny via permissionDecision:"deny")
 #   1 - Error (allow operation, log warning)
-#   2 - Block operation, request approval
+#   2 - Block operation (legacy fallback when jq unavailable)
 #   3 - Forbidden operation, hard block
 
 set -euo pipefail
@@ -117,6 +117,30 @@ log_decision() {
             safe_append_log "$entry"
         fi
     fi
+}
+
+# Emit structured JSON deny and exit cleanly.
+# Per Claude Code hooks docs, PreToolUse hooks should use JSON with
+# permissionDecision:"deny" on exit 0 rather than plain-text stderr + exit 2.
+emit_deny() {
+    local reason="$1"
+    if command -v jq &>/dev/null; then
+        jq -nc \
+            --arg reason "$reason" \
+            '{
+                suppressOutput: true,
+                hookSpecificOutput: {
+                    hookEventName: "PreToolUse",
+                    permissionDecision: "deny",
+                    permissionDecisionReason: $reason
+                }
+            }'
+    else
+        # Fallback: plain-text deny via exit 2 if jq is unavailable
+        echo "$reason" >&2
+        exit 2
+    fi
+    exit 0
 }
 
 is_opspal_runtime_maintenance_command() {
@@ -332,8 +356,7 @@ main() {
             exit 3
         else
             log_decision "approval_required" "tool_requires_approval"
-            echo "⚠️ APPROVAL_REQUIRED: Tool '$TOOL_NAME' requires approval for $RISK_LEVEL risk tasks" >&2
-            exit 2
+            emit_deny "APPROVAL_REQUIRED: Tool '$TOOL_NAME' requires approval for $RISK_LEVEL risk tasks"
         fi
     fi
 
@@ -342,8 +365,7 @@ main() {
     if prod_result=$(check_production_access 2>&1); then
         if [[ "$RISK_LEVEL" != "critical" ]]; then
             log_decision "escalate" "$prod_result"
-            echo "⚠️ ESCALATE: $prod_result - Task should be escalated to critical risk" >&2
-            exit 2
+            emit_deny "ESCALATE: $prod_result - Task should be escalated to critical risk"
         fi
     fi
 
@@ -353,8 +375,7 @@ main() {
         case "$RISK_LEVEL" in
             low|medium)
                 log_decision "approval_required" "$destruct_result"
-                echo "⚠️ APPROVAL_REQUIRED: $destruct_result - Destructive operations require approval" >&2
-                exit 2
+                emit_deny "APPROVAL_REQUIRED: $destruct_result - Destructive operations require approval"
                 ;;
             high|unmanaged)
                 log_decision "warn" "$destruct_result"
@@ -369,8 +390,7 @@ main() {
         case "$RISK_LEVEL" in
             low|medium)
                 log_decision "approval_required" "$approval_result"
-                echo "⚠️ $approval_result" >&2
-                exit 2
+                emit_deny "$approval_result"
                 ;;
             high|unmanaged)
                 log_decision "warn" "$approval_result"

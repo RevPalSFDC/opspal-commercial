@@ -913,18 +913,41 @@ main() {
 
         BOOT_PASS=$(echo "$BOOT_REPORT" | jq -r '.pass // false' 2>/dev/null || echo "false")
         if [[ "$BOOT_PASS" != "true" ]]; then
+            # Check if the report has diagnostic content (not just a {} fallback)
+            BOOT_ISSUE_COUNT=$(echo "$BOOT_REPORT" | jq -r '.issueCount // 0' 2>/dev/null || echo "0")
+            if [[ "$BOOT_ISSUE_COUNT" == "0" ]] || [[ "$BOOT_ISSUE_COUNT" == "null" ]]; then
+                # Validator returned no issues — likely a {} fallback from timeout/missing validator
+                log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_no_report" "Boot validator returned empty report"
+                emit_pretool_response \
+                  "allow" \
+                  "" \
+                  "AGENT_BOOT_INTEGRITY_WARNING: Boot validator returned no diagnostic details for $RESOLVED (empty report — validator may have timed out or is unavailable). The agent will proceed." \
+                  "" \
+                  "AGENT_BOOT_INTEGRITY_WARNING" \
+                  "WARN"
+                exit 0
+            fi
+
             BOOT_MESSAGE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].message // "Agent boot integrity validation failed."' 2>/dev/null || echo "Agent boot integrity validation failed.")
-            BOOT_FIELD=$(echo "$BOOT_REPORT" | jq -r '.issues[0].field // "unknown"' 2>/dev/null || echo "unknown")
-            BOOT_SOURCE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].sourceOfTruth // "unknown"' 2>/dev/null || echo "unknown")
+            BOOT_FIELD=$(echo "$BOOT_REPORT" | jq -r '.issues[0].field // empty' 2>/dev/null || echo "")
+            BOOT_SOURCE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].sourceOfTruth // empty' 2>/dev/null || echo "")
             BOOT_REPAIR=$(echo "$BOOT_REPORT" | jq -r '.issues[0].repairAction // "Repair the agent markdown, imported prompt fragments, launch payload, or generated routing artifact before launch."' 2>/dev/null || echo "Repair the agent markdown, imported prompt fragments, launch payload, or generated routing artifact before launch.")
             BOOT_AGENT=$(echo "$BOOT_REPORT" | jq -r '.issues[0].agentId // empty' 2>/dev/null || echo "")
+            BOOT_CODE=$(echo "$BOOT_REPORT" | jq -r '.issues[0].code // empty' 2>/dev/null || echo "")
+
+            # Build diagnostic string with available fields only
+            local diag_parts="AGENT_BOOT_INTEGRITY_WARNING: ${BOOT_MESSAGE} Agent: ${BOOT_AGENT:-$RESOLVED}."
+            [[ -n "$BOOT_CODE" ]] && diag_parts="${diag_parts} Code: ${BOOT_CODE}."
+            [[ -n "$BOOT_FIELD" ]] && diag_parts="${diag_parts} Missing/invalid field: ${BOOT_FIELD}."
+            [[ -n "$BOOT_SOURCE" ]] && diag_parts="${diag_parts} Source of truth checked: ${BOOT_SOURCE}."
+            diag_parts="${diag_parts} Suggested repair: ${BOOT_REPAIR}. The agent will proceed despite this validation issue."
 
             log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "agent_boot_integrity_error" "$BOOT_MESSAGE"
             # Advisory only — do not deny agent launches for routing/integrity checks
             emit_pretool_response \
               "allow" \
               "" \
-              "AGENT_BOOT_INTEGRITY_WARNING: ${BOOT_MESSAGE} Agent: ${BOOT_AGENT:-$RESOLVED}. Missing/invalid field: ${BOOT_FIELD:-unknown}. Source of truth checked: ${BOOT_SOURCE:-unknown}. Suggested repair: ${BOOT_REPAIR}. The agent will proceed despite this validation issue." \
+              "$diag_parts" \
               "" \
               "AGENT_BOOT_INTEGRITY_WARNING" \
               "WARN"
