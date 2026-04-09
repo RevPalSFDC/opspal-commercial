@@ -1,43 +1,30 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week brought major improvements to system reliability and data quality checks. OpsPal now automatically detects and prevents common Salesforce configuration errors that could break your workflows, while also cleaning up outdated settings and connections behind the scenes. The platform also added stronger validation rules to ensure your automation runs smoothly without interruption.",
-  "published_at": "2026-04-09T16:46:23.529Z",
+  "summary": "This week focused on improving OpsPal's reliability and setup experience. The platform now automatically cleans up outdated files and fixes missing dependencies during startup, reducing manual maintenance. Additionally, HubSpot integrations received important compatibility updates, and Salesforce workflows now better handle record types and dynamic forms.",
+  "published_at": "2026-04-09T19:27:12.437Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-09",
   "has_breaking": false,
-  "total_commits": 77,
+  "total_commits": 85,
   "entries": [
     {
       "category": "improved",
       "plugin": "HubSpot",
-      "headline": "Enhanced HubSpot connection capabilities",
+      "headline": "Enhanced HubSpot integration capabilities",
       "details": null,
       "commits": [
         "d7f3d38"
       ]
     },
     {
-      "category": "new",
-      "plugin": "Rth",
-      "headline": "Added stronger validation rules for automation workflows",
-      "details": [
-        "Ensures all workflow steps produce valid results",
-        "Prevents advisory workflows from blocking your operations",
-        "Speeds up workflow testing with irrelevant commands"
-      ],
-      "commits": [
-        "ae9c3e3"
-      ]
-    },
-    {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Automatic system cleanup keeps OpsPal running smoothly",
+      "headline": "Platform automatically cleans up old files during updates",
       "details": [
         "Removes outdated cache files older than 7 days",
-        "Cleans up stale session files older than 5 minutes",
-        "Alerts you when memory usage approaches limits"
+        "Cleans up stuck session files older than 5 minutes",
+        "Alerts when memory files become too large"
       ],
       "commits": [
         "46d5153"
@@ -46,24 +33,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "System automatically removes broken connections and outdated settings",
+      "headline": "Improved Salesforce metadata and record type handling",
       "details": [
-        "Works across Windows, Linux, and Mac systems",
-        "Detects and removes any marketplace connections",
-        "Cleans up settings for all connected platforms"
-      ],
-      "commits": [
-        "396a613"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Prevents common Salesforce configuration errors that break workflows",
-      "details": [
-        "Blocks field additions when Dynamic Forms are active to prevent invisible fields",
-        "Automatically assigns record types to prevent permission errors",
-        "Converts blocking workflow errors to warnings to keep operations running"
+        "Prevents field conflicts when Dynamic Forms are active",
+        "Automatically assigns new record types to System Administrator profile",
+        "Reduces workflow blocking from routing requirements"
       ],
       "commits": [
         "b85e3bf"
@@ -72,11 +46,11 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Automatically installs missing dependencies and reports installation issues",
+      "headline": "Platform automatically fixes missing dependencies at startup",
       "details": [
-        "Captures detailed installation logs for troubleshooting",
-        "Provides manual fix commands when automatic installation fails",
-        "Runs background fixes for safe dependency issues"
+        "Installs required packages automatically during session start",
+        "Shows clear error messages when installations fail",
+        "Provides manual fix commands when needed"
       ],
       "commits": [
         "26f0866"
@@ -85,7 +59,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminated false missing package errors during startup",
+      "headline": "Resolved false missing package errors during startup",
       "details": null,
       "commits": [
         "4255dd6"
