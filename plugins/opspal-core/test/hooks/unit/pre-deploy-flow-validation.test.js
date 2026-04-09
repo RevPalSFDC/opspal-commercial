@@ -224,11 +224,11 @@ async function runAllTests() {
       assert.strictEqual(result.parseError, null, 'Should emit valid structured output');
       assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should allow deploy with advisory context');
       assert(
-        (result.output?.hookSpecificOutput?.additionalContext || '').includes('FlowDefinition'),
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('FlowDefinition'),
         'Should mention FlowDefinition remediation'
       );
       assert(
-        (result.output?.hookSpecificOutput?.additionalContext || '').includes('ActiveVersionId=null'),
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ActiveVersionId=null'),
         'Should include the Flow deactivation Tooling API guidance'
       );
     } finally {

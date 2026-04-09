@@ -1,0 +1,992 @@
+{
+  "generatedAt": "2026-04-09T19:18:32.865Z",
+  "defaultMax": 3,
+  "totals": {
+    "matcherGroups": 61,
+    "overBudget": 0,
+    "duplicateRegistrations": 0
+  },
+  "overBudget": [],
+  "duplicateRegistrations": [],
+  "staleBudgets": [],
+  "entries": [
+    {
+      "key": "PreToolUse :: Agent",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "count": 11,
+      "plugins": [
+        "opspal-core",
+        "opspal-gtm-planning",
+        "opspal-hubspot",
+        "opspal-marketo",
+        "opspal-monday",
+        "opspal-okrs"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-task-agent-validator.sh",
+        "plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh",
+        "plugins/opspal-core/hooks/pre-task-work-context.sh",
+        "plugins/opspal-gtm-planning/hooks/pre-task-gtm-approval-gate.sh",
+        "plugins/opspal-hubspot/hooks/pre-task-agent-validator.sh",
+        "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
+        "plugins/opspal-hubspot/hooks/universal-agent-governance.sh",
+        "plugins/opspal-marketo/hooks/pre-intelligence-analysis.sh",
+        "plugins/opspal-marketo/hooks/universal-agent-governance.sh",
+        "plugins/opspal-monday/hooks/universal-agent-governance.sh",
+        "plugins/opspal-okrs/hooks/pre-task-okr-approval-gate.sh"
+      ],
+      "duplicates": [],
+      "max": 11,
+      "budgetReason": "Current layered agent-governance stack; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
+    },
+    {
+      "key": "SessionStart :: *",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "count": 6,
+      "plugins": [
+        "opspal-core",
+        "opspal-gtm-planning",
+        "opspal-hubspot",
+        "opspal-marketo",
+        "opspal-okrs",
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/session-start-dispatcher.sh",
+        "plugins/opspal-gtm-planning/hooks/session-start-gtm-context-loader.sh",
+        "plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
+        "plugins/opspal-marketo/hooks/session-start-marketo.sh",
+        "plugins/opspal-okrs/hooks/session-start-okr-context-loader.sh",
+        "plugins/opspal-salesforce/hooks/session-start-sf-context.sh"
+      ],
+      "duplicates": [],
+      "max": 12,
+      "budgetReason": "Global startup hooks are intentionally broad today; includes session-capture-init for ambient reflection pipeline."
+    },
+    {
+      "key": "PreToolUse :: Bash",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "count": 5,
+      "plugins": [
+        "opspal-core",
+        "opspal-hubspot",
+        "opspal-marketo",
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+        "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh",
+        "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
+        "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
+        "plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh"
+      ],
+      "duplicates": [],
+      "max": 5,
+      "budgetReason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, and Marketo plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
+    },
+    {
+      "key": "PreToolUse :: Write",
+      "eventType": "PreToolUse",
+      "matcher": "Write",
+      "count": 5,
+      "plugins": [
+        "opspal-core",
+        "opspal-gtm-planning",
+        "opspal-hubspot",
+        "opspal-okrs"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
+        "plugins/opspal-gtm-planning/hooks/pre-write-gtm-path-validator.sh",
+        "plugins/opspal-hubspot/hooks/pre-property-write-validation.sh",
+        "plugins/opspal-hubspot/hooks/pre-write-path-validator.sh",
+        "plugins/opspal-okrs/hooks/pre-write-okr-path-validator.sh"
+      ],
+      "duplicates": [],
+      "max": 5,
+      "budgetReason": "Write hooks are already layered across domains; this budget prevents quiet growth."
+    },
+    {
+      "key": "PostToolUse :: Agent",
+      "eventType": "PostToolUse",
+      "matcher": "Agent",
+      "count": 4,
+      "plugins": [
+        "opspal-ai-consult",
+        "opspal-core",
+        "opspal-gtm-planning",
+        "opspal-okrs"
+      ],
+      "hookPaths": [
+        "plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
+        "plugins/opspal-core/hooks/post-tool-use-agent-dispatcher.sh",
+        "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
+        "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh"
+      ],
+      "duplicates": [],
+      "max": 10,
+      "budgetReason": "Agent post-hooks now include AI consult plus GTM and OKR telemetry; hold the line here until the post-agent chain is consolidated."
+    },
+    {
+      "key": "PostToolUse :: *",
+      "eventType": "PostToolUse",
+      "matcher": "*",
+      "count": 3,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+        "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+        "plugins/opspal-core/hooks/ambient-hook-error-observer.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": "PostToolUse catch-all includes ambient candidate extractor, hook-error observer, and flush trigger."
+    },
+    {
+      "key": "PostToolUse :: Bash",
+      "eventType": "PostToolUse",
+      "matcher": "Bash",
+      "count": 3,
+      "plugins": [
+        "opspal-core",
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+        "plugins/opspal-core/hooks/post-tool-use.sh",
+        "plugins/opspal-salesforce/hooks/post-bash-dispatcher.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": "Post-Bash hooks are now dispatched per domain; fail any attempt to reintroduce broad Bash post-hook fan-out."
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__*",
+      "count": 3,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/api-limit-monitor.sh",
+        "plugins/opspal-marketo/hooks/post-instance-authentication.sh",
+        "plugins/opspal-marketo/hooks/post-operation-verification.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: Write",
+      "eventType": "PostToolUse",
+      "matcher": "Write",
+      "count": 3,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-reflect-strategy-update.sh",
+        "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+        "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "TaskCompleted :: *",
+      "eventType": "TaskCompleted",
+      "matcher": "*",
+      "count": 3,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
+        "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+        "plugins/opspal-core/hooks/task-completed-metrics.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": "TaskCompleted now includes ambient candidate extraction and flush trigger alongside metrics."
+    },
+    {
+      "key": "PostToolUse :: ^mcp__hubspot.*$",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__hubspot.*$",
+      "count": 2,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+        "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: ^mcp__marketo.*$",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__marketo.*$",
+      "count": 2,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+        "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: ^mcp__salesforce.*$",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__salesforce.*$",
+      "count": 2,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
+        "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreCompact :: *",
+      "eventType": "PreCompact",
+      "matcher": "*",
+      "count": 2,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/ambient-flush-trigger.sh",
+        "plugins/opspal-core/hooks/pre-compact.sh"
+      ],
+      "duplicates": [],
+      "max": 2,
+      "budgetReason": "PreCompact includes transcript backup and ambient flush trigger."
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__bulk_lead_export_create|mcp__marketo__bulk_activity_export_create|mcp__marketo__bulk_program_member_export_create",
+      "count": 2,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-bulk-export.sh",
+        "plugins/opspal-marketo/hooks/pre-observability-extract.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "UserPromptSubmit :: *",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "count": 2,
+      "plugins": [
+        "opspal-core",
+        "opspal-data-hygiene"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/user-prompt-dispatcher.sh",
+        "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh"
+      ],
+      "duplicates": [],
+      "max": 8,
+      "budgetReason": "Prompt-time routing, deprecation notices, and ambient candidate extraction are global today."
+    },
+    {
+      "key": "PermissionRequest :: *",
+      "eventType": "PermissionRequest",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/permission-request-handler.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: ^mcp__fireflies.*$",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-fireflies-sync.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: ^mcp__gong.*$",
+      "eventType": "PostToolUse",
+      "matcher": "^mcp__gong.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-gong-sync.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: Edit",
+      "eventType": "PostToolUse",
+      "matcher": "Edit",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__hubspot*__*auth*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*auth*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/post-portal-authentication.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__hubspot*__*cms*publish*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*cms*publish*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/post-cms-publish-notification.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__hubspot*__*portal*switch*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__hubspot*__*portal*switch*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/post-portal-switch.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__bulk_*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_*",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/observability-quota-monitor.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__bulk_lead_export_status|mcp__marketo__bulk_activity_export_status|mcp__marketo__bulk_program_member_export_status",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_lead_export_status|mcp__marketo__bulk_activity_export_status|mcp__marketo__bulk_program_member_export_status",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/post-extract-complete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__bulk_lead_import_status",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__bulk_lead_import_status",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/post-bulk-import.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__campaign_*|mcp__marketo__lead_activities",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__campaign_*|mcp__marketo__lead_activities",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/campaign-diagnostic-reminder.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__campaign_create|mcp__marketo__campaign_clone",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__campaign_create|mcp__marketo__campaign_clone",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/post-campaign-create.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__marketo__sync_*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__marketo__sync_*",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/sync-error-monitor.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__monday__*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__monday__*",
+      "count": 1,
+      "plugins": [
+        "opspal-monday"
+      ],
+      "hookPaths": [
+        "plugins/opspal-monday/hooks/post-tool-use-monday-audit.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: TodoWrite",
+      "eventType": "PostToolUse",
+      "matcher": "TodoWrite",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/post-todowrite-scratchpad.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUseFailure :: Bash",
+      "eventType": "PostToolUseFailure",
+      "matcher": "Bash",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-bash-error-handler.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: *",
+      "eventType": "PreToolUse",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-tool-use-contract-validation.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: ^mcp__fireflies.*$",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__fireflies.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-fireflies-api-call.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: ^mcp__gong.*$",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__gong.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-gong-api-call.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: ^mcp__hubspot.*$",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__hubspot.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-operation-data-validator.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: ^mcp__marketo.*$",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__marketo.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-operation-data-validator.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: ^mcp__salesforce.*$",
+      "eventType": "PreToolUse",
+      "matcher": "^mcp__salesforce.*$",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/pre-operation-data-validator.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__hubspot*",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/pre-hubspot-api-call.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__hubspot*__*cms*publish*",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*cms*publish*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/pre-cms-publish-validation.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__hubspot*__*merge*",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*merge*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/pre-company-merge.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__hubspot*__*workflow*list*",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__hubspot*__*workflow*list*",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/pre-workflow-list-validation.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__campaign_activate",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_activate",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-campaign-activation.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__campaign_clone",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_clone",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-campaign-clone.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__campaign_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__campaign_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-campaign-delete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__lead_create|mcp__marketo__lead_update|mcp__marketo__lead_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-bulk-operation.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__lead_merge",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__lead_merge",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-lead-merge.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__marketo__program_clone",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__marketo__program_clone",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/pre-orchestration.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "Stop :: *",
+      "eventType": "Stop",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/stop-dispatcher.sh"
+      ],
+      "duplicates": [],
+      "max": 6,
+      "budgetReason": "Global stop hooks include ambient hook-error observer and flush trigger for session-end reflection."
+    },
+    {
+      "key": "SubagentStart :: *",
+      "eventType": "SubagentStart",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/subagent-start-context.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: *",
+      "eventType": "SubagentStop",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/subagent-stop-dispatcher.sh"
+      ],
+      "duplicates": [],
+      "max": 4,
+      "budgetReason": "SubagentStop now includes ambient candidate extraction alongside verification hooks."
+    },
+    {
+      "key": "SubagentStop :: hubspot-assessment-analyzer",
+      "eventType": "SubagentStop",
+      "matcher": "hubspot-assessment-analyzer",
+      "count": 1,
+      "plugins": [
+        "opspal-hubspot"
+      ],
+      "hookPaths": [
+        "plugins/opspal-hubspot/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: marketo-lead-quality-assessor",
+      "eventType": "SubagentStop",
+      "matcher": "marketo-lead-quality-assessor",
+      "count": 1,
+      "plugins": [
+        "opspal-marketo"
+      ],
+      "hookPaths": [
+        "plugins/opspal-marketo/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-architecture-auditor",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-architecture-auditor",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-automation-auditor",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-automation-auditor",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-cpq-assessor",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-cpq-assessor",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-deployment-manager",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-deployment-manager",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-deploy-manager-stop.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-discovery",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-discovery",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-quality-auditor",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-quality-auditor",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-revops-auditor",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-revops-auditor",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-assessment-planning-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "SubagentStop :: sfdc-state-discovery",
+      "eventType": "SubagentStop",
+      "matcher": "sfdc-state-discovery",
+      "count": 1,
+      "plugins": [
+        "opspal-salesforce"
+      ],
+      "hookPaths": [
+        "plugins/opspal-salesforce/hooks/post-discovery-field-dictionary.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    }
+  ]
+}

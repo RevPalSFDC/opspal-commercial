@@ -89,12 +89,12 @@ async function runAllTests() {
     const output = JSON.parse(result.stdout.trim());
     assert(
       output.hookSpecificOutput &&
-      output.hookSpecificOutput.additionalContext.includes('FlowVersionView uses DeveloperName'),
+      output.hookSpecificOutput.permissionDecisionReason.includes('FlowVersionView uses DeveloperName'),
       'Should warn about ApiName vs DeveloperName mismatch'
     );
     assert(
       output.hookSpecificOutput &&
-      output.hookSpecificOutput.additionalContext.includes('--use-tooling-api'),
+      output.hookSpecificOutput.permissionDecisionReason.includes('--use-tooling-api'),
       'Should warn about missing Tooling API flag'
     );
   }));
@@ -118,7 +118,7 @@ async function runAllTests() {
       'Should identify deprecated bulk flag usage'
     );
     assert(
-      (output.hookSpecificOutput?.additionalContext || '').includes('sf data export bulk'),
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('sf data export bulk'),
       'Should suggest sf data export bulk as the replacement'
     );
   }));
@@ -142,7 +142,7 @@ async function runAllTests() {
       'Should identify invalid FlowVersionStatus usage'
     );
     assert(
-      (output.hookSpecificOutput?.additionalContext || '').includes('Active, Draft, Obsolete'),
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('Active, Draft, Obsolete'),
       'Should list valid FlowVersionStatus values'
     );
   }));
@@ -166,7 +166,7 @@ async function runAllTests() {
       'Should identify the apostrophe escaping issue'
     );
     assert(
-      (output.hookSpecificOutput?.additionalContext || '').includes('O\\\'Brien'),
+      (output.hookSpecificOutput?.permissionDecisionReason || '').includes('O\\\'Brien'),
       'Should provide an escaped remediation example'
     );
   }));

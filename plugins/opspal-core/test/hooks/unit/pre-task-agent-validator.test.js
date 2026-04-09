@@ -282,7 +282,7 @@ async function runAllTests() {
     // With deploy contract removed, deployment agents now receive the generic
     // Bash permission contract — this is correct (fallback if Bash unavailable).
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_SPECIALIST_OVERRIDE'),
       'Should explain why the reroute happened'
     );
   }));
@@ -694,7 +694,7 @@ async function runAllTests() {
       'Mandatory helper Agent call should be rewritten to the required specialist'
     );
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_AUTO_DELEGATED'),
       'Should surface auto-delegation bridge context'
     );
     const state = readRoutingState(env);
@@ -789,7 +789,7 @@ async function runAllTests() {
       'Invalid auto-delegation targets should be repaired to a profile-matching specialist'
     );
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_PROFILE_REPAIRED'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('ROUTING_PROFILE_REPAIRED'),
       'Should explain that the route profile was repaired'
     );
     const state = readRoutingState(env);

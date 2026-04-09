@@ -1,0 +1,1581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>test-single.fallback.html</title>
+  <style>/**
+ * PDF Base Stylesheet - RevPal Brand
+ *
+ * Core typography, layout, and print rules for PDF generation.
+ * This file provides the foundation styles with RevPal branding defaults.
+ * Components and themes layer on top.
+ *
+ * Brand Reference: templates/branding-gallery/index.html
+ *
+ * @version 2.0.0
+ * @date 2026-01-31
+ */
+
+/* =============================================================================
+   Google Fonts Import (Montserrat + Figtree)
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&display=swap');
+
+/* =============================================================================
+   CSS Variables - RevPal Brand Defaults
+   ============================================================================= */
+
+:root {
+  /* RevPal Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F7F4EF;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-40: #A8A5A0;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Typography - RevPal Fonts */
+  --font-primary: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-secondary: "Figtree", system-ui, sans-serif;
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+  /* Font Sizes */
+  --font-size-base: 10pt;
+  --font-size-small: 8pt;
+  --font-size-large: 12pt;
+  --font-size-h1: 24pt;
+  --font-size-h2: 18pt;
+  --font-size-h3: 14pt;
+  --font-size-h4: 12pt;
+  --font-size-h5: 11pt;
+  --font-size-h6: 10pt;
+
+  /* Semantic Color Mapping (use these in styles) */
+  --color-text: var(--brand-indigo);
+  --color-text-secondary: var(--neutral-40);
+  --color-text-muted: var(--neutral-20);
+  --color-background: var(--neutral-100);
+  --color-surface: var(--neutral-90);
+  --color-border: var(--neutral-60);
+  --color-border-light: var(--neutral-80);
+  --color-primary: var(--brand-grape);
+  --color-accent: var(--brand-apricot);
+  --color-success: var(--brand-green);
+  --color-warning: #F5A623;
+  --color-danger: #D32F2F;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Layout */
+  --content-max-width: 650px;
+  --line-height: 1.6;
+}
+
+html {
+  font-size: 14px;
+}
+
+/* =============================================================================
+   Base Typography
+   ============================================================================= */
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings - Montserrat font family */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.25;
+  page-break-after: avoid;
+  break-after: avoid-page;
+  break-inside: avoid;
+}
+
+h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+  page-break-before: avoid;
+  break-before: avoid-page;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: 800;
+  color: var(--brand-grape);
+  border-bottom: 3px solid var(--brand-apricot);
+  padding-bottom: 12px;
+  margin-top: var(--spacing-xl);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+  color: var(--brand-grape);
+  border-bottom: 2px solid var(--brand-sand);
+  padding-bottom: 8px;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  color: var(--brand-indigo);
+}
+
+h4 {
+  font-size: var(--font-size-h4);
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+h5 {
+  font-size: var(--font-size-h5);
+  font-weight: 500;
+  color: var(--brand-indigo);
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Paragraphs and Links */
+p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--brand-indigo);
+}
+
+a {
+  color: var(--brand-apricot);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--brand-apricot-hover);
+  text-decoration: underline;
+}
+
+/* Strong/Bold text */
+strong, b {
+  color: var(--brand-grape);
+  font-weight: 600;
+}
+
+/* Lists */
+ul, ol {
+  margin: 0 0 var(--spacing-md) 0;
+  padding-left: 2em;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+li {
+  margin-bottom: var(--spacing-xs);
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+li > ul, li > ol {
+  margin-top: var(--spacing-xs);
+  margin-bottom: 0;
+}
+
+/* =============================================================================
+   Code and Preformatted Text
+   ============================================================================= */
+
+code {
+  font-family: var(--font-mono);
+  font-size: 90%;
+  background-color: var(--neutral-90);
+  color: var(--brand-grape);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre {
+  background-color: var(--neutral-90);
+  border: 1px solid var(--neutral-60);
+  border-left: 4px solid var(--brand-grape);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 90%;
+  line-height: 1.45;
+  page-break-inside: avoid;
+  max-width: 100%;
+  white-space: pre-wrap;       /* Wrap long lines instead of horizontal scroll */
+  word-wrap: break-word;       /* Break words if needed */
+  overflow-wrap: break-word;   /* Modern property for word breaking */
+}
+
+pre code {
+  background-color: transparent;
+  color: var(--brand-indigo);
+  padding: 0;
+  font-size: 100%;
+  border-radius: 0;
+  white-space: pre-wrap;       /* Inherit wrapping behavior */
+  word-break: break-all;       /* Break very long strings (like URLs, IDs) */
+}
+
+/* Code blocks that must preserve formatting (explicit class) */
+pre.nowrap,
+pre.preserve-formatting {
+  white-space: pre;
+  overflow-x: auto;
+  word-wrap: normal;
+}
+
+/* =============================================================================
+   Blockquotes - Callout Style
+   ============================================================================= */
+
+blockquote {
+  background-color: var(--brand-sand);
+  border-left: 4px solid var(--brand-apricot);
+  border-radius: 0 8px 8px 0;
+  padding: var(--spacing-md) 20px;
+  margin: var(--spacing-md) 0;
+  color: var(--brand-indigo);
+  font-style: normal;
+}
+
+blockquote > :first-child {
+  margin-top: 0;
+}
+
+blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+blockquote strong {
+  color: var(--brand-grape);
+}
+
+/* =============================================================================
+   Horizontal Rules
+   ============================================================================= */
+
+hr {
+  height: 0;
+  padding: 0;
+  margin: var(--spacing-xl) 0;
+  border: none;
+  border-top: 2px solid var(--brand-sand);
+}
+
+/* =============================================================================
+   Images and Media
+   ============================================================================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+  page-break-inside: avoid;
+  display: block;
+  margin: var(--spacing-md) auto;
+}
+
+figure {
+  margin: var(--spacing-md) 0;
+  text-align: center;
+}
+
+figcaption {
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-sm);
+  font-style: italic;
+}
+
+/* =============================================================================
+   Page Layout and Print Rules
+   ============================================================================= */
+
+/* Default page setup */
+@page {
+  size: A4;
+  margin: 20mm;
+}
+
+/* Landscape page for wide content */
+@page landscape {
+  size: A4 landscape;
+  margin: 15mm;
+}
+
+.landscape-section {
+  page: landscape;
+}
+
+/* Page break utilities */
+.page-break {
+  page-break-after: always;
+}
+
+.page-break-before {
+  page-break-before: always;
+}
+
+.no-break {
+  page-break-inside: avoid;
+}
+
+/* Section breaks between documents */
+.section-break {
+  page-break-before: always;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 3px solid var(--brand-apricot);
+}
+
+/* =============================================================================
+   Print-Specific Styles
+   ============================================================================= */
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    font-size: 10pt;
+  }
+
+  /* Use grape for links in print */
+  a {
+    text-decoration: none;
+    color: var(--brand-grape);
+  }
+
+  /* Ensure brand colors print correctly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Prevent widows and orphans */
+  p, li, blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Keep headings with following content */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  /* Avoid breaking inside important elements */
+  pre, blockquote, table, figure, img {
+    page-break-inside: avoid;
+  }
+}
+
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-muted { color: var(--neutral-20); }
+.text-secondary { color: var(--neutral-40); }
+.text-primary { color: var(--brand-grape); }
+.text-accent { color: var(--brand-apricot); }
+.text-success { color: var(--brand-green); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+
+.font-heading { font-family: var(--font-heading); }
+.font-body { font-family: var(--font-primary); }
+.font-mono { font-family: var(--font-mono); }
+.font-small { font-size: var(--font-size-small); }
+.font-large { font-size: var(--font-size-large); }
+
+.bg-sand { background-color: var(--brand-sand); }
+.bg-surface { background-color: var(--neutral-90); }
+
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.mt-md { margin-top: var(--spacing-md); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+/* Status indicators */
+.status-pass { color: var(--brand-green); font-weight: 600; }
+.status-partial { color: var(--brand-apricot); font-weight: 600; }
+.status-fail { color: var(--color-danger); font-weight: 600; }
+
+/* Cards / Callout boxes */
+.card {
+  background: var(--brand-sand);
+  border: 1px solid rgba(62, 74, 97, 0.2);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+}
+
+/* Footer */
+.footer {
+  margin-top: var(--spacing-2xl);
+  padding-top: var(--spacing-md);
+  border-top: 2px solid var(--brand-sand);
+  text-align: center;
+  font-size: var(--font-size-small);
+  color: var(--neutral-20);
+}
+
+.footer strong {
+  color: var(--brand-grape);
+}
+
+
+/* === Layer Separator === */
+
+/**
+ * PDF Tables Stylesheet
+ *
+ * Styling for tables with proper word-wrap, page breaks, and accessibility.
+ * Fixes the table overflow issues with long content.
+ *
+ * @version 1.0.0
+ * @date 2025-12-25
+ */
+
+/* =============================================================================
+   Base Table Styles
+   ============================================================================= */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: var(--spacing-md) 0;
+  font-size: var(--font-size-small);
+  table-layout: fixed;  /* Fixed layout prevents overflow - recommended for PDF */
+}
+
+/* =============================================================================
+   Table Cells - Word Wrap Fix
+   ============================================================================= */
+
+table th,
+table td {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+
+  /* Critical word-wrap fixes */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;  /* Changed from nowrap default */
+  hyphens: auto;
+}
+
+/* Header cells - Use brand colors (Grape background, white text) */
+table th {
+  font-weight: 600;
+  background-color: var(--brand-grape, var(--color-primary, #5F3B8C));
+  color: var(--neutral-100, #FFFFFF);
+  border-color: var(--brand-grape, var(--color-primary, #5F3B8C));
+}
+
+/* =============================================================================
+   Zebra Striping
+   ============================================================================= */
+
+table tbody tr:nth-child(odd) {
+  background-color: var(--color-background);
+}
+
+table tbody tr:nth-child(even) {
+  background-color: var(--color-surface);
+}
+
+/* Hover effect (for screen viewing) */
+@media screen {
+  table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* =============================================================================
+   Page Break Handling
+   ============================================================================= */
+
+/* Allow table body to break across pages */
+table {
+  page-break-inside: auto;
+}
+
+/* Repeat table headers on each page */
+thead {
+  display: table-header-group;
+}
+
+/* Allow tbody to break */
+tbody {
+  display: table-row-group;
+  page-break-inside: auto;
+}
+
+/* Try to keep individual rows together */
+tr {
+  page-break-inside: avoid;
+  page-break-after: auto;
+}
+
+/* Prevent table footer from splitting */
+tfoot {
+  display: table-footer-group;
+}
+
+/* =============================================================================
+   Column Width Hints
+   ============================================================================= */
+
+/* Narrow columns for numbers, status */
+.col-narrow {
+  width: 80px;
+}
+
+/* Medium columns for dates, short text */
+.col-medium {
+  width: 120px;
+}
+
+/* Wide columns for descriptions */
+.col-wide {
+  width: 200px;
+}
+
+/* Auto-expand column */
+.col-auto {
+  width: auto;
+}
+
+/* =============================================================================
+   Special Table Types
+   ============================================================================= */
+
+/* Compact table (less padding) */
+table.compact th,
+table.compact td {
+  padding: 4px 8px;
+}
+
+/* Borderless table */
+table.borderless,
+table.borderless th,
+table.borderless td {
+  border: none;
+}
+
+/* Striped (explicit class) */
+table.striped tbody tr:nth-child(even) {
+  background-color: var(--color-surface);
+}
+
+/* =============================================================================
+   Status Badges in Tables
+   ============================================================================= */
+
+table .status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+table .status-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+table .status-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+table .status-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+table .status-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* =============================================================================
+   Wide Tables (Landscape)
+   ============================================================================= */
+
+table.wide {
+  page: landscape;
+}
+
+/* Container for wide tables */
+.table-wide-container {
+  page: landscape;
+  width: 100%;
+}
+
+/* =============================================================================
+   Many-Column Tables (7+ columns)
+   ============================================================================= */
+
+/* For tables with many columns, use smaller font and tighter padding */
+table.many-columns,
+table:has(th:nth-child(7)) {
+  font-size: 9pt;
+}
+
+table.many-columns th,
+table.many-columns td,
+table:has(th:nth-child(7)) th,
+table:has(th:nth-child(7)) td {
+  padding: 4px 6px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =============================================================================
+   ID Columns (Salesforce IDs, GUIDs)
+   ============================================================================= */
+
+/* Columns containing long IDs should truncate gracefully */
+.col-id,
+td[data-type="id"] {
+  max-width: 100px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
+/* Truncate long IDs with ellipsis */
+.col-id-truncate {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Show full ID on hover (screen only) */
+@media screen {
+  .col-id-truncate:hover {
+    overflow: visible;
+    white-space: normal;
+    word-break: break-all;
+  }
+}
+
+/* =============================================================================
+   Responsive Considerations (Screen Only)
+   ============================================================================= */
+
+@media screen and (max-width: 600px) {
+  table {
+    font-size: 10pt;
+  }
+
+  table th,
+  table td {
+    padding: 6px 8px;
+  }
+}
+
+
+/* === Layer Separator === */
+
+/**
+ * PDF Table of Contents Stylesheet
+ *
+ * Styling for automatically generated table of contents.
+ * Supports nested headings up to 3 levels deep.
+ *
+ * @version 1.0.0
+ * @date 2025-12-25
+ */
+
+/* =============================================================================
+   TOC Container
+   ============================================================================= */
+
+.toc {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  page-break-inside: avoid;
+}
+
+/* TOC Heading */
+.toc h2,
+.toc-title {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  border-bottom: none;
+  font-size: 1.3em;
+  color: var(--color-text);
+}
+
+/* =============================================================================
+   TOC List Styles (Legacy - for markdown-generated lists)
+   ============================================================================= */
+
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc ul ul {
+  padding-left: 20px;
+  margin-top: var(--spacing-xs);
+}
+
+.toc ul ul ul {
+  padding-left: 20px;
+}
+
+.toc li {
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.5;
+}
+
+/* =============================================================================
+   TOC Entry Styles (HTML-generated - better page-break control)
+   ============================================================================= */
+
+.toc-entries {
+  page-break-inside: avoid;
+}
+
+.toc-group {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  -webkit-column-break-inside: avoid !important;
+}
+
+.toc-entry {
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.6;
+  display: flex;
+  align-items: baseline;
+}
+
+.toc-entry a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.2s;
+}
+
+.toc-entry a:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-border);
+}
+
+.toc-number {
+  color: var(--color-text-secondary);
+  font-weight: normal;
+  min-width: 40px;
+  display: inline-block;
+}
+
+/* Level-specific styling */
+.toc-level-1 {
+  font-size: 1.05em;
+}
+
+.toc-level-2 {
+  font-size: 1em;
+}
+
+.toc-level-3 {
+  font-size: 0.95em;
+  color: var(--color-text-secondary);
+}
+
+/* =============================================================================
+   TOC Links
+   ============================================================================= */
+
+.toc a {
+  color: var(--color-text);
+  text-decoration: none;
+  display: block;
+  padding: 4px 0;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.2s;
+}
+
+.toc a:hover {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-border);
+}
+
+/* Level 1 entries (document titles) */
+.toc > ul > li > a {
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+/* Level 2 entries */
+.toc > ul > li > ul > li > a {
+  font-weight: 500;
+  font-size: 1em;
+  color: var(--color-text);
+}
+
+/* Level 3 entries */
+.toc > ul > li > ul > li > ul > li > a {
+  font-weight: normal;
+  font-size: 0.95em;
+  color: var(--color-text-secondary);
+}
+
+/* =============================================================================
+   TOC with Page Numbers (Leader Dots)
+   ============================================================================= */
+
+.toc-with-pages li {
+  display: flex;
+  align-items: baseline;
+}
+
+.toc-with-pages a {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.toc-with-pages a::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dotted var(--color-border);
+  margin: 0 8px;
+}
+
+.toc-page-number {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  font-size: 0.9em;
+  min-width: 30px;
+  text-align: right;
+}
+
+/* =============================================================================
+   Compact TOC Variant
+   ============================================================================= */
+
+.toc-compact {
+  padding: var(--spacing-md);
+}
+
+.toc-compact li {
+  margin-bottom: 2px;
+}
+
+.toc-compact ul ul {
+  padding-left: 16px;
+}
+
+/* =============================================================================
+   TOC Section Markers
+   ============================================================================= */
+
+.toc-section-marker {
+  display: inline-block;
+  width: 24px;
+  color: var(--color-text-secondary);
+  font-weight: normal;
+}
+
+/* =============================================================================
+   Print-Specific TOC Styles
+   ============================================================================= */
+
+@media print {
+  .toc {
+    page-break-inside: avoid;
+    page-break-after: always;
+  }
+
+  .toc-group {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .toc-entries {
+    page-break-inside: avoid;
+  }
+
+  .toc a {
+    color: var(--color-text);
+  }
+
+  .toc a::after {
+    /* Ensure leader dots print */
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .toc-entry {
+    page-break-inside: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+}
+
+/* =============================================================================
+   TOC Numbering (Optional)
+   ============================================================================= */
+
+.toc-numbered {
+  counter-reset: toc-section;
+}
+
+.toc-numbered > ul > li {
+  counter-increment: toc-section;
+}
+
+.toc-numbered > ul > li > a::before {
+  content: counter(toc-section) ". ";
+  color: var(--color-text-secondary);
+  font-weight: normal;
+}
+
+.toc-numbered > ul > li {
+  counter-reset: toc-subsection;
+}
+
+.toc-numbered > ul > li > ul > li {
+  counter-increment: toc-subsection;
+}
+
+.toc-numbered > ul > li > ul > li > a::before {
+  content: counter(toc-section) "." counter(toc-subsection) " ";
+  color: var(--color-text-secondary);
+  font-weight: normal;
+}
+
+
+/* === Layer Separator === */
+
+/**
+ * PDF Cover Page Stylesheet
+ *
+ * Styling for cover pages with logo support, metadata display,
+ * and professional branding elements.
+ *
+ * @version 1.0.0
+ * @date 2025-12-25
+ */
+
+/* =============================================================================
+   Cover Page Container
+   ============================================================================= */
+
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  height: auto;
+  max-height: none;
+  text-align: center;
+  page-break-after: auto;
+  padding: 0 40px 10px 40px;
+  margin-top: -8mm;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* =============================================================================
+   Logo Styling
+   ============================================================================= */
+
+.cover-logo {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.cover-logo img {
+  max-width: 160px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* Logo size variants */
+.cover-logo.logo-small img {
+  max-width: 120px;
+  max-height: 60px;
+}
+
+.cover-logo.logo-large img {
+  max-width: 300px;
+  max-height: 150px;
+}
+
+/* =============================================================================
+   Cover Title
+   ============================================================================= */
+
+.cover-page h1,
+.cover-title {
+  font-size: 2em;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-bottom: none;
+  color: var(--color-text);
+  font-weight: 700;
+  line-height: 1.2;
+  max-width: 85%;
+}
+
+/* Subtitle */
+.cover-subtitle {
+  font-size: 1.1em;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Report type badge */
+.cover-report-type {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* =============================================================================
+   Cover Metadata
+   ============================================================================= */
+
+.cover-metadata {
+  font-size: 0.95em;
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.cover-metadata p {
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.cover-metadata strong {
+  color: var(--color-text);
+}
+
+/* Metadata table layout */
+.cover-details {
+  margin: var(--spacing-lg) auto;
+  text-align: left;
+  border: none;
+  width: auto;
+  table-layout: auto;
+}
+
+.cover-details td {
+  padding: 6px 12px;
+  border: none;
+  vertical-align: top;
+}
+
+.cover-details td:first-child {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  padding-right: var(--spacing-md);
+}
+
+.cover-details td:last-child {
+  color: var(--color-text);
+}
+
+/* =============================================================================
+   Cover Footer (Branding & Disclaimer)
+   ============================================================================= */
+
+.cover-footer {
+  margin-top: 20px;
+  padding-top: 0;
+  padding-bottom: 8px;
+  width: 100%;
+  max-width: 90%;
+  text-align: center;
+}
+
+.cover-footer p {
+  margin: 4px 0;
+}
+
+.cover-disclaimer {
+  font-size: 0.7em;
+  color: var(--color-text-muted);
+  font-style: italic;
+  line-height: 1.35;
+  margin-top: 0;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 95%;
+}
+
+/* =============================================================================
+   Decorative Elements
+   ============================================================================= */
+
+.cover-divider {
+  width: 50px;
+  height: 3px;
+  background-color: var(--color-primary);
+  margin: 12px auto;
+  border-radius: 2px;
+}
+
+.cover-border {
+  border: 2px solid var(--color-border);
+  padding: 60px 40px;
+  margin: 40px;
+}
+
+/* =============================================================================
+   Cover Page Variants
+   ============================================================================= */
+
+/* Minimal cover */
+.cover-minimal {
+  justify-content: flex-start;
+  padding-top: 30vh;
+}
+
+.cover-minimal .cover-footer {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+}
+
+/* Full-bleed cover with background */
+.cover-full-bleed {
+  margin: -20px;
+  padding: 60px;
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+}
+
+/* Dark cover variant */
+.cover-dark {
+  background-color: #1a1a2e;
+  color: #ffffff;
+}
+
+.cover-dark h1,
+.cover-dark .cover-title {
+  color: #ffffff;
+}
+
+.cover-dark .cover-subtitle,
+.cover-dark .cover-metadata {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cover-dark .cover-disclaimer {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* =============================================================================
+   Date Formatting
+   ============================================================================= */
+
+.cover-date {
+  font-variant-numeric: tabular-nums;
+}
+
+/* =============================================================================
+   Print-Specific Cover Styles
+   ============================================================================= */
+
+@media print {
+  .cover-page {
+    page-break-after: auto;
+    page-break-inside: avoid;
+  }
+
+  /* Keep cover bounded to a single page without forcing an extra blank page */
+  .cover-page {
+    min-height: 100vh;
+    height: auto;
+  }
+
+  /* Preserve background colors */
+  .cover-full-bleed,
+  .cover-dark {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+
+/* === Layer Separator === */
+
+/* RevPal Brand Stylesheet */
+/* Clean over clever | Readability first | Consistent spacing | Subtle hierarchy | Minimal visual noise */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap');
+
+:root {
+  /* Brand Colors */
+  --brand-grape: #5F3B8C;
+  --brand-indigo: #3E4A61;
+  --brand-apricot: #E99560;
+  --brand-apricot-hover: #D88450;
+  --brand-sand: #EAE4DC;
+  --brand-green: #6FBF73;
+
+  /* Neutral Palette */
+  --neutral-100: #FFFFFF;
+  --neutral-90: #F6F5F3;
+  --neutral-80: #EAE4DC;
+  --neutral-60: #C6C3BD;
+  --neutral-20: #8A8A8A;
+  --neutral-0: #000000;
+
+  /* Typography */
+  --font-heading: "Montserrat", system-ui, sans-serif;
+  --font-body: "Figtree", system-ui, sans-serif;
+
+  /* Spacing */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 11pt;
+  line-height: 1.6;
+  color: var(--brand-indigo);
+  max-width: 100%;
+  background-color: var(--neutral-100);
+}
+
+/* Headings */
+h1 {
+  font-family: var(--font-heading);
+  color: var(--brand-grape);
+  font-size: 24pt;
+  font-weight: 800;
+  border-bottom: 3px solid var(--brand-apricot);
+  padding-bottom: 12px;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  page-break-after: avoid;
+}
+
+h2 {
+  font-family: var(--font-heading);
+  color: var(--brand-grape);
+  font-size: 18pt;
+  font-weight: 700;
+  border-bottom: 2px solid var(--brand-sand);
+  padding-bottom: 8px;
+  margin-top: 28px;
+  margin-bottom: 16px;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  color: var(--brand-indigo);
+  font-size: 14pt;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  page-break-after: avoid;
+}
+
+h4 {
+  font-family: var(--font-heading);
+  color: var(--brand-indigo);
+  font-size: 12pt;
+  font-weight: 500;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  page-break-after: avoid;
+}
+
+/* Body Text - scoped to avoid overriding TOC and component-specific styles */
+.markdown-body p,
+.markdown-body > ul > li,
+.markdown-body > ol > li,
+.markdown-body > ul ul > li,
+.markdown-body > ol ol > li {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: var(--brand-indigo);
+}
+
+strong {
+  color: var(--brand-grape);
+  font-weight: 600;
+}
+
+/* Code */
+code {
+  background-color: var(--neutral-90);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10pt;
+  color: var(--brand-grape);
+}
+
+pre {
+  background-color: var(--neutral-90);
+  border: 1px solid var(--neutral-60);
+  border-left: 4px solid var(--brand-grape);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  page-break-inside: avoid;
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  color: var(--brand-indigo);
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  page-break-inside: avoid;
+  font-size: 10pt;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th {
+  background-color: var(--brand-grape);
+  color: var(--neutral-100);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  padding: 12px 10px;
+  text-align: left;
+  border: 1px solid var(--brand-grape);
+}
+
+td {
+  border: 1px solid var(--neutral-60);
+  padding: 10px;
+  text-align: left;
+  color: var(--brand-indigo);
+}
+
+tr:nth-child(even) {
+  background-color: var(--neutral-90);
+}
+
+tr:nth-child(odd) {
+  background-color: var(--neutral-100);
+}
+
+/* Blockquotes - callout style */
+blockquote {
+  background-color: var(--brand-sand);
+  border-left: 4px solid var(--brand-apricot);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  color: var(--brand-indigo);
+  font-style: normal;
+}
+
+blockquote strong {
+  color: var(--brand-grape);
+}
+
+/* Lists */
+ul, ol {
+  margin: 12px 0;
+  padding-left: 28px;
+}
+
+li {
+  margin: 6px 0;
+}
+
+/* Links */
+a {
+  color: var(--brand-apricot);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--brand-apricot-hover);
+  text-decoration: underline;
+}
+
+/* Horizontal Rule */
+hr {
+  border: none;
+  border-top: 2px solid var(--brand-sand);
+  margin: 32px 0;
+}
+
+/* Status indicators */
+.status-pass { color: var(--brand-green); font-weight: 600; }
+.status-partial { color: var(--brand-apricot); font-weight: 600; }
+.status-fail { color: #D32F2F; font-weight: 600; }
+
+/* Cards / Callout boxes */
+.card {
+  background: var(--brand-sand);
+  border: 1px solid rgba(62, 74, 97, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+}
+
+/* Print styles */
+@media print {
+  body {
+    font-size: 10pt;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  table, pre, blockquote {
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: var(--brand-grape);
+  }
+}
+
+/* Page footer */
+.footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 2px solid var(--brand-sand);
+  text-align: center;
+  font-size: 9pt;
+  color: var(--neutral-20);
+}
+
+.footer strong {
+  color: var(--brand-grape);
+}
+
+
+/* === Layer Separator === */
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Montserrat:wght@500;600;700;800&family=JetBrains%20Mono:wght@400;500&display=swap');
+/* Brand Customization */
+:root {
+  --color-primary: #5F3B8C;
+  --color-secondary: #3E4A61;
+  --color-accent: #E99560;
+  --color-accentHover: #D88450;
+  --color-success: #6FBF73;
+  --color-danger: #D35649;
+  --color-warning: #E99560;
+  --color-info: #3E4A61;
+  --color-background: #FFFFFF;
+  --color-surface: #F6F5F3;
+  --color-surfaceDark: #EAE4DC;
+  --color-text: #000000;
+  --color-text-secondary: #3E4A61;
+  --color-text-muted: #8A8A8A;
+  --color-border: rgba(62, 74, 97, 0.2);
+  --font-primary: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-secondary: 'Montserrat', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* Logo Customization */
+.cover-logo img { max-width: 150px; }
+
+/* Custom Text Styling */</style>
+</head>
+<body class="markdown-body">
+<h1 id="test-report">Test Report</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This is a test report for PDF generation.</p>
+<h2 id="data-analysis">Data Analysis</h2>
+<p>Here are some key findings:</p>
+<ul>
+<li>Finding 1: Data quality is good</li>
+<li>Finding 2: Performance is acceptable</li>
+<li>Finding 3: No critical issues found</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>The system is operating normally.</p>
+
+</body>
+</html>

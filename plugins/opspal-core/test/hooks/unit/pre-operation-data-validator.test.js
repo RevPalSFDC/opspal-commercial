@@ -241,7 +241,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0 for structured deny');
     assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny low-confidence merge decisions');
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Average merge confidence'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Average merge confidence'),
       'Should surface the average merge confidence failure'
     );
   }));
@@ -309,7 +309,7 @@ async function runAllTests() {
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should allow with warning context');
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('formula or rollup field'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('formula or rollup field'),
       'Should surface the formula/rollup preflight warning'
     );
   }));

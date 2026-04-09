@@ -79,7 +79,7 @@ async function runAllTests() {
       'Guidance path should allow the write'
     );
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('orgs/acme/platforms/gtm-planning/'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('orgs/acme/platforms/gtm-planning/'),
       'Should direct the user toward the standard GTM path'
     );
   }));

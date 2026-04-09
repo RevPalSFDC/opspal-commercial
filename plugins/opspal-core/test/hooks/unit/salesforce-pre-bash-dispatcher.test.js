@@ -174,7 +174,7 @@ async function runAllTests() {
         'Should translate the sf describe command to a legacy sfdx equivalent'
       );
       assert(
-        (result.output?.hookSpecificOutput?.additionalContext || '').includes('compatibility fallback'),
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('compatibility fallback'),
         'Should explain that sfdx compatibility fallback was applied'
       );
     } finally {
@@ -233,7 +233,7 @@ async function runAllTests() {
         'Should prefix the command with set -o pipefail'
       );
       assert(
-        (result.output?.hookSpecificOutput?.additionalContext || '').includes('pipefail'),
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('pipefail'),
         'Should explain why pipefail was added'
       );
     } finally {
@@ -255,9 +255,9 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
     // The SOQL validator should fire and correct ApiName -> DeveloperName
-    if (result.output?.hookSpecificOutput?.additionalContext) {
+    if (result.output?.hookSpecificOutput?.permissionDecisionReason) {
       assert(
-        result.output.hookSpecificOutput.additionalContext.includes('DeveloperName') ||
+        result.output.hookSpecificOutput.permissionDecisionReason.includes('DeveloperName') ||
         result.output.hookSpecificOutput.updatedInput,
         'sfdx data query should trigger SOQL field corrections'
       );
@@ -279,7 +279,7 @@ async function runAllTests() {
     assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
     assert.strictEqual(result.output?.hookSpecificOutput?.hookEventName, 'PreToolUse');
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('incomplete pipe'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('incomplete pipe'),
       'Should preserve jq validation guidance through the dispatcher'
     );
   }));

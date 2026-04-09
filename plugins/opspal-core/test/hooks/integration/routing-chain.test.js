@@ -367,7 +367,7 @@ async function runAllTests() {
       'Helper Agent call should be rewritten to the required release specialist'
     );
     assert(
-      (autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      (autoDelegated.output?.hookSpecificOutput?.permissionDecisionReason || autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
       'Validator should explain that the mandatory route was auto-delegated'
     );
     assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Auto-delegated specialist should clear the pending route');
@@ -617,7 +617,7 @@ async function runAllTests() {
       'Helper Agent call should be rewritten to the canonical permission specialist'
     );
     assert(
-      (autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
+      (autoDelegated.output?.hookSpecificOutput?.permissionDecisionReason || autoDelegated.output?.hookSpecificOutput?.additionalContext || '').includes('ROUTING_AUTO_DELEGATED'),
       'Validator should explain that the permission route was auto-delegated'
     );
     assert.strictEqual(readRoutingState(env)?.clearance_status, 'cleared', 'Auto-delegated permission specialist should clear the pending route');

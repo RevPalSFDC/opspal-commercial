@@ -115,7 +115,7 @@ function assertStructuredRoutingAdvisory(result, reasonFragment, message) {
     decision === 'allow' || decision === undefined,
     `${message} should allow tool execution (advisory routing)`
   );
-  const context = result.output?.hookSpecificOutput?.additionalContext || '';
+  const context = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
   const reason = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
   assert(
     context.includes(reasonFragment) || reason.includes(reasonFragment) || context.includes('ROUTING_ADVISORY'),
@@ -268,7 +268,7 @@ async function runAllTests() {
       decision === 'allow' || decision === undefined,
       'Pending routing state should allow execution with advisory context'
     );
-    const ctx = result.output?.hookSpecificOutput?.additionalContext || '';
+    const ctx = result.output?.hookSpecificOutput?.permissionDecisionReason || '';
     assert(
       ctx.includes('ROUTING_ADVISORY'),
       'Should include ROUTING_ADVISORY guidance'
@@ -627,7 +627,7 @@ async function runAllTests() {
       'Should not surface a competing security-admin recommendation in the primary deny message'
     );
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('Do not recover by having the parent context run a generated script'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('Do not recover by having the parent context run a generated script'),
       'Should steer recovery away from parent-context script handoff'
     );
   }));
@@ -1396,7 +1396,7 @@ async function runAllTests() {
 
     assertStructuredRoutingDeny(result, 'ROUTING_REQUIRED_BEFORE_OPERATION', 'Unknown MCP tool fallback');
     assert(
-      (result.output?.hookSpecificOutput?.additionalContext || '').includes('not yet explicitly classified'),
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('not yet explicitly classified'),
       'Unknown MCP fallback should explain registry default deny behavior'
     );
     assert(fs.existsSync(policyLog), 'Unknown MCP fallback should write policy telemetry');

@@ -90,7 +90,7 @@ async function runAllTests() {
     assert(
       output.hookSpecificOutput &&
       output.hookSpecificOutput.hookEventName === 'PreToolUse' &&
-      output.hookSpecificOutput.additionalContext.includes('incomplete pipe'),
+      output.hookSpecificOutput.permissionDecisionReason.includes('incomplete pipe'),
       'Should warn about incomplete jq pipe expressions'
     );
   }));
