@@ -1,34 +1,43 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on major platform reliability improvements, with automatic cleanup of outdated configurations and missing dependencies that previously caused session startup issues. The platform now automatically detects and fixes common setup problems, while new compliance checks ensure data flows work consistently across all your revenue operations workflows.",
-  "published_at": "2026-04-09T01:35:43.772Z",
+  "summary": "This week focused on platform reliability improvements that make OpsPal run more smoothly behind the scenes. The most significant enhancement is automated system maintenance that keeps your workspace clean and prevents common startup issues. Additionally, we strengthened data quality checks to ensure your automation rules work consistently across all connected systems.",
+  "published_at": "2026-04-09T13:15:53.164Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-09",
   "has_breaking": false,
-  "total_commits": 71,
+  "total_commits": 74,
   "entries": [
+    {
+      "category": "fixed",
+      "plugin": "HubSpot",
+      "headline": "HubSpot agents now have same access permissions as Salesforce agents",
+      "details": null,
+      "commits": [
+        "d7f3d38"
+      ]
+    },
     {
       "category": "improved",
       "plugin": "Rth",
-      "headline": "Enhanced data flow validation prevents workflow interruptions",
+      "headline": "Enhanced automation rule validation prevents configuration errors",
       "details": [
-        "All data transfers now verify proper formatting before processing",
-        "Advisory workflows can no longer accidentally block other operations",
-        "Faster processing when running unrelated automation tasks"
+        "Rules now validate properly before running to prevent failures",
+        "Advisory notifications work correctly without blocking other operations",
+        "Performance testing ensures rules respond quickly when needed"
       ],
       "commits": [
         "ae9c3e3"
       ]
     },
     {
-      "category": "improved",
+      "category": "new",
       "plugin": "Core Platform",
-      "headline": "Automatic cleanup removes outdated files and improves performance",
+      "headline": "Automatic system maintenance keeps workspace clean and fast",
       "details": [
-        "Removes old temporary files that slow down your workspace",
-        "Clears abandoned session locks that prevent new workflows from starting",
-        "Alerts you when memory usage approaches limits"
+        "Removes old temporary files that slow down performance",
+        "Cleans up incomplete processes that could cause errors",
+        "Warns when memory usage tracking files become too large"
       ],
       "commits": [
         "46d5153"
@@ -37,11 +46,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Platform automatically removes broken automation components",
+      "headline": "System automatically removes broken automation components",
       "details": [
-        "Works across Windows, Mac, and Linux systems",
-        "Detects and removes any marketplace integration that stops working",
-        "Prevents failed automations from affecting other workflows"
+        "Works across all operating systems and marketplace sources",
+        "Finds and removes any broken components regardless of origin",
+        "Applies to all plugins not just specific ones"
       ],
       "commits": [
         "396a613"
@@ -50,27 +59,58 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce integration prevents common field and profile errors",
+      "headline": "Broken plugins automatically removed during startup",
+      "details": null,
+      "commits": [
+        "479282c"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Salesforce startup process now more reliable and cleaner",
       "details": [
-        "Stops invisible field additions when Dynamic Forms are active",
-        "Automatically assigns new record types to admin profiles",
-        "Converts workflow blocking errors into helpful suggestions"
+        "Removed unnecessary testing components that caused confusion",
+        "Streamlined connection process for better performance",
+        "Added proper cleanup for quality and architecture monitoring tools"
+      ],
+      "commits": [
+        "ba25138"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Resolved three critical Salesforce automation issues",
+      "details": [
+        "Prevents invisible field errors when Dynamic Forms are active on pages",
+        "Automatically assigns proper permissions to new record types to prevent errors",
+        "Stops automation rules from blocking sessions due to keyword detection"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Missing dependencies install automatically at startup",
+      "headline": "Missing system components automatically installed during startup",
       "details": [
-        "Platform detects and installs missing components during session start",
-        "Shows clear error messages when installations fail",
-        "Provides specific fix commands for manual troubleshooting"
+        "Captures detailed information when installations fail",
+        "Provides clear instructions for manual fixes when needed",
+        "Runs automatic fixes in background for safe installations"
       ],
       "commits": [
         "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Eliminated false warnings about missing system packages",
+      "details": null,
+      "commits": [
+        "4255dd6"
       ]
     }
   ]
