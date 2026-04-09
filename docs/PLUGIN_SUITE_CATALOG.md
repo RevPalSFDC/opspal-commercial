@@ -12,7 +12,7 @@
 | Commands | 283 |
 | Skills | 163 |
 | Hooks | 205 |
-| Scripts | 1859 |
+| Scripts | 1860 |
 
 ## Regeneration
 
@@ -30,7 +30,7 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.54.24 | active | 80 | 11 | 126 | 51 | 107 | 601 |
+| `opspal-core` | 2.55.0 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
 | `opspal-gtm-planning` | 2.3.9 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.29 | active | 59 | 6 | 33 | 23 | 15 | 109 |
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.54.24`
+- Version: `2.55.0`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -291,7 +291,7 @@
 | `/startopspalupdate` | `[--dry-run] [--skip-confirm] [--only plugin1,plugin2] [--history] [--verbose]...` | Force refresh marketplace and update all installed OpsPal plugins to latest versions | `startopspalupdate.md` |
 | `/strategy-dashboard` | `[--category <category>] [--agent <agent>] [--json]` | View ACE Framework strategy registry overview with performance metrics | `strategy-dashboard.md` |
 | `/strategy-transfer` | `<command> [options]` | ACE Framework strategy transfer operations - candidates, transfer, validate, rollback | `strategy-transfer.md` |
-| `/sync-claudemd` | `[--dry-run] [--verbose] [--project-dir=<path>]` | Dynamically discover and sync plugin metadata to CLAUDE.md routing tables | `sync-claudemd.md` |
+| `/sync-claudemd` | `[--dry-run] [--verbose] [--project-dir=<path>] [--mode=interactive|non-intera...` | Non-destructive merge of plugin metadata into CLAUDE.md with section ownership | `sync-claudemd.md` |
 | `/task-graph` | `[task description]` | Decompose complex request into a Task Graph (DAG) with explicit dependencies, parallel execution, and verification gates | `task-graph.md` |
 | `/uat-build` | `[--output <path>] [--platform salesforce|hubspot] [--format csv|json]` | Interactively build UAT test cases through guided questions | `uat-build.md` |
 | `/uat-run` | `<csv-file> [options]` | Execute UAT tests from CSV workbooks against Salesforce or HubSpot, with automated step execution, context management... | `uat-run.md` |

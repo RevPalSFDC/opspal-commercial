@@ -158,8 +158,19 @@ if [ "${#COMPLETED_TASKS[@]}" -gt 0 ]; then
 fi
 
 MSG=""
+# Check if CLAUDE.md sync was deferred (pending review exists)
+CLAUDEMD_DEFERRED=0
+PENDING_DIR="$HOME/.claude/opspal/claudemd-pending"
+if [ -d "$PENDING_DIR" ] && ls "$PENDING_DIR"/*.json >/dev/null 2>&1; then
+  CLAUDEMD_DEFERRED=1
+fi
+
 if [ "${#COMPLETED_TASKS[@]}" -gt 0 ]; then
-  MSG="Post-update auto-applied: ${TASK_LABELS}."
+  if [ "$CLAUDEMD_DEFERRED" = "1" ]; then
+    MSG="Post-update: CLAUDE.md sync paused — custom content needs review. Run /sync-claudemd to merge safely."
+  else
+    MSG="Post-update auto-applied: ${TASK_LABELS}."
+  fi
 fi
 
 if [ "$PENDING_COUNT" -gt 0 ] 2>/dev/null && [ "$PENDING_COUNT" != "0" ]; then

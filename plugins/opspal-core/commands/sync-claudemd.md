@@ -1,13 +1,14 @@
 ---
 name: sync-claudemd
-description: Dynamically discover and sync plugin metadata to CLAUDE.md routing tables
-argument-hint: "[--dry-run] [--verbose] [--project-dir=<path>]"
+description: Non-destructive merge of plugin metadata into CLAUDE.md with section ownership
+argument-hint: "[--dry-run] [--verbose] [--project-dir=<path>] [--mode=interactive|non-interactive] [--force] [--rollback]"
 allowed_tools:
   - Bash
 tags:
   - sync
   - documentation
   - routing
+  - merge
 ---
 
 # Sync CLAUDE.md After Plugin Update
@@ -132,14 +133,33 @@ Updates the keyword-to-agent mapping table with current agents.
 
 Updates the list of available slash commands per plugin.
 
-## What Gets Preserved
+## What Gets Preserved (v4.0 Section Ownership)
 
-The following sections are NOT modified (your customizations are safe):
+**ALL user content is preserved by default.** The v4.0 merge engine uses section markers to distinguish plugin-owned content from yours:
 
-- **Project Overview** - Your project name, description, and details
-- **Custom sections** - Any sections you've added
-- **Instance-specific notes** - Customer/org specific documentation
-- **Comments** - `<!-- EDIT THIS SECTION -->` markers and content within
+- **User sections** (`<!-- USER_SECTION name="..." -->`) — never touched by sync
+- **Legacy sections** (`<!-- USER_EDITABLE_START name="..." -->`) — fully supported, never touched
+- **Untagged content** — detected and deferred for review (never silently destroyed)
+- **Plugin-managed sections** (`<!-- OPSPAL_MANAGED section="..." -->`) — updated by plugins
+
+### How It Works
+
+1. Plugin sections are wrapped in `OPSPAL_MANAGED` markers with checksums
+2. Your content lives in `USER_SECTION` markers (or untagged verbatim)
+3. On sync: plugin sections update in place, your content stays untouched
+4. If you edit inside a managed section, the conflict is detected and handled
+
+### Protecting Your Content
+
+Wrap any custom section you add:
+
+```html
+<!-- USER_SECTION name="my-team-conventions" -->
+## Our Team Conventions
+- Always use Person Accounts for B2C
+- Custom field prefix: RevPal__
+<!-- USER_SECTION_END -->
+```
 
 ## When to Run This Command
 
@@ -246,7 +266,37 @@ Other sections are preserved. If you're seeing unexpected changes, please report
 - `/plugindr` - Diagnose plugin health issues
 - `/checkdependencies` - Verify plugin dependencies
 
+## New Flags (v4.0)
+
+| Flag | Purpose |
+|------|---------|
+| `--mode=interactive` | Guided merge with per-section review (default) |
+| `--mode=non-interactive` | Safe merge only, defer untagged content (used by automated callers) |
+| `--force` | Overwrite even on conflicts (always backs up first) |
+| `--rollback` | Restore CLAUDE.md from most recent backup |
+| `--dry-run` | Show section-level diff report without writing |
+
+## Backup & Rollback
+
+Every sync creates a timestamped backup in `~/.claude/opspal/claudemd-backups/`. Up to 10 backups are retained.
+
+```bash
+/sync-claudemd --rollback    # Restore from most recent backup
+```
+
 ## Version History
+
+- **v4.0.0** (2026-04-09) - Section Ownership Merge
+  - **BREAKING**: File is now section-level merged instead of fully regenerated
+  - Plugin sections wrapped in `OPSPAL_MANAGED` markers with checksums
+  - User content preserved in `USER_SECTION` markers
+  - Untagged user content detected and deferred (never destroyed)
+  - Automatic backup before every write
+  - `--rollback` flag to restore from backup
+  - `--mode=non-interactive` for safe automated syncs
+  - `--force` to override conflicts
+  - Legacy `USER_EDITABLE_START/END` markers fully supported
+  - Structured JSON output for hook callers (`__SYNC_RESULT__`)
 
 - **v2.0.0** (2026-01-30) - Dynamic Discovery Edition
   - **BREAKING**: Routing tables now auto-generated from plugin metadata

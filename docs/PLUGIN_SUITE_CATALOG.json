@@ -171,7 +171,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.54.24",
+      "version": "2.55.0",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -4654,19 +4654,20 @@
         },
         {
           "name": "sync-claudemd",
-          "description": "Dynamically discover and sync plugin metadata to CLAUDE.md routing tables",
+          "description": "Non-destructive merge of plugin metadata into CLAUDE.md with section ownership",
           "file": "sync-claudemd.md",
           "frontmatter": {
             "name": "sync-claudemd",
-            "description": "Dynamically discover and sync plugin metadata to CLAUDE.md routing tables",
-            "argument-hint": "[--dry-run] [--verbose] [--project-dir=<path>]",
+            "description": "Non-destructive merge of plugin metadata into CLAUDE.md with section ownership",
+            "argument-hint": "[--dry-run] [--verbose] [--project-dir=<path>] [--mode=interactive|non-interactive] [--force] [--rollback]",
             "allowed_tools": [
               "Bash"
             ],
             "tags": [
               "sync",
               "documentation",
-              "routing"
+              "routing",
+              "merge"
             ]
           },
           "sourcePath": "plugins/opspal-core/commands/sync-claudemd.md"
@@ -6735,6 +6736,12 @@
           "file": "lib/claude-log-parser.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/claude-log-parser.js"
+        },
+        {
+          "name": "claudemd-section-parser",
+          "file": "lib/claudemd-section-parser.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/claudemd-section-parser.js"
         },
         {
           "name": "cohort-analysis-engine",
@@ -29581,6 +29588,6 @@
     "commands": 283,
     "skills": 163,
     "hooks": 205,
-    "scripts": 1859
+    "scripts": 1860
   }
 }

@@ -1805,7 +1805,7 @@ step7_sync_claudemd() {
 
   sync_script="$(find_script "sync-claudemd.js")"
   if [ -n "$sync_script" ]; then
-    SYNC_CMD=(node "$sync_script")
+    SYNC_CMD=(node "$sync_script" --mode=non-interactive)
     [ -n "$VERBOSE_FLAG" ] && SYNC_CMD+=("$VERBOSE_FLAG")
 
     if "${SYNC_CMD[@]}"; then
