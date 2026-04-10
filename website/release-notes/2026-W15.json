@@ -1,17 +1,17 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on making OpsPal more reliable and self-maintaining. The platform now automatically detects and fixes common setup issues, including missing dependencies and outdated configurations. Most importantly, OpsPal added better safety checks for Salesforce metadata changes, preventing errors when Dynamic Forms are active and ensuring new record types work properly.",
-  "published_at": "2026-04-10T13:37:55.157Z",
+  "summary": "This week brought major stability improvements to OpsPal's platform with automatic cleanup systems that remove outdated configurations and prevent startup errors. We've also enhanced Salesforce workflows by adding smart detection for Dynamic Forms and automatic profile assignments for new record types. The platform now automatically fixes missing dependencies and prevents common configuration issues that could interrupt your RevOps workflows.",
+  "published_at": "2026-04-10T13:55:56.022Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-10",
   "has_breaking": false,
-  "total_commits": 92,
+  "total_commits": 101,
   "entries": [
     {
       "category": "improved",
       "plugin": "HubSpot",
-      "headline": "HubSpot connector now has full feature parity with Salesforce",
+      "headline": "HubSpot integration now matches Salesforce feature capabilities",
       "details": null,
       "commits": [
         "d7f3d38"
@@ -20,10 +20,10 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically cleans up temporary files and old session data",
+      "headline": "Platform automatically cleans up old files during updates",
       "details": [
         "Removes outdated cache files older than 7 days",
-        "Clears abandoned session locks older than 5 minutes",
+        "Clears stuck session files older than 5 minutes",
         "Alerts you when memory usage files get too large"
       ],
       "commits": [
@@ -31,22 +31,22 @@
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "OpsPal removes outdated connectors automatically across all systems",
+      "headline": "Platform removes broken automation scripts automatically",
       "details": [
-        "Works on Windows, Mac, and Linux systems",
-        "Detects and removes any inactive marketplace connectors",
-        "Cleans up all plugin types, not just specific ones"
+        "Works across Windows, Mac, and Linux systems",
+        "Finds and removes automation scripts that no longer exist",
+        "Prevents errors from outdated or missing components"
       ],
       "commits": [
         "396a613"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Unused connectors are removed every time you start OpsPal",
+      "headline": "Outdated plugins automatically removed when starting sessions",
       "details": null,
       "commits": [
         "479282c"
@@ -55,24 +55,24 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce metadata changes now work properly with Dynamic Forms",
+      "headline": "Salesforce workflows now handle Dynamic Forms and record types better",
       "details": [
-        "Prevents invisible field additions when Dynamic Forms are active",
-        "New record types automatically get proper permissions",
-        "Routing conflicts no longer block your sessions"
+        "Prevents field addition errors when Dynamic Forms is active on your pages",
+        "Automatically assigns new record types to System Administrator profiles",
+        "Reduces workflow blocking from routing decisions"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "improved",
+      "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically installs missing dependencies when you start",
+      "headline": "Platform automatically installs missing dependencies at startup",
       "details": [
-        "Detects missing components at startup",
         "Shows clear error messages when installations fail",
-        "Provides manual fix commands when needed"
+        "Provides manual fix commands when needed",
+        "Runs background repairs for common issues"
       ],
       "commits": [
         "26f0866"
@@ -81,7 +81,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Eliminated false warnings about missing packages at startup",
+      "headline": "Resolved false error messages about missing packages",
       "details": null,
       "commits": [
         "4255dd6"
