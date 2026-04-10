@@ -30,14 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.2 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-core` | 2.55.3 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
-| `opspal-hubspot` | 3.9.30 | active | 59 | 6 | 33 | 23 | 15 | 109 |
-| `opspal-marketo` | 2.6.39 | active | 30 | 24 | 30 | 17 | 25 | 33 |
-| `opspal-monday` | 1.4.9 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
+| `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
+| `opspal-marketo` | 2.6.40 | active | 30 | 24 | 30 | 17 | 25 | 33 |
+| `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.10 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.11 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 
 ## Registry
 
@@ -78,7 +78,7 @@
 
 ### opspal-core
 
-- Version: `2.55.2`
+- Version: `2.55.3`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -568,7 +568,7 @@
 
 ### opspal-hubspot
 
-- Version: `3.9.30`
+- Version: `3.9.31`
 - Status: `active`
 - Path: `plugins/opspal-hubspot`
 - Manifest: `plugins/opspal-hubspot/.claude-plugin/plugin.json`
@@ -726,7 +726,7 @@
 
 ### opspal-marketo
 
-- Version: `2.6.39`
+- Version: `2.6.40`
 - Status: `active`
 - Path: `plugins/opspal-marketo`
 - Manifest: `plugins/opspal-marketo/.claude-plugin/plugin.json`
@@ -856,7 +856,7 @@
 
 ### opspal-monday
 
-- Version: `1.4.9`
+- Version: `1.4.10`
 - Status: `experimental`
 - Path: `plugins/opspal-monday`
 - Manifest: `plugins/opspal-monday/.claude-plugin/plugin.json`
@@ -965,7 +965,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.10`
+- Version: `3.87.11`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
