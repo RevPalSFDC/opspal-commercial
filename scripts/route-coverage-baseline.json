@@ -1,7 +1,49 @@
 {
-  "generatedAt": "2026-04-10T13:46:52.371Z",
+  "generatedAt": "2026-04-10T17:45:25.416Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-companies-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-companies-manager",
+      "sourcePath": "plugins/opspal-attio/agents/attio-companies-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-companies-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-deals-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-deals-manager",
+      "sourcePath": "plugins/opspal-attio/agents/attio-deals-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-deals-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-lists-pipeline-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-lists-pipeline-manager",
+      "sourcePath": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-lists-pipeline-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-orchestrator",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-orchestrator",
+      "sourcePath": "plugins/opspal-attio/agents/attio-orchestrator.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-orchestrator"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-people-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-people-manager",
+      "sourcePath": "plugins/opspal-attio/agents/attio-people-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-people-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-workspace-discovery",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-workspace-discovery",
+      "sourcePath": "plugins/opspal-attio/agents/attio-workspace-discovery.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-workspace-discovery"
+    },
     {
       "signature": "mandatory-agent-missing-route|opspal-core:conversation-intelligence-aggregator",
       "rule": "mandatory-agent-missing-route",
