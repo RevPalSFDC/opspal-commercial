@@ -1,13 +1,13 @@
-{
-  "generatedAt": "2026-04-10T13:35:03.757Z",
-  "totals": {
-    "activeHooks": 103,
+[
+  "2026-04-10T13:49:19.892Z",
+  {
+    "activeHooks": 102,
     "coveredHooks": 90,
-    "allowlistedUntested": 13,
+    "allowlistedUntested": 12,
     "missingCoverage": 0
   },
-  "missingCoverage": [],
-  "allowlistedUntested": [
+  [],
+  [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
       "plugin": "opspal-core",
@@ -79,13 +79,6 @@
       "reason": "Credentialed Gong API preflight still needs a service-stub harness."
     },
     {
-      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-      "plugin": "opspal-data-hygiene",
-      "eventType": "UserPromptSubmit",
-      "matcher": "*",
-      "reason": "Deprecated plugin — hook only emits a deprecation warning banner, no functional logic to test"
-    },
-    {
       "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
       "plugin": "opspal-gtm-planning",
       "eventType": "PostToolUse",
@@ -100,8 +93,7 @@
       "reason": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
     }
   ],
-  "staleConfiguration": [],
-  "entries": [
+  [
     {
       "hookPath": "plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
       "plugin": "opspal-ai-consult",
@@ -582,15 +574,6 @@
       ],
       "covered": true,
       "allowReason": null
-    },
-    {
-      "hookPath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh",
-      "plugin": "opspal-data-hygiene",
-      "eventType": "UserPromptSubmit",
-      "matcher": "*",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "Deprecated plugin — hook only emits a deprecation warning banner, no functional logic to test"
     },
     {
       "hookPath": "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh",
@@ -1302,4 +1285,4 @@
       "allowReason": null
     }
   ]
-}
+]

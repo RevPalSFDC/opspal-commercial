@@ -43,8 +43,7 @@
     "plugins/opspal-core/hooks/pre-fireflies-api-call.sh": "Credentialed Fireflies API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-gong-api-call.sh": "Credentialed Gong API preflight still needs a service-stub harness.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
-    "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures.",
-    "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh": "Deprecated plugin — hook only emits a deprecation warning banner, no functional logic to test"
+    "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
   },
   "blockingHooks": {
     "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh": {
