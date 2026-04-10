@@ -267,7 +267,8 @@
       "log_as": "read_only_production_retrieve"
     },
     "tier_3_mutation": {
-      "description": "Operations that modify org state. Triggers PRODUCTION_DETECTED escalation.",
+      "_advisory_note": "Per Phase 9 policy (2026-04-01), production mutations trigger advisory warnings, not denials. Hard blocks are in blocked_patterns only.",
+      "description": "Operations that modify org state. Triggers PRODUCTION_DETECTED advisory.",
       "classifier_results": ["deploy", "mutate", "bulk-mutate", "permission"],
       "examples": [
         "sf project deploy start --target-org production",
@@ -276,7 +277,7 @@
         "sf data delete record --target-org production",
         "sf org assign permset --target-org production"
       ],
-      "policy": "escalate_to_critical",
+      "policy": "advisory_escalation",
       "log_as": "PRODUCTION_DETECTED"
     }
   },

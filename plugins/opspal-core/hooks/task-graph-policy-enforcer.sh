@@ -144,6 +144,24 @@ emit_deny() {
     exit 0
 }
 
+# Emit structured JSON advisory allow and exit cleanly.
+# Per Phase 9 policy (2026-04-01), production governance and routing enforcement
+# must be advisory only — hooks log events and provide guidance but never deny.
+emit_advisory() {
+    local reason="$1"
+    local context="${2:-}"
+    log_decision "advisory" "$(echo "$reason" | head -c 120)"
+    if command -v jq &>/dev/null; then
+        jq -nc --arg reason "$reason" --arg context "$context" \
+            '{ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "allow", additionalContext: ("PRODUCTION_ADVISORY: " + $reason + (if $context != "" then "\n" + $context else "" end)) } }'
+    else
+        local escaped
+        escaped="$(printf '%s' "$reason" | sed 's/\\/\\\\/g; s/"/\\"/g' | tr '\n' ' ')"
+        printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","additionalContext":"PRODUCTION_ADVISORY: %s"}}' "$escaped"
+    fi
+    exit 0
+}
+
 is_opspal_runtime_maintenance_command() {
     if [[ "$TOOL_NAME" != "Bash" ]] || [[ -z "$TOOL_ARGS" ]]; then
         return 1
@@ -356,8 +374,7 @@ main() {
             echo "❌ BLOCKED: Tool '$TOOL_NAME' not allowed for critical risk tasks" >&2
             exit 3
         else
-            log_decision "approval_required" "tool_requires_approval"
-            emit_deny "APPROVAL_REQUIRED: Tool '$TOOL_NAME' requires approval for $RISK_LEVEL risk tasks"
+            emit_advisory "Tool '$TOOL_NAME' is outside standard allowed list for $RISK_LEVEL risk tasks. Proceeding with enhanced logging."
         fi
     fi
 
@@ -365,8 +382,7 @@ main() {
     local prod_result
     if prod_result=$(check_production_access 2>/dev/null); then
         if [[ "$RISK_LEVEL" != "critical" ]]; then
-            log_decision "escalate" "$prod_result"
-            emit_deny "ESCALATE: $prod_result - Task should be escalated to critical risk"
+            emit_advisory "$prod_result" "Production mutations should ideally use sfdc-deployment-manager. Proceeding autonomously."
         fi
     fi
 
@@ -375,8 +391,7 @@ main() {
     if destruct_result=$(check_destructive_ops 2>/dev/null); then
         case "$RISK_LEVEL" in
             low|medium)
-                log_decision "approval_required" "$destruct_result"
-                emit_deny "APPROVAL_REQUIRED: $destruct_result - Destructive operations require approval"
+                emit_advisory "$destruct_result - Verify rollback capability before executing."
                 ;;
             high|unmanaged)
                 log_decision "warn" "$destruct_result"
@@ -390,8 +405,7 @@ main() {
     if approval_result=$(check_approval_required 2>&1); then
         case "$RISK_LEVEL" in
             low|medium)
-                log_decision "approval_required" "$approval_result"
-                emit_deny "$approval_result"
+                emit_advisory "$approval_result - Proceeding autonomously per agent autonomy policy."
                 ;;
             high|unmanaged)
                 log_decision "warn" "$approval_result"
