@@ -259,6 +259,7 @@ TOTAL_CHECKS=0
 PASSED_CHECKS=0
 FAILED_CHECKS=0
 SKIPPED_CHECKS=0
+FAILED_CHECK_NAMES=""
 
 ##############################################################################
 # Step 1: Deployment Source Validation
@@ -275,6 +276,7 @@ if [ -f "$VALIDATOR" ]; then
     else
         log_error "Invalid deployment source structure"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Source Validation"
         VALIDATION_FAILED=1
     fi
 else
@@ -364,6 +366,7 @@ elif [ -n "$FLOW_FILES" ]; then
     else
         log_error "$FLOW_ERRORS flow(s) failed validation"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Flow XML"
         VALIDATION_FAILED=1
     fi
 else
@@ -461,6 +464,7 @@ elif [ -n "$DELETED_FIELDS" ]; then
             echo ""
             echo "This deployment will FAIL if attempted. Fix the dependencies first."
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Field Dependencies"
             VALIDATION_FAILED=1
         fi
     else
@@ -512,6 +516,7 @@ if [ -n "$CSV_FILES" ]; then
         else
             log_error "$CSV_ERRORS CSV file(s) failed validation"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }CSV Data"
             VALIDATION_FAILED=1
         fi
     else
@@ -597,6 +602,7 @@ elif [ -n "$TRACKED_FIELDS" ]; then
     else
         log_error "$TRACKING_ERRORS object(s) would exceed field history tracking limit"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Field History Tracking"
         VALIDATION_FAILED=1
     fi
 else
@@ -639,6 +645,7 @@ if [ -n "$FORMULAS" ]; then
     else
         log_error "$FORMULA_ERRORS formula(s) use invalid picklist syntax"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Picklist Formula"
         VALIDATION_FAILED=1
     fi
 else
@@ -737,6 +744,7 @@ if [ -f "$ENV_CONFIG_VALIDATOR" ]; then
     else
         log_error "$DEPLOYMENT_ORDER_ERRORS deployment order error(s)"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Deployment Order"
         VALIDATION_FAILED=1
     fi
 else
@@ -800,6 +808,7 @@ elif [ -f "$PRE_OP_ORCHESTRATOR" ]; then
         else
             log_error "Unified validation failed: $ORCH_BLOCKERS blocker(s), $ORCH_ERRORS error(s)"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Unified Pre-Operation"
             VALIDATION_FAILED=1
 
             # Show blocking issues
@@ -843,6 +852,7 @@ done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
 
 if [ "$LOOKUP_CONSTRAINT_ERRORS" -gt 0 ]; then
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Lookup Delete Constraint"
     VALIDATION_FAILED=1
 else
     log_success "Lookup delete constraints valid"
@@ -882,6 +892,7 @@ done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
 
 if [ "$REQ_FIELD_PERM_ERRORS" -gt 0 ]; then
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
+    FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Required Field Permissions"
     VALIDATION_FAILED=1
 else
     log_success "No required field permissions found in permission sets"
@@ -939,6 +950,7 @@ else
     else
         log_error "$PICKLIST_DEACT_ERRORS picklist value(s) blocked — records still reference them"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Picklist Deactivation"
         VALIDATION_FAILED=1
     fi
 fi
@@ -963,13 +975,13 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
         "{\"targetOrg\":\"$TARGET_ORG\",\"totalChecks\":$TOTAL_CHECKS,\"passed\":$PASSED_CHECKS,\"failed\":$FAILED_CHECKS}"
 
     if [ "$PRETOOLUSE_MODE" = "1" ]; then
-        emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed. Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
+        emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
         exit 0
     elif [ -f "$OUTPUT_FORMATTER" ]; then
         node "$OUTPUT_FORMATTER" error \
             "Deployment Validation Failed" \
-            "Deployment blocked - $FAILED_CHECKS of $TOTAL_CHECKS validation checks failed" \
-            "Target Org:$TARGET_ORG,Total Checks:$TOTAL_CHECKS,Passed:$PASSED_CHECKS,Failed:$FAILED_CHECKS,Deployment Dir:$DEPLOY_DIR" \
+            "Deployment blocked - $FAILED_CHECKS of $TOTAL_CHECKS validation checks failed (${FAILED_CHECK_NAMES})" \
+            "Target Org:$TARGET_ORG,Total Checks:$TOTAL_CHECKS,Passed:$PASSED_CHECKS,Failed:$FAILED_CHECKS,Failed Checks:$FAILED_CHECK_NAMES,Deployment Dir:$DEPLOY_DIR" \
             "Review and fix the errors listed above,Check deployment source structure,Verify org permissions and limits,Use SKIP_COMPREHENSIVE_VALIDATION=1 to bypass (not recommended)" \
             "Prevents 80% of deployment failures • ROI: \$126K/year"
         exit $EXIT_VALIDATION_ERROR

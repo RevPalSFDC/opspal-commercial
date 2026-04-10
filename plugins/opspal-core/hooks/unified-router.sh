@@ -104,6 +104,7 @@ ROUTING_STATE_MANAGER="$PLUGIN_ROOT/scripts/lib/routing-state-manager.js"
 INTAKE_COMPLETENESS_SCORER="$PLUGIN_ROOT/scripts/lib/intake/intake-completeness-scorer.js"
 NODE_TIMEOUT_SECONDS="${UNIFIED_ROUTER_NODE_TIMEOUT_SECONDS:-3}"
 START_TIME_MS=$(date +%s%3N 2>/dev/null || echo "0")
+LOG_DIR="$HOME/.claude/logs"
 
 run_node_with_timeout() {
     local timeout_seconds="$1"
@@ -1540,7 +1541,6 @@ fi
 # LOG ROUTING DECISION
 # =============================================================================
 
-LOG_DIR="$HOME/.claude/logs"
 LOG_FILE="$LOG_DIR/routing.jsonl"
 mkdir -p "$LOG_DIR" 2>/dev/null || true
 

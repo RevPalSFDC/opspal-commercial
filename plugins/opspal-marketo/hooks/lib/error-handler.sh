@@ -33,7 +33,7 @@ else
     log_success() { echo "[OK] $1" >&2; }
     log_warn()    { echo "[WARN] $1" >&2; }
     log_error()   { echo "[ERROR] $1" >&2; }
-    set_lenient_mode() { set +e; trap - ERR; }
+    set_lenient_mode() { set +eu; trap - ERR; }
     set_strict_mode()  { set -euo pipefail; }
 fi
 

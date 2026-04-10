@@ -153,7 +153,7 @@ set_strict_mode() {
 
 # Set lenient mode (only for hooks that need to continue on errors)
 set_lenient_mode() {
-    set +e
+    set +eu
     trap - ERR
 }
 
