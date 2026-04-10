@@ -83,13 +83,10 @@ if (fs.existsSync(ipPath)) {
   } catch (_) {}
 }
 
-if (orphanedKeys.size === 0) {
-  // No orphans — fast exit
-  process.stdout.write("{}\n");
-  process.exit(0);
-}
-
 // --- 2. Clean enabledPlugins and hook commands from settings.json files ---
+// NOTE: This section runs even when orphanedKeys is empty because stale hook
+// entries can exist in settings.json from marketplace plugins whose directories
+// were removed via git pull, without ever appearing in installed_plugins.json.
 const settingsPaths = [
   path.join(claudeRoot, "settings.json"),
   path.join(claudeRoot, "settings.local.json"),
@@ -136,7 +133,9 @@ for (const sp of settingsPaths) {
           return !hooks.some(h => {
             const cmd = h.command || "";
             let resolved = cmd.replace(/\$\{CLAUDE_PLUGIN_ROOT\}/g, pluginRoot).replace(/~/g, home);
-            const scriptPath = resolved.split(/\s+/)[0];
+            // Strip leading env VAR=val prefixes to find the actual script path
+            let stripped = resolved.replace(/^env\s+(?:[A-Za-z_][A-Za-z0-9_]*=[^\s]*\s+)*/g, "");
+            const scriptPath = stripped.split(/\s+/)[0];
             return scriptPath.startsWith("/") && !fs.existsSync(scriptPath);
           });
         });
@@ -155,8 +154,10 @@ for (const sp of settingsPaths) {
 }
 
 // Emit result
-const result = pruned.length > 0
-  ? { systemMessage: "Pruned " + pruned.length + " orphaned plugin reference(s): " + [...orphanedNames].join(", ") }
-  : {};
+const names = [...orphanedNames];
+const msg = pruned.length > 0
+  ? "Pruned " + pruned.length + " stale reference(s)" + (names.length > 0 ? ": " + names.join(", ") : " (dead hook scripts)")
+  : null;
+const result = msg ? { systemMessage: msg } : {};
 process.stdout.write(JSON.stringify(result) + "\n");
 ' 2>/dev/null || printf '{}\n'

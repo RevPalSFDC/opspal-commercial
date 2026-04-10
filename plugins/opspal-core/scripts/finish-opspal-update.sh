@@ -1080,6 +1080,9 @@ function isObject(value) {
 
 function isStalePluginHook(cmd) {
   if (!cmd || typeof cmd !== 'string') return false;
+  // Hooks referencing removed plugins (file no longer exists on disk) are always stale.
+  const scriptPath = cmd.replace(/^env\s+[A-Z_]+=[^\s]+\s+/, '').split(/\s+/)[0];
+  if (scriptPath.startsWith('/') && !fs.existsSync(scriptPath)) return true;
   const matchesPluginHook = pluginHookPatterns.some((pattern) => pattern.test(cmd));
   if (!matchesPluginHook) return false;
   if (strict) return true;
