@@ -1,17 +1,17 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week brought major improvements to OpsPal's reliability and automation capabilities. The platform now automatically cleans up outdated files and fixes missing dependencies during startup, preventing common session issues. Additionally, new quality checks ensure data integrity rules are properly enforced across all your revenue operations workflows.",
-  "published_at": "2026-04-10T14:36:31.586Z",
+  "summary": "This week focused on making OpsPal more reliable and easier to use. The platform now automatically fixes common setup issues like missing dependencies and outdated configurations, while new data quality checks ensure your integrations stay compliant with business policies. Several HubSpot performance improvements bring it up to par with Salesforce capabilities.",
+  "published_at": "2026-04-10T17:54:54.857Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-10",
   "has_breaking": false,
-  "total_commits": 105,
+  "total_commits": 111,
   "entries": [
     {
       "category": "improved",
       "plugin": "HubSpot",
-      "headline": "Enhanced HubSpot automation capabilities",
+      "headline": "HubSpot integration now matches Salesforce performance capabilities",
       "details": null,
       "commits": [
         "d7f3d38"
@@ -20,24 +20,24 @@
     {
       "category": "new",
       "plugin": "Rth",
-      "headline": "Added quality checks to ensure data rules are followed",
+      "headline": "Added automated compliance checks for data quality policies",
       "details": [
-        "Every automation process now validates data before completing",
-        "Advisory processes can no longer accidentally block workflows",
-        "Faster detection when commands don't apply to current data"
+        "Platform now verifies all data operations meet your business compliance requirements",
+        "Advisory-only checks provide recommendations without blocking workflows",
+        "Faster processing when dealing with unrelated commands"
       ],
       "commits": [
         "ae9c3e3"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Automatic cleanup keeps your workspace running smoothly",
+      "headline": "Platform updates now include automatic cleanup and maintenance",
       "details": [
-        "Removes outdated cache files older than 7 days",
-        "Cleans up abandoned session files after 5 minutes",
-        "Warns when memory usage files become too large"
+        "Removes old temporary files older than 7 days",
+        "Clears stuck session files after 5 minutes",
+        "Alerts you if memory usage files get too large"
       ],
       "commits": [
         "46d5153"
@@ -46,11 +46,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Automatically removes broken automation scripts",
+      "headline": "Platform now removes broken integrations automatically",
       "details": [
-        "Works across all operating systems",
-        "Detects issues with any installed add-on",
-        "Prevents errors from missing or corrupted files"
+        "Works across all operating systems including Windows",
+        "Detects and removes any outdated marketplace integrations",
+        "Applies to all installed plugins, not just specific ones"
       ],
       "commits": [
         "396a613"
@@ -59,45 +59,27 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Removes outdated add-ons automatically when starting sessions",
-      "details": null,
-      "commits": [
-        "479282c"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Resolved critical Salesforce workflow issues",
+      "headline": "Resolved three critical Salesforce integration issues",
       "details": [
-        "Prevents invisible field problems when Dynamic Forms are active",
-        "Automatically assigns record types to avoid permission errors",
-        "Stops routing conflicts from interrupting your workflows"
+        "Dynamic Forms now work properly when adding new fields to page layouts",
+        "New record types automatically get proper administrator permissions",
+        "Workflow routing no longer blocks sessions with keyword mismatches"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "fixed",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Automatically installs missing dependencies and shows clear error messages",
+      "headline": "Platform automatically installs missing components at startup",
       "details": [
-        "Captures detailed error information during installation",
-        "Shows manual fix commands when automatic fixes fail",
-        "Runs background repairs for safe issues"
+        "Detects and fixes missing dependencies when you start a session",
+        "Shows clear error messages and fix instructions when auto-repair fails",
+        "Runs repairs in background without interrupting your work"
       ],
       "commits": [
         "26f0866"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Fixed false missing package errors during startup",
-      "details": null,
-      "commits": [
-        "4255dd6"
       ]
     }
   ]
