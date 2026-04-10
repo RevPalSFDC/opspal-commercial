@@ -12,11 +12,11 @@
 
 ## Coverage Summary
 
-- Plugins scanned: 8
+- Plugins scanned: 9
 - Missing status: 0
-- Missing owner: 0
-- Missing stability: 0
-- Missing last_reviewed_at: 0
+- Missing owner: 1
+- Missing stability: 1
+- Missing last_reviewed_at: 1
 - Deprecated plugins missing replacement: 0
 
 ## Ownership and Lifecycle Matrix
@@ -24,6 +24,7 @@
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.14 | active | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-attio` | 1.0.0 | active | _unset_ | _unset_ | _unset_ | _unset_ | _unset_ |
 | `opspal-core` | 2.55.8 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-gtm-planning` | 2.3.10 | active | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-hubspot` | 3.9.31 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |

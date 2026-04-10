@@ -1,13 +1,13 @@
-[
-  "2026-04-10T13:49:19.892Z",
-  {
+{
+  "generatedAt": "2026-04-10T14:33:43.030Z",
+  "totals": {
     "activeHooks": 102,
     "coveredHooks": 90,
     "allowlistedUntested": 12,
     "missingCoverage": 0
   },
-  [],
-  [
+  "missingCoverage": [],
+  "allowlistedUntested": [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
       "plugin": "opspal-core",
@@ -93,7 +93,8 @@
       "reason": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
     }
   ],
-  [
+  "staleConfiguration": [],
+  "entries": [
     {
       "hookPath": "plugins/opspal-ai-consult/hooks/post-tool-use-consultation-check.sh",
       "plugin": "opspal-ai-consult",
@@ -1285,4 +1286,4 @@
       "allowReason": null
     }
   ]
-]
+}

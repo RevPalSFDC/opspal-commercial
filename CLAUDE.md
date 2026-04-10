@@ -1,6 +1,6 @@
 # OpsPal Commercial Marketplace
 
-This repository is the commercial OpsPal marketplace. It publishes 9 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
+This repository is the commercial OpsPal marketplace. It publishes 10 plugins and uses the plugin manifests under `plugins/*/.claude-plugin/plugin.json` as the source of truth for marketplace metadata.
 
 ## Installation
 
@@ -10,6 +10,7 @@ This repository is the commercial OpsPal marketplace. It publishes 9 plugins and
 /plugin install opspal-salesforce@opspal-commercial
 /plugin install opspal-hubspot@opspal-commercial
 /plugin install opspal-marketo@opspal-commercial
+/plugin install opspal-attio@opspal-commercial
 ```
 
 ## Published Versions
@@ -17,6 +18,7 @@ This repository is the commercial OpsPal marketplace. It publishes 9 plugins and
 | Plugin | Version | Status |
 |--------|---------|--------|
 | `opspal-ai-consult` | 1.4.14 | active |
+| `opspal-attio` | 1.0.0 | active |
 | `opspal-core` | 2.55.8 | active |
 | `opspal-gtm-planning` | 2.3.10 | active |
 | `opspal-hubspot` | 3.9.31 | active |
@@ -49,9 +51,9 @@ git pull origin main
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 8 |
-| Agents | 298 |
-| Commands | 282 |
-| Skills | 162 |
-| Hooks | 204 |
-| Scripts | 1852 |
+| Plugins | 9 |
+| Agents | 306 |
+| Commands | 288 |
+| Skills | 164 |
+| Hooks | 213 |
+| Scripts | 1859 |

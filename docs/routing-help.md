@@ -1,7 +1,7 @@
 # Routing Help - Agent Selection Guide
 
-> Generated from `routing-patterns.json` v3.5.0
-> Last updated: 2026-04-02 | Hash: c6b278e8869f
+> Generated from `routing-patterns.json` v3.6.0
+> Last updated: 2026-04-10
 
 This document is auto-generated from the canonical routing registry.
 Do not edit directly - modify `plugins/opspal-core/config/routing-patterns.json` instead.
@@ -142,6 +142,18 @@ Cross-platform routing patterns
 | impact-analysis | impact.*analysis, what.*breaks, field.*change.*impact | `opspal-core:cross-platform-impact-analyzer` | 🟢 No |
 | revops-query | what.*is.*our, how.*many, show.*me.*pipeline | `opspal-core:revops-query-agent` | 🟢 No |
 
+## Attio Patterns
+
+Attio CRM routing patterns
+
+| Pattern ID | Keywords | Agent | Blocking |
+|------------|----------|-------|----------|
+| record-management | attio.*people, attio.*person, attio.*contact, attio.*company, attio.*companies | `opspal-attio:attio-orchestrator` | 🟢 No |
+| deals-pipeline | attio.*deal, attio.*pipeline, attio.*list, attio.*stage | `opspal-attio:attio-deals-manager` | 🟢 No |
+| discovery | attio.*discover, attio.*explore, attio.*workspace, attio.*schema | `opspal-attio:attio-workspace-discovery` | 🟢 No |
+| data-hygiene | attio.*dedup, attio.*duplicate, attio.*data.*quality, attio.*hygiene | `opspal-attio:attio-data-hygiene-specialist` | 🟢 No |
+| governance | attio.*governance, attio.*audit, attio.*compliance | `opspal-attio:attio-governance-enforcer` | 🔴 Yes |
+
 ## GtmPlanning Patterns
 
 GTM Planning routing patterns
@@ -191,4 +203,4 @@ These patterns MUST be routed to their designated agent:
 node plugins/opspal-core/scripts/lib/routing-docs-generator.js generate
 ```
 
-*Registry version: 3.5.0*
+*Registry version: 3.6.0*

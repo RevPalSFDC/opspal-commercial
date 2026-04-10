@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-10T13:35:03.801Z",
+  "generatedAt": "2026-04-10T14:33:43.076Z",
   "defaultMax": 3,
   "totals": {
     "matcherGroups": 61,
@@ -295,21 +295,6 @@
       "duplicates": [],
       "max": 3,
       "budgetReason": null
-    },
-    {
-      "key": "UserPromptSubmit :: *",
-      "eventType": "UserPromptSubmit",
-      "matcher": "*",
-      "count": 2,
-      "plugins": [
-        "opspal-core"
-      ],
-      "hookPaths": [
-        "plugins/opspal-core/hooks/user-prompt-dispatcher.sh"
-      ],
-      "duplicates": [],
-      "max": 8,
-      "budgetReason": "Prompt-time routing, deprecation notices, and ambient candidate extraction are global today."
     },
     {
       "key": "PermissionRequest :: *",
@@ -985,6 +970,21 @@
       "duplicates": [],
       "max": 3,
       "budgetReason": null
+    },
+    {
+      "key": "UserPromptSubmit :: *",
+      "eventType": "UserPromptSubmit",
+      "matcher": "*",
+      "count": 1,
+      "plugins": [
+        "opspal-core"
+      ],
+      "hookPaths": [
+        "plugins/opspal-core/hooks/user-prompt-dispatcher.sh"
+      ],
+      "duplicates": [],
+      "max": 8,
+      "budgetReason": "Prompt-time routing, deprecation notices, and ambient candidate extraction are global today."
     }
   ]
 }
