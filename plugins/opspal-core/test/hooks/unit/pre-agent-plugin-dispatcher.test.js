@@ -67,10 +67,10 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Structured deny should preserve exit code 0');
     assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
-    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny destructive HubSpot work');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should emit advisory allow for destructive HubSpot work');
     assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('HUBSPOT_GOVERNANCE_BLOCKED'),
-      'Should preserve the HubSpot governance block reason'
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('HUBSPOT_GOVERNANCE_ADVISORY'),
+      'Should preserve the HubSpot governance advisory reason'
     );
   }));
 
@@ -88,10 +88,10 @@ async function runAllTests() {
 
     assert.strictEqual(result.exitCode, 0, 'Structured deny should preserve exit code 0');
     assert.strictEqual(result.parseError, null, 'Should emit valid JSON');
-    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny destructive Monday work');
+    assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should emit advisory allow for destructive Monday work');
     assert(
-      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('MONDAY_GOVERNANCE_BLOCKED'),
-      'Should preserve the Monday governance block reason'
+      (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('MONDAY_GOVERNANCE_ADVISORY'),
+      'Should preserve the Monday governance advisory reason'
     );
   }));
 

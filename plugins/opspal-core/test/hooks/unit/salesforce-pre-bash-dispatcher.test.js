@@ -112,20 +112,19 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits JSON blockExecution)');
-    assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the direct deploy block');
+    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
+    assert(result.stderr.includes('DEPLOY ADVISORY'), 'Should explain the deploy advisory');
     const output = result.output || {};
     const hookOutput = output.hookSpecificOutput || {};
-    // The child hook emits {"blockExecution": true} which the dispatcher merges into its JSON
-    // The merged output may surface as permissionDecision or as blockExecution depending on dispatcher merge logic
+    // The child hook emits advisory allow which the dispatcher merges into its JSON
     assert(
-      hookOutput.permissionDecision === 'deny' || (result.stdout || '').includes('blockExecution'),
-      'Should contain a blocking signal in the merged output'
+      hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
+      'Should contain an advisory signal in the merged output'
     );
   }));
 
   // sfdx bypass prevention tests
-  results.push(await runTest('Blocks sfdx project deploy start (no sfdx bypass)', async () => {
+  results.push(await runTest('Advises on sfdx project deploy start (same as sf deploy)', async () => {
     const result = await tester.run({
       input: {
         hook_event_name: 'PreToolUse',
@@ -136,13 +135,13 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits JSON blockExecution)');
-    assert(result.stderr.includes('DEPLOY BLOCKED'), 'sfdx deploy should be blocked just like sf deploy');
+    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
+    assert(result.stderr.includes('DEPLOY ADVISORY'), 'sfdx deploy should get advisory just like sf deploy');
     const output = result.output || {};
     const hookOutput = output.hookSpecificOutput || {};
     assert(
-      hookOutput.permissionDecision === 'deny' || (result.stdout || '').includes('blockExecution'),
-      'Should contain a blocking signal for sfdx deploy commands'
+      hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
+      'Should contain an advisory signal for sfdx deploy commands'
     );
   }));
 

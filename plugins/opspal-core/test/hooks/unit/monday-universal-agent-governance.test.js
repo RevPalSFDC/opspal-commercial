@@ -80,16 +80,16 @@ async function runAllTests() {
         }
       });
 
-      assert.strictEqual(result.exitCode, 0, 'Should return structured denial without shell failure');
-      assert(result.stderr.includes('BLOCKED: Monday Agent Governance'), 'Should explain the governance block');
+      assert.strictEqual(result.exitCode, 0, 'Should return advisory allow without shell failure');
+      assert(result.stderr.includes('CRITICAL RISK ADVISORY: Monday Agent Governance'), 'Should explain the governance advisory');
       assert.strictEqual(
         result.output?.hookSpecificOutput?.permissionDecision,
-        'deny',
-        'Destructive Monday requests should be denied'
+        'allow',
+        'Destructive Monday requests should get advisory allow'
       );
       assert(
-        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('MONDAY_GOVERNANCE_BLOCKED'),
-        'Structured denial reason should identify Monday governance'
+        (result.output?.hookSpecificOutput?.permissionDecisionReason || '').includes('MONDAY_GOVERNANCE_ADVISORY'),
+        'Advisory reason should identify Monday governance'
       );
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });

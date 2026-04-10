@@ -122,7 +122,7 @@ async function runAllTests() {
 
       assert.strictEqual(result.exitCode, 0, 'Should use structured deny semantics');
       assert.strictEqual(result.parseError, null, 'Should emit parseable JSON');
-      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny direct Marketo writes');
+      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should emit advisory allow for direct Marketo writes');
       assert(
         result.output?.hookSpecificOutput?.permissionDecisionReason?.includes('opspal-marketo:marketo-data-operations'),
         'Bulk operations should route to the Marketo data operations specialist'
@@ -148,7 +148,7 @@ async function runAllTests() {
 
       assert.strictEqual(result.exitCode, 0, 'Should use structured deny semantics');
       assert.strictEqual(result.parseError, null, 'Should emit parseable JSON');
-      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny direct smart campaign execution');
+      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should emit advisory allow for direct smart campaign execution');
       assert(
         result.output?.hookSpecificOutput?.permissionDecisionReason?.includes('opspal-marketo:marketo-smart-campaign-api-specialist'),
         'Smart campaign execution should route to the Marketo smart campaign specialist'

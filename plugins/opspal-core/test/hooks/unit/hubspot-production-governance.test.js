@@ -39,12 +39,12 @@ async function runTest(name, testFn) {
   }
 }
 
-function assertDenied(result, message) {
+function assertAdvisoryAllow(result, message) {
   assert.strictEqual(result.exitCode, 0, `${message} — should exit 0`);
   assert(result.output && result.output.hookSpecificOutput,
     `${message} — should have hookSpecificOutput`);
-  assert.strictEqual(result.output.hookSpecificOutput.permissionDecision, 'deny',
-    `${message} — should deny`);
+  assert.strictEqual(result.output.hookSpecificOutput.permissionDecision, 'allow',
+    `${message} — should emit advisory allow (not deny)`);
 }
 
 function assertNotDenied(result, message) {
@@ -86,8 +86,8 @@ async function runAllTests() {
         HUBSPOT_SANDBOX_PORTAL_IDS: '11111'
       }
     });
-    assertDenied(result, 'Production portal mutation from parent context');
-    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_GOVERNANCE'),
+    assertAdvisoryAllow(result, 'Production portal mutation from parent context');
+    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_ADVISORY'),
       'Reason should mention PRODUCTION_GOVERNANCE');
   }));
 
@@ -104,8 +104,8 @@ async function runAllTests() {
         HUBSPOT_ENVIRONMENT: 'production'
       }
     });
-    assertDenied(result, 'HUBSPOT_ENVIRONMENT=production mutation');
-    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_GOVERNANCE'),
+    assertAdvisoryAllow(result, 'HUBSPOT_ENVIRONMENT=production mutation');
+    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_ADVISORY'),
       'Reason should mention PRODUCTION_GOVERNANCE');
   }));
 
@@ -122,7 +122,7 @@ async function runAllTests() {
         HUBSPOT_ENVIRONMENT: 'production'
       }
     });
-    assertDenied(result, 'Production DELETE');
+    assertAdvisoryAllow(result, 'Production DELETE');
   }));
 
   // =========================================================================
@@ -216,7 +216,7 @@ async function runAllTests() {
         HUBSPOT_ENVIRONMENT: 'sandbox'
       }
     });
-    assertDenied(result, 'Sandbox mutation from parent still denied (existing behavior)');
+    assertAdvisoryAllow(result, 'Sandbox mutation from parent still denied (existing behavior)');
     assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('ROUTING_SPECIALIST_REQUIRED'),
       'Sandbox deny should use ROUTING_SPECIALIST_REQUIRED, not PRODUCTION_GOVERNANCE');
   }));
@@ -234,7 +234,7 @@ async function runAllTests() {
         // No HUBSPOT_ENVIRONMENT set — unknown
       }
     });
-    assertDenied(result, 'Unknown env mutation from parent still denied (existing behavior)');
+    assertAdvisoryAllow(result, 'Unknown env mutation from parent still denied (existing behavior)');
     assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('ROUTING_SPECIALIST_REQUIRED'),
       'Unknown env deny should use ROUTING_SPECIALIST_REQUIRED');
   }));

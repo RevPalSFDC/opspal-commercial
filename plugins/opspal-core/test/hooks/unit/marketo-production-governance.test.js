@@ -40,12 +40,12 @@ async function runTest(name, testFn) {
   }
 }
 
-function assertDenied(result, message) {
+function assertAdvisoryAllow(result, message) {
   assert.strictEqual(result.exitCode, 0, `${message} — should exit 0`);
   assert(result.output && result.output.hookSpecificOutput,
     `${message} — should have hookSpecificOutput`);
-  assert.strictEqual(result.output.hookSpecificOutput.permissionDecision, 'deny',
-    `${message} — should deny`);
+  assert.strictEqual(result.output.hookSpecificOutput.permissionDecision, 'allow',
+    `${message} — should emit advisory allow (not deny)`);
 }
 
 function assertNotDenied(result, message) {
@@ -85,8 +85,8 @@ async function runAllTests() {
         MARKETO_BASE_URL: 'https://123-ABC-456.mktorest.com'
       }
     });
-    assertDenied(result, 'mktorest.com mutation from parent context');
-    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_GOVERNANCE'),
+    assertAdvisoryAllow(result, 'mktorest.com mutation from parent context');
+    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_ADVISORY'),
       'Reason should mention PRODUCTION_GOVERNANCE');
   }));
 
@@ -103,8 +103,8 @@ async function runAllTests() {
         MARKETO_ENVIRONMENT: 'production'
       }
     });
-    assertDenied(result, 'MARKETO_ENVIRONMENT=production mutation');
-    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_GOVERNANCE'),
+    assertAdvisoryAllow(result, 'MARKETO_ENVIRONMENT=production mutation');
+    assert(result.output.hookSpecificOutput.permissionDecisionReason.includes('PRODUCTION_ADVISORY'),
       'Reason should mention PRODUCTION_GOVERNANCE');
   }));
 
@@ -121,7 +121,7 @@ async function runAllTests() {
         MARKETO_BASE_URL: 'https://123-ABC-456.mktorest.com'
       }
     });
-    assertDenied(result, 'Production bulk import');
+    assertAdvisoryAllow(result, 'Production bulk import');
   }));
 
   // =========================================================================

@@ -144,7 +144,7 @@ async function runAllTests() {
 
       assert.strictEqual(result.exitCode, 0, 'Should use structured deny semantics');
       assert.strictEqual(result.parseError, null, 'Should emit parseable JSON');
-      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'deny', 'Should deny direct HubSpot writes');
+      assert.strictEqual(result.output?.hookSpecificOutput?.permissionDecision, 'allow', 'Should emit advisory allow for direct HubSpot writes');
       assert(
         result.output?.hookSpecificOutput?.permissionDecisionReason?.includes('opspal-hubspot:hubspot-data-operations-manager'),
         'Should route CRM data writes to the HubSpot data operations specialist'

@@ -90,13 +90,13 @@ async function runAllTests() {
         env
       });
 
-      assert.strictEqual(result.exitCode, 0, 'Hook should exit 0 with JSON deny (not exit 2)');
+      assert.strictEqual(result.exitCode, 0, 'Hook should exit 0 with advisory allow');
       assert(result.stdout.includes('"permissionDecision"'), 'Should emit canonical PreToolUse JSON to stdout');
-      assert(result.stdout.includes('"deny"'), 'Should emit permissionDecision deny');
-      assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the direct deploy block');
+      assert(result.stdout.includes('"allow"'), 'Should emit permissionDecision allow (advisory)');
+      assert(result.stderr.includes('DEPLOY ADVISORY'), 'Should explain the advisory');
       assert(
-        result.stderr.includes('parent-context deployment handoff'),
-        'Block guidance should steer the caller toward planning plus parent-context execution'
+        result.stderr.includes('sfdc-deployment-manager'),
+        'Advisory should recommend deployment manager agent'
       );
     } finally {
       fs.rmSync(env.HOME, { recursive: true, force: true });
@@ -200,10 +200,10 @@ async function runAllTests() {
       }
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Planning-only orchestrators should still use structured block semantics');
-    assert(result.stdout.includes('"permissionDecision"'), 'Should emit a structured deploy block');
-    assert(result.stdout.includes('"deny"'), 'Should emit permissionDecision deny');
-    assert(result.stderr.includes('DEPLOY BLOCKED'), 'Should explain the blocked direct deploy');
+    assert.strictEqual(result.exitCode, 0, 'Planning-only orchestrators should receive advisory allow');
+    assert(result.stdout.includes('"permissionDecision"'), 'Should emit a structured advisory');
+    assert(result.stdout.includes('"allow"'), 'Should emit permissionDecision allow (advisory)');
+    assert(result.stderr.includes('DEPLOY ADVISORY'), 'Should explain the advisory');
   }));
 
   results.push(await runTest('Allows parent-context deploys after approved deployment planning clears the session', async () => {
