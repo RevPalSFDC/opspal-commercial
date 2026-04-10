@@ -142,13 +142,14 @@ Reference guide: `docs/DEVELOPER_TOOLS_GUIDE.md`.
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.8 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-attio` | 1.0.0 | active | 8 | 6 | 6 | 2 | 9 | 7 |
+| `opspal-core` | 2.55.9 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
-| `opspal-marketo` | 2.6.40 | active | 30 | 24 | 30 | 17 | 25 | 33 |
+| `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.11 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.12 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 <!-- AUTO_GENERATED_END:plugin-matrix -->
 
 ## Runtime Registry

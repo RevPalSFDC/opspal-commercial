@@ -7,12 +7,12 @@
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 8 |
-| Agents | 298 |
-| Commands | 282 |
-| Skills | 162 |
-| Hooks | 204 |
-| Scripts | 1852 |
+| Plugins | 9 |
+| Agents | 306 |
+| Commands | 288 |
+| Skills | 164 |
+| Hooks | 213 |
+| Scripts | 1859 |
 
 ## Regeneration
 
@@ -30,13 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.8 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-attio` | 1.0.0 | active | 8 | 6 | 6 | 2 | 9 | 7 |
+| `opspal-core` | 2.55.9 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
-| `opspal-marketo` | 2.6.40 | active | 30 | 24 | 30 | 17 | 25 | 33 |
+| `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.11 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.12 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 
 ## Registry
 
@@ -75,9 +76,62 @@
 
 ---
 
+### opspal-attio
+
+- Version: `1.0.0`
+- Status: `active`
+- Path: `plugins/opspal-attio`
+- Manifest: `plugins/opspal-attio/.claude-plugin/plugin.json`
+- Description: Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, and cross-platform sync with HubSpot and Salesforce. 8 agents.
+
+#### Agents
+
+| Agent | Description | File |
+|-------|-------------|------|
+| `attio-companies-manager` | MUST BE USED for Attio company record operations. | `attio-companies-manager.md` |
+| `attio-data-hygiene-specialist` | Use for Attio data quality: deduplication detection, completeness scoring, stale record cleanup. | `attio-data-hygiene-specialist.md` |
+| `attio-deals-manager` | MUST BE USED for Attio deal record operations and pipeline entries. | `attio-deals-manager.md` |
+| `attio-governance-enforcer` | Use for Attio governance, delete validation, and change control. | `attio-governance-enforcer.md` |
+| `attio-lists-pipeline-manager` | MUST BE USED for Attio list (pipeline) management. | `attio-lists-pipeline-manager.md` |
+| `attio-orchestrator` | MUST BE USED for complex multi-step Attio operations. | `attio-orchestrator.md` |
+| `attio-people-manager` | MUST BE USED for Attio people record operations. | `attio-people-manager.md` |
+| `attio-workspace-discovery` | MUST BE USED for read-only Attio workspace exploration. | `attio-workspace-discovery.md` |
+
+#### Commands
+
+| Command | Args | Description | File |
+|---------|------|-------------|------|
+| `/attio-audit` | `[--scope=full|quick] [--focus=schema|data|access]` | Full Attio workspace health audit | `attio-audit.md` |
+| `/attio-auth` | `[action] [workspace]` | Configure or verify Attio authentication and credentials | `attio-auth.md` |
+| `/attio-dedup` | `[--object=people|companies] [--dry-run]` | Duplicate detection wizard for Attio records | `attio-dedup.md` |
+| `/attio-preflight` | `[--scope=full|quick]` | Pre-operation validation for Attio workspace | `attio-preflight.md` |
+| `/attio-workspace` | `[action] [workspace-name]` | Switch or list Attio workspaces | `attio-workspace.md` |
+| `/checkdependencies` |  | Validate system dependencies for Attio plugin | `checkdependencies.md` |
+
+#### Skills
+
+| Skill | Description | File |
+|-------|-------------|------|
+| `attio-api-reference` | Attio REST API reference: authentication, rate limits, pagination, error codes, and common query patterns. | `attio-api-reference/SKILL.md` |
+| `attio-data-model` | Attio data model: objects, records, attributes (17 types), lists (pipelines), entries, actors, and how they relate. | `attio-data-model/SKILL.md` |
+
+#### Hooks
+
+- `api-quota-monitor` (`api-quota-monitor.sh`): API Quota Monitor Hook - Attio Plugin
+- `error-handler` (`lib/error-handler.sh`): Attio Plugin Error Handler
+- `post-workspace-auth` (`post-workspace-auth.sh`): Post Workspace Auth Hook - Attio Plugin
+- `pre-attribute-delete` (`pre-attribute-delete.sh`): Pre-Attribute / Object Delete Hook - Attio Plugin
+- `pre-bash-attio-api` (`pre-bash-attio-api.sh`): Pre-Bash Attio API Hook - Attio Plugin
+- `pre-entry-delete` (`pre-entry-delete.sh`): Pre-Entry Delete Hook - Attio Plugin
+- `pre-record-delete` (`pre-record-delete.sh`): Pre-Record Delete Hook - Attio Plugin
+- `session-start-attio` (`session-start-attio.sh`): Session Start Hook - Attio Plugin
+- `universal-agent-governance` (`universal-agent-governance.sh`): Universal Agent Governance Hook - Attio Plugin
+
+---
+
 ### opspal-core
 
-- Version: `2.55.8`
+- Version: `2.55.9`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -692,7 +746,7 @@
 
 ### opspal-marketo
 
-- Version: `2.6.40`
+- Version: `2.6.41`
 - Status: `active`
 - Path: `plugins/opspal-marketo`
 - Manifest: `plugins/opspal-marketo/.claude-plugin/plugin.json`
@@ -931,7 +985,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.11`
+- Version: `3.87.12`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`

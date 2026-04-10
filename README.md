@@ -90,12 +90,12 @@ git pull origin main
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 8 |
-| Agents | 298 |
-| Commands | 282 |
-| Skills | 162 |
-| Hooks | 204 |
-| Scripts | 1852 |
+| Plugins | 9 |
+| Agents | 306 |
+| Commands | 288 |
+| Skills | 164 |
+| Hooks | 213 |
+| Scripts | 1859 |
 
 
 ## Plugin Overview
@@ -105,11 +105,12 @@ Install `opspal-core` first, then add only the domain plugins you actually need.
 | Plugin | Version | Status | Agents | Commands | Focus |
 |--------|---------|--------|--------|----------|-------|
 | [`opspal-ai-consult`](plugins/opspal-ai-consult) | 1.4.14 | active | 2 | 3 | Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemi... |
-| [`opspal-core`](plugins/opspal-core) | 2.55.8 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
+| [`opspal-attio`](plugins/opspal-attio) | 1.0.0 | active | 8 | 6 | Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, we... |
+| [`opspal-core`](plugins/opspal-core) | 2.55.9 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
 | [`opspal-gtm-planning`](plugins/opspal-gtm-planning) | 2.3.10 | active | 13 | 16 | GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes ter... |
 | [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.31 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
-| [`opspal-marketo`](plugins/opspal-marketo) | 2.6.40 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |
+| [`opspal-marketo`](plugins/opspal-marketo) | 2.6.41 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |
 | [`opspal-monday`](plugins/opspal-monday) | 1.4.10 | experimental | 6 | 1 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog genera... |
 | [`opspal-okrs`](plugins/opspal-okrs) | 3.0.13 | active | 14 | 14 | Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubS... |
-| [`opspal-salesforce`](plugins/opspal-salesforce) | 3.87.11 | active | 94 | 59 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout manageme... |
+| [`opspal-salesforce`](plugins/opspal-salesforce) | 3.87.12 | active | 94 | 59 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout manageme... |
 

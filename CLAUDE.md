@@ -51,9 +51,9 @@ git pull origin main
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 8 |
-| Agents | 298 |
-| Commands | 282 |
-| Skills | 162 |
-| Hooks | 204 |
-| Scripts | 1852 |
+| Plugins | 9 |
+| Agents | 306 |
+| Commands | 288 |
+| Skills | 164 |
+| Hooks | 213 |
+| Scripts | 1859 |
