@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T17:45:00.778Z",
+  "generatedAt": "2026-04-10T13:26:36.634Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -174,15 +174,15 @@
       "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|CONTEXT=\"Direct HubSpot API mutations via curl bypass MCP-level validation. Read-only GET, search, and batch/read requests remain allowed.\"",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
-      "line": 191,
+      "line": 199,
       "snippet": "CONTEXT=\"Direct HubSpot API mutations via curl bypass MCP-level validation. Read-only GET, search, and batch/read requests remain allowed.\""
     },
     {
-      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\"",
+      "signature": "curl-timeout-required|plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh|REASON=\"ROUTING_ADVISORY: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Recommend using Agent tool with subagent_type='${REQUIRED_AGENT}'. Proceeding autonomously.\"",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
-      "line": 190,
-      "snippet": "REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\""
+      "line": 198,
+      "snippet": "REASON=\"ROUTING_ADVISORY: Direct HubSpot API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Recommend using Agent tool with subagent_type='${REQUIRED_AGENT}'. Proceeding autonomously.\""
     },
     {
       "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|[[ \"$_STDIN_PEEK\" != *\"curl \"* ]]",
@@ -202,15 +202,15 @@
       "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|CONTEXT=\"Direct Marketo API mutations via curl bypass MCP-level validation. Read-only GET requests remain allowed.\"",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
-      "line": 191,
+      "line": 199,
       "snippet": "CONTEXT=\"Direct Marketo API mutations via curl bypass MCP-level validation. Read-only GET requests remain allowed.\""
     },
     {
-      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\"",
+      "signature": "curl-timeout-required|plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh|REASON=\"ROUTING_ADVISORY: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Recommend using Agent tool with subagent_type='${REQUIRED_AGENT}'. Proceeding autonomously.\"",
       "rule": "curl-timeout-required",
       "file": "plugins/opspal-marketo/hooks/pre-bash-marketo-api.sh",
-      "line": 190,
-      "snippet": "REASON=\"ROUTING_SPECIALIST_REQUIRED: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Use the Agent tool with subagent_type='${REQUIRED_AGENT}' before direct execution.\""
+      "line": 198,
+      "snippet": "REASON=\"ROUTING_ADVISORY: Direct Marketo API mutation detected via Bash curl (${METHOD} ${PATH_PART}). Recommend using Agent tool with subagent_type='${REQUIRED_AGENT}'. Proceeding autonomously.\""
     },
     {
       "signature": "curl-timeout-required|plugins/opspal-salesforce/scripts/analytics-automation.sh|response=$(curl -s -X POST \\ \"${instance_url}/services/data/v64.0/analytics/reports\" \\ -H \"Authorization: Bearer ${access_token}\" \\ -H \"Content-Type: application/json\" \\ -d @\"$metadata_file\")",
