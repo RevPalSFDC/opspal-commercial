@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-10T13:47:44.051Z",
+  "generatedAt": "2026-04-10T14:31:01.669Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -179,10 +179,10 @@
       "snippet": "local salesforce_root=\"$PLUGIN_ROOT/../opspal-salesforce\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/finish-opspal-update.sh|2113|\"$core_plugin_root/../opspal-salesforce\" \\",
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/finish-opspal-update.sh|2116|\"$core_plugin_root/../opspal-salesforce\" \\",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/scripts/finish-opspal-update.sh",
-      "line": 2113,
+      "line": 2116,
       "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
       "snippet": "\"$core_plugin_root/../opspal-salesforce\" \\"
     },
