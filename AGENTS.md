@@ -142,7 +142,7 @@ Reference guide: `docs/DEVELOPER_TOOLS_GUIDE.md`.
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.5 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-core` | 2.55.6 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.40 | active | 30 | 24 | 30 | 17 | 25 | 33 |
