@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-09T19:18:32.865Z",
+  "generatedAt": "2026-04-10T13:35:03.801Z",
   "defaultMax": 3,
   "totals": {
     "matcherGroups": 61,
@@ -302,12 +302,10 @@
       "matcher": "*",
       "count": 2,
       "plugins": [
-        "opspal-core",
-        "opspal-data-hygiene"
+        "opspal-core"
       ],
       "hookPaths": [
-        "plugins/opspal-core/hooks/user-prompt-dispatcher.sh",
-        "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh"
+        "plugins/opspal-core/hooks/user-prompt-dispatcher.sh"
       ],
       "duplicates": [],
       "max": 8,

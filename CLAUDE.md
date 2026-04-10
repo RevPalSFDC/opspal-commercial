@@ -17,8 +17,7 @@ This repository is the commercial OpsPal marketplace. It publishes 9 plugins and
 | Plugin | Version | Status |
 |--------|---------|--------|
 | `opspal-ai-consult` | 1.4.14 | active |
-| `opspal-core` | 2.55.4 | active |
-| `opspal-data-hygiene` | 1.2.2 | active |
+| `opspal-core` | 2.55.5 | active |
 | `opspal-gtm-planning` | 2.3.10 | active |
 | `opspal-hubspot` | 3.9.31 | active |
 | `opspal-marketo` | 2.6.40 | active |
@@ -50,9 +49,9 @@ git pull origin main
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 9 |
-| Agents | 300 |
-| Commands | 283 |
-| Skills | 163 |
-| Hooks | 205 |
-| Scripts | 1860 |
+| Plugins | 8 |
+| Agents | 298 |
+| Commands | 282 |
+| Skills | 162 |
+| Hooks | 204 |
+| Scripts | 1852 |

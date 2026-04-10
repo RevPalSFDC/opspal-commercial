@@ -171,7 +171,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.4",
+      "version": "2.55.5",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -9820,163 +9820,6 @@
           "file": "validate-pdf-integration.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/validate-pdf-integration.js"
-        }
-      ]
-    },
-    {
-      "name": "opspal-data-hygiene",
-      "description": "[DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functionality has been consolidated into opspal-core. Use /dedup-companies or /deduplicate commands instead.",
-      "version": "1.2.2",
-      "status": "deprecated",
-      "manifestStatus": "deprecated",
-      "owner": "revpal-platform",
-      "stability": "deprecated",
-      "lastReviewedAt": "2026-02-15",
-      "deprecationDate": "2026-02-15",
-      "replacedBy": "opspal-core",
-      "path": "plugins/opspal-data-hygiene",
-      "manifestPath": "plugins/opspal-data-hygiene/.claude-plugin/plugin.json",
-      "lifecyclePath": "plugins/opspal-data-hygiene/.claude-plugin/lifecycle.json",
-      "agents": [
-        {
-          "name": "contact-dedup-orchestrator",
-          "description": "MUST BE USED for Contact/Lead deduplication. Orchestrates Contact dedup between HubSpot and Salesforce with fuzzy matching, merge rules, and comprehensive safety guardrails.",
-          "file": "contact-dedup-orchestrator.md",
-          "frontmatter": {
-            "name": "contact-dedup-orchestrator",
-            "model": "sonnet",
-            "description": "MUST BE USED for Contact/Lead deduplication. Orchestrates Contact dedup between HubSpot and Salesforce with fuzzy matching, merge rules, and comprehensive safety guardrails.",
-            "color": "teal",
-            "tools": [
-              "Read",
-              "Write",
-              "Bash",
-              "Task",
-              "TodoWrite"
-            ],
-            "triggerKeywords": [
-              "contact dedup",
-              "deduplicate contacts",
-              "merge contacts",
-              "duplicate contacts",
-              "contact hygiene",
-              "lead dedup",
-              "deduplicate leads"
-            ]
-          },
-          "sourcePath": "plugins/opspal-data-hygiene/agents/contact-dedup-orchestrator.md"
-        },
-        {
-          "name": "sfdc-hubspot-dedup-orchestrator",
-          "description": "MUST BE USED for cross-platform deduplication. Orchestrates Company/Account dedup between HubSpot and Salesforce with comprehensive safety guardrails.",
-          "file": "sfdc-hubspot-dedup-orchestrator.md",
-          "frontmatter": {
-            "name": "sfdc-hubspot-dedup-orchestrator",
-            "model": "sonnet",
-            "description": "MUST BE USED for cross-platform deduplication. Orchestrates Company/Account dedup between HubSpot and Salesforce with comprehensive safety guardrails.",
-            "color": "teal",
-            "tools": [
-              "Read",
-              "Write",
-              "Bash",
-              "Task",
-              "TodoWrite"
-            ],
-            "triggerKeywords": [
-              "sf",
-              "hubspot",
-              "sfdc",
-              "salesforce",
-              "dedup",
-              "orchestrator",
-              "orchestrate",
-              "cross-platform"
-            ]
-          },
-          "sourcePath": "plugins/opspal-data-hygiene/agents/sfdc-hubspot-dedup-orchestrator.md"
-        }
-      ],
-      "commands": [
-        {
-          "name": "dedup-companies",
-          "description": "Execute complete Company/Account deduplication workflow between HubSpot and Salesforce",
-          "file": "dedup-companies.md",
-          "frontmatter": {
-            "description": "Execute complete Company/Account deduplication workflow between HubSpot and Salesforce",
-            "argument-hint": "[--config <path>] [--output-dir <path>] [--resume <session>]"
-          },
-          "sourcePath": "plugins/opspal-data-hygiene/commands/dedup-companies.md"
-        }
-      ],
-      "skills": [
-        {
-          "name": "cross-platform-deduplication",
-          "description": "Cross-platform deduplication methodology for HubSpot and Salesforce with 6-phase workflow. Use when deduplicating Company/Account records, clustering duplicates, selecting canonical records, executing merges with data preservation, repairing associations, or implementing guardrails to prevent recurrence.",
-          "file": "cross-platform-deduplication/SKILL.md",
-          "frontmatter": {
-            "name": "cross-platform-deduplication",
-            "description": "Cross-platform deduplication methodology for HubSpot and Salesforce with 6-phase workflow. Use when deduplicating Company/Account records, clustering duplicates, selecting canonical records, executing merges with data preservation, repairing associations, or implementing guardrails to prevent recurrence.",
-            "allowed-tools": "Read, Grep, Glob"
-          },
-          "sourcePath": "plugins/opspal-data-hygiene/skills/cross-platform-deduplication/SKILL.md"
-        }
-      ],
-      "hooks": [
-        {
-          "name": "deprecation-warning",
-          "file": "deprecation-warning.sh",
-          "description": "Hook: deprecation-warning.sh",
-          "sourcePath": "plugins/opspal-data-hygiene/hooks/deprecation-warning.sh"
-        }
-      ],
-      "scripts": [
-        {
-          "name": "csv-schema-validator",
-          "file": "lib/__mocks__/csv-schema-validator.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/__mocks__/csv-schema-validator.js"
-        },
-        {
-          "name": "dedup-association-repair",
-          "file": "lib/dedup-association-repair.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-association-repair.js"
-        },
-        {
-          "name": "dedup-association-verifier",
-          "file": "lib/dedup-association-verifier.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-association-verifier.js"
-        },
-        {
-          "name": "dedup-config-loader",
-          "file": "lib/dedup-config-loader.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-config-loader.js"
-        },
-        {
-          "name": "dedup-executor",
-          "file": "lib/dedup-executor.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-executor.js"
-        },
-        {
-          "name": "dedup-ledger",
-          "file": "lib/dedup-ledger.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-ledger.js"
-        },
-        {
-          "name": "dedup-rollback-manager",
-          "file": "lib/dedup-rollback-manager.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-rollback-manager.js"
-        },
-        {
-          "name": "dedup-snapshot-generator",
-          "file": "lib/dedup-snapshot-generator.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-data-hygiene/scripts/lib/dedup-snapshot-generator.js"
         }
       ]
     },
@@ -29583,11 +29426,11 @@
     }
   ],
   "totals": {
-    "plugins": 9,
-    "agents": 300,
-    "commands": 283,
-    "skills": 163,
-    "hooks": 205,
-    "scripts": 1860
+    "plugins": 8,
+    "agents": 298,
+    "commands": 282,
+    "skills": 162,
+    "hooks": 204,
+    "scripts": 1852
   }
 }

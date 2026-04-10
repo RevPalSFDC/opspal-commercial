@@ -7,12 +7,12 @@
 
 | Metric | Count |
 |--------|-------|
-| Plugins | 9 |
-| Agents | 300 |
-| Commands | 283 |
-| Skills | 163 |
-| Hooks | 205 |
-| Scripts | 1860 |
+| Plugins | 8 |
+| Agents | 298 |
+| Commands | 282 |
+| Skills | 162 |
+| Hooks | 204 |
+| Scripts | 1852 |
 
 ## Regeneration
 
@@ -30,8 +30,7 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-core` | 2.55.4 | active | 80 | 11 | 126 | 51 | 107 | 602 |
-| `opspal-data-hygiene` | 1.2.2 | deprecated | 2 | 2 | 1 | 1 | 1 | 8 |
+| `opspal-core` | 2.55.5 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.40 | active | 30 | 24 | 30 | 17 | 25 | 33 |
@@ -78,7 +77,7 @@
 
 ### opspal-core
 
-- Version: `2.55.4`
+- Version: `2.55.5`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -465,39 +464,6 @@
 - `user-prompt-first-run` (`user-prompt-first-run.sh`): Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
 - `user-prompt-reminder` (`user-prompt-reminder.sh`)
 - `weekly-strategy-transfer` (`weekly-strategy-transfer.sh`): Weekly Skill Transfer Hook
-
----
-
-### opspal-data-hygiene
-
-- Version: `1.2.2`
-- Status: `deprecated`
-- Path: `plugins/opspal-data-hygiene`
-- Manifest: `plugins/opspal-data-hygiene/.claude-plugin/plugin.json`
-- Description: [DEPRECATED] Cross-platform data deduplication and hygiene management for HubSpot and Salesforce. Functionality has been consolidated into opspal-core. Use /dedup-companies or /deduplicate commands instead.
-
-#### Agents
-
-| Agent | Description | File |
-|-------|-------------|------|
-| `contact-dedup-orchestrator` | MUST BE USED for Contact/Lead deduplication. Orchestrates Contact dedup between HubSpot and Salesforce with fuzzy mat... | `contact-dedup-orchestrator.md` |
-| `sfdc-hubspot-dedup-orchestrator` | MUST BE USED for cross-platform deduplication. Orchestrates Company/Account dedup between HubSpot and Salesforce with... | `sfdc-hubspot-dedup-orchestrator.md` |
-
-#### Commands
-
-| Command | Args | Description | File |
-|---------|------|-------------|------|
-| `/dedup-companies` | `[--config <path>] [--output-dir <path>] [--resume <session>]` | Execute complete Company/Account deduplication workflow between HubSpot and Salesforce | `dedup-companies.md` |
-
-#### Skills
-
-| Skill | Description | File |
-|-------|-------------|------|
-| `cross-platform-deduplication` | Cross-platform deduplication methodology for HubSpot and Salesforce with 6-phase workflow. Use when deduplicating Com... | `cross-platform-deduplication/SKILL.md` |
-
-#### Hooks
-
-- `deprecation-warning` (`deprecation-warning.sh`): Hook: deprecation-warning.sh
 
 ---
 

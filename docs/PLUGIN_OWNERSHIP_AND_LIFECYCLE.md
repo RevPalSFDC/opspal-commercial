@@ -12,7 +12,7 @@
 
 ## Coverage Summary
 
-- Plugins scanned: 9
+- Plugins scanned: 8
 - Missing status: 0
 - Missing owner: 0
 - Missing stability: 0
@@ -24,8 +24,7 @@
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.14 | active | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-core` | 2.55.4 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-data-hygiene` | 1.2.2 | deprecated | `revpal-platform` | `deprecated` | `2026-02-15` | `2026-02-15` | `opspal-core` |
+| `opspal-core` | 2.55.5 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-gtm-planning` | 2.3.10 | active | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-hubspot` | 3.9.31 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-marketo` | 2.6.40 | active | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |

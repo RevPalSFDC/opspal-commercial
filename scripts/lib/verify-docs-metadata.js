@@ -31,7 +31,6 @@ const PLUGIN_NAMES = [
   'opspal-gtm-planning',
   'opspal-okrs',
   'opspal-monday',
-  'opspal-data-hygiene',
   'opspal-ai-consult',
   'opspal-mcp-client'
 ];
