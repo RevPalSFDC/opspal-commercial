@@ -112,5 +112,5 @@ Install `opspal-core` first, then add only the domain plugins you actually need.
 | [`opspal-marketo`](plugins/opspal-marketo) | 2.6.41 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |
 | [`opspal-monday`](plugins/opspal-monday) | 1.4.10 | experimental | 6 | 1 | [EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog genera... |
 | [`opspal-okrs`](plugins/opspal-okrs) | 3.0.13 | active | 14 | 14 | Data-driven OKR generation from live revenue data. Derives objectives and key results from Salesforce, HubS... |
-| [`opspal-salesforce`](plugins/opspal-salesforce) | 3.87.12 | active | 94 | 59 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout manageme... |
+| [`opspal-salesforce`](plugins/opspal-salesforce) | 3.87.13 | active | 94 | 59 | Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout manageme... |
 
