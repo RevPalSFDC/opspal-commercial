@@ -127,6 +127,7 @@
 | `/attio-automation-audit` | `[--check-urls] [--verify-hmac]` | Webhook and integration health audit for Attio | `attio-automation-audit.md` |
 | `/attio-bulk-export` | `[--object people|companies] [--format json|csv] [--output path]` | Export Attio records with pagination | `attio-bulk-export.md` |
 | `/attio-bulk-import` | `[--object people|companies] [--file path.csv] [--dry-run] [--matching-attribu...` | Sequential loop import wizard for Attio records | `attio-bulk-import.md` |
+| `/attio-checkdependencies` |  | Validate system dependencies for Attio plugin | `attio-checkdependencies.md` |
 | `/attio-comments` | `[action: list|create|resolve] [--record object:record-id] [--thread thread-id]` | Manage Attio comments and collaboration threads | `attio-comments.md` |
 | `/attio-custom-objects` | `[--name slug] [--template path.json]` | Custom object design wizard for Attio | `attio-custom-objects.md` |
 | `/attio-dedup` | `[--object=people|companies] [--dry-run]` | Duplicate detection wizard for Attio records | `attio-dedup.md` |
@@ -149,7 +150,6 @@
 | `/attio-webhook-setup` | `[--url target-url] [--events record.created,record.updated]` | Webhook configuration wizard for Attio | `attio-webhook-setup.md` |
 | `/attio-workspace` | `[action] [workspace-name]` | Switch or list Attio workspaces | `attio-workspace.md` |
 | `/attio-workspace-report` | `[--scope full|quick] [--compare-previous]` | Generate full Attio workspace health report | `attio-workspace-report.md` |
-| `/checkdependencies` |  | Validate system dependencies for Attio plugin | `checkdependencies.md` |
 
 #### Skills
 

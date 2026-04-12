@@ -1433,6 +1433,16 @@
           "sourcePath": "plugins/opspal-attio/commands/attio-bulk-import.md"
         },
         {
+          "name": "attio-checkdependencies",
+          "description": "Validate system dependencies for Attio plugin",
+          "file": "attio-checkdependencies.md",
+          "frontmatter": {
+            "description": "Validate system dependencies for Attio plugin",
+            "argument-hint": ""
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-checkdependencies.md"
+        },
+        {
           "name": "attio-comments",
           "description": "Manage Attio comments and collaboration threads",
           "file": "attio-comments.md",
@@ -1651,16 +1661,6 @@
             "argument-hint": "[--scope full|quick] [--compare-previous]"
           },
           "sourcePath": "plugins/opspal-attio/commands/attio-workspace-report.md"
-        },
-        {
-          "name": "checkdependencies",
-          "description": "Validate system dependencies for Attio plugin",
-          "file": "checkdependencies.md",
-          "frontmatter": {
-            "description": "Validate system dependencies for Attio plugin",
-            "argument-hint": ""
-          },
-          "sourcePath": "plugins/opspal-attio/commands/checkdependencies.md"
         }
       ],
       "skills": [
