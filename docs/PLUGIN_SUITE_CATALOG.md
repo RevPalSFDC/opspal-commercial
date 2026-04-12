@@ -8,11 +8,11 @@
 | Metric | Count |
 |--------|-------|
 | Plugins | 9 |
-| Agents | 306 |
-| Commands | 288 |
-| Skills | 164 |
-| Hooks | 213 |
-| Scripts | 1859 |
+| Agents | 327 |
+| Commands | 310 |
+| Skills | 175 |
+| Hooks | 225 |
+| Scripts | 1878 |
 
 ## Regeneration
 
@@ -30,7 +30,7 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-attio` | 1.0.0 | active | 8 | 6 | 6 | 2 | 9 | 7 |
+| `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
 | `opspal-core` | 2.55.9 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
@@ -78,23 +78,44 @@
 
 ### opspal-attio
 
-- Version: `1.0.0`
+- Version: `2.0.0`
 - Status: `active`
 - Path: `plugins/opspal-attio`
 - Manifest: `plugins/opspal-attio/.claude-plugin/plugin.json`
-- Description: Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, and cross-platform sync with HubSpot and Salesforce. 8 agents.
+- Description: Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, custom objects, SCIM, files, and cross-platform sync with HubSpot and Salesforce. 29 agents.
 
 #### Agents
 
 | Agent | Description | File |
 |-------|-------------|------|
+| `attio-admin-specialist` | Use for Attio workspace administration: members, views, object configuration. | `attio-admin-specialist.md` |
+| `attio-assessment-analyzer` | Use for read-only Attio workspace assessments and health reports. | `attio-assessment-analyzer.md` |
+| `attio-attribute-architect` | MUST BE USED for Attio attribute and schema management. | `attio-attribute-architect.md` |
+| `attio-automation-auditor` | Use for auditing Attio webhook chains, integration health, and automation coverage. | `attio-automation-auditor.md` |
+| `attio-comments-specialist` | Use for Attio comments and collaboration thread management. | `attio-comments-specialist.md` |
 | `attio-companies-manager` | MUST BE USED for Attio company record operations. | `attio-companies-manager.md` |
+| `attio-custom-objects-architect` | MUST BE USED for Attio custom object creation, schema design, and object lifecycle management. | `attio-custom-objects-architect.md` |
 | `attio-data-hygiene-specialist` | Use for Attio data quality: deduplication detection, completeness scoring, stale record cleanup. | `attio-data-hygiene-specialist.md` |
+| `attio-data-migration-specialist` | MUST BE USED for large-scale Attio data migration from CRMs or CSV sources. | `attio-data-migration-specialist.md` |
+| `attio-data-operations` | MUST BE USED for Attio bulk data import, export, and sequential batch operations. | `attio-data-operations.md` |
 | `attio-deals-manager` | MUST BE USED for Attio deal record operations and pipeline entries. | `attio-deals-manager.md` |
+| `attio-files-specialist` | Use for Attio file upload, download, and folder management. | `attio-files-specialist.md` |
 | `attio-governance-enforcer` | Use for Attio governance, delete validation, and change control. | `attio-governance-enforcer.md` |
+| `attio-hubspot-bridge` | MUST BE USED for HubSpot-Attio data synchronization and record matching. | `attio-hubspot-bridge.md` |
+| `attio-integration-specialist` | MUST BE USED for Attio webhooks and integration configuration. | `attio-integration-specialist.md` |
 | `attio-lists-pipeline-manager` | MUST BE USED for Attio list (pipeline) management. | `attio-lists-pipeline-manager.md` |
+| `attio-meeting-intelligence` | MUST BE USED for Attio meetings, call recordings, and transcripts. | `attio-meeting-intelligence.md` |
+| `attio-notes-tasks-manager` | MUST BE USED for Attio notes and tasks. | `attio-notes-tasks-manager.md` |
+| `attio-observability-orchestrator` | Use for continuous Attio workspace intelligence: daily data quality monitoring, pipeline drift detection. | `attio-observability-orchestrator.md` |
 | `attio-orchestrator` | MUST BE USED for complex multi-step Attio operations. | `attio-orchestrator.md` |
 | `attio-people-manager` | MUST BE USED for Attio people record operations. | `attio-people-manager.md` |
+| `attio-pipeline-analyst` | Use for Attio pipeline health analysis, stage conversion rates, and deal velocity. | `attio-pipeline-analyst.md` |
+| `attio-query-specialist` | MUST BE USED for complex Attio filtering, cross-object path queries, and search operations. | `attio-query-specialist.md` |
+| `attio-record-historian` | Use for Attio historic attribute value analysis — value changes over time. | `attio-record-historian.md` |
+| `attio-revenue-intelligence` | Use for Attio revenue analytics, ARR modeling, and GTM funnel analysis. | `attio-revenue-intelligence.md` |
+| `attio-salesforce-bridge` | MUST BE USED for Salesforce-Attio data synchronization. | `attio-salesforce-bridge.md` |
+| `attio-scim-admin` | Use for Attio enterprise SCIM 2.0 user and group provisioning. | `attio-scim-admin.md` |
+| `attio-users-workspaces-manager` | Use for Attio custom object management (users, workspaces) and SCIM configuration. | `attio-users-workspaces-manager.md` |
 | `attio-workspace-discovery` | MUST BE USED for read-only Attio workspace exploration. | `attio-workspace-discovery.md` |
 
 #### Commands
@@ -103,9 +124,31 @@
 |---------|------|-------------|------|
 | `/attio-audit` | `[--scope=full|quick] [--focus=schema|data|access]` | Full Attio workspace health audit | `attio-audit.md` |
 | `/attio-auth` | `[action] [workspace]` | Configure or verify Attio authentication and credentials | `attio-auth.md` |
+| `/attio-automation-audit` | `[--check-urls] [--verify-hmac]` | Webhook and integration health audit for Attio | `attio-automation-audit.md` |
+| `/attio-bulk-export` | `[--object people|companies] [--format json|csv] [--output path]` | Export Attio records with pagination | `attio-bulk-export.md` |
+| `/attio-bulk-import` | `[--object people|companies] [--file path.csv] [--dry-run] [--matching-attribu...` | Sequential loop import wizard for Attio records | `attio-bulk-import.md` |
+| `/attio-comments` | `[action: list|create|resolve] [--record object:record-id] [--thread thread-id]` | Manage Attio comments and collaboration threads | `attio-comments.md` |
+| `/attio-custom-objects` | `[--name slug] [--template path.json]` | Custom object design wizard for Attio | `attio-custom-objects.md` |
 | `/attio-dedup` | `[--object=people|companies] [--dry-run]` | Duplicate detection wizard for Attio records | `attio-dedup.md` |
+| `/attio-enrich` | `[--object people|companies] [--scope incomplete|all] [--dry-run]` | Data enrichment workflow for Attio records | `attio-enrich.md` |
+| `/attio-files` | `[action: list|upload|download|mkdir] [--record object:record-id]` | File management operations for Attio | `attio-files.md` |
+| `/attio-governance-audit` | `[--scope full|quick] [--dimension schema|access|webhook|data|change-control]` | Full governance and compliance audit for Attio workspace | `attio-governance-audit.md` |
+| `/attio-history` | `[object] [record-id] [--attribute slug] [--timeline]` | Historic value analysis for an Attio record or attribute | `attio-history.md` |
+| `/attio-meetings` | `[action: list|create|transcript] [--linked-to object:record-id] [--since 7d]` | Attio meeting management and transcript access | `attio-meetings.md` |
+| `/attio-migration` | `[--source hubspot|salesforce|csv] [--object people|companies] [--dry-run] [--...` | Cross-CRM migration wizard for Attio | `attio-migration.md` |
+| `/attio-notes-add` | `[object] [record-id] [--format plaintext|markdown]` | Add a note to an Attio record | `attio-notes-add.md` |
+| `/attio-observability-dashboard` | `[--compare-previous] [--format summary|detail]` | View current Attio workspace health metrics | `attio-observability-dashboard.md` |
+| `/attio-observability-setup` | `[--type health-snapshot|pipeline-drift|data-quality] [--cron expression]` | Configure continuous Attio workspace monitoring | `attio-observability-setup.md` |
+| `/attio-pipeline-health` | `[--list slug] [--period 30d|90d|all]` | Pipeline conversion and velocity report for Attio lists | `attio-pipeline-health.md` |
 | `/attio-preflight` | `[--scope=full|quick]` | Pre-operation validation for Attio workspace | `attio-preflight.md` |
+| `/attio-query` | `[object] [--filter key=value] [--sort field:asc|desc] [--limit N]` | Interactive query builder for Attio records and entries | `attio-query.md` |
+| `/attio-revenue-report` | `[--list slug] [--period Q1|Q2|Q3|Q4|YTD] [--target amount]` | ARR waterfall and pipeline coverage report for Attio | `attio-revenue-report.md` |
+| `/attio-schema` | `[object|list] [--detail] [--format table|json]` | Inspect Attio workspace schema (objects, attributes, lists) | `attio-schema.md` |
+| `/attio-sync-sfdc` | `[--direction sfdc-to-attio|attio-to-sfdc|bidirectional] [--object contacts|ac...` | Salesforce-Attio sync analysis and data synchronization | `attio-sync-sfdc.md` |
+| `/attio-tasks` | `[action] [--assignee member-email] [--deadline YYYY-MM-DD]` | Manage Attio tasks (create, list, complete, assign) | `attio-tasks.md` |
+| `/attio-webhook-setup` | `[--url target-url] [--events record.created,record.updated]` | Webhook configuration wizard for Attio | `attio-webhook-setup.md` |
 | `/attio-workspace` | `[action] [workspace-name]` | Switch or list Attio workspaces | `attio-workspace.md` |
+| `/attio-workspace-report` | `[--scope full|quick] [--compare-previous]` | Generate full Attio workspace health report | `attio-workspace-report.md` |
 | `/checkdependencies` |  | Validate system dependencies for Attio plugin | `checkdependencies.md` |
 
 #### Skills
@@ -113,17 +156,40 @@
 | Skill | Description | File |
 |-------|-------------|------|
 | `attio-api-reference` | Attio REST API reference: authentication, rate limits, pagination, error codes, and common query patterns. | `attio-api-reference/SKILL.md` |
+| `attio-attribute-types` | Attio attribute types: all 17 types with creation patterns, value shapes, validation rules, and configuration options. | `attio-attribute-types/SKILL.md` |
+| `attio-custom-objects-guide` | Attio custom object design: creation patterns, relationship modeling, migration from flat CRM schemas, and lifecycle ... | `attio-custom-objects-guide/SKILL.md` |
 | `attio-data-model` | Attio data model: objects, records, attributes (17 types), lists (pipelines), entries, actors, and how they relate. | `attio-data-model/SKILL.md` |
+| `attio-governance-framework` | Attio governance methodology: delete safety, change control, compliance auditing, and workspace governance scoring. | `attio-governance-framework/SKILL.md` |
+| `attio-historic-values` | Attio historic attribute values: value timeline, actor tracking, change detection, and audit trail patterns. | `attio-historic-values/SKILL.md` |
+| `attio-integration-patterns` | Attio integration patterns: webhooks, HMAC verification, cross-platform field mapping, and sync strategies. | `attio-integration-patterns/SKILL.md` |
+| `attio-meeting-intelligence` | Attio meeting operations: meeting lifecycle, call recordings, transcripts, and meeting-to-CRM enrichment patterns. | `attio-meeting-intelligence/SKILL.md` |
+| `attio-observability-layer` | Attio observability: workspace health snapshots, pipeline drift detection, continuous monitoring, and alerting patterns. | `attio-observability-layer/SKILL.md` |
+| `attio-pipeline-operations` | Attio pipeline operations: list lifecycle, entry management, stage configuration, funnel analysis, and velocity track... | `attio-pipeline-operations/SKILL.md` |
+| `attio-query-patterns` | Attio query and filter patterns: shorthand vs verbose syntax, operators, cross-object path filtering, pagination, and... | `attio-query-patterns/SKILL.md` |
+| `attio-revenue-analytics` | Attio revenue analytics: ARR waterfall, pipeline coverage, weighted pipeline, cohort analysis, and revenue forecastin... | `attio-revenue-analytics/SKILL.md` |
+| `attio-scim-enterprise` | Attio SCIM 2.0 enterprise provisioning: user/group management, IdP integration patterns, and compliance auditing. | `attio-scim-enterprise/SKILL.md` |
 
 #### Hooks
 
 - `api-quota-monitor` (`api-quota-monitor.sh`): API Quota Monitor Hook - Attio Plugin
 - `error-handler` (`lib/error-handler.sh`): Attio Plugin Error Handler
+- `observability-quota-monitor` (`observability-quota-monitor.sh`): Observability Quota Monitor Hook - Attio Plugin
+- `post-assessment-trigger` (`post-assessment-trigger.sh`): Post-Assessment Trigger Hook - Attio Plugin
+- `post-entry-upsert` (`post-entry-upsert.sh`): Post-Entry Upsert Hook - Attio Plugin
+- `post-meeting-create` (`post-meeting-create.sh`): Post-Meeting Create Hook - Attio Plugin
+- `post-migration-checkpoint` (`post-migration-checkpoint.sh`): hooks/post-migration-checkpoint.sh
+- `post-webhook-create` (`post-webhook-create.sh`): Post-Webhook-Create Hook - Attio Plugin
 - `post-workspace-auth` (`post-workspace-auth.sh`): Post Workspace Auth Hook - Attio Plugin
 - `pre-attribute-delete` (`pre-attribute-delete.sh`): Pre-Attribute / Object Delete Hook - Attio Plugin
 - `pre-bash-attio-api` (`pre-bash-attio-api.sh`): Pre-Bash Attio API Hook - Attio Plugin
+- `pre-bulk-loop` (`pre-bulk-loop.sh`): Pre-Bulk-Loop Hook - Attio Plugin
 - `pre-entry-delete` (`pre-entry-delete.sh`): Pre-Entry Delete Hook - Attio Plugin
+- `pre-object-delete` (`pre-object-delete.sh`): hooks/pre-object-delete.sh
+- `pre-rate-limit-read-warn` (`pre-rate-limit-read-warn.sh`): Pre-Rate-Limit Read Warn Hook - Attio Plugin
 - `pre-record-delete` (`pre-record-delete.sh`): Pre-Record Delete Hook - Attio Plugin
+- `pre-schema-mutate` (`pre-schema-mutate.sh`): Pre-Schema Mutate Hook - Attio Plugin
+- `pre-scim-mutate` (`pre-scim-mutate.sh`): hooks/pre-scim-mutate.sh
+- `pre-search-beta-warning` (`pre-search-beta-warning.sh`): Pre-Search Beta Warning Hook - Attio Plugin
 - `session-start-attio` (`session-start-attio.sh`): Session Start Hook - Attio Plugin
 - `universal-agent-governance` (`universal-agent-governance.sh`): Universal Agent Governance Hook - Attio Plugin
 
@@ -201,7 +267,7 @@
 | `revops-deal-scorer` | Rules-based deal win probability scoring analyzing stage velocity, engagement patterns, ICP fit, and competitive posi... | `revops-deal-scorer.md` |
 | `revops-dedup-specialist` | Specialist agent for RevOps data deduplication operations | `revops-dedup-specialist.md` |
 | `revops-lead-scorer` | Rules-based lead quality scoring combining ICP firmographic fit and behavioral engagement signals. | `revops-lead-scorer.md` |
-| `revops-maturity-orchestrator` | MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo. | `revops-maturity-orchestrator.md` |
+| `revops-maturity-orchestrator` | MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio. | `revops-maturity-orchestrator.md` |
 | `revops-query-agent` | Use PROACTIVELY for ad-hoc RevOps questions that don't map to a specific agent. | `revops-query-agent.md` |
 | `revops-reporting-assistant` | MUST BE USED for RevOps report generation. | `revops-reporting-assistant.md` |
 | `sales-enablement-coordinator` | Coordinates sales enablement activities including training paths, skill gap analysis, and content recommendations. | `sales-enablement-coordinator.md` |

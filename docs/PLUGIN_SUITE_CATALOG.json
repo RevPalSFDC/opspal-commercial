@@ -170,19 +170,246 @@
     },
     {
       "name": "opspal-attio",
-      "description": "Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, and cross-platform sync with HubSpot and Salesforce. 8 agents.",
-      "version": "1.0.0",
+      "description": "Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, custom objects, SCIM, files, and cross-platform sync with HubSpot and Salesforce. 29 agents.",
+      "version": "2.0.0",
       "status": "active",
-      "manifestStatus": "",
-      "owner": "",
-      "stability": "",
-      "lastReviewedAt": "",
+      "manifestStatus": "active",
+      "owner": "revpal-engineering",
+      "stability": "stable",
+      "lastReviewedAt": "2026-04-10",
       "deprecationDate": "",
       "replacedBy": "",
       "path": "plugins/opspal-attio",
       "manifestPath": "plugins/opspal-attio/.claude-plugin/plugin.json",
-      "lifecyclePath": null,
+      "lifecyclePath": "plugins/opspal-attio/.claude-plugin/lifecycle.json",
       "agents": [
+        {
+          "name": "attio-admin-specialist",
+          "description": "Use for Attio workspace administration: members, views, object configuration.",
+          "file": "attio-admin-specialist.md",
+          "frontmatter": {
+            "name": "attio-admin-specialist",
+            "description": "Use for Attio workspace administration: members, views, object configuration.",
+            "color": "gray",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "admin",
+              "member",
+              "members",
+              "workspace member",
+              "access level",
+              "views",
+              "saved views",
+              "workspace settings"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__members_list",
+              "mcp__attio__members_get",
+              "mcp__attio__self_get",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get",
+              "mcp__attio__lists_views",
+              "mcp__attio__attributes_list"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_create",
+              "mcp__attio__records_update",
+              "mcp__attio__records_upsert",
+              "mcp__attio__records_delete",
+              "mcp__attio__entries_create",
+              "mcp__attio__entries_update",
+              "mcp__attio__entries_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-admin-specialist.md"
+        },
+        {
+          "name": "attio-assessment-analyzer",
+          "description": "Use for read-only Attio workspace assessments and health reports.",
+          "file": "attio-assessment-analyzer.md",
+          "frontmatter": {
+            "name": "attio-assessment-analyzer",
+            "description": "Use for read-only Attio workspace assessments and health reports.",
+            "color": "blue",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "assessment",
+              "health check",
+              "workspace health",
+              "audit report",
+              "compliance check"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "Task",
+              "TodoWrite",
+              "mcp__attio__self_get",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__attributes_get",
+              "mcp__attio__records_query",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get",
+              "mcp__attio__lists_views",
+              "mcp__attio__entries_query",
+              "mcp__attio__members_list",
+              "mcp__attio__webhooks_list",
+              "mcp__attio__tasks_list",
+              "mcp__attio__notes_list"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_create",
+              "mcp__attio__records_upsert",
+              "mcp__attio__records_update",
+              "mcp__attio__records_update_overwrite",
+              "mcp__attio__records_delete",
+              "mcp__attio__entries_create",
+              "mcp__attio__entries_upsert",
+              "mcp__attio__entries_update",
+              "mcp__attio__entries_update_overwrite",
+              "mcp__attio__entries_delete",
+              "mcp__attio__attributes_create",
+              "mcp__attio__attributes_update",
+              "mcp__attio__objects_create",
+              "mcp__attio__objects_update",
+              "mcp__attio__objects_delete",
+              "mcp__attio__lists_create",
+              "mcp__attio__lists_update",
+              "mcp__attio__lists_delete",
+              "mcp__attio__webhooks_create",
+              "mcp__attio__webhooks_update",
+              "mcp__attio__webhooks_delete",
+              "mcp__attio__notes_create",
+              "mcp__attio__notes_delete",
+              "mcp__attio__tasks_create",
+              "mcp__attio__tasks_update",
+              "mcp__attio__tasks_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-assessment-analyzer.md"
+        },
+        {
+          "name": "attio-attribute-architect",
+          "description": "MUST BE USED for Attio attribute and schema management.",
+          "file": "attio-attribute-architect.md",
+          "frontmatter": {
+            "name": "attio-attribute-architect",
+            "description": "MUST BE USED for Attio attribute and schema management.",
+            "color": "yellow",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "attribute",
+              "field",
+              "schema",
+              "property",
+              "create attribute",
+              "create field",
+              "status options",
+              "select options",
+              "record reference"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__attributes_list",
+              "mcp__attio__attributes_get",
+              "mcp__attio__attributes_create",
+              "mcp__attio__attributes_update",
+              "mcp__attio__attributes_list_options",
+              "mcp__attio__attributes_create_option",
+              "mcp__attio__attributes_update_option",
+              "mcp__attio__attributes_list_statuses",
+              "mcp__attio__attributes_create_status",
+              "mcp__attio__attributes_update_status",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_delete",
+              "mcp__attio__entries_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-attribute-architect.md"
+        },
+        {
+          "name": "attio-automation-auditor",
+          "description": "Use for auditing Attio webhook chains, integration health, and automation coverage.",
+          "file": "attio-automation-auditor.md",
+          "frontmatter": {
+            "name": "attio-automation-auditor",
+            "description": "Use for auditing Attio webhook chains, integration health, and automation coverage.",
+            "color": "red",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": "[attio, automation audit, webhook audit, integration audit, automation health]",
+            "tools": "[Read, Write, Grep, Bash, TodoWrite, mcp__attio__webhooks_list, mcp__attio__webhooks_get, mcp__attio__objects_list, mcp__attio__attributes_list, mcp__attio__lists_list, mcp__attio__members_list, mcp__attio__self_get]",
+            "disallowedTools": "[mcp__attio__webhooks_create, mcp__attio__webhooks_update, mcp__attio__webhooks_delete, mcp__attio__records_create, mcp__attio__records_update, mcp__attio__records_delete, mcp__attio__entries_create, mcp__attio__entries_update, mcp__attio__entries_delete]"
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-automation-auditor.md"
+        },
+        {
+          "name": "attio-comments-specialist",
+          "description": "Use for Attio comments and collaboration thread management.",
+          "file": "attio-comments-specialist.md",
+          "frontmatter": {
+            "name": "attio-comments-specialist",
+            "description": "Use for Attio comments and collaboration thread management.",
+            "color": "gray",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "comment",
+              "comments",
+              "thread",
+              "discussion",
+              "mention",
+              "resolve"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__comments_create",
+              "mcp__attio__comments_get",
+              "mcp__attio__comments_delete",
+              "mcp__attio__threads_list",
+              "mcp__attio__threads_get",
+              "mcp__attio__members_list",
+              "mcp__attio__records_query"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-comments-specialist.md"
+        },
         {
           "name": "attio-companies-manager",
           "description": "MUST BE USED for Attio company record operations.",
@@ -226,6 +453,22 @@
             ]
           },
           "sourcePath": "plugins/opspal-attio/agents/attio-companies-manager.md"
+        },
+        {
+          "name": "attio-custom-objects-architect",
+          "description": "MUST BE USED for Attio custom object creation, schema design, and object lifecycle management.",
+          "file": "attio-custom-objects-architect.md",
+          "frontmatter": {
+            "name": "attio-custom-objects-architect",
+            "description": "MUST BE USED for Attio custom object creation, schema design, and object lifecycle management.",
+            "color": "yellow",
+            "model": "opus",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": "[attio, custom object, create object, new object, schema design, object lifecycle]",
+            "tools": "[Read, Write, Grep, Bash, Task, TodoWrite, mcp__attio__objects_list, mcp__attio__objects_get, mcp__attio__objects_create, mcp__attio__objects_update, mcp__attio__objects_delete, mcp__attio__attributes_list, mcp__attio__attributes_create, mcp__attio__attributes_update, mcp__attio__attributes_list_options, mcp__attio__attributes_create_option, mcp__attio__attributes_list_statuses, mcp__attio__attributes_create_status, mcp__attio__lists_list, mcp__attio__lists_create]"
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-custom-objects-architect.md"
         },
         {
           "name": "attio-data-hygiene-specialist",
@@ -272,6 +515,67 @@
             ]
           },
           "sourcePath": "plugins/opspal-attio/agents/attio-data-hygiene-specialist.md"
+        },
+        {
+          "name": "attio-data-migration-specialist",
+          "description": "MUST BE USED for large-scale Attio data migration from CRMs or CSV sources.",
+          "file": "attio-data-migration-specialist.md",
+          "frontmatter": {
+            "name": "attio-data-migration-specialist",
+            "description": "MUST BE USED for large-scale Attio data migration from CRMs or CSV sources.",
+            "color": "red",
+            "model": "opus",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": "[attio, migration, data migration, migrate from, migrate to attio, cross-crm migration]",
+            "tools": "[Read, Write, Grep, Bash, Task, TodoWrite, mcp__attio__records_query, mcp__attio__records_upsert, mcp__attio__records_get, mcp__attio__entries_upsert, mcp__attio__entries_query, mcp__attio__attributes_list, mcp__attio__objects_list, mcp__attio__lists_list]"
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-data-migration-specialist.md"
+        },
+        {
+          "name": "attio-data-operations",
+          "description": "MUST BE USED for Attio bulk data import, export, and sequential batch operations.",
+          "file": "attio-data-operations.md",
+          "frontmatter": {
+            "name": "attio-data-operations",
+            "description": "MUST BE USED for Attio bulk data import, export, and sequential batch operations.",
+            "color": "red",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "import",
+              "export",
+              "bulk",
+              "batch",
+              "csv",
+              "data migration",
+              "mass update"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "Task",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_list",
+              "mcp__attio__records_create",
+              "mcp__attio__records_upsert",
+              "mcp__attio__records_update",
+              "mcp__attio__records_attribute_values",
+              "mcp__attio__entries_query",
+              "mcp__attio__entries_list",
+              "mcp__attio__entries_upsert",
+              "mcp__attio__entries_create",
+              "mcp__attio__attributes_list",
+              "mcp__attio__objects_list",
+              "mcp__attio__lists_list"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-data-operations.md"
         },
         {
           "name": "attio-deals-manager",
@@ -326,6 +630,22 @@
           "sourcePath": "plugins/opspal-attio/agents/attio-deals-manager.md"
         },
         {
+          "name": "attio-files-specialist",
+          "description": "Use for Attio file upload, download, and folder management.",
+          "file": "attio-files-specialist.md",
+          "frontmatter": {
+            "name": "attio-files-specialist",
+            "description": "Use for Attio file upload, download, and folder management.",
+            "color": "teal",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": "[attio, file, files, upload, download, folder, attachment, document]",
+            "tools": "[Read, Write, Grep, Bash, TodoWrite, mcp__attio__files_list, mcp__attio__files_get, mcp__attio__files_upload, mcp__attio__files_download, mcp__attio__files_create_folder, mcp__attio__files_delete, mcp__attio__records_query]"
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-files-specialist.md"
+        },
+        {
           "name": "attio-governance-enforcer",
           "description": "Use for Attio governance, delete validation, and change control.",
           "file": "attio-governance-enforcer.md",
@@ -373,6 +693,82 @@
             ]
           },
           "sourcePath": "plugins/opspal-attio/agents/attio-governance-enforcer.md"
+        },
+        {
+          "name": "attio-hubspot-bridge",
+          "description": "MUST BE USED for HubSpot-Attio data synchronization and record matching.",
+          "file": "attio-hubspot-bridge.md",
+          "frontmatter": {
+            "name": "attio-hubspot-bridge",
+            "description": "MUST BE USED for HubSpot-Attio data synchronization and record matching.",
+            "color": "orange",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "hubspot",
+              "sync hubspot",
+              "hubspot to attio",
+              "attio to hubspot",
+              "cross-platform"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "Task",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_upsert",
+              "mcp__attio__records_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__objects_list",
+              "mcp__hubspot-enhanced-v3__hubspot_search",
+              "mcp__hubspot-enhanced-v3__hubspot_get",
+              "mcp__hubspot-enhanced-v3__hubspot_create",
+              "mcp__hubspot-enhanced-v3__hubspot_update"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-hubspot-bridge.md"
+        },
+        {
+          "name": "attio-integration-specialist",
+          "description": "MUST BE USED for Attio webhooks and integration configuration.",
+          "file": "attio-integration-specialist.md",
+          "frontmatter": {
+            "name": "attio-integration-specialist",
+            "description": "MUST BE USED for Attio webhooks and integration configuration.",
+            "color": "teal",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "webhook",
+              "integration",
+              "hmac",
+              "event subscription",
+              "api integration"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__webhooks_list",
+              "mcp__attio__webhooks_get",
+              "mcp__attio__webhooks_create",
+              "mcp__attio__webhooks_update",
+              "mcp__attio__webhooks_delete",
+              "mcp__attio__self_get",
+              "mcp__attio__objects_list",
+              "mcp__attio__lists_list"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-integration-specialist.md"
         },
         {
           "name": "attio-lists-pipeline-manager",
@@ -426,6 +822,133 @@
             ]
           },
           "sourcePath": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md"
+        },
+        {
+          "name": "attio-meeting-intelligence",
+          "description": "MUST BE USED for Attio meetings, call recordings, and transcripts.",
+          "file": "attio-meeting-intelligence.md",
+          "frontmatter": {
+            "name": "attio-meeting-intelligence",
+            "description": "MUST BE USED for Attio meetings, call recordings, and transcripts.",
+            "color": "teal",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "meeting",
+              "meetings",
+              "call recording",
+              "transcript",
+              "calendar",
+              "conversation"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__meetings_list",
+              "mcp__attio__meetings_get",
+              "mcp__attio__meetings_create",
+              "mcp__attio__meetings_recordings_list",
+              "mcp__attio__meetings_recordings_create",
+              "mcp__attio__meetings_recording_get",
+              "mcp__attio__meetings_transcript_get",
+              "mcp__attio__records_query",
+              "mcp__attio__records_get",
+              "mcp__attio__notes_create",
+              "mcp__attio__tasks_create",
+              "mcp__attio__members_list"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-meeting-intelligence.md"
+        },
+        {
+          "name": "attio-notes-tasks-manager",
+          "description": "MUST BE USED for Attio notes and tasks.",
+          "file": "attio-notes-tasks-manager.md",
+          "frontmatter": {
+            "name": "attio-notes-tasks-manager",
+            "description": "MUST BE USED for Attio notes and tasks.",
+            "color": "teal",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "note",
+              "notes",
+              "task",
+              "tasks",
+              "create note",
+              "add note",
+              "to-do",
+              "assign task",
+              "follow up"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__notes_list",
+              "mcp__attio__notes_get",
+              "mcp__attio__notes_create",
+              "mcp__attio__notes_delete",
+              "mcp__attio__tasks_list",
+              "mcp__attio__tasks_get",
+              "mcp__attio__tasks_create",
+              "mcp__attio__tasks_update",
+              "mcp__attio__tasks_delete",
+              "mcp__attio__members_list",
+              "mcp__attio__records_query"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-notes-tasks-manager.md"
+        },
+        {
+          "name": "attio-observability-orchestrator",
+          "description": "Use for continuous Attio workspace intelligence: daily data quality monitoring, pipeline drift detection.",
+          "file": "attio-observability-orchestrator.md",
+          "frontmatter": {
+            "name": "attio-observability-orchestrator",
+            "description": "Use for continuous Attio workspace intelligence: daily data quality monitoring, pipeline drift detection.",
+            "color": "purple",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "observability",
+              "monitoring",
+              "continuous intelligence",
+              "health snapshot",
+              "drift detection",
+              "scheduled check"
+            ],
+            "tools": [
+              "Task",
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__entries_query",
+              "mcp__attio__entries_list",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__members_list",
+              "mcp__attio__webhooks_list"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-observability-orchestrator.md"
         },
         {
           "name": "attio-orchestrator",
@@ -515,6 +1038,292 @@
           "sourcePath": "plugins/opspal-attio/agents/attio-people-manager.md"
         },
         {
+          "name": "attio-pipeline-analyst",
+          "description": "Use for Attio pipeline health analysis, stage conversion rates, and deal velocity.",
+          "file": "attio-pipeline-analyst.md",
+          "frontmatter": {
+            "name": "attio-pipeline-analyst",
+            "description": "Use for Attio pipeline health analysis, stage conversion rates, and deal velocity.",
+            "color": "orange",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "pipeline health",
+              "funnel",
+              "conversion rate",
+              "velocity",
+              "stage distribution",
+              "bottleneck",
+              "win rate"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get",
+              "mcp__attio__entries_query",
+              "mcp__attio__entries_list",
+              "mcp__attio__entries_attribute_values",
+              "mcp__attio__records_query",
+              "mcp__attio__records_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__attributes_list_statuses"
+            ],
+            "disallowedTools": [
+              "mcp__attio__entries_create",
+              "mcp__attio__entries_upsert",
+              "mcp__attio__entries_update",
+              "mcp__attio__entries_update_overwrite",
+              "mcp__attio__entries_delete",
+              "mcp__attio__records_create",
+              "mcp__attio__records_update",
+              "mcp__attio__records_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-pipeline-analyst.md"
+        },
+        {
+          "name": "attio-query-specialist",
+          "description": "MUST BE USED for complex Attio filtering, cross-object path queries, and search operations.",
+          "file": "attio-query-specialist.md",
+          "frontmatter": {
+            "name": "attio-query-specialist",
+            "description": "MUST BE USED for complex Attio filtering, cross-object path queries, and search operations.",
+            "color": "blue",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "query",
+              "filter",
+              "search",
+              "find records",
+              "cross-object",
+              "path filter",
+              "advanced search"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_search",
+              "mcp__attio__records_list",
+              "mcp__attio__entries_query",
+              "mcp__attio__entries_list",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__lists_list"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-query-specialist.md"
+        },
+        {
+          "name": "attio-record-historian",
+          "description": "Use for Attio historic attribute value analysis — value changes over time.",
+          "file": "attio-record-historian.md",
+          "frontmatter": {
+            "name": "attio-record-historian",
+            "description": "Use for Attio historic attribute value analysis — value changes over time.",
+            "color": "purple",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "history",
+              "historic values",
+              "change history",
+              "who changed",
+              "audit trail",
+              "field changes",
+              "value timeline"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_get",
+              "mcp__attio__records_attribute_values",
+              "mcp__attio__entries_attribute_values",
+              "mcp__attio__attributes_list",
+              "mcp__attio__objects_list",
+              "mcp__attio__lists_list",
+              "mcp__attio__members_list"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_create",
+              "mcp__attio__records_update",
+              "mcp__attio__records_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-record-historian.md"
+        },
+        {
+          "name": "attio-revenue-intelligence",
+          "description": "Use for Attio revenue analytics, ARR modeling, and GTM funnel analysis.",
+          "file": "attio-revenue-intelligence.md",
+          "frontmatter": {
+            "name": "attio-revenue-intelligence",
+            "description": "Use for Attio revenue analytics, ARR modeling, and GTM funnel analysis.",
+            "color": "purple",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "revenue",
+              "arr",
+              "waterfall",
+              "pipeline coverage",
+              "weighted pipeline",
+              "cohort",
+              "forecast",
+              "revenue report"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_get",
+              "mcp__attio__records_attribute_values",
+              "mcp__attio__entries_query",
+              "mcp__attio__entries_list",
+              "mcp__attio__entries_attribute_values",
+              "mcp__attio__lists_list",
+              "mcp__attio__lists_get",
+              "mcp__attio__attributes_list",
+              "mcp__attio__attributes_list_statuses",
+              "mcp__attio__objects_list"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_create",
+              "mcp__attio__records_update",
+              "mcp__attio__records_delete",
+              "mcp__attio__entries_create",
+              "mcp__attio__entries_update",
+              "mcp__attio__entries_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-revenue-intelligence.md"
+        },
+        {
+          "name": "attio-salesforce-bridge",
+          "description": "MUST BE USED for Salesforce-Attio data synchronization.",
+          "file": "attio-salesforce-bridge.md",
+          "frontmatter": {
+            "name": "attio-salesforce-bridge",
+            "description": "MUST BE USED for Salesforce-Attio data synchronization.",
+            "color": "blue",
+            "model": "sonnet",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "salesforce",
+              "sfdc",
+              "sync salesforce",
+              "salesforce to attio",
+              "attio to salesforce"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "Task",
+              "TodoWrite",
+              "mcp__attio__records_query",
+              "mcp__attio__records_upsert",
+              "mcp__attio__records_get",
+              "mcp__attio__entries_upsert",
+              "mcp__attio__attributes_list",
+              "mcp__attio__objects_list",
+              "mcp__attio__lists_list",
+              "mcp__salesforce__query",
+              "mcp__salesforce__create",
+              "mcp__salesforce__update",
+              "mcp__salesforce__describe"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-salesforce-bridge.md"
+        },
+        {
+          "name": "attio-scim-admin",
+          "description": "Use for Attio enterprise SCIM 2.0 user and group provisioning.",
+          "file": "attio-scim-admin.md",
+          "frontmatter": {
+            "name": "attio-scim-admin",
+            "description": "Use for Attio enterprise SCIM 2.0 user and group provisioning.",
+            "color": "gray",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": "[attio, scim, provisioning, user provisioning, group management, idp, identity provider, enterprise admin]",
+            "tools": "[Read, Write, Grep, Bash, TodoWrite, mcp__attio__scim_users_list, mcp__attio__scim_users_get, mcp__attio__scim_users_create, mcp__attio__scim_users_update, mcp__attio__scim_users_delete, mcp__attio__scim_groups_list, mcp__attio__scim_groups_get, mcp__attio__members_list]"
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-scim-admin.md"
+        },
+        {
+          "name": "attio-users-workspaces-manager",
+          "description": "Use for Attio custom object management (users, workspaces) and SCIM configuration.",
+          "file": "attio-users-workspaces-manager.md",
+          "frontmatter": {
+            "name": "attio-users-workspaces-manager",
+            "description": "Use for Attio custom object management (users, workspaces) and SCIM configuration.",
+            "color": "gray",
+            "model": "haiku",
+            "version": "1.0.0",
+            "created": "2026-04-10",
+            "triggerKeywords": [
+              "attio",
+              "users object",
+              "workspaces object",
+              "custom objects",
+              "product analytics",
+              "user tracking",
+              "scim read"
+            ],
+            "tools": [
+              "Read",
+              "Write",
+              "Grep",
+              "Bash",
+              "TodoWrite",
+              "mcp__attio__objects_list",
+              "mcp__attio__objects_get",
+              "mcp__attio__records_query",
+              "mcp__attio__records_list",
+              "mcp__attio__records_get",
+              "mcp__attio__records_attribute_values",
+              "mcp__attio__attributes_list",
+              "mcp__attio__lists_list",
+              "mcp__attio__entries_query"
+            ],
+            "disallowedTools": [
+              "mcp__attio__records_delete",
+              "mcp__attio__entries_delete",
+              "mcp__attio__objects_delete"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/agents/attio-users-workspaces-manager.md"
+        },
+        {
           "name": "attio-workspace-discovery",
           "description": "MUST BE USED for read-only Attio workspace exploration.",
           "file": "attio-workspace-discovery.md",
@@ -594,6 +1403,56 @@
           "sourcePath": "plugins/opspal-attio/commands/attio-auth.md"
         },
         {
+          "name": "attio-automation-audit",
+          "description": "Webhook and integration health audit for Attio",
+          "file": "attio-automation-audit.md",
+          "frontmatter": {
+            "description": "Webhook and integration health audit for Attio",
+            "argument-hint": "[--check-urls] [--verify-hmac]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-automation-audit.md"
+        },
+        {
+          "name": "attio-bulk-export",
+          "description": "Export Attio records with pagination",
+          "file": "attio-bulk-export.md",
+          "frontmatter": {
+            "description": "Export Attio records with pagination",
+            "argument-hint": "[--object people|companies] [--format json|csv] [--output path]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-bulk-export.md"
+        },
+        {
+          "name": "attio-bulk-import",
+          "description": "Sequential loop import wizard for Attio records",
+          "file": "attio-bulk-import.md",
+          "frontmatter": {
+            "description": "Sequential loop import wizard for Attio records",
+            "argument-hint": "[--object people|companies] [--file path.csv] [--dry-run] [--matching-attribute slug]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-bulk-import.md"
+        },
+        {
+          "name": "attio-comments",
+          "description": "Manage Attio comments and collaboration threads",
+          "file": "attio-comments.md",
+          "frontmatter": {
+            "description": "Manage Attio comments and collaboration threads",
+            "argument-hint": "[action: list|create|resolve] [--record object:record-id] [--thread thread-id]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-comments.md"
+        },
+        {
+          "name": "attio-custom-objects",
+          "description": "Custom object design wizard for Attio",
+          "file": "attio-custom-objects.md",
+          "frontmatter": {
+            "description": "Custom object design wizard for Attio",
+            "argument-hint": "[--name slug] [--template path.json]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-custom-objects.md"
+        },
+        {
           "name": "attio-dedup",
           "description": "Duplicate detection wizard for Attio records",
           "file": "attio-dedup.md",
@@ -602,6 +1461,106 @@
             "argument-hint": "[--object=people|companies] [--dry-run]"
           },
           "sourcePath": "plugins/opspal-attio/commands/attio-dedup.md"
+        },
+        {
+          "name": "attio-enrich",
+          "description": "Data enrichment workflow for Attio records",
+          "file": "attio-enrich.md",
+          "frontmatter": {
+            "description": "Data enrichment workflow for Attio records",
+            "argument-hint": "[--object people|companies] [--scope incomplete|all] [--dry-run]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-enrich.md"
+        },
+        {
+          "name": "attio-files",
+          "description": "File management operations for Attio",
+          "file": "attio-files.md",
+          "frontmatter": {
+            "description": "File management operations for Attio",
+            "argument-hint": "[action: list|upload|download|mkdir] [--record object:record-id]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-files.md"
+        },
+        {
+          "name": "attio-governance-audit",
+          "description": "Full governance and compliance audit for Attio workspace",
+          "file": "attio-governance-audit.md",
+          "frontmatter": {
+            "description": "Full governance and compliance audit for Attio workspace",
+            "argument-hint": "[--scope full|quick] [--dimension schema|access|webhook|data|change-control]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-governance-audit.md"
+        },
+        {
+          "name": "attio-history",
+          "description": "Historic value analysis for an Attio record or attribute",
+          "file": "attio-history.md",
+          "frontmatter": {
+            "description": "Historic value analysis for an Attio record or attribute",
+            "argument-hint": "[object] [record-id] [--attribute slug] [--timeline]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-history.md"
+        },
+        {
+          "name": "attio-meetings",
+          "description": "Attio meeting management and transcript access",
+          "file": "attio-meetings.md",
+          "frontmatter": {
+            "description": "Attio meeting management and transcript access",
+            "argument-hint": "[action: list|create|transcript] [--linked-to object:record-id] [--since 7d]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-meetings.md"
+        },
+        {
+          "name": "attio-migration",
+          "description": "Cross-CRM migration wizard for Attio",
+          "file": "attio-migration.md",
+          "frontmatter": {
+            "description": "Cross-CRM migration wizard for Attio",
+            "argument-hint": "[--source hubspot|salesforce|csv] [--object people|companies] [--dry-run] [--resume migration-id]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-migration.md"
+        },
+        {
+          "name": "attio-notes-add",
+          "description": "Add a note to an Attio record",
+          "file": "attio-notes-add.md",
+          "frontmatter": {
+            "description": "Add a note to an Attio record",
+            "argument-hint": "[object] [record-id] [--format plaintext|markdown]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-notes-add.md"
+        },
+        {
+          "name": "attio-observability-dashboard",
+          "description": "View current Attio workspace health metrics",
+          "file": "attio-observability-dashboard.md",
+          "frontmatter": {
+            "description": "View current Attio workspace health metrics",
+            "argument-hint": "[--compare-previous] [--format summary|detail]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-observability-dashboard.md"
+        },
+        {
+          "name": "attio-observability-setup",
+          "description": "Configure continuous Attio workspace monitoring",
+          "file": "attio-observability-setup.md",
+          "frontmatter": {
+            "description": "Configure continuous Attio workspace monitoring",
+            "argument-hint": "[--type health-snapshot|pipeline-drift|data-quality] [--cron expression]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-observability-setup.md"
+        },
+        {
+          "name": "attio-pipeline-health",
+          "description": "Pipeline conversion and velocity report for Attio lists",
+          "file": "attio-pipeline-health.md",
+          "frontmatter": {
+            "description": "Pipeline conversion and velocity report for Attio lists",
+            "argument-hint": "[--list slug] [--period 30d|90d|all]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-pipeline-health.md"
         },
         {
           "name": "attio-preflight",
@@ -614,6 +1573,66 @@
           "sourcePath": "plugins/opspal-attio/commands/attio-preflight.md"
         },
         {
+          "name": "attio-query",
+          "description": "Interactive query builder for Attio records and entries",
+          "file": "attio-query.md",
+          "frontmatter": {
+            "description": "Interactive query builder for Attio records and entries",
+            "argument-hint": "[object] [--filter key=value] [--sort field:asc|desc] [--limit N]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-query.md"
+        },
+        {
+          "name": "attio-revenue-report",
+          "description": "ARR waterfall and pipeline coverage report for Attio",
+          "file": "attio-revenue-report.md",
+          "frontmatter": {
+            "description": "ARR waterfall and pipeline coverage report for Attio",
+            "argument-hint": "[--list slug] [--period Q1|Q2|Q3|Q4|YTD] [--target amount]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-revenue-report.md"
+        },
+        {
+          "name": "attio-schema",
+          "description": "Inspect Attio workspace schema (objects, attributes, lists)",
+          "file": "attio-schema.md",
+          "frontmatter": {
+            "description": "Inspect Attio workspace schema (objects, attributes, lists)",
+            "argument-hint": "[object|list] [--detail] [--format table|json]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-schema.md"
+        },
+        {
+          "name": "attio-sync-sfdc",
+          "description": "Salesforce-Attio sync analysis and data synchronization",
+          "file": "attio-sync-sfdc.md",
+          "frontmatter": {
+            "description": "Salesforce-Attio sync analysis and data synchronization",
+            "argument-hint": "[--direction sfdc-to-attio|attio-to-sfdc|bidirectional] [--object contacts|accounts|opportunities] [--dry-run]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-sync-sfdc.md"
+        },
+        {
+          "name": "attio-tasks",
+          "description": "Manage Attio tasks (create, list, complete, assign)",
+          "file": "attio-tasks.md",
+          "frontmatter": {
+            "description": "Manage Attio tasks (create, list, complete, assign)",
+            "argument-hint": "[action] [--assignee member-email] [--deadline YYYY-MM-DD]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-tasks.md"
+        },
+        {
+          "name": "attio-webhook-setup",
+          "description": "Webhook configuration wizard for Attio",
+          "file": "attio-webhook-setup.md",
+          "frontmatter": {
+            "description": "Webhook configuration wizard for Attio",
+            "argument-hint": "[--url target-url] [--events record.created,record.updated]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-webhook-setup.md"
+        },
+        {
           "name": "attio-workspace",
           "description": "Switch or list Attio workspaces",
           "file": "attio-workspace.md",
@@ -622,6 +1641,16 @@
             "argument-hint": "[action] [workspace-name]"
           },
           "sourcePath": "plugins/opspal-attio/commands/attio-workspace.md"
+        },
+        {
+          "name": "attio-workspace-report",
+          "description": "Generate full Attio workspace health report",
+          "file": "attio-workspace-report.md",
+          "frontmatter": {
+            "description": "Generate full Attio workspace health report",
+            "argument-hint": "[--scope full|quick] [--compare-previous]"
+          },
+          "sourcePath": "plugins/opspal-attio/commands/attio-workspace-report.md"
         },
         {
           "name": "checkdependencies",
@@ -651,6 +1680,32 @@
           "sourcePath": "plugins/opspal-attio/skills/attio-api-reference/SKILL.md"
         },
         {
+          "name": "attio-attribute-types",
+          "description": "Attio attribute types: all 17 types with creation patterns, value shapes, validation rules, and configuration options.",
+          "file": "attio-attribute-types/SKILL.md",
+          "frontmatter": {
+            "name": "attio-attribute-types",
+            "description": "Attio attribute types: all 17 types with creation patterns, value shapes, validation rules, and configuration options.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-attribute-types/SKILL.md"
+        },
+        {
+          "name": "attio-custom-objects-guide",
+          "description": "Attio custom object design: creation patterns, relationship modeling, migration from flat CRM schemas, and lifecycle management.",
+          "file": "attio-custom-objects-guide/SKILL.md",
+          "frontmatter": {
+            "name": "attio-custom-objects-guide",
+            "description": "Attio custom object design: creation patterns, relationship modeling, migration from flat CRM schemas, and lifecycle management.",
+            "allowed-tools": "[Read, Grep, Glob]"
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-custom-objects-guide/SKILL.md"
+        },
+        {
           "name": "attio-data-model",
           "description": "Attio data model: objects, records, attributes (17 types), lists (pipelines), entries, actors, and how they relate.",
           "file": "attio-data-model/SKILL.md",
@@ -664,6 +1719,133 @@
             ]
           },
           "sourcePath": "plugins/opspal-attio/skills/attio-data-model/SKILL.md"
+        },
+        {
+          "name": "attio-governance-framework",
+          "description": "Attio governance methodology: delete safety, change control, compliance auditing, and workspace governance scoring.",
+          "file": "attio-governance-framework/SKILL.md",
+          "frontmatter": {
+            "name": "attio-governance-framework",
+            "description": "Attio governance methodology: delete safety, change control, compliance auditing, and workspace governance scoring.",
+            "allowed-tools": "[Read, Grep, Glob]"
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-governance-framework/SKILL.md"
+        },
+        {
+          "name": "attio-historic-values",
+          "description": "Attio historic attribute values: value timeline, actor tracking, change detection, and audit trail patterns.",
+          "file": "attio-historic-values/SKILL.md",
+          "frontmatter": {
+            "name": "attio-historic-values",
+            "description": "Attio historic attribute values: value timeline, actor tracking, change detection, and audit trail patterns.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-historic-values/SKILL.md"
+        },
+        {
+          "name": "attio-integration-patterns",
+          "description": "Attio integration patterns: webhooks, HMAC verification, cross-platform field mapping, and sync strategies.",
+          "file": "attio-integration-patterns/SKILL.md",
+          "frontmatter": {
+            "name": "attio-integration-patterns",
+            "description": "Attio integration patterns: webhooks, HMAC verification, cross-platform field mapping, and sync strategies.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-integration-patterns/SKILL.md"
+        },
+        {
+          "name": "attio-meeting-intelligence",
+          "description": "Attio meeting operations: meeting lifecycle, call recordings, transcripts, and meeting-to-CRM enrichment patterns.",
+          "file": "attio-meeting-intelligence/SKILL.md",
+          "frontmatter": {
+            "name": "attio-meeting-intelligence",
+            "description": "Attio meeting operations: meeting lifecycle, call recordings, transcripts, and meeting-to-CRM enrichment patterns.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-meeting-intelligence/SKILL.md"
+        },
+        {
+          "name": "attio-observability-layer",
+          "description": "Attio observability: workspace health snapshots, pipeline drift detection, continuous monitoring, and alerting patterns.",
+          "file": "attio-observability-layer/SKILL.md",
+          "frontmatter": {
+            "name": "attio-observability-layer",
+            "description": "Attio observability: workspace health snapshots, pipeline drift detection, continuous monitoring, and alerting patterns.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-observability-layer/SKILL.md"
+        },
+        {
+          "name": "attio-pipeline-operations",
+          "description": "Attio pipeline operations: list lifecycle, entry management, stage configuration, funnel analysis, and velocity tracking.",
+          "file": "attio-pipeline-operations/SKILL.md",
+          "frontmatter": {
+            "name": "attio-pipeline-operations",
+            "description": "Attio pipeline operations: list lifecycle, entry management, stage configuration, funnel analysis, and velocity tracking.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-pipeline-operations/SKILL.md"
+        },
+        {
+          "name": "attio-query-patterns",
+          "description": "Attio query and filter patterns: shorthand vs verbose syntax, operators, cross-object path filtering, pagination, and query score limits.",
+          "file": "attio-query-patterns/SKILL.md",
+          "frontmatter": {
+            "name": "attio-query-patterns",
+            "description": "Attio query and filter patterns: shorthand vs verbose syntax, operators, cross-object path filtering, pagination, and query score limits.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-query-patterns/SKILL.md"
+        },
+        {
+          "name": "attio-revenue-analytics",
+          "description": "Attio revenue analytics: ARR waterfall, pipeline coverage, weighted pipeline, cohort analysis, and revenue forecasting patterns.",
+          "file": "attio-revenue-analytics/SKILL.md",
+          "frontmatter": {
+            "name": "attio-revenue-analytics",
+            "description": "Attio revenue analytics: ARR waterfall, pipeline coverage, weighted pipeline, cohort analysis, and revenue forecasting patterns.",
+            "allowed-tools": [
+              "Read",
+              "Grep",
+              "Glob"
+            ]
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-revenue-analytics/SKILL.md"
+        },
+        {
+          "name": "attio-scim-enterprise",
+          "description": "Attio SCIM 2.0 enterprise provisioning: user/group management, IdP integration patterns, and compliance auditing.",
+          "file": "attio-scim-enterprise/SKILL.md",
+          "frontmatter": {
+            "name": "attio-scim-enterprise",
+            "description": "Attio SCIM 2.0 enterprise provisioning: user/group management, IdP integration patterns, and compliance auditing.",
+            "allowed-tools": "[Read, Grep, Glob]"
+          },
+          "sourcePath": "plugins/opspal-attio/skills/attio-scim-enterprise/SKILL.md"
         }
       ],
       "hooks": [
@@ -678,6 +1860,42 @@
           "file": "lib/error-handler.sh",
           "description": "Attio Plugin Error Handler",
           "sourcePath": "plugins/opspal-attio/hooks/lib/error-handler.sh"
+        },
+        {
+          "name": "observability-quota-monitor",
+          "file": "observability-quota-monitor.sh",
+          "description": "Observability Quota Monitor Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/observability-quota-monitor.sh"
+        },
+        {
+          "name": "post-assessment-trigger",
+          "file": "post-assessment-trigger.sh",
+          "description": "Post-Assessment Trigger Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/post-assessment-trigger.sh"
+        },
+        {
+          "name": "post-entry-upsert",
+          "file": "post-entry-upsert.sh",
+          "description": "Post-Entry Upsert Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/post-entry-upsert.sh"
+        },
+        {
+          "name": "post-meeting-create",
+          "file": "post-meeting-create.sh",
+          "description": "Post-Meeting Create Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/post-meeting-create.sh"
+        },
+        {
+          "name": "post-migration-checkpoint",
+          "file": "post-migration-checkpoint.sh",
+          "description": "hooks/post-migration-checkpoint.sh",
+          "sourcePath": "plugins/opspal-attio/hooks/post-migration-checkpoint.sh"
+        },
+        {
+          "name": "post-webhook-create",
+          "file": "post-webhook-create.sh",
+          "description": "Post-Webhook-Create Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/post-webhook-create.sh"
         },
         {
           "name": "post-workspace-auth",
@@ -698,16 +1916,52 @@
           "sourcePath": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh"
         },
         {
+          "name": "pre-bulk-loop",
+          "file": "pre-bulk-loop.sh",
+          "description": "Pre-Bulk-Loop Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-bulk-loop.sh"
+        },
+        {
           "name": "pre-entry-delete",
           "file": "pre-entry-delete.sh",
           "description": "Pre-Entry Delete Hook - Attio Plugin",
           "sourcePath": "plugins/opspal-attio/hooks/pre-entry-delete.sh"
         },
         {
+          "name": "pre-object-delete",
+          "file": "pre-object-delete.sh",
+          "description": "hooks/pre-object-delete.sh",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-object-delete.sh"
+        },
+        {
+          "name": "pre-rate-limit-read-warn",
+          "file": "pre-rate-limit-read-warn.sh",
+          "description": "Pre-Rate-Limit Read Warn Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh"
+        },
+        {
           "name": "pre-record-delete",
           "file": "pre-record-delete.sh",
           "description": "Pre-Record Delete Hook - Attio Plugin",
           "sourcePath": "plugins/opspal-attio/hooks/pre-record-delete.sh"
+        },
+        {
+          "name": "pre-schema-mutate",
+          "file": "pre-schema-mutate.sh",
+          "description": "Pre-Schema Mutate Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-schema-mutate.sh"
+        },
+        {
+          "name": "pre-scim-mutate",
+          "file": "pre-scim-mutate.sh",
+          "description": "hooks/pre-scim-mutate.sh",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-scim-mutate.sh"
+        },
+        {
+          "name": "pre-search-beta-warning",
+          "file": "pre-search-beta-warning.sh",
+          "description": "Pre-Search Beta Warning Hook - Attio Plugin",
+          "sourcePath": "plugins/opspal-attio/hooks/pre-search-beta-warning.sh"
         },
         {
           "name": "session-start-attio",
@@ -730,6 +1984,12 @@
           "sourcePath": "plugins/opspal-attio/scripts/lib/add-workspace-config.js"
         },
         {
+          "name": "assessment-history-tracker",
+          "file": "lib/assessment-history-tracker.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/assessment-history-tracker.js"
+        },
+        {
           "name": "attio-auth-manager",
           "file": "lib/attio-auth-manager.js",
           "extension": ".js",
@@ -742,10 +2002,82 @@
           "sourcePath": "plugins/opspal-attio/scripts/lib/attio-field-policy-validator.js"
         },
         {
+          "name": "attio-loop-executor",
+          "file": "lib/attio-loop-executor.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/attio-loop-executor.js"
+        },
+        {
+          "name": "attribute-schema-cache",
+          "file": "lib/attribute-schema-cache.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/attribute-schema-cache.js"
+        },
+        {
+          "name": "auto-implementer",
+          "file": "lib/auto-implementer.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/auto-implementer.js"
+        },
+        {
+          "name": "csv-to-records-transformer",
+          "file": "lib/csv-to-records-transformer.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/csv-to-records-transformer.js"
+        },
+        {
           "name": "emit-automation-event",
           "file": "lib/emit-automation-event.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-attio/scripts/lib/emit-automation-event.js"
+        },
+        {
+          "name": "governance-audit-runner",
+          "file": "lib/governance-audit-runner.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/governance-audit-runner.js"
+        },
+        {
+          "name": "history-value-fetcher",
+          "file": "lib/history-value-fetcher.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/history-value-fetcher.js"
+        },
+        {
+          "name": "meeting-transcript-fetcher",
+          "file": "lib/meeting-transcript-fetcher.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/meeting-transcript-fetcher.js"
+        },
+        {
+          "name": "migration-state-manager",
+          "file": "lib/migration-state-manager.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/migration-state-manager.js"
+        },
+        {
+          "name": "observability-scheduler",
+          "file": "lib/observability-scheduler.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/observability-scheduler.js"
+        },
+        {
+          "name": "pipeline-drift-detector",
+          "file": "lib/pipeline-drift-detector.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/pipeline-drift-detector.js"
+        },
+        {
+          "name": "pipeline-funnel-calculator",
+          "file": "lib/pipeline-funnel-calculator.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/pipeline-funnel-calculator.js"
+        },
+        {
+          "name": "query-builder",
+          "file": "lib/query-builder.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/query-builder.js"
         },
         {
           "name": "rate-limit-manager",
@@ -760,10 +2092,46 @@
           "sourcePath": "plugins/opspal-attio/scripts/lib/record-dedup-detector.js"
         },
         {
+          "name": "record-export-paginator",
+          "file": "lib/record-export-paginator.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/record-export-paginator.js"
+        },
+        {
+          "name": "revenue-waterfall-calculator",
+          "file": "lib/revenue-waterfall-calculator.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/revenue-waterfall-calculator.js"
+        },
+        {
+          "name": "scim-provisioning-auditor",
+          "file": "lib/scim-provisioning-auditor.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/scim-provisioning-auditor.js"
+        },
+        {
+          "name": "webhook-hmac-verifier",
+          "file": "lib/webhook-hmac-verifier.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/webhook-hmac-verifier.js"
+        },
+        {
           "name": "workspace-context-manager",
           "file": "lib/workspace-context-manager.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-attio/scripts/lib/workspace-context-manager.js"
+        },
+        {
+          "name": "workspace-health-snapshotter",
+          "file": "lib/workspace-health-snapshotter.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/workspace-health-snapshotter.js"
+        },
+        {
+          "name": "workspace-quirks-detector",
+          "file": "lib/workspace-quirks-detector.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-attio/scripts/lib/workspace-quirks-detector.js"
         }
       ]
     },
@@ -1140,7 +2508,7 @@
             "model": "sonnet",
             "description": "Use PROACTIVELY before making changes that affect synced fields or shared objects.",
             "intent": "Analyze cross-platform field and object dependencies to prevent regressions from changes.",
-            "dependencies": "[sfdc-field-analyzer, sfdc-dependency-analyzer, hubspot-property-manager]",
+            "dependencies": "[sfdc-field-analyzer, sfdc-dependency-analyzer, hubspot-property-manager, attio-attribute-architect]",
             "failure_modes": "[sync_config_not_found, insufficient_permissions, platform_not_connected]",
             "color": "red",
             "tools": [
@@ -2727,14 +4095,14 @@
         },
         {
           "name": "revops-maturity-orchestrator",
-          "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
+          "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
           "file": "revops-maturity-orchestrator.md",
           "frontmatter": {
             "name": "revops-maturity-orchestrator",
             "model": "opus",
-            "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
+            "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
             "intent": "Produce a unified RevOps maturity score across all connected platforms with actionable remediation roadmap.",
-            "dependencies": "[sfdc-revops-auditor, hubspot-assessment-analyzer, marketo-orchestrator, web-viz-generator, pdf-generator, benchmark-research-agent, mcp-scoring-orchestrator]",
+            "dependencies": "[sfdc-revops-auditor, hubspot-assessment-analyzer, marketo-orchestrator, attio-assessment-analyzer, web-viz-generator, pdf-generator, benchmark-research-agent, mcp-scoring-orchestrator]",
             "failure_modes": "[no_platforms_connected, single_platform_only, assessment_timeout, scoring_tool_unavailable]",
             "color": "purple",
             "tools": [
@@ -30026,10 +31394,10 @@
   ],
   "totals": {
     "plugins": 9,
-    "agents": 306,
-    "commands": 288,
-    "skills": 164,
-    "hooks": 213,
-    "scripts": 1859
+    "agents": 327,
+    "commands": 310,
+    "skills": 175,
+    "hooks": 225,
+    "scripts": 1878
   }
 }

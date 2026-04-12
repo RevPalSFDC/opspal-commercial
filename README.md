@@ -91,11 +91,11 @@ git pull origin main
 | Metric | Count |
 |--------|-------|
 | Plugins | 9 |
-| Agents | 306 |
-| Commands | 288 |
-| Skills | 164 |
-| Hooks | 213 |
-| Scripts | 1859 |
+| Agents | 327 |
+| Commands | 310 |
+| Skills | 175 |
+| Hooks | 225 |
+| Scripts | 1878 |
 
 
 ## Plugin Overview
@@ -105,7 +105,7 @@ Install `opspal-core` first, then add only the domain plugins you actually need.
 | Plugin | Version | Status | Agents | Commands | Focus |
 |--------|---------|--------|--------|----------|-------|
 | [`opspal-ai-consult`](plugins/opspal-ai-consult) | 1.4.14 | active | 2 | 3 | Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemi... |
-| [`opspal-attio`](plugins/opspal-attio) | 1.0.0 | active | 8 | 6 | Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, we... |
+| [`opspal-attio`](plugins/opspal-attio) | 2.0.0 | active | 29 | 28 | Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, we... |
 | [`opspal-core`](plugins/opspal-core) | 2.55.9 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
 | [`opspal-gtm-planning`](plugins/opspal-gtm-planning) | 2.3.10 | active | 13 | 16 | GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes ter... |
 | [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.31 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
