@@ -1,7 +1,35 @@
 {
-  "generatedAt": "2026-04-10T13:47:44.265Z",
+  "generatedAt": "2026-04-12T01:13:42.101Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
+    {
+      "signature": "curl-timeout-required|plugins/opspal-attio/hooks/pre-bash-attio-api.sh|attio.*curl)'",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "line": 93,
+      "snippet": "attio.*curl)'"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-attio/hooks/pre-bash-attio-api.sh|curl[[:space:]].*attio",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "line": 93,
+      "snippet": "curl[[:space:]].*attio"
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-attio/hooks/pre-bash-attio-api.sh|emit_advisory \\ \"ROUTING_ADVISORY: Direct Attio API call via Bash curl detected. Use mcp__attio__* MCP tools instead to ensure quota tracking, permanent-delete guards, and schema-change warnings are applied. Proceeding autonomously.\" \\ \"Direct curl bypasses: (1) api-quota-monitor.sh rate tracking, (2) pre-record-delete.sh and pre-entry-delete.sh permanent-delete warnings, (3) pre-attribute-delete.sh schema-change guards. All Attio interactions should use mcp__attio__* tools.\"",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "line": 96,
+      "snippet": "emit_advisory \\ \"ROUTING_ADVISORY: Direct Attio API call via Bash curl detected. Use mcp__attio__* MCP tools instead to ensure quota tracking, permanent-delete guards, and schema-change warnings are applied. Proceeding autonomously.\" \\ \"Direct curl bypasses: (1) api-quota-monitor.sh rate tracking, (2) pre-record-delete.sh and pre-entry-delete.sh permanent-delete warnings, (3) pre-attribute-delete.sh schema-change guards. All Attio interactions should use mcp__attio__* tools.\""
+    },
+    {
+      "signature": "curl-timeout-required|plugins/opspal-attio/hooks/pre-bash-attio-api.sh|log_warn \"Direct curl to Attio API detected — MCP tools recommended\" 2>/dev/null",
+      "rule": "curl-timeout-required",
+      "file": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "line": 94,
+      "snippet": "log_warn \"Direct curl to Attio API detected — MCP tools recommended\" 2>/dev/null"
+    },
     {
       "signature": "curl-timeout-required|plugins/opspal-core/hooks/post-reflect-alerter.sh|if ! command -v curl &> /dev/null",
       "rule": "curl-timeout-required",
