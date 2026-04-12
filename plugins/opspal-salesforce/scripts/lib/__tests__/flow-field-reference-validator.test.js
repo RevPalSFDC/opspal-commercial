@@ -226,6 +226,104 @@ describe('FlowFieldReferenceValidator', () => {
 
             expect(refs.length).toBeGreaterThan(0);
         });
+
+        test('should classify filter fields as read context', () => {
+            const flowXml = {
+                Flow: {
+                    recordLookups: [{
+                        name: ['Get_Account'],
+                        object: ['Account'],
+                        filters: [{
+                            field: ['Type'],
+                            operator: ['EqualTo'],
+                            value: [{ stringValue: ['Customer'] }]
+                        }]
+                    }]
+                }
+            };
+
+            const refs = validator.extractFieldReferences(flowXml);
+            const typeRef = refs.find(r => r.field === 'Type');
+
+            expect(typeRef).toBeDefined();
+            expect(typeRef.elementType).toBe('filter');
+        });
+
+        test('should classify inputAssignment fields as write context', () => {
+            const flowXml = {
+                Flow: {
+                    recordUpdates: [{
+                        name: ['Update_Account'],
+                        object: ['Account'],
+                        inputAssignments: [{
+                            field: ['Description'],
+                            value: [{ stringValue: ['Updated'] }]
+                        }]
+                    }]
+                }
+            };
+
+            const refs = validator.extractFieldReferences(flowXml);
+            const descRef = refs.find(r => r.field === 'Description');
+
+            expect(descRef).toBeDefined();
+            expect(descRef.elementType).toBe('inputAssignment');
+        });
+
+        test('should classify outputAssignment fields as read context', () => {
+            const flowXml = {
+                Flow: {
+                    recordLookups: [{
+                        name: ['Get_Account'],
+                        object: ['Account'],
+                        outputAssignments: [{
+                            field: ['Name'],
+                            assignToReference: ['varAccountName']
+                        }]
+                    }]
+                }
+            };
+
+            const refs = validator.extractFieldReferences(flowXml);
+            const nameRef = refs.find(r => r.field === 'Name');
+
+            expect(nameRef).toBeDefined();
+            expect(nameRef.elementType).toBe('outputAssignment');
+        });
+
+        test('should not flag read-context fields as PERMISSION_DENIED', async () => {
+            // Formula fields are readable but not updateable — they should not
+            // trigger PERMISSION_DENIED when used in filters or queriedFields
+            const flowXml = {
+                Flow: {
+                    recordLookups: [{
+                        name: ['Get_Account'],
+                        object: ['Account'],
+                        filters: [{
+                            field: ['FormulaField__c']
+                        }]
+                    }],
+                    recordUpdates: [{
+                        name: ['Update_Account'],
+                        object: ['Account'],
+                        inputAssignments: [{
+                            field: ['FormulaField__c'],
+                            value: [{ stringValue: ['test'] }]
+                        }]
+                    }]
+                }
+            };
+
+            const refs = validator.extractFieldReferences(flowXml);
+            const filterRef = refs.find(r => r.field === 'FormulaField__c' && r.elementType === 'filter');
+            const writeRef = refs.find(r => r.field === 'FormulaField__c' && r.elementType === 'inputAssignment');
+
+            expect(filterRef).toBeDefined();
+            expect(writeRef).toBeDefined();
+            // Write context should be checked for writability, read context should not
+            expect(['inputAssignment', 'assignment']).toContain(writeRef.elementType);
+            expect(['inputAssignment', 'assignment']).not.toContain(filterRef.elementType);
+        });
     });
 
     describe('Levenshtein Distance', () => {

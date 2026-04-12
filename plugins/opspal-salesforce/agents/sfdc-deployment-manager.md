@@ -1047,6 +1047,37 @@ ${topRecommendation}
 
 **Root Cause Addressed:** Reflection FP-008 - Agents claimed success without verification, causing false positives.
 
+### Post-Deploy Flow Activation (REQUIRED when deploying Flows)
+
+The Salesforce Metadata API deploys new flows as Draft/Inactive when the flow has never
+existed in the target org. The `<status>Active</status>` in the XML is a request, not a
+guarantee. Always verify and activate after deploying flows.
+
+**Verify and auto-activate deployed flows:**
+```bash
+node scripts/lib/flow-activation-verifier.js batch-verify <org> \
+    --flows "Flow_Api_Name_1,Flow_Api_Name_2" --auto-activate --json
+```
+
+**If programmatic activation fails** (e.g., Apex-invoking flows require System Administrator
+profile), use the Tooling API directly. Note: FlowDefinition is deprecated in Metadata API
+v44+ but the Tooling API PATCH endpoint still works. Version numbers are org-specific —
+always query the target org's LatestVersionNumber first.
+
+```bash
+# Step 1: Get FlowDefinition ID and version numbers from TARGET org
+sf data query --query "SELECT Id, ActiveVersionNumber, LatestVersionNumber FROM FlowDefinition WHERE DeveloperName = '<FlowName>'" --target-org <org> --use-tooling-api --json
+
+# Step 2: Activate via Tooling API PATCH (use LatestVersionNumber from Step 1)
+curl -s -X PATCH "${INSTANCE_URL}/services/data/v62.0/tooling/sobjects/FlowDefinition/<Id>" \
+    -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{"Metadata":{"activeVersionNumber":<LatestVersionNumber>}}'
+```
+
+Ref: https://developer.salesforce.com/docs/atlas.en-us.api_tooling.meta/api_tooling/tooling_api_objects_flowdefinition.htm
+Ref: https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_flowdefinition.htm
+
 ### Post-Deployment Verification (REQUIRED)
 
 After EVERY deployment:

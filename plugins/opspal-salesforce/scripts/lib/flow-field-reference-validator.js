@@ -163,22 +163,31 @@ class FlowFieldReferenceValidator {
                 }
             }
 
-            // NEW: Check field permissions if enabled
+            // Check field permissions if enabled — only enforce writable for write contexts.
+            // Read contexts (filters, queriedFields, outputAssignments, formulas) only need
+            // the field to exist, which is already validated by validateFieldReference above.
+            // Ref: Salesforce FieldDescribeResult — updateable/createable are DML properties,
+            // not read properties. A field present in describe is readable by the running user.
             if (this.checkPermissions && fieldRef.object) {
-                const permissionResult = await this.validateFieldPermissions(fieldRef.object, fieldRef.field);
+                const isWriteContext = ['inputAssignment', 'assignment'].includes(fieldRef.elementType);
 
-                if (!permissionResult.valid || !permissionResult.writable) {
-                    result.errors.push({
-                        type: 'PERMISSION_DENIED',
-                        message: `Field ${fieldRef.field} on ${fieldRef.object} is not writable`,
-                        severity: 'ERROR',
-                        field: fieldRef.field,
-                        object: fieldRef.object,
-                        element: fieldRef.element,
-                        details: permissionResult.details,
-                        suggestion: 'Check field-level security or use a different field'
-                    });
-                    this.stats.permissionDenied++;
+                if (isWriteContext) {
+                    const permissionResult = await this.validateFieldPermissions(fieldRef.object, fieldRef.field);
+
+                    if (!permissionResult.valid || !permissionResult.writable) {
+                        result.errors.push({
+                            type: 'PERMISSION_DENIED',
+                            message: `Field ${fieldRef.field} on ${fieldRef.object} is not writable`,
+                            severity: 'ERROR',
+                            field: fieldRef.field,
+                            object: fieldRef.object,
+                            element: fieldRef.element,
+                            elementType: fieldRef.elementType,
+                            details: permissionResult.details,
+                            suggestion: 'Check field-level security or use a different field'
+                        });
+                        this.stats.permissionDenied++;
+                    }
                 }
             }
 
@@ -232,8 +241,18 @@ class FlowFieldReferenceValidator {
         const flow = flowXml.Flow || flowXml;
 
         // Helper to traverse flow and find field references
-        const traverse = (obj, objectContext = null) => {
+        // parentKey tracks the XML element name that contains this object,
+        // allowing read vs write context classification (e.g. 'filters' vs 'inputAssignments')
+        const traverse = (obj, objectContext = null, parentKey = null) => {
             if (typeof obj !== 'object' || obj === null) return;
+
+            // Preserve parentKey when traversing arrays
+            if (Array.isArray(obj)) {
+                for (const item of obj) {
+                    traverse(item, objectContext, parentKey);
+                }
+                return;
+            }
 
             // Check for field references
             if (obj.field && obj.field[0]) {
@@ -241,7 +260,7 @@ class FlowFieldReferenceValidator {
                     field: obj.field[0],
                     object: objectContext || this.guessObjectFromContext(obj),
                     element: obj.name?.[0] || 'unknown',
-                    elementType: this.getElementType(obj)
+                    elementType: this.getElementType(obj, parentKey)
                 });
             }
 
@@ -250,7 +269,7 @@ class FlowFieldReferenceValidator {
                 if (typeof obj[key] === 'object') {
                     // Update object context if recordLookups or similar
                     const newContext = obj.object?.[0] || objectContext;
-                    traverse(obj[key], newContext);
+                    traverse(obj[key], newContext, key);
                 }
             }
         };
@@ -486,7 +505,18 @@ class FlowFieldReferenceValidator {
         return null;
     }
 
-    getElementType(element) {
+    getElementType(element, parentKey = null) {
+        // Classify by parent XML key for accurate read/write context.
+        // Salesforce Flow XML nests field refs under these keys:
+        //   Write: inputAssignments (recordCreates/recordUpdates), assignmentItems
+        //   Read:  filters, outputAssignments, queriedFields, conditions
+        // See: https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_visual_workflow.htm
+        if (parentKey === 'inputAssignments') return 'inputAssignment';
+        if (parentKey === 'outputAssignments') return 'outputAssignment';
+        if (parentKey === 'filters' || parentKey === 'conditions') return 'filter';
+        if (parentKey === 'queriedFields') return 'queriedField';
+
+        // Fall back to element-level inspection
         if (element.assignmentItems) return 'assignment';
         if (element.filters) return 'filter';
         if (element.formula) return 'formula';

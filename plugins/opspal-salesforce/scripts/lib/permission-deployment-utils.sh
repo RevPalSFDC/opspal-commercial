@@ -182,6 +182,13 @@ deploy_all_permission_sets() {
     # Clean up temp directory
     rm -rf "$TEMP_DIR"
 
+    # Auto-assign deployed perm sets to the connected CLI user.
+    # Salesforce FLS grants in a perm set are not inherited until the perm set is
+    # explicitly assigned to the user. Without this step, the deploying user
+    # cannot access fields granted by perm sets they just deployed.
+    # Ref: https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_permissionsetassignment.htm
+    post_deploy_assign_cli_user "$org_alias"
+
     log_success "Permission deployment completed"
 }
 
@@ -227,6 +234,89 @@ EOF
     fi
 
     rm -rf "$deploy_dir"
+}
+
+# Auto-assign all deployed perm sets to the connected CLI user.
+# Resolves the CLI user via `sf org display`, then assigns each base perm set.
+# Skips assignment if already present (idempotent).
+post_deploy_assign_cli_user() {
+    local org_alias="${1:-$(get_org_alias)}"
+
+    log_section "Auto-assigning perm sets to CLI user"
+
+    # Get the connected CLI username from sf org display
+    local org_info
+    org_info=$(sf org display --target-org "$org_alias" --json 2>/dev/null) || {
+        log_warning "Could not resolve CLI user — skipping auto-assign"
+        return 0
+    }
+    local cli_username
+    cli_username=$(echo "$org_info" | jq -r '.result.username // empty')
+
+    if [ -z "$cli_username" ]; then
+        log_warning "No username found for org $org_alias — skipping auto-assign"
+        return 0
+    fi
+
+    log_info "CLI user: $cli_username"
+
+    # Assign each base perm set that was deployed
+    if [ -d "$TEMPLATE_DIR/base" ]; then
+        for perm_file in "$TEMPLATE_DIR/base"/*.permissionset-meta.xml; do
+            if [ -f "$perm_file" ]; then
+                local ps_name
+                ps_name=$(basename "$perm_file" .permissionset-meta.xml)
+                assign_permission_set "$cli_username" "$ps_name" "$org_alias"
+            fi
+        done
+    fi
+
+    # Verify FLS after assignment
+    verify_field_permissions "$cli_username" "$org_alias"
+}
+
+# Verify the CLI user's effective field permissions after perm set assignment.
+# Queries PermissionSetAssignment to confirm assignment count, then spot-checks
+# FieldPermissions on assigned perm sets.
+# Note: PermissionSet deploys (v40+) preserve omitted entries — unlisted fields
+# are ignored, not revoked. However, Profile deploys ARE destructive for omissions.
+# This check catches: (a) perm sets not assigned to user, (b) Profile-based FLS
+# regressions from mixed deploys, (c) explicit false entries in perm set XML.
+# Ref: https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_permissionset.htm
+# Ref: https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_fieldpermissions.htm
+verify_field_permissions() {
+    local username="$1"
+    local org_alias="${2:-$(get_org_alias)}"
+
+    log_info "Verifying field permissions for $username..."
+
+    # Count perm set assignments for the user
+    local count_query="SELECT COUNT() FROM PermissionSetAssignment WHERE Assignee.Username = '${username}' AND PermissionSet.IsOwnedByProfile = false"
+    local count_result
+    count_result=$(sf data query --query "$count_query" --target-org "$org_alias" --json 2>/dev/null) || {
+        log_warning "Could not verify perm set assignments"
+        return 0
+    }
+    local assignment_count
+    assignment_count=$(echo "$count_result" | jq -r '.result.totalSize // 0')
+    log_info "User has $assignment_count non-profile permission set assignments"
+
+    # Spot-check: count FieldPermissions across assigned perm sets
+    local fps_query="SELECT COUNT() FROM FieldPermissions WHERE Parent.IsOwnedByProfile = false AND ParentId IN (SELECT PermissionSetId FROM PermissionSetAssignment WHERE Assignee.Username = '${username}')"
+    local fps_result
+    fps_result=$(sf data query --query "$fps_query" --target-org "$org_alias" --json 2>/dev/null) || {
+        log_warning "Could not query FieldPermissions — SOQL may be unsupported for this object via REST"
+        return 0
+    }
+    local fps_count
+    fps_count=$(echo "$fps_result" | jq -r '.result.totalSize // 0')
+    log_info "FieldPermissions entries across assigned perm sets: $fps_count"
+
+    if [ "$fps_count" -eq 0 ] && [ "$assignment_count" -gt 0 ]; then
+        log_warning "ALERT: User has perm set assignments but zero FieldPermissions — possible FLS wipeout from partial XML deploy"
+    else
+        log_success "Field permission verification passed"
+    fi
 }
 
 # Assign permission set to user
