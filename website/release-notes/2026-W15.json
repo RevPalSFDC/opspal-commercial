@@ -1,30 +1,32 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week focused on making OpsPal more reliable and easier to use. The platform now automatically fixes common setup issues like missing dependencies and outdated configurations, while new data quality checks ensure your integrations stay compliant with business policies. Several HubSpot performance improvements bring it up to par with Salesforce capabilities.",
-  "published_at": "2026-04-10T17:54:54.857Z",
+  "summary": "This week brought significant improvements to automation reliability and system performance. OpsPal now automatically detects and fixes missing dependencies at startup, preventing workflow interruptions. Additionally, enhanced Salesforce integration ensures smoother data flow creation and proper permission handling.",
+  "published_at": "2026-04-12T01:26:55.396Z",
   "week_start": "2026-04-06",
-  "week_end": "2026-04-10",
+  "week_end": "2026-04-12",
   "has_breaking": false,
-  "total_commits": 111,
+  "total_commits": 124,
   "entries": [
     {
-      "category": "improved",
-      "plugin": "HubSpot",
-      "headline": "HubSpot integration now matches Salesforce performance capabilities",
-      "details": null,
+      "category": "fixed",
+      "plugin": "Salesforce",
+      "headline": "Salesforce workflows now validate permissions and context properly",
+      "details": [
+        "Flow creation and editing now includes proper permission checking",
+        "Automated permission assignment prevents access errors"
+      ],
       "commits": [
-        "d7f3d38"
+        "620ca48"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Rth",
-      "headline": "Added automated compliance checks for data quality policies",
+      "headline": "Enhanced compliance monitoring for automation workflows",
       "details": [
-        "Platform now verifies all data operations meet your business compliance requirements",
-        "Advisory-only checks provide recommendations without blocking workflows",
-        "Faster processing when dealing with unrelated commands"
+        "Workflows now validate against security policies automatically",
+        "Better enforcement of data handling requirements"
       ],
       "commits": [
         "ae9c3e3"
@@ -33,11 +35,10 @@
     {
       "category": "improved",
       "plugin": "Core Platform",
-      "headline": "Platform updates now include automatic cleanup and maintenance",
+      "headline": "System maintenance now runs automatically during updates",
       "details": [
-        "Removes old temporary files older than 7 days",
-        "Clears stuck session files after 5 minutes",
-        "Alerts you if memory usage files get too large"
+        "OpsPal cleans up old files and sessions automatically",
+        "Warnings appear when system memory usage gets high"
       ],
       "commits": [
         "46d5153"
@@ -46,40 +47,36 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Platform now removes broken integrations automatically",
+      "headline": "Salesforce form and permission management works more reliably",
       "details": [
-        "Works across all operating systems including Windows",
-        "Detects and removes any outdated marketplace integrations",
-        "Applies to all installed plugins, not just specific ones"
-      ],
-      "commits": [
-        "396a613"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Resolved three critical Salesforce integration issues",
-      "details": [
-        "Dynamic Forms now work properly when adding new fields to page layouts",
-        "New record types automatically get proper administrator permissions",
-        "Workflow routing no longer blocks sessions with keyword mismatches"
+        "Dynamic Forms detection prevents field visibility issues",
+        "New record types automatically get proper permissions",
+        "Workflow routing no longer blocks sessions unexpectedly"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "improved",
+      "category": "new",
       "plugin": "Core Platform",
-      "headline": "Platform automatically installs missing components at startup",
+      "headline": "OpsPal automatically fixes missing dependencies at startup",
       "details": [
-        "Detects and fixes missing dependencies when you start a session",
-        "Shows clear error messages and fix instructions when auto-repair fails",
-        "Runs repairs in background without interrupting your work"
+        "System detects and installs missing components automatically",
+        "Clear error messages show when manual fixes are needed",
+        "Background installation prevents workflow interruptions"
       ],
       "commits": [
         "26f0866"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Resolved false dependency warnings during startup",
+      "details": null,
+      "commits": [
+        "4255dd6"
       ]
     }
   ]
