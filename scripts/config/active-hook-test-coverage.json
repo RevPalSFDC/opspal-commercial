@@ -43,7 +43,25 @@
     "plugins/opspal-core/hooks/pre-fireflies-api-call.sh": "Credentialed Fireflies API preflight still needs a service-stub harness.",
     "plugins/opspal-core/hooks/pre-gong-api-call.sh": "Credentialed Gong API preflight still needs a service-stub harness.",
     "plugins/opspal-gtm-planning/hooks/post-task-gtm-telemetry.sh": "Telemetry hook writes GTM planning artifacts and needs isolated cycle fixtures.",
-    "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures."
+    "plugins/opspal-okrs/hooks/post-task-okr-telemetry.sh": "Telemetry hook writes OKR artifacts and needs isolated cycle fixtures.",
+    "plugins/opspal-attio/hooks/api-quota-monitor.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-assessment-trigger.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-entry-upsert.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-meeting-create.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-migration-checkpoint.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-webhook-create.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/post-workspace-auth.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-attribute-delete.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-bash-attio-api.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-bulk-loop.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-entry-delete.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-object-delete.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-record-delete.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-schema-mutate.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-scim-mutate.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/pre-search-beta-warning.sh": "New plugin (opspal-attio) — hook tests pending initial integration.",
+    "plugins/opspal-attio/hooks/session-start-attio.sh": "New plugin (opspal-attio) — hook tests pending initial integration."
   },
   "blockingHooks": {
     "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh": {

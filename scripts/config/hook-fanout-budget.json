@@ -2,8 +2,8 @@
   "defaultMax": 3,
   "budgets": {
     "PreToolUse :: Agent": {
-      "max": 11,
-      "reason": "Current layered agent-governance stack; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
+      "max": 13,
+      "reason": "Current layered agent-governance stack plus attio domain guard; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
     },
     "SessionStart :: *": {
       "max": 12,
@@ -14,8 +14,8 @@
       "reason": "Agent post-hooks now include AI consult plus GTM and OKR telemetry; hold the line here until the post-agent chain is consolidated."
     },
     "PreToolUse :: Bash": {
-      "max": 5,
-      "reason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, and Marketo plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
+      "max": 6,
+      "reason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, Marketo, and Attio plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
     },
     "UserPromptSubmit :: *": {
       "max": 8,

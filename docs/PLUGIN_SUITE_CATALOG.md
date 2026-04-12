@@ -31,7 +31,7 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.9 | active | 80 | 11 | 126 | 51 | 107 | 602 |
+| `opspal-core` | 2.55.10 | active | 80 | 11 | 126 | 51 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.9`
+- Version: `2.55.10`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`

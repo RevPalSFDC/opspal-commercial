@@ -1,12 +1,121 @@
 {
-  "generatedAt": "2026-04-10T14:33:43.030Z",
+  "generatedAt": "2026-04-12T01:18:13.897Z",
   "totals": {
-    "activeHooks": 102,
-    "coveredHooks": 90,
+    "activeHooks": 122,
+    "coveredHooks": 92,
     "allowlistedUntested": 12,
-    "missingCoverage": 0
+    "missingCoverage": 18
   },
-  "missingCoverage": [],
+  "missingCoverage": [
+    {
+      "hookPath": "plugins/opspal-attio/hooks/api-quota-monitor.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__*"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-assessment-trigger.sh",
+      "plugin": "opspal-attio",
+      "eventType": "SubagentStop",
+      "matcher": "attio-assessment-analyzer"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-entry-upsert.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__entries_upsert|mcp__attio__entries_create"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-meeting-create.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__meetings_create"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-migration-checkpoint.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__records_upsert"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-webhook-create.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__webhooks_create"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-workspace-auth.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__self_get"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-attribute-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_delete|mcp__attio__objects_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "Bash"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-bulk-loop.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "Agent"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-entry-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__entries_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-object-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__objects_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_query|mcp__attio__entries_query"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-record-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-schema-mutate.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-scim-mutate.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__scim_users_delete"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-search-beta-warning.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_search"
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/session-start-attio.sh",
+      "plugin": "opspal-attio",
+      "eventType": "SessionStart",
+      "matcher": "*"
+    }
+  ],
   "allowlistedUntested": [
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
@@ -102,6 +211,193 @@
       "matcher": "Agent",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/api-quota-monitor.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/observability-quota-monitor.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__records_query|mcp__attio__entries_query|mcp__attio__records_list|mcp__attio__entries_list",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-observability-quota-monitor.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-assessment-trigger.sh",
+      "plugin": "opspal-attio",
+      "eventType": "SubagentStop",
+      "matcher": "attio-assessment-analyzer",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-entry-upsert.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__entries_upsert|mcp__attio__entries_create",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-meeting-create.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__meetings_create",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-migration-checkpoint.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__records_upsert",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-webhook-create.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__webhooks_create",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/post-workspace-auth.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__self_get",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-attribute-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_delete|mcp__attio__objects_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "Bash",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-bulk-loop.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-entry-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__entries_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-object-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__objects_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_query|mcp__attio__entries_query",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-record-delete.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-schema-mutate.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-scim-mutate.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__scim_users_delete",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/pre-search-beta-warning.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_search",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/session-start-attio.sh",
+      "plugin": "opspal-attio",
+      "eventType": "SessionStart",
+      "matcher": "*",
+      "matchedTests": [],
+      "covered": false,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-attio/hooks/universal-agent-governance.sh",
+      "plugin": "opspal-attio",
+      "eventType": "PreToolUse",
+      "matcher": "Agent",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/unit/marketo-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/monday-universal-agent-governance.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance-cross-plugin.test.js",
+        "plugins/opspal-core/test/hooks/unit/universal-agent-governance.test.js"
       ],
       "covered": true,
       "allowReason": null
