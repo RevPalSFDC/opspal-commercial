@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-10T14:31:01.669Z",
+  "generatedAt": "2026-04-12T01:12:37.245Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -9,6 +9,22 @@
       "line": 21,
       "message": "Cross-plugin path reference to opspal-core found in opspal-ai-consult.",
       "snippet": "const CROSS_PLATFORM_ROOT = path.resolve(__dirname, '../../../opspal-core');"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|22|# Fallback: navigate from this file's location (../../opspal-core relative to hooks/lib/)",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-attio/hooks/lib/error-handler.sh",
+      "line": 22,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-attio.",
+      "snippet": "# Fallback: navigate from this file's location (../../opspal-core relative to hooks/lib/)"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|24|_CORE_ERROR_HANDLER=\"$(cd \"$_ATTIO_LIB_DIR/../../../opspal-core/hooks/lib\" 2>/dev/null && pwd)/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-attio/hooks/lib/error-handler.sh",
+      "line": 24,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-attio.",
+      "snippet": "_CORE_ERROR_HANDLER=\"$(cd \"$_ATTIO_LIB_DIR/../../../opspal-core/hooks/lib\" 2>/dev/null && pwd)/error-handler.sh\""
     },
     {
       "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/post-investigation-execution-proof.sh|44|\"${PLUGIN_ROOT}/../opspal-salesforce/scripts/lib\" \\",
