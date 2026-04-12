@@ -1,20 +1,19 @@
 {
   "slug": "2026-W15",
   "title": "Week of April 6, 2026",
-  "summary": "This week brought significant improvements to automation reliability and system performance. OpsPal now automatically detects and fixes missing dependencies at startup, preventing workflow interruptions. Additionally, enhanced Salesforce integration ensures smoother data flow creation and proper permission handling.",
-  "published_at": "2026-04-12T01:26:55.396Z",
+  "summary": "This week brought significant improvements to platform reliability and Salesforce workflow management. OpsPal now automatically handles system maintenance tasks and prevents common setup errors that could interrupt your revenue operations. The platform also gained better safeguards for Salesforce flows and improved data consistency across all your connected systems.",
+  "published_at": "2026-04-12T23:05:10.267Z",
   "week_start": "2026-04-06",
   "week_end": "2026-04-12",
   "has_breaking": false,
-  "total_commits": 124,
+  "total_commits": 126,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Salesforce",
-      "headline": "Salesforce workflows now validate permissions and context properly",
+      "headline": "Salesforce flows now work reliably with proper permissions",
       "details": [
-        "Flow creation and editing now includes proper permission checking",
-        "Automated permission assignment prevents access errors"
+        "OpsPal automatically assigns the right permissions when setting up Salesforce flows, preventing workflow failures"
       ],
       "commits": [
         "620ca48"
@@ -22,23 +21,10 @@
     },
     {
       "category": "improved",
-      "plugin": "Rth",
-      "headline": "Enhanced compliance monitoring for automation workflows",
-      "details": [
-        "Workflows now validate against security policies automatically",
-        "Better enforcement of data handling requirements"
-      ],
-      "commits": [
-        "ae9c3e3"
-      ]
-    },
-    {
-      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "System maintenance now runs automatically during updates",
+      "headline": "Platform automatically cleans up old files and sessions",
       "details": [
-        "OpsPal cleans up old files and sessions automatically",
-        "Warnings appear when system memory usage gets high"
+        "OpsPal now removes outdated system files and warns you if memory usage gets too high, keeping your workspace running smoothly"
       ],
       "commits": [
         "46d5153"
@@ -47,24 +33,22 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Salesforce form and permission management works more reliably",
+      "headline": "Salesforce setup now prevents common configuration errors",
       "details": [
-        "Dynamic Forms detection prevents field visibility issues",
-        "New record types automatically get proper permissions",
-        "Workflow routing no longer blocks sessions unexpectedly"
+        "OpsPal detects when Dynamic Forms are active and prevents field conflicts",
+        "New record types are automatically assigned proper permissions",
+        "System routing no longer blocks your sessions unexpectedly"
       ],
       "commits": [
         "b85e3bf"
       ]
     },
     {
-      "category": "new",
+      "category": "improved",
       "plugin": "Core Platform",
-      "headline": "OpsPal automatically fixes missing dependencies at startup",
+      "headline": "Platform automatically fixes missing dependencies at startup",
       "details": [
-        "System detects and installs missing components automatically",
-        "Clear error messages show when manual fixes are needed",
-        "Background installation prevents workflow interruptions"
+        "OpsPal now detects and installs missing components in the background, showing you clear error messages if manual fixes are needed"
       ],
       "commits": [
         "26f0866"
@@ -73,7 +57,7 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved false dependency warnings during startup",
+      "headline": "Eliminated false error messages during platform startup",
       "details": null,
       "commits": [
         "4255dd6"
