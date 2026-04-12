@@ -149,7 +149,7 @@ Reference guide: `docs/DEVELOPER_TOOLS_GUIDE.md`.
 | `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.13 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
 <!-- AUTO_GENERATED_END:plugin-matrix -->
 
 ## Runtime Registry
