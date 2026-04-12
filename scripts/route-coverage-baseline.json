@@ -1,13 +1,41 @@
 {
-  "generatedAt": "2026-04-10T17:45:25.416Z",
+  "generatedAt": "2026-04-12T01:09:47.985Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-attribute-architect",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-attribute-architect",
+      "sourcePath": "plugins/opspal-attio/agents/attio-attribute-architect.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-attribute-architect"
+    },
     {
       "signature": "mandatory-agent-missing-route|opspal-attio:attio-companies-manager",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-attio:attio-companies-manager",
       "sourcePath": "plugins/opspal-attio/agents/attio-companies-manager.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-companies-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-custom-objects-architect",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-custom-objects-architect",
+      "sourcePath": "plugins/opspal-attio/agents/attio-custom-objects-architect.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-custom-objects-architect"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-data-migration-specialist",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-data-migration-specialist",
+      "sourcePath": "plugins/opspal-attio/agents/attio-data-migration-specialist.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-data-migration-specialist"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-data-operations",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-data-operations",
+      "sourcePath": "plugins/opspal-attio/agents/attio-data-operations.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-data-operations"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-attio:attio-deals-manager",
@@ -17,11 +45,39 @@
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-deals-manager"
     },
     {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-hubspot-bridge",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-hubspot-bridge",
+      "sourcePath": "plugins/opspal-attio/agents/attio-hubspot-bridge.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-hubspot-bridge"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-integration-specialist",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-integration-specialist",
+      "sourcePath": "plugins/opspal-attio/agents/attio-integration-specialist.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-integration-specialist"
+    },
+    {
       "signature": "mandatory-agent-missing-route|opspal-attio:attio-lists-pipeline-manager",
       "rule": "mandatory-agent-missing-route",
       "target": "opspal-attio:attio-lists-pipeline-manager",
       "sourcePath": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-lists-pipeline-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-meeting-intelligence",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-meeting-intelligence",
+      "sourcePath": "plugins/opspal-attio/agents/attio-meeting-intelligence.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-meeting-intelligence"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-notes-tasks-manager",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-notes-tasks-manager",
+      "sourcePath": "plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-notes-tasks-manager"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-attio:attio-orchestrator",
@@ -36,6 +92,20 @@
       "target": "opspal-attio:attio-people-manager",
       "sourcePath": "plugins/opspal-attio/agents/attio-people-manager.md",
       "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-people-manager"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-query-specialist",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-query-specialist",
+      "sourcePath": "plugins/opspal-attio/agents/attio-query-specialist.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-query-specialist"
+    },
+    {
+      "signature": "mandatory-agent-missing-route|opspal-attio:attio-salesforce-bridge",
+      "rule": "mandatory-agent-missing-route",
+      "target": "opspal-attio:attio-salesforce-bridge",
+      "sourcePath": "plugins/opspal-attio/agents/attio-salesforce-bridge.md",
+      "message": "Mandatory agent is not routed in CLAUDE.md: opspal-attio:attio-salesforce-bridge"
     },
     {
       "signature": "mandatory-agent-missing-route|opspal-attio:attio-workspace-discovery",
