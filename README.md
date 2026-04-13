@@ -93,7 +93,7 @@ git pull origin main
 | Plugins | 9 |
 | Agents | 327 |
 | Commands | 310 |
-| Skills | 173 |
+| Skills | 177 |
 | Hooks | 225 |
 | Scripts | 1878 |
 
@@ -106,7 +106,7 @@ Install `opspal-core` first, then add only the domain plugins you actually need.
 |--------|---------|--------|--------|----------|-------|
 | [`opspal-ai-consult`](plugins/opspal-ai-consult) | 1.4.14 | active | 2 | 3 | Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemi... |
 | [`opspal-attio`](plugins/opspal-attio) | 2.0.0 | active | 29 | 28 | Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, we... |
-| [`opspal-core`](plugins/opspal-core) | 2.55.12 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
+| [`opspal-core`](plugins/opspal-core) | 2.55.10 | active | 80 | 126 | OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-h... |
 | [`opspal-gtm-planning`](plugins/opspal-gtm-planning) | 2.3.10 | active | 13 | 16 | GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes ter... |
 | [`opspal-hubspot`](plugins/opspal-hubspot) | 3.9.31 | active | 59 | 33 | HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless... |
 | [`opspal-marketo`](plugins/opspal-marketo) | 2.6.41 | active | 30 | 30 | Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce... |

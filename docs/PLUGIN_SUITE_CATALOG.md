@@ -10,7 +10,7 @@
 | Plugins | 9 |
 | Agents | 327 |
 | Commands | 310 |
-| Skills | 173 |
+| Skills | 177 |
 | Hooks | 225 |
 | Scripts | 1878 |
 
@@ -31,13 +31,13 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.12 | active | 80 | 11 | 126 | 49 | 107 | 602 |
-| `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
+| `opspal-core` | 2.55.10 | active | 80 | 11 | 126 | 49 | 107 | 602 |
+| `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
 
 ## Registry
 
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.12`
+- Version: `2.55.10`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -267,7 +267,7 @@
 | `revops-deal-scorer` | Rules-based deal win probability scoring analyzing stage velocity, engagement patterns, ICP fit, and competitive posi... | `revops-deal-scorer.md` |
 | `revops-dedup-specialist` | Specialist agent for RevOps data deduplication operations | `revops-dedup-specialist.md` |
 | `revops-lead-scorer` | Rules-based lead quality scoring combining ICP firmographic fit and behavioral engagement signals. | `revops-lead-scorer.md` |
-| `revops-maturity-orchestrator` | MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo. | `revops-maturity-orchestrator.md` |
+| `revops-maturity-orchestrator` | MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio. | `revops-maturity-orchestrator.md` |
 | `revops-query-agent` | Use PROACTIVELY for ad-hoc RevOps questions that don't map to a specific agent. | `revops-query-agent.md` |
 | `revops-reporting-assistant` | MUST BE USED for RevOps report generation. | `revops-reporting-assistant.md` |
 | `sales-enablement-coordinator` | Coordinates sales enablement activities including training paths, skill gap analysis, and content recommendations. | `sales-enablement-coordinator.md` |
@@ -639,7 +639,10 @@
 | `gtm-annual-planning-framework` | GTM annual planning orchestration methodology with 7-phase workflow and approval gates. Use when initiating annual pl... | `gtm-annual-planning-framework/SKILL.md` |
 | `gtm-revenue-modeling` | Revenue modeling methodology including ARR waterfall, scenario planning, and projection models. Use when building rev... | `gtm-revenue-modeling/SKILL.md` |
 | `gtm-scenario-governance-framework` | Govern GTM scenario planning with assumption tracking, sensitivity analysis, and decision records. | `gtm-scenario-governance-framework/SKILL.md` |
+| `market-sizing-methodology` | TAM/SAM/SOM market sizing methodology and penetration analysis. Use when calculating market opportunity, analyzing se... | `market-sizing-methodology/SKILL.md` |
 | `quota-capacity-modeling` | Quota and capacity modeling methodology with Monte Carlo simulations and P10/P50/P90 scenarios. Use when building quo... | `quota-capacity-modeling/SKILL.md` |
+| `revenue-modeling-patterns` | Revenue modeling methodology for multi-year projections and scenario planning. Use when building ARR forecasts, runni... | `revenue-modeling-patterns/SKILL.md` |
+| `strategic-reporting-framework` | Provides standardized guidance for strategic GTM report generation. Use when generating reports from the strategic te... | `strategic-reporting-framework/SKILL.md` |
 
 #### Hooks
 
@@ -1222,6 +1225,7 @@
 
 | Skill | Description | File |
 |-------|-------------|------|
+| `api-selection-guide` | Guide for selecting the correct Salesforce API for different operations. Use when querying metadata objects, performi... | `api-selection-guide/SKILL.md` |
 | `assignment-rules-framework` | Seven-phase framework for Salesforce Lead/Case assignment rule design, validation, deployment, and conflict prevention. | `assignment-rules-framework/SKILL.md` |
 | `automation-audit-framework` | Salesforce automation audit methodology. Use when auditing Flows, Process Builders, Workflow Rules, Apex Triggers, or... | `automation-audit-framework/SKILL.md` |
 | `automation-building-patterns` | Salesforce automation feasibility analysis and building patterns. Use when creating flows, process builders, workflow... | `automation-building-patterns/SKILL.md` |

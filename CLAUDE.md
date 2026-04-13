@@ -54,6 +54,6 @@ git pull origin main
 | Plugins | 9 |
 | Agents | 327 |
 | Commands | 310 |
-| Skills | 173 |
+| Skills | 177 |
 | Hooks | 225 |
 | Scripts | 1878 |

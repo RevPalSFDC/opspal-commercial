@@ -9,18 +9,39 @@ allowed-tools:
 
 # org-claim-evidence-enforcement
 
-Use this skill when working on hook-driven workflows in this domain.
+## When to Use This Skill
+
+- A PostToolUse hook should block or flag responses that assert org state ("this org has X flows active") without evidence from a prior tool call
+- Tuning the claim-detection regex patterns to catch new assertion phrasings without generating false positives
+- Diagnosing why a response was incorrectly blocked (false positive: the evidence was present but not recognized by the hook)
+- Adding a new claim category (e.g., permission set assertions, data volume claims) to the enforcement policy
+- Reviewing hook output quality: the guard message must tell the user specifically what evidence is missing, not just that a claim was blocked
+
+**Not for**: Validating data quality in CRM records — use `data-quality-audit` or the platform-specific dedup skills for that.
+
+## Claim Categories and Evidence Requirements
+
+| Claim Type | Example Phrase | Required Evidence |
+|------------|----------------|-------------------|
+| Flow state | "this org has 47 active flows" | `sf flow list` output in current session |
+| Record count | "there are 12,000 contacts" | SOQL/API query result |
+| Permission state | "users have View All Data" | Permission set or profile query |
+| Integration status | "the HubSpot sync is active" | Integration health check output |
+| Field existence | "the field Arr__c exists" | Metadata describe output |
 
 ## Workflow
 
-1. Identify the hook trigger surface and decision points.
-2. Validate policy or guardrail behavior before and after change.
-3. Capture failure modes, rollback path, and verification checks.
+1. Read `claim-detection.md` to understand the current regex patterns and claim-category taxonomy.
+2. Test the detection gate: craft a response that makes an unsupported org-state claim and confirm the hook intercepts it before the response is delivered.
+3. Verify the evidence-check logic (see `evidence-check.md`): the hook must scan the current session's tool call history for the specific evidence type required for each claim category.
+4. Test the true-positive path: provide the required evidence via a prior tool call, then make the same claim — confirm the hook allows the response.
+5. Review `response-guard.md` for the final-response guard: it must produce a specific, actionable message naming the missing evidence type, not a generic block notice.
+6. Update claim-category patterns if new assertion phrasings are detected in production session logs.
 
 ## Routing Boundaries
 
-Use this skill for the specific hook workflow described here.
-Defer to adjacent domain skills when the task is primarily about business logic rather than hook enforcement.
+Use this skill for hook-level org-claim evidence gating.
+Defer to `evidence-capture-packager` when the goal is archiving already-collected evidence rather than enforcing its collection.
 
 ## References
 
