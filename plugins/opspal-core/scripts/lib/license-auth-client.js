@@ -11,12 +11,22 @@ const { DOMAIN_KEY_FILES } = require('./asset-encryption-engine');
 
 const DEFAULT_SERVER_URL = 'https://license.gorevpal.com';
 const DEFAULT_OFFLINE_GRACE_DAYS = parseInt(process.env.OPSPAL_OFFLINE_GRACE_DAYS, 10) || 7;
+const GRACE_WARNING_THRESHOLD_HOURS = parseInt(process.env.OPSPAL_GRACE_WARNING_HOURS, 10) || 48;
+const AUDIT_LOG_MAX_LINES = 500;
 const HOME_DIR = process.env.HOME || os.homedir();
-const OPSPAL_DIR = path.join(HOME_DIR, '.opspal');
+
+// OPSPAL_LICENSE_DIR escape hatch — Windows users running both Claude Desktop (Git Bash)
+// and Claude CLI (WSL) can point both shells at a single shared path so one activation
+// works in both environments. Unset (default) uses ~/.opspal/ per-shell.
+const OPSPAL_DIR = (process.env.OPSPAL_LICENSE_DIR && process.env.OPSPAL_LICENSE_DIR.trim())
+  ? path.resolve(process.env.OPSPAL_LICENSE_DIR.trim())
+  : path.join(HOME_DIR, '.opspal');
+
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
 const CACHE_BACKUP_FILE = path.join(OPSPAL_DIR, 'license-cache.json.bak');
 const CACHE_TERMINATED_MARKER_FILE = path.join(OPSPAL_DIR, 'license-cache.terminated');
 const LEGACY_LICENSE_KEY_FILE = path.join(OPSPAL_DIR, 'license.key');
+const AUDIT_LOG_FILE = path.join(OPSPAL_DIR, 'license-events.jsonl');
 const SESSION_RUNTIME_DIR = path.join(HOME_DIR, '.claude', 'opspal-enc', 'runtime');
 const CURRENT_SESSION_POINTER = path.join(SESSION_RUNTIME_DIR, '.current-session');
 
@@ -65,14 +75,22 @@ function readLicenseCache() {
   }
 }
 
-function writeLicenseCache(payload) {
+function writeLicenseCache(payload, options = {}) {
   ensureOpspalDir();
 
   const tempFile = `${CACHE_FILE}.tmp.${process.pid}`;
   fs.writeFileSync(tempFile, `${JSON.stringify(payload, null, 2)}\n`, { mode: 0o600 });
   fs.renameSync(tempFile, CACHE_FILE);
   backupLicenseCache(payload);
-  clearTerminatedStateMarker();
+  clearTerminatedStateMarker({ caller: options.caller || 'write-cache' });
+
+  appendAuditLog({
+    action: 'write-cache',
+    caller: options.caller || 'unknown',
+    reason: options.reason || 'cache-written',
+    tier: (payload && payload.tier) || null,
+    grace_until: (payload && payload.grace_until) || null
+  });
 }
 
 function backupLicenseCache(payload = readLicenseCache()) {
@@ -89,23 +107,79 @@ function backupLicenseCache(payload = readLicenseCache()) {
   return true;
 }
 
-function restoreLicenseCacheFromBackup() {
+function restoreLicenseCacheFromBackup(options = {}) {
   if (fs.existsSync(CACHE_FILE) || !fs.existsSync(CACHE_BACKUP_FILE) || fs.existsSync(CACHE_TERMINATED_MARKER_FILE)) {
     return false;
   }
 
   const tempFile = `${CACHE_FILE}.tmp.${process.pid}`;
+  const stuckStateDetected = isLikelyShellHookStuckState();
 
   try {
     ensureOpspalDir();
     fs.copyFileSync(CACHE_BACKUP_FILE, tempFile);
     fs.chmodSync(tempFile, 0o600);
     fs.renameSync(tempFile, CACHE_FILE);
+
+    appendAuditLog({
+      action: stuckStateDetected ? 'auto-heal' : 'restore-from-backup',
+      caller: options.caller || 'unknown',
+      reason: stuckStateDetected
+        ? 'shell-hook-restore-loop-detected'
+        : (options.reason || 'cache-missing-backup-present'),
+      stuck_state_detected: stuckStateDetected
+    });
+
     return true;
-  } catch {
+  } catch (err) {
     removeFile(tempFile);
+    appendAuditLog({
+      action: 'restore-from-backup-failed',
+      caller: options.caller || 'unknown',
+      reason: err && err.message ? err.message : 'unknown-error'
+    });
     return false;
   }
+}
+
+// ─── Grace-expiry warning helper ────────────────────────────────────────────
+// Returns { hours_remaining, expires_at, threshold_hours } when grace_until is
+// within GRACE_WARNING_THRESHOLD_HOURS, otherwise null. Called from both the
+// cache-fallback path in sessionToken() and from cacheToSessionPayload() so
+// the shell hook and /license-status can surface an actionable message before
+// the 7-day silent-expiry cliff hits.
+function graceWarningFor(graceUntil) {
+  if (!graceUntil) return null;
+  const expiryMs = Date.parse(graceUntil);
+  if (Number.isNaN(expiryMs)) return null;
+  const hoursRemaining = (expiryMs - Date.now()) / 3_600_000;
+  if (hoursRemaining > GRACE_WARNING_THRESHOLD_HOURS) return null;
+  return {
+    hours_remaining: Math.max(0, Math.round(hoursRemaining * 10) / 10),
+    expires_at: new Date(expiryMs).toISOString(),
+    threshold_hours: GRACE_WARNING_THRESHOLD_HOURS
+  };
+}
+
+// ─── Stuck-state detection (auto-heal) ──────────────────────────────────────
+// Returns true when the most recent cache clear in the audit log was done by
+// the shell hook termination path. That is the signature of the restore-loop
+// bug fixed by the confirm-terminated CLI subcommand — on install, pre-patch
+// wipes are detected by the audit log being absent (the trail never existed),
+// and the same recovery action applies. A 'clear-local-state' from the
+// deactivate-cli or server-confirmed 403+terminated:true path is NOT stuck.
+function isLikelyShellHookStuckState() {
+  const entries = readRecentAuditEntries(50);
+  for (let i = entries.length - 1; i >= 0; i -= 1) {
+    const e = entries[i];
+    if (e.action === 'clear-local-state') {
+      return e.caller === 'shell-hook-terminated';
+    }
+  }
+  // No prior clear recorded — either first run after patch install, or the
+  // audit log never existed (pre-patch shell hook did the wipe). In both
+  // cases, restoring from the backup is the correct action.
+  return true;
 }
 
 function removeFile(filePath) {
@@ -118,32 +192,114 @@ function removeFile(filePath) {
   }
 }
 
-function markTerminatedState() {
+// ─── Audit log ──────────────────────────────────────────────────────────────
+// Append-only JSONL trail of license state mutations at ~/.opspal/license-events.jsonl.
+// Every state-changing function instruments through appendAuditLog so support has a
+// triage trail when a cache disappears. Never read by runtime — corruption cannot cascade.
+function appendAuditLog(entry) {
+  try {
+    ensureOpspalDir();
+    const line = `${JSON.stringify({
+      ts: new Date().toISOString(),
+      pid: process.pid,
+      ...entry
+    })}\n`;
+    fs.appendFileSync(AUDIT_LOG_FILE, line, { mode: 0o600 });
+    trimAuditLog();
+  } catch {
+    // Audit log writes must never throw — the audit log is observability, not correctness.
+  }
+}
+
+function trimAuditLog() {
+  try {
+    if (!fs.existsSync(AUDIT_LOG_FILE)) return;
+    const raw = fs.readFileSync(AUDIT_LOG_FILE, 'utf8');
+    const lines = raw.split('\n').filter((l) => l.length > 0);
+    if (lines.length <= AUDIT_LOG_MAX_LINES) return;
+    const kept = lines.slice(-AUDIT_LOG_MAX_LINES).join('\n') + '\n';
+    const tempFile = `${AUDIT_LOG_FILE}.tmp.${process.pid}`;
+    fs.writeFileSync(tempFile, kept, { mode: 0o600 });
+    fs.renameSync(tempFile, AUDIT_LOG_FILE);
+  } catch {
+    // Trimming is best-effort.
+  }
+}
+
+function readRecentAuditEntries(limit = 20) {
+  try {
+    if (!fs.existsSync(AUDIT_LOG_FILE)) return [];
+    const raw = fs.readFileSync(AUDIT_LOG_FILE, 'utf8');
+    const lines = raw.split('\n').filter((l) => l.length > 0);
+    return lines.slice(-limit).map((l) => {
+      try { return JSON.parse(l); } catch { return null; }
+    }).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+function markTerminatedState(options = {}) {
   ensureOpspalDir();
 
   const tempFile = `${CACHE_TERMINATED_MARKER_FILE}.tmp.${process.pid}`;
   fs.writeFileSync(tempFile, `${JSON.stringify({ terminated_at: new Date().toISOString() })}\n`, { mode: 0o600 });
   fs.renameSync(tempFile, CACHE_TERMINATED_MARKER_FILE);
+
+  appendAuditLog({
+    action: 'mark-terminated',
+    caller: options.caller || 'unknown',
+    reason: options.reason || 'server-confirmed-termination'
+  });
 }
 
-function clearTerminatedStateMarker() {
+function clearTerminatedStateMarker(options = {}) {
+  const wasPresent = fs.existsSync(CACHE_TERMINATED_MARKER_FILE);
   removeFile(CACHE_TERMINATED_MARKER_FILE);
+  if (wasPresent) {
+    appendAuditLog({
+      action: 'clear-terminated-marker',
+      caller: options.caller || 'unknown',
+      reason: options.reason || 'marker-cleared'
+    });
+  }
 }
 
 function clearRuntimeArtifacts() {
   removeFile(CURRENT_SESSION_POINTER);
 }
 
+// clearLocalLicenseState deletes the primary cache and optionally the per-domain
+// decryption key files. Key-file destruction is irreversible without a fresh license
+// server round-trip, so callers that want it MUST pass { clearKeyFiles: true,
+// confirmedByServer: true }. Missing confirmedByServer silently downgrades to a
+// cache-only clear and is logged — a defensive barrier against false-positive wipes.
 function clearLocalLicenseState(options = {}) {
+  const caller = options.caller || 'unknown';
+  const keyFilesRequested = options.clearKeyFiles === true;
+  const confirmedByServer = options.confirmedByServer === true;
+  const shouldClearKeyFiles = keyFilesRequested && confirmedByServer;
+
+  const cacheWasPresent = fs.existsSync(CACHE_FILE);
   removeFile(CACHE_FILE);
   removeFile(LEGACY_LICENSE_KEY_FILE);
   clearRuntimeArtifacts();
 
-  if (options.clearKeyFiles) {
+  if (shouldClearKeyFiles) {
     for (const filePath of Object.values(DOMAIN_KEY_FILES)) {
       removeFile(filePath);
     }
   }
+
+  appendAuditLog({
+    action: 'clear-local-state',
+    caller,
+    reason: options.reason || 'unspecified',
+    cache_was_present: cacheWasPresent,
+    cleared_key_files: shouldClearKeyFiles,
+    key_files_requested: keyFilesRequested,
+    confirmed_by_server: confirmedByServer
+  });
 }
 
 function getServerUrl(overrideValue) {
@@ -289,7 +445,8 @@ function hasUsableCachedBundle(cache) {
 }
 
 function cacheToSessionPayload(cache, extra = {}) {
-  return {
+  const graceUntil = buildGraceUntil(cache.grace_until, cache.updated_at);
+  const payload = {
     valid: cache.valid !== false,
     terminated: cache.terminated === true,
     session_token: cache.session_token || '',
@@ -302,12 +459,19 @@ function cacheToSessionPayload(cache, extra = {}) {
     blocked_domains: Array.isArray(cache.blocked_domains) ? cache.blocked_domains : [],
     key_bundle_version: cache.key_bundle_version || (cache.key_bundle && cache.key_bundle.version) || null,
     key_bundle: cache.key_bundle || null,
-    grace_until: buildGraceUntil(cache.grace_until, cache.updated_at),
+    grace_until: graceUntil,
     user_email: cache.user_email || '',
     machine_id: cache.machine_id || '',
     source: extra.source || 'cache',
     within_grace: extra.withinGrace === true
   };
+
+  const warning = graceWarningFor(graceUntil);
+  if (warning) {
+    payload.grace_warning = warning;
+  }
+
+  return payload;
 }
 
 function buildCachePayload(response, context, previousCache = null) {
@@ -385,7 +549,7 @@ async function activate(options = {}) {
   validateSessionPayload(response);
 
   const cachePayload = buildCachePayload(response, context, context.cache);
-  writeLicenseCache(cachePayload);
+  writeLicenseCache(cachePayload, { caller: 'activate', reason: 'activation-success' });
   removeFile(LEGACY_LICENSE_KEY_FILE);
 
   return cacheToSessionPayload(cachePayload, { source: 'live' });
@@ -401,17 +565,55 @@ function buildInvalidSessionResponse(options = {}) {
   };
 }
 
+// shouldFullyInvalidate — tightened confirmation barrier for destructive wipes.
+// Returns true ONLY when the server has confirmed termination with a well-formed
+// response: statusCode 403 (not 401/404/429/5xx — those are transient),
+// non-empty parsed body, terminated === true, AND an explicit error code string.
+// A transient proxy 404, rate-limit 429, or malformed error must not be able
+// to destroy cached state. Rollback path: if we fail to invalidate a genuinely
+// terminated license here, the next successful poll or session-start will
+// re-detect and handle it — whereas a false-positive wipe is unrecoverable.
+function shouldFullyInvalidate(err, body) {
+  if (!err || err.statusCode !== 403) return false;
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return false;
+  if (Object.keys(body).length === 0) return false;
+  if (body.terminated !== true) return false;
+  if (typeof body.error !== 'string' || body.error.length === 0) return false;
+  return true;
+}
+
 function buildLiveFailureResponse(err, cache) {
   const responseBody = err && err.response ? err.response : {};
   const terminated = responseBody.terminated === true;
-  const hasValidResponseBody = responseBody
-    && typeof responseBody === 'object'
-    && Object.keys(responseBody).length > 0;
-  const shouldInvalidateCache = terminated && hasValidResponseBody;
+  const shouldInvalidateCache = shouldFullyInvalidate(err, responseBody);
 
   if (shouldInvalidateCache) {
-    clearLocalLicenseState({ clearKeyFiles: true });
-    markTerminatedState();
+    clearLocalLicenseState({
+      clearKeyFiles: true,
+      confirmedByServer: true,
+      caller: 'buildLiveFailureResponse',
+      reason: responseBody.error || 'terminated-confirmed-403'
+    });
+    markTerminatedState({
+      caller: 'buildLiveFailureResponse',
+      reason: responseBody.error || 'terminated-confirmed-403'
+    });
+    removeFile(CACHE_BACKUP_FILE);
+    appendAuditLog({
+      action: 'remove-backup',
+      caller: 'buildLiveFailureResponse',
+      reason: 'terminated-confirmed-403'
+    });
+  } else if (terminated) {
+    // Server hinted termination but the response failed the full confirmation barrier.
+    // Log so support can triage if the server is emitting malformed termination payloads.
+    appendAuditLog({
+      action: 'terminated-hint-ignored',
+      caller: 'buildLiveFailureResponse',
+      reason: 'confirmation-barrier-not-met',
+      server_status: err && err.statusCode ? err.statusCode : null,
+      has_error_field: typeof responseBody.error === 'string'
+    });
   }
 
   return {
@@ -428,7 +630,7 @@ function buildLiveFailureResponse(err, cache) {
 
 async function sessionToken(options = {}) {
   if (!fs.existsSync(CACHE_FILE)) {
-    restoreLicenseCacheFromBackup();
+    restoreLicenseCacheFromBackup({ caller: options.caller || 'session-token' });
   }
 
   const context = resolveActivationContext(options);
@@ -447,7 +649,7 @@ async function sessionToken(options = {}) {
     validateSessionPayload(response);
 
     const cachePayload = buildCachePayload(response, context, cache);
-    writeLicenseCache(cachePayload);
+    writeLicenseCache(cachePayload, { caller: 'session-token', reason: 'session-refresh' });
     removeFile(LEGACY_LICENSE_KEY_FILE);
 
     return cacheToSessionPayload(cachePayload, { source: 'live' });
@@ -457,9 +659,12 @@ async function sessionToken(options = {}) {
     }
 
     if (hasUsableCachedBundle(cache)) {
+      const payload = cacheToSessionPayload(cache, { source: 'cache', withinGrace: true });
       return {
-        ...cacheToSessionPayload(cache, { source: 'cache', withinGrace: true }),
-        message: 'Using cached scoped key bundle during the offline grace window.'
+        ...payload,
+        message: payload.grace_warning
+          ? `Using cached scoped key bundle. License offline — reconnect within ${payload.grace_warning.hours_remaining}h or premium features will deactivate.`
+          : 'Using cached scoped key bundle during the offline grace window.'
       };
     }
 
@@ -535,9 +740,35 @@ async function pollStatus(options = {}) {
   });
 
   if (response.statusCode >= 400) {
-    if (response.body && response.body.terminated === true) {
-      clearLocalLicenseState({ clearKeyFiles: true });
-      markTerminatedState();
+    const syntheticErr = {
+      statusCode: response.statusCode,
+      response: response.body
+    };
+    if (shouldFullyInvalidate(syntheticErr, response.body)) {
+      clearLocalLicenseState({
+        clearKeyFiles: true,
+        confirmedByServer: true,
+        caller: 'pollStatus',
+        reason: (response.body && response.body.error) || 'terminated-confirmed-poll'
+      });
+      markTerminatedState({
+        caller: 'pollStatus',
+        reason: (response.body && response.body.error) || 'terminated-confirmed-poll'
+      });
+      removeFile(CACHE_BACKUP_FILE);
+      appendAuditLog({
+        action: 'remove-backup',
+        caller: 'pollStatus',
+        reason: 'terminated-confirmed-poll'
+      });
+    } else if (response.body && response.body.terminated === true) {
+      appendAuditLog({
+        action: 'terminated-hint-ignored',
+        caller: 'pollStatus',
+        reason: 'confirmation-barrier-not-met',
+        server_status: response.statusCode,
+        has_error_field: Boolean(response.body && typeof response.body.error === 'string')
+      });
     }
 
     return response.body;
@@ -554,7 +785,13 @@ async function pollStatus(options = {}) {
       grace_until: context.cache && context.cache.grace_until
     }, context, context.cache);
 
-    writeLicenseCache(cachePayload);
+    writeLicenseCache(cachePayload, { caller: 'pollStatus', reason: 'poll-success' });
+
+    // Grace warning at ≤ 48h — surfaces to poll-daemon stderr via the returned body.
+    const warning = graceWarningFor(cachePayload.grace_until);
+    if (warning) {
+      response.body.grace_warning = warning;
+    }
   }
 
   return response.body;
@@ -597,15 +834,69 @@ async function deactivate(options = {}) {
     throw error;
   }
 
-  clearLocalLicenseState({ clearKeyFiles: true });
-  clearTerminatedStateMarker();
+  clearLocalLicenseState({
+    clearKeyFiles: true,
+    confirmedByServer: true,
+    caller: 'deactivate-cli',
+    reason: 'user-initiated-deactivate'
+  });
+  clearTerminatedStateMarker({ caller: 'deactivate-cli', reason: 'user-initiated-deactivate' });
   removeFile(CACHE_BACKUP_FILE);
+  appendAuditLog({
+    action: 'remove-backup',
+    caller: 'deactivate-cli',
+    reason: 'user-initiated-deactivate'
+  });
 
   return {
     success: true,
     license_key: context.licenseKey,
     machine_id: context.machineId,
     server_url: context.serverUrl
+  };
+}
+
+// confirmTerminated — canonical termination wipe path.
+// Invoked by the SessionStart shell hook (session-start-asset-decryptor.sh) when
+// the session-token output reports terminated:true, replacing the pre-patch raw
+// `rm -f license-cache.json` which did NOT write the marker — that omission is
+// the root cause of the restore-loop bug (backup restored on next session →
+// restored cache still has terminated:true → shell hook wipes again).
+//
+// Atomically:
+//   1. Write ~/.opspal/license-cache.terminated marker
+//   2. Clear primary cache + legacy key file + domain key files (confirmedByServer)
+//   3. Delete ~/.opspal/license-cache.json.bak so restoreLicenseCacheFromBackup
+//      cannot reinstate a terminated license on the next session start
+//
+// Returns a status JSON suitable for printing from the CLI.
+function confirmTerminated(options = {}) {
+  const caller = options.caller || 'confirm-terminated-cli';
+  const reason = options.reason || 'server-confirmed-termination';
+
+  markTerminatedState({ caller, reason });
+  clearLocalLicenseState({
+    clearKeyFiles: true,
+    confirmedByServer: true,
+    caller,
+    reason
+  });
+  const backupWasPresent = fs.existsSync(CACHE_BACKUP_FILE);
+  removeFile(CACHE_BACKUP_FILE);
+  if (backupWasPresent) {
+    appendAuditLog({
+      action: 'remove-backup',
+      caller,
+      reason
+    });
+  }
+
+  return {
+    success: true,
+    terminated: true,
+    cache_file_removed: !fs.existsSync(CACHE_FILE),
+    backup_removed: !fs.existsSync(CACHE_BACKUP_FILE),
+    marker_present: fs.existsSync(CACHE_TERMINATED_MARKER_FILE)
   };
 }
 
@@ -706,6 +997,9 @@ async function runCli(argv = process.argv.slice(2)) {
     case 'deactivate':
       process.stdout.write(`${JSON.stringify(await deactivate(options))}\n`);
       return;
+    case 'confirm-terminated':
+      process.stdout.write(`${JSON.stringify(confirmTerminated(options))}\n`);
+      return;
     case 'status':
       process.stdout.write(`${JSON.stringify(status(options))}\n`);
       return;
@@ -715,28 +1009,39 @@ async function runCli(argv = process.argv.slice(2)) {
 }
 
 module.exports = {
+  AUDIT_LOG_FILE,
   CACHE_BACKUP_FILE,
   CACHE_FILE,
   CACHE_TERMINATED_MARKER_FILE,
   CURRENT_SESSION_POINTER,
   DEFAULT_SERVER_URL,
+  GRACE_WARNING_THRESHOLD_HOURS,
   LEGACY_LICENSE_KEY_FILE,
+  OPSPAL_DIR,
   activate,
   activateLicenseRequest,
+  appendAuditLog,
   backupLicenseCache,
   clearLocalLicenseState,
+  clearTerminatedStateMarker,
+  confirmTerminated,
   deactivate,
   getLicenseCacheFile,
   getServerUrl,
+  graceWarningFor,
   hasScopedKeyBundle,
+  isLikelyShellHookStuckState,
+  markTerminatedState,
   normalizeServerUrl,
   pollStatus,
   readLicenseCache,
+  readRecentAuditEntries,
   requestJson,
   resolveActivationContext,
   restoreLicenseCacheFromBackup,
   runCli,
   sessionToken,
+  shouldFullyInvalidate,
   status,
   validateSessionPayload,
   verifyToken,

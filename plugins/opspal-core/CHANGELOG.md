@@ -2,6 +2,64 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## [2.55.12] - 2026-04-13 (License Activation Loss — Permanent Fix)
+
+### Fixed — License Activation Restore Loop (root cause)
+
+Previously activated installs were intermittently losing their activation keys and being forced to re-run `/activate-license`. The 2026-03-27 fix (`08b15ca`) added a `license-cache.json.bak` backup and `restoreLicenseCacheFromBackup()` recovery path, but two root causes remained:
+
+- **Shell hook bypassed the JS safety net** (`hooks/session-start-asset-decryptor.sh` lines 218–227). The hook did a raw `rm -f license-cache.json` on termination but did NOT write the `~/.opspal/license-cache.terminated` marker. On the next session, `restoreLicenseCacheFromBackup()` found no marker, restored from `.bak`, and the restored cache still carried `terminated:true` — so the hook wiped again. Users saw intermittent "License terminated" messages and had to reactivate.
+- **Transient-error wipes still possible** — any 4xx response containing `terminated:true` (even from a misbehaving proxy or malformed error) would call `clearLocalLicenseState({ clearKeyFiles: true })` and destroy domain key files, forcing re-activation on the next session.
+
+### Added — `confirm-terminated` CLI + atomic termination wipe
+
+- New `node license-auth-client.js confirm-terminated` subcommand invoked by the shell hook when the server reports termination. Atomically writes the `.terminated` marker, clears cache + legacy key file + domain `.key` files, and deletes `license-cache.json.bak` — closing the restore loop.
+- `hooks/session-start-asset-decryptor.sh` now calls `confirm-terminated` instead of raw `rm -f`.
+- `scripts/lib/license-poll-daemon.js` termination path now routes through `confirmTerminated()` as well (was calling raw `fs.unlinkSync(CACHE_FILE)` — same bug as the shell hook).
+- The `.terminated` marker provides defense-in-depth: even if a `.bak` file somehow reappears, `restoreLicenseCacheFromBackup` refuses while the marker is present.
+
+### Added — Tightened termination-confirmation barrier (`shouldFullyInvalidate`)
+
+- `clearLocalLicenseState({ clearKeyFiles: true })` now requires an explicit `confirmedByServer: true` option. Missing confirmation silently downgrades to cache-only clear and is logged — a defensive barrier against accidental key-file destruction.
+- The new `shouldFullyInvalidate(err, body)` gate requires **all** of: statusCode 403 (not 401/404/429/5xx — those are transient), non-empty parsed object body, `terminated === true`, AND a non-empty `error` field. A 429 rate-limit with `terminated:true` hint in the body no longer wipes state.
+- Responses that hint termination but fail the barrier now emit a `terminated-hint-ignored` audit entry for support triage.
+
+### Added — Proactive grace-expiry warning (`grace_warning`)
+
+- When `grace_until` is within 48 hours (configurable via `OPSPAL_GRACE_WARNING_HOURS`), the `sessionToken()`/`pollStatus()` responses include a `grace_warning: { hours_remaining, expires_at, threshold_hours }` payload.
+- Session-start shell hook surfaces this as a user-visible message: "OpsPal license offline — reconnect within Nh or premium features will deactivate."
+- The PostToolUse poll daemon emits the same warning to stderr.
+- Eliminates the silent day-8 offline-grace cliff users previously experienced.
+
+### Added — License-state audit log at `~/.opspal/license-events.jsonl`
+
+- Append-only JSONL log instrumenting every state-changing operation: `write-cache`, `clear-local-state`, `mark-terminated`, `clear-terminated-marker`, `restore-from-backup`, `auto-heal`, `remove-backup`, `terminated-hint-ignored`.
+- Each entry records `{ ts, pid, action, caller, reason, ... }`. Caller is a string tag passed by the call site (`shell-hook-terminated`, `deactivate-cli`, `poll-daemon`, `buildLiveFailureResponse`, `confirm-terminated-cli`, `auto-heal`, etc.) — never derived from stack traces.
+- Trimmed to the last 500 lines on each write. Never read by the runtime, so corruption cannot cascade.
+- Surfaces the exact wipe cause and caller to support for future triage.
+
+### Added — Auto-heal for existing stuck installs
+
+- `restoreLicenseCacheFromBackup()` detects the shell-hook restore-loop signature (cache missing + backup present + no marker, plus an audit-log trail showing `shell-hook-terminated` as the last clear OR no audit log for first-run after patch) and tags the restore as `auto-heal` in the audit log.
+- Users caught in the restore loop before installing this patch will self-heal on the first session after update — no manual `/activate-license` required. If the server subsequently confirms termination, the `confirm-terminated` flow wipes cleanly and no further heal attempt is made.
+
+### Added — `OPSPAL_LICENSE_DIR` env-var override (Windows cross-shell)
+
+- Respect `process.env.OPSPAL_LICENSE_DIR` as an override for `~/.opspal/` in both `license-auth-client.js` and `license-poll-daemon.js`.
+- Windows users running both Claude Desktop (Git Bash) and Claude CLI (WSL) can set this to a shared Windows-side path (e.g. `/c/Users/<u>/.opspal-shared`) in both shell profiles so a single activation works across both environments — fixes the separate-HOME divergence that caused duplicate activations.
+
+### Changed — Explicit caller tags on state-changing functions
+
+- `writeLicenseCache(payload, { caller, reason })`, `clearLocalLicenseState({ caller, reason, confirmedByServer, clearKeyFiles })`, `markTerminatedState({ caller, reason })`, `restoreLicenseCacheFromBackup({ caller, reason })`, `clearTerminatedStateMarker({ caller, reason })` all accept a second options argument now.
+- Old single-argument call signatures remain backward-compatible (`caller` defaults to `'unknown'`).
+- New exports from `scripts/lib/license-auth-client.js`: `AUDIT_LOG_FILE`, `GRACE_WARNING_THRESHOLD_HOURS`, `OPSPAL_DIR`, `appendAuditLog`, `clearTerminatedStateMarker`, `confirmTerminated`, `graceWarningFor`, `isLikelyShellHookStuckState`, `markTerminatedState`, `readRecentAuditEntries`, `shouldFullyInvalidate`.
+
+### Testing
+
+- New Jest suite at `test/license-auth-client-restore-loop-fix.test.js` — 32 tests covering all five fixes: confirmTerminated atomic wipe + restore-loop reproduction, shouldFullyInvalidate matrix (12 cases), grace-warning thresholds, audit log append/trim/read-recent, stuck-state detection, auto-heal tagging, OPSPAL_LICENSE_DIR override.
+- Updated `test/license-auth-client-resilience.test.js` to reflect the new correct policy (backup removed on confirmed termination — the preservation policy was itself the bug).
+- All 40 license-related Jest tests pass.
+
 ## [2.42.34] - 2026-03-23 (Hook Remediation + Agent Routing Fixes)
 
 ### Fixed — Hook Remediation (177 hooks audited)

@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-12T01:16:22.596Z",
+  "buildDate": "2026-04-13T15:17:06.379Z",
   "totalAgents": 326,
   "totalAgentsFull": 327,
   "totalCommands": 310,
@@ -26037,7 +26037,7 @@
       "file": "revops-maturity-orchestrator.md",
       "path": "opspal-core/agents/revops-maturity-orchestrator.md",
       "name": "revops-maturity-orchestrator",
-      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
+      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
       "model": "opus",
       "color": "purple",
       "tools": [
@@ -39509,7 +39509,7 @@
       "file": "revops-maturity-orchestrator.md",
       "path": "opspal-core/agents/revops-maturity-orchestrator.md",
       "name": "revops-maturity-orchestrator",
-      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
+      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
       "model": "opus",
       "color": "purple",
       "tools": [

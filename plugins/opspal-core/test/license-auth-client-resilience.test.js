@@ -203,7 +203,14 @@ describe('license auth client resilience', () => {
     });
   });
 
-  test('pollStatus clears the active cache only when the server confirms termination', async () => {
+  test('pollStatus wipes cache AND backup when the server confirms termination', async () => {
+    // Updated for the restore-loop fix: preserving the backup on confirmed
+    // termination was the root cause of the loop (shell hook wiped primary, no
+    // marker, next session restored from .bak, cache still carried terminated:true,
+    // hook wiped again). Now confirmed termination removes both cache and backup.
+    // The .terminated marker also provides belt-and-suspenders: even if a backup
+    // file somehow reappears, restoreLicenseCacheFromBackup refuses to restore
+    // while the marker is present.
     await withJsonServer((req, res) => {
       expect(req.url).toBe('/api/v1/poll');
 
@@ -225,7 +232,7 @@ describe('license auth client resilience', () => {
 
       expect(result.terminated).toBe(true);
       expect(fs.existsSync(client.CACHE_FILE)).toBe(false);
-      expect(fs.existsSync(client.CACHE_BACKUP_FILE)).toBe(true);
+      expect(fs.existsSync(client.CACHE_BACKUP_FILE)).toBe(false);
       expect(fs.existsSync(client.CACHE_TERMINATED_MARKER_FILE)).toBe(true);
     });
   });
@@ -258,7 +265,10 @@ describe('license auth client resilience', () => {
     expect(session.valid).toBe(false);
     expect(session.error).toBe('missing_activation');
     expect(fs.existsSync(client.CACHE_FILE)).toBe(false);
-    expect(fs.existsSync(client.CACHE_BACKUP_FILE)).toBe(true);
+    // Backup is now removed on confirmed termination (see above). The marker file
+    // is what makes the state unambiguous — even if someone manually drops a .bak
+    // file back into place, restoreLicenseCacheFromBackup refuses while marker present.
+    expect(fs.existsSync(client.CACHE_BACKUP_FILE)).toBe(false);
     expect(fs.existsSync(client.CACHE_TERMINATED_MARKER_FILE)).toBe(true);
   });
 

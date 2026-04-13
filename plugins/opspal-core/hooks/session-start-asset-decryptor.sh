@@ -219,10 +219,13 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
             const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
             process.exit(d.terminated === true ? 0 : 1);
         ' 2>/dev/null; then
-            log_verbose "License terminated — wiping cache and blocking decryption"
-            # Server confirmed license termination - wipe active cache only.
-            # Do NOT remove license-cache.json.bak (preserved as recovery artifact).
-            rm -f "$HOME/.opspal/license-cache.json" "$HOME/.opspal/license.key" 2>/dev/null || true
+            log_verbose "License terminated — invoking confirm-terminated for atomic wipe"
+            # Server confirmed license termination. Delegate to the JS client so the
+            # wipe is atomic with writing the .terminated marker AND deleting the .bak
+            # backup. Prior to this fix (pre-patch), raw `rm -f license-cache.json`
+            # here would leave .bak intact and no marker, so restoreLicenseCacheFromBackup
+            # would reinstate the terminated cache on the next session (restore loop).
+            node "$LICENSE_AUTH_CLIENT" confirm-terminated >/dev/null 2>&1 || true
             LICENSE_TERMINATED=1
             MESSAGES+=("License terminated: decryption blocked. Contact support@gorevpal.com")
         elif echo "$LICENSE_RESULT" | node -e '
@@ -249,6 +252,19 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
             else
                 log_verbose "License is valid but no scoped keyring was delivered"
             fi
+
+            # Surface grace-expiry warning when the cached key bundle is close to expiring.
+            # Emitted by the JS client when grace_until is within GRACE_WARNING_THRESHOLD_HOURS (default 48h).
+            GRACE_WARNING_MSG=$(echo "$LICENSE_RESULT" | node -e '
+                const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+                if (d.grace_warning && typeof d.grace_warning.hours_remaining === "number") {
+                    const hrs = d.grace_warning.hours_remaining;
+                    process.stdout.write("OpsPal license offline — reconnect within " + hrs + "h or premium features will deactivate.");
+                }
+            ' 2>/dev/null || echo "")
+            if [[ -n "$GRACE_WARNING_MSG" ]]; then
+                MESSAGES+=("$GRACE_WARNING_MSG")
+            fi
         else
             LICENSE_ERROR=$(echo "$LICENSE_RESULT" | node -e '
                 const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
@@ -256,6 +272,18 @@ if [[ -f "$LICENSE_AUTH_CLIENT" ]]; then
             ' 2>/dev/null || echo "")
             if [[ -n "$LICENSE_ERROR" ]]; then
                 MESSAGES+=("$LICENSE_ERROR")
+            fi
+
+            # Even on error path, surface grace warning if present (cache-fallback case).
+            GRACE_WARNING_MSG=$(echo "$LICENSE_RESULT" | node -e '
+                const d = JSON.parse(require("fs").readFileSync("/dev/stdin","utf8"));
+                if (d.grace_warning && typeof d.grace_warning.hours_remaining === "number") {
+                    const hrs = d.grace_warning.hours_remaining;
+                    process.stdout.write("OpsPal license offline — reconnect within " + hrs + "h or premium features will deactivate.");
+                }
+            ' 2>/dev/null || echo "")
+            if [[ -n "$GRACE_WARNING_MSG" ]]; then
+                MESSAGES+=("$GRACE_WARNING_MSG")
             fi
         fi
     fi

@@ -25,7 +25,7 @@
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.14 | active | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-attio` | 2.0.0 | active | `revpal-engineering` | `stable` | `2026-04-10` | _unset_ | _unset_ |
-| `opspal-core` | 2.55.10 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-core` | 2.55.12 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-gtm-planning` | 2.3.10 | active | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-hubspot` | 3.9.31 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-marketo` | 2.6.41 | active | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |

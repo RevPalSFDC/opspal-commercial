@@ -425,4 +425,20 @@ await layer.admin.publish('brand:color-palette:default');
 
 ---
 
+## License Activation — Environment Variables
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `OPSPAL_LICENSE_DIR` | `~/.opspal/` | Override the license cache directory. **Windows cross-shell users** running both Claude Desktop (Git Bash) and Claude CLI (WSL) should set this to a shared Windows path (e.g. `/c/Users/<u>/.opspal-shared`) in both shell profiles so one activation works in both environments. |
+| `OPSPAL_OFFLINE_GRACE_DAYS` | `7` | Days the cached key bundle remains valid without server contact. |
+| `OPSPAL_GRACE_WARNING_HOURS` | `48` | Surface an actionable warning when `grace_until` is within this threshold. |
+| `OPSPAL_LICENSE_SERVER` | `https://license.gorevpal.com` | License server base URL (typically unset). |
+
+### Diagnostics
+
+- Activation/deactivation, cache wipes, backup restores, and termination confirmations are recorded in the append-only audit log at `${OPSPAL_LICENSE_DIR:-$HOME/.opspal}/license-events.jsonl` (last 500 entries). Use this trail when triaging unexpected re-activation prompts — each entry includes `{ts, action, caller, reason}`.
+- `/license-status` reports current state including any grace-expiry warning.
+
+---
+
 **Full Documentation**: See CLAUDE.md for comprehensive feature documentation.

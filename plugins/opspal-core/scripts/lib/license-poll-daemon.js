@@ -17,7 +17,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const OPSPAL_DIR = path.join(process.env.HOME, '.opspal');
+// Respect OPSPAL_LICENSE_DIR for Windows cross-shell (Git Bash ↔ WSL) parity.
+// Must match the resolution in license-auth-client.js exactly so both agree on
+// where the cache lives.
+const OPSPAL_DIR = (process.env.OPSPAL_LICENSE_DIR && process.env.OPSPAL_LICENSE_DIR.trim())
+  ? path.resolve(process.env.OPSPAL_LICENSE_DIR.trim())
+  : path.join(process.env.HOME || require('os').homedir(), '.opspal');
 const STATE_FILE = path.join(OPSPAL_DIR, 'last-poll.json');
 const CACHE_FILE = path.join(OPSPAL_DIR, 'license-cache.json');
 
@@ -111,7 +116,8 @@ if (age < effectiveInterval) {
 // ─── Perform poll ───────────────────────────────────────────────────────────
 
 async function doPoll() {
-  const { pollStatus } = require('./license-auth-client');
+  const client = require('./license-auth-client');
+  const { pollStatus, confirmTerminated, graceWarningFor } = client;
 
   let result;
   try {
@@ -136,7 +142,7 @@ async function doPoll() {
   const wasValid = cache && cache.valid !== false;
 
   // Termination detected
-  if (result.terminated) {
+  if (result && result.terminated) {
     process.stderr.write('\n');
     process.stderr.write('╔══════════════════════════════════════════════════════════════╗\n');
     process.stderr.write('║  ⚠  LICENSE TERMINATED                                      ║\n');
@@ -147,23 +153,44 @@ async function doPoll() {
     process.stderr.write('╚══════════════════════════════════════════════════════════════╝\n');
     process.stderr.write('\n');
 
-    // Wipe local cache
-    try { fs.unlinkSync(CACHE_FILE); } catch { /* ok */ }
+    // Use the atomic confirm-terminated path so the .terminated marker is
+    // written AND the backup is deleted — prevents the same restore-loop bug
+    // the shell hook had when it did raw unlink without writing the marker.
+    try {
+      confirmTerminated({ caller: 'poll-daemon', reason: 'terminated-detected-poll' });
+    } catch {
+      // Fallback: leave state untouched rather than performing a partial wipe.
+    }
     process.stdout.write('{}');
     return;
   }
 
   // Tier changed
-  if (result.valid && previousTier && result.tier !== previousTier) {
+  if (result && result.valid && previousTier && result.tier !== previousTier) {
     process.stderr.write(`\n[OpsPal] License tier changed: ${previousTier} → ${result.tier}\n`);
     process.stderr.write(`[OpsPal] Start a new session to apply the updated tier.\n\n`);
   }
 
   // License became invalid (previously was valid)
-  if (!result.valid && wasValid) {
+  if (result && !result.valid && wasValid) {
     const reason = result.message || result.error || 'unknown';
     process.stderr.write(`\n[OpsPal] License is no longer valid: ${reason}\n`);
     process.stderr.write(`[OpsPal] Run /license-status for details.\n\n`);
+  }
+
+  // Grace-expiry warning — surfaces before the silent 7-day offline cliff.
+  // pollStatus() attaches grace_warning to its return body when grace_until is
+  // within the configured threshold (default 48h); fall back to reading the
+  // freshly-written cache directly if the server didn't echo a grace_until.
+  let graceWarning = result && result.grace_warning;
+  if (!graceWarning && typeof graceWarningFor === 'function') {
+    const refreshedCache = loadCache();
+    if (refreshedCache) {
+      graceWarning = graceWarningFor(refreshedCache.grace_until);
+    }
+  }
+  if (graceWarning && typeof graceWarning.hours_remaining === 'number') {
+    process.stderr.write(`\n[OpsPal] License offline — reconnect within ${graceWarning.hours_remaining}h or premium features will deactivate (grace_until=${graceWarning.expires_at}).\n\n`);
   }
 
   process.stdout.write('{}');
