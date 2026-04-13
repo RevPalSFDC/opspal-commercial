@@ -1,7 +1,7 @@
 {
   "name": "opspal-core",
   "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-  "version": "2.55.10",
+  "version": "2.55.11",
   "author": {
     "name": "RevPal Engineering",
     "email": "engineering@gorevpal.com"

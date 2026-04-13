@@ -3,7 +3,7 @@
     {
       "name": "opspal-ai-consult",
       "description": "Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemini CLI invocation, Claude + Gemini response synthesis, alignment scoring, auto-consultation triggers, domain canonicalization for shadow duplicate detection, and ACE skill registry integration for learning from outcomes.",
-      "version": "1.4.14",
+      "version": "1.4.15",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-ai",
@@ -2138,7 +2138,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.10",
+      "version": "2.55.11",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -11771,7 +11771,7 @@
     {
       "name": "opspal-gtm-planning",
       "description": "GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes territory design, quota modeling, compensation planning, revenue modeling, retention analysis, market intelligence, 13 strategic report templates, session context loading, telemetry, and path validation. 12 agents, 15 commands, 3 hooks, 4 skill frameworks.",
-      "version": "2.3.10",
+      "version": "2.3.11",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-gtm",
@@ -12482,7 +12482,7 @@
     {
       "name": "opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.31",
+      "version": "3.9.32",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-hubspot",
@@ -15856,7 +15856,7 @@
     {
       "name": "opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.41",
+      "version": "2.6.42",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-marketing-ops",
@@ -18218,7 +18218,7 @@
     {
       "name": "opspal-monday",
       "description": "[EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export, and cross-board operations.",
-      "version": "1.4.10",
+      "version": "1.4.11",
       "status": "experimental",
       "manifestStatus": "experimental",
       "owner": "revpal-experimental",
@@ -19359,7 +19359,7 @@
     {
       "name": "opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.87.14",
+      "version": "3.87.15",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-salesforce",
