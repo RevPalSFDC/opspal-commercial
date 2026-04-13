@@ -1,0 +1,24 @@
+{
+  "slug": "2026-W16",
+  "title": "Week of April 13, 2026",
+  "summary": "This week's release focused on improving system reliability with a key fix to license management that prevents user sessions from getting stuck in activation loops. RevOps teams will experience more stable platform access without interruptions.",
+  "published_at": "2026-04-13T15:22:59.646Z",
+  "week_start": "2026-04-13",
+  "week_end": "2026-04-13",
+  "has_breaking": false,
+  "total_commits": 3,
+  "entries": [
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Fixed license activation getting stuck in endless loops",
+      "details": [
+        "Your OpsPal session now stays active without requiring repeated login attempts",
+        "You'll receive early warnings when your license approaches expiration"
+      ],
+      "commits": [
+        "c794211"
+      ]
+    }
+  ]
+}
