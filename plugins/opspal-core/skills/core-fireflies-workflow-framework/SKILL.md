@@ -14,24 +14,40 @@ version: 1.0.0
 
 ## When to Use This Skill
 
-Use for meeting intelligence ingestion and action-item operationalization.
+- After a Fireflies-synced meeting, extracting and operationalizing action items into Asana or CRM tasks
+- Running `/fireflies-sync` to pull transcripts from the Fireflies API and normalize them into the OpsPal transcript format
+- Diagnosing sync failures where transcripts are missing, partial, or duplicated
+- Setting up the meeting-to-action pipeline for the first time (auth + taxonomy configuration)
+- QA-reviewing AI-extracted action items for accuracy before committing them to downstream systems
+
+**Not for**: Live meeting transcription — Fireflies handles recording; this skill operates on completed transcripts.
 
 ## Required Inputs
 
-- Meeting source scope\n- Action taxonomy\n- Sync window
+| Input | Description |
+|-------|-------------|
+| Meeting source scope | Space ID, user filter, or date range |
+| Action taxonomy | Configured categories (follow-up, blocker, decision, commitment) |
+| Sync window | Start/end timestamps for the pull |
 
 ## Output Artifacts
 
-- Normalized transcript/action package\n- QA findings\n- Follow-up queue
+- Normalized transcript package (speaker-attributed, timestamped)
+- Action-item extraction results with confidence scores
+- QA findings report (low-confidence items flagged for human review)
+- Follow-up queue ready for Asana task creation
 
 ## Workflow
 
-1. Collect scope, constraints, and success criteria.
-2. Build a deterministic execution plan with explicit checks.
-3. Run read-first diagnostics and capture baseline evidence.
-4. Propose safe execution steps with rollback or abort criteria.
-5. Produce final artifacts with owners and next actions.
+1. Run `/fireflies-auth` to confirm API credentials are valid and quota is available.
+2. Scope the sync: specify meeting space, date window, and participant filter using `/fireflies-sync`.
+3. Review the normalized transcript package — confirm speaker attribution is correct and redact any confidential content per retention policy.
+4. Run action extraction: apply the configured taxonomy to surface follow-ups, decisions, and commitments.
+5. QA extracted items: flag any with confidence < 0.75 for human review before promoting to Asana or CRM.
+6. Deliver the follow-up queue via `/fireflies-action-items` and confirm owners are assigned.
 
 ## Safety Checks
 
-- Apply transcript retention limits\n- Redact confidential content\n- Require confidence thresholds for actions
+- Apply transcript retention limits (default: 90 days; configurable per space)
+- Redact PII and confidential deal terms before storing normalized output
+- Require confidence threshold >= 0.75 for auto-promoted action items

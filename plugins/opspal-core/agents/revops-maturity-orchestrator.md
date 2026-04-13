@@ -1,9 +1,9 @@
 ---
 name: revops-maturity-orchestrator
 model: opus
-description: "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo."
+description: "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio."
 intent: Produce a unified RevOps maturity score across all connected platforms with actionable remediation roadmap.
-dependencies: [sfdc-revops-auditor, hubspot-assessment-analyzer, marketo-orchestrator, web-viz-generator, pdf-generator, benchmark-research-agent, mcp-scoring-orchestrator]
+dependencies: [sfdc-revops-auditor, hubspot-assessment-analyzer, marketo-orchestrator, attio-assessment-analyzer, web-viz-generator, pdf-generator, benchmark-research-agent, mcp-scoring-orchestrator]
 failure_modes: [no_platforms_connected, single_platform_only, assessment_timeout, scoring_tool_unavailable]
 color: purple
 tools:
@@ -58,9 +58,12 @@ Task(opspal-hubspot:hubspot-assessment-analyzer):
 
 Task(opspal-marketo:marketo-orchestrator):
   "Run Marketo instance analysis for {org}. Output structured JSON with scores per category."
+
+Task(opspal-attio:attio-assessment-analyzer):
+  "Run Attio workspace assessment for {org}. Output structured JSON with scores per category (schema health, data quality, access controls, webhook inventory, pipeline health)."
 ```
 
-Only launch agents for connected platforms. If only SF is connected, produce a SF-only maturity report with notes on what cross-platform integration would add.
+Only launch agents for connected platforms. If only SF is connected, produce a SF-only maturity report with notes on what cross-platform integration would add. Attio assessments cover schema governance, data quality, pipeline health, and webhook infrastructure.
 
 ### Phase 2: Benchmark Context
 

@@ -3,7 +3,7 @@
     {
       "name": "opspal-ai-consult",
       "description": "Cross-model AI consultation plugin - get second opinions from Google Gemini. Features: non-interactive Gemini CLI invocation, Claude + Gemini response synthesis, alignment scoring, auto-consultation triggers, domain canonicalization for shadow duplicate detection, and ACE skill registry integration for learning from outcomes.",
-      "version": "1.4.14",
+      "version": "1.4.15",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-ai",
@@ -2138,7 +2138,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.10",
+      "version": "2.55.11",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -7446,28 +7446,6 @@
           "sourcePath": "plugins/opspal-core/skills/slo-sla-operations-guard/SKILL.md"
         },
         {
-          "name": "state/country-picklist-detection-and-flow-adaptation",
-          "description": "Before deploying flows referencing state fields: (1) query for [COMPANY] existence, (2) if found, rewrite all flow state references to StateCode variants, (3) use REST API for test writes",
-          "file": "state/country-picklist-detection-and-flow-adaptation/SKILL.md",
-          "frontmatter": {
-            "name": "state/country-picklist-detection-and-flow-adaptation",
-            "description": "Before deploying flows referencing state fields: (1) query for [COMPANY] existence, (2) if found, rewrite all flow state references to StateCode variants, (3) use REST API for test writes",
-            "version": "1.0.0"
-          },
-          "sourcePath": "plugins/opspal-core/skills/state/country-picklist-detection-and-flow-adaptation/SKILL.md"
-        },
-        {
-          "name": "state/country-picklist-detection-and-handling",
-          "description": "Before bulk address updates, check if BillingStateCode field exists via describe. If yes, use BillingStateCode (2-letter codes) instead of BillingState (full names) to avoid FIELD_INTEGRITY_EXCEPTION.",
-          "file": "state/country-picklist-detection-and-handling/SKILL.md",
-          "frontmatter": {
-            "name": "state/country-picklist-detection-and-handling",
-            "description": "Before bulk address updates, check if BillingStateCode field exists via describe. If yes, use BillingStateCode (2-letter codes) instead of BillingState (full names) to avoid FIELD_INTEGRITY_EXCEPTION.",
-            "version": "1.0.0"
-          },
-          "sourcePath": "plugins/opspal-core/skills/state/country-picklist-detection-and-handling/SKILL.md"
-        },
-        {
           "name": "subagent-verification-debugging",
           "description": "Debug subagent lifecycle hooks, verification failures, and recurring subagent execution issues.",
           "file": "subagent-verification-debugging/SKILL.md",
@@ -11793,7 +11771,7 @@
     {
       "name": "opspal-gtm-planning",
       "description": "GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes territory design, quota modeling, compensation planning, revenue modeling, retention analysis, market intelligence, 13 strategic report templates, session context loading, telemetry, and path validation. 12 agents, 15 commands, 3 hooks, 4 skill frameworks.",
-      "version": "2.3.10",
+      "version": "2.3.11",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-gtm",
@@ -12419,6 +12397,16 @@
           "sourcePath": "plugins/opspal-gtm-planning/skills/gtm-scenario-governance-framework/SKILL.md"
         },
         {
+          "name": "market-sizing-methodology",
+          "description": "TAM/SAM/SOM market sizing methodology and penetration analysis. Use when calculating market opportunity, analyzing segment penetration, or evaluating ICP performance and win profiles. TRIGGER KEYWORDS: \"tam\", \"sam\", \"som\", \"market size\", \"penetration\", \"icp\", \"win profile\", \"segment analysis\"",
+          "file": "market-sizing-methodology/SKILL.md",
+          "frontmatter": {
+            "name": "market-sizing-methodology",
+            "description": "TAM/SAM/SOM market sizing methodology and penetration analysis.\nUse when calculating market opportunity, analyzing segment penetration,\nor evaluating ICP performance and win profiles.\n\nTRIGGER KEYWORDS: \"tam\", \"sam\", \"som\", \"market size\", \"penetration\",\n\"icp\", \"win profile\", \"segment analysis\""
+          },
+          "sourcePath": "plugins/opspal-gtm-planning/skills/market-sizing-methodology/SKILL.md"
+        },
+        {
           "name": "quota-capacity-modeling",
           "description": "Quota and capacity modeling methodology with Monte Carlo simulations and P10/P50/P90 scenarios. Use when building quota models, running scenario analysis, calculating pipeline coverage, performing sensitivity analysis, back-testing against historical data, or validating hiring plans.",
           "file": "quota-capacity-modeling/SKILL.md",
@@ -12428,6 +12416,26 @@
             "allowed-tools": "Read, Grep, Glob"
           },
           "sourcePath": "plugins/opspal-gtm-planning/skills/quota-capacity-modeling/SKILL.md"
+        },
+        {
+          "name": "revenue-modeling-patterns",
+          "description": "Revenue modeling methodology for multi-year projections and scenario planning. Use when building ARR forecasts, running Monte Carlo simulations, or performing sensitivity analysis on growth assumptions. TRIGGER KEYWORDS: \"revenue model\", \"arr projection\", \"scenario\", \"monte carlo\", \"sensitivity analysis\", \"forecast\"",
+          "file": "revenue-modeling-patterns/SKILL.md",
+          "frontmatter": {
+            "name": "revenue-modeling-patterns",
+            "description": "Revenue modeling methodology for multi-year projections and scenario planning.\nUse when building ARR forecasts, running Monte Carlo simulations,\nor performing sensitivity analysis on growth assumptions.\n\nTRIGGER KEYWORDS: \"revenue model\", \"arr projection\", \"scenario\",\n\"monte carlo\", \"sensitivity analysis\", \"forecast\""
+          },
+          "sourcePath": "plugins/opspal-gtm-planning/skills/revenue-modeling-patterns/SKILL.md"
+        },
+        {
+          "name": "strategic-reporting-framework",
+          "description": "Provides standardized guidance for strategic GTM report generation. Use when generating reports from the strategic template library, applying metric definitions, or creating executive-ready outputs. TRIGGER KEYWORDS: \"strategic report\", \"gtm report\", \"executive report\", \"metric definition\", \"data contract\", \"dashboard blueprint\"",
+          "file": "strategic-reporting-framework/SKILL.md",
+          "frontmatter": {
+            "name": "strategic-reporting-framework",
+            "description": "Provides standardized guidance for strategic GTM report generation.\nUse when generating reports from the strategic template library,\napplying metric definitions, or creating executive-ready outputs.\n\nTRIGGER KEYWORDS: \"strategic report\", \"gtm report\", \"executive report\",\n\"metric definition\", \"data contract\", \"dashboard blueprint\""
+          },
+          "sourcePath": "plugins/opspal-gtm-planning/skills/strategic-reporting-framework/SKILL.md"
         }
       ],
       "hooks": [
@@ -12474,7 +12482,7 @@
     {
       "name": "opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.31",
+      "version": "3.9.32",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-hubspot",
@@ -15848,7 +15856,7 @@
     {
       "name": "opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.41",
+      "version": "2.6.42",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-marketing-ops",
@@ -18210,7 +18218,7 @@
     {
       "name": "opspal-monday",
       "description": "[EXPERIMENTAL] Monday.com board and item management: CRUD operations, batch processing, file catalog generation, CSV/JSON import/export, and cross-board operations.",
-      "version": "1.4.10",
+      "version": "1.4.11",
       "status": "experimental",
       "manifestStatus": "experimental",
       "owner": "revpal-experimental",
@@ -19351,7 +19359,7 @@
     {
       "name": "opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.87.14",
+      "version": "3.87.15",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-salesforce",
@@ -23765,6 +23773,17 @@
         }
       ],
       "skills": [
+        {
+          "name": "api-selection-guide",
+          "description": "Guide for selecting the correct Salesforce API for different operations. Use when querying metadata objects, performing bulk operations, or encountering API errors.",
+          "file": "api-selection-guide/SKILL.md",
+          "frontmatter": {
+            "name": "api-selection-guide",
+            "description": "Guide for selecting the correct Salesforce API for different operations. Use when querying metadata objects, performing bulk operations, or encountering API errors.",
+            "version": "1.0.0"
+          },
+          "sourcePath": "plugins/opspal-salesforce/skills/api-selection-guide/SKILL.md"
+        },
         {
           "name": "assignment-rules-framework",
           "description": "Seven-phase framework for Salesforce Lead/Case assignment rule design, validation, deployment, and conflict prevention.",
@@ -31396,7 +31415,7 @@
     "plugins": 9,
     "agents": 327,
     "commands": 310,
-    "skills": 175,
+    "skills": 177,
     "hooks": 225,
     "scripts": 1878
   }

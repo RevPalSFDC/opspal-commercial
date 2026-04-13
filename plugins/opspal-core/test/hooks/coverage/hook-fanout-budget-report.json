@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-10T14:33:43.076Z",
+  "generatedAt": "2026-04-12T23:02:10.922Z",
   "defaultMax": 3,
   "totals": {
-    "matcherGroups": 61,
+    "matcherGroups": 77,
     "overBudget": 0,
     "duplicateRegistrations": 0
   },
@@ -14,8 +14,9 @@
       "key": "PreToolUse :: Agent",
       "eventType": "PreToolUse",
       "matcher": "Agent",
-      "count": 11,
+      "count": 13,
       "plugins": [
+        "opspal-attio",
         "opspal-core",
         "opspal-gtm-planning",
         "opspal-hubspot",
@@ -24,6 +25,8 @@
         "opspal-okrs"
       ],
       "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-bulk-loop.sh",
+        "plugins/opspal-attio/hooks/universal-agent-governance.sh",
         "plugins/opspal-core/hooks/pre-task-agent-validator.sh",
         "plugins/opspal-core/hooks/pre-task-runbook-policy-enforcer.sh",
         "plugins/opspal-core/hooks/pre-task-work-context.sh",
@@ -37,15 +40,16 @@
         "plugins/opspal-okrs/hooks/pre-task-okr-approval-gate.sh"
       ],
       "duplicates": [],
-      "max": 11,
-      "budgetReason": "Current layered agent-governance stack; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
+      "max": 13,
+      "budgetReason": "Current layered agent-governance stack plus attio domain guard; prevent more Agent pre-hook fan-out until dispatcher consolidation lands."
     },
     {
       "key": "SessionStart :: *",
       "eventType": "SessionStart",
       "matcher": "*",
-      "count": 6,
+      "count": 7,
       "plugins": [
+        "opspal-attio",
         "opspal-core",
         "opspal-gtm-planning",
         "opspal-hubspot",
@@ -54,6 +58,7 @@
         "opspal-salesforce"
       ],
       "hookPaths": [
+        "plugins/opspal-attio/hooks/session-start-attio.sh",
         "plugins/opspal-core/hooks/session-start-dispatcher.sh",
         "plugins/opspal-gtm-planning/hooks/session-start-gtm-context-loader.sh",
         "plugins/opspal-hubspot/hooks/pre-task-context-loader.sh",
@@ -69,14 +74,16 @@
       "key": "PreToolUse :: Bash",
       "eventType": "PreToolUse",
       "matcher": "Bash",
-      "count": 5,
+      "count": 6,
       "plugins": [
+        "opspal-attio",
         "opspal-core",
         "opspal-hubspot",
         "opspal-marketo",
         "opspal-salesforce"
       ],
       "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
         "plugins/opspal-core/hooks/pre-operation-data-validator.sh",
         "plugins/opspal-core/hooks/task-graph-policy-enforcer.sh",
         "plugins/opspal-hubspot/hooks/pre-bash-hubspot-api.sh",
@@ -84,8 +91,8 @@
         "plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh"
       ],
       "duplicates": [],
-      "max": 5,
-      "budgetReason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, and Marketo plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
+      "max": 6,
+      "budgetReason": "Bash pre-hooks now include domain guards for Salesforce, HubSpot, Marketo, and Attio plus core governance; hold this ceiling until a shared dispatcher replaces the layered chain."
     },
     {
       "key": "PreToolUse :: Write",
@@ -351,6 +358,111 @@
       ],
       "hookPaths": [
         "plugins/opspal-core/hooks/post-tool-use.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__*",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__*",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/api-quota-monitor.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__entries_upsert|mcp__attio__entries_create",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__entries_upsert|mcp__attio__entries_create",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-entry-upsert.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__meetings_create",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__meetings_create",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-meeting-create.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__records_query|mcp__attio__entries_query|mcp__attio__records_list|mcp__attio__entries_list",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__records_query|mcp__attio__entries_query|mcp__attio__records_list|mcp__attio__entries_list",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/observability-quota-monitor.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__records_upsert",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__records_upsert",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-migration-checkpoint.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__self_get",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__self_get",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-workspace-auth.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PostToolUse :: mcp__attio__webhooks_create",
+      "eventType": "PostToolUse",
+      "matcher": "mcp__attio__webhooks_create",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-webhook-create.sh"
       ],
       "duplicates": [],
       "max": 3,
@@ -627,6 +739,126 @@
       "budgetReason": null
     },
     {
+      "key": "PreToolUse :: mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-schema-mutate.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__attributes_delete|mcp__attio__objects_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__attributes_delete|mcp__attio__objects_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-attribute-delete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__entries_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__entries_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-entry-delete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__objects_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__objects_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-object-delete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__records_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-record-delete.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__records_query|mcp__attio__entries_query",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_query|mcp__attio__entries_query",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__records_search",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__records_search",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-search-beta-warning.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
+      "key": "PreToolUse :: mcp__attio__scim_users_delete",
+      "eventType": "PreToolUse",
+      "matcher": "mcp__attio__scim_users_delete",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/pre-scim-mutate.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
+    },
+    {
       "key": "PreToolUse :: mcp__hubspot*",
       "eventType": "PreToolUse",
       "matcher": "mcp__hubspot*",
@@ -820,6 +1052,21 @@
       "duplicates": [],
       "max": 4,
       "budgetReason": "SubagentStop now includes ambient candidate extraction alongside verification hooks."
+    },
+    {
+      "key": "SubagentStop :: attio-assessment-analyzer",
+      "eventType": "SubagentStop",
+      "matcher": "attio-assessment-analyzer",
+      "count": 1,
+      "plugins": [
+        "opspal-attio"
+      ],
+      "hookPaths": [
+        "plugins/opspal-attio/hooks/post-assessment-trigger.sh"
+      ],
+      "duplicates": [],
+      "max": 3,
+      "budgetReason": null
     },
     {
       "key": "SubagentStop :: hubspot-assessment-analyzer",

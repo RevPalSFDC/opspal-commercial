@@ -861,6 +861,12 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-task-context-loader.sh",
             "timeout": 10000,
             "description": "Load org context from working directory, config files, and environment"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/session-start-attio.sh",
+            "timeout": 10000,
+            "description": "Load Attio workspace context and validate authentication"
           }
         ]
       }
@@ -933,6 +939,17 @@
           }
         ],
         "matcher": "sfdc-automation-auditor"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-assessment-trigger.sh",
+            "timeout": 30000,
+            "description": "Package Attio assessment deliverables after attio-assessment-analyzer completes"
+          }
+        ],
+        "matcher": "attio-assessment-analyzer"
       },
       {
         "hooks": [
@@ -1078,7 +1095,11 @@
       "mcp__marketo__*_list",
       "mcp__marketo__*_get",
       "mcp__marketo__*_query",
-      "mcp__marketo__*_describe"
+      "mcp__marketo__*_describe",
+      "mcp__attio__*_list",
+      "mcp__attio__*_get",
+      "mcp__attio__*_query",
+      "mcp__attio__self_get"
     ]
   }
 }
