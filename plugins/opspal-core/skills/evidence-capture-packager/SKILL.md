@@ -14,24 +14,39 @@ version: 1.0.0
 
 ## When to Use This Skill
 
-Use for audits, incidents, release gates, and governance reviews.
+- Packaging artifacts from a completed audit (CPQ, RevOps, automation) into a review-ready bundle for client delivery
+- Preparing evidence for an incident postmortem: timestamped logs, screenshots, API responses, and diff outputs
+- Creating a release gate evidence bundle before production deployments to satisfy change-management requirements
+- Assembling governance review packages with index, retention metadata, and redaction confirmation
+- Archiving assessment session artifacts so they are discoverable and reproducible after session compaction
+
+**Not for**: Writing the narrative analysis of the evidence — use `postmortem-rca-writer` or the relevant assessment agent for that.
 
 ## Required Inputs
 
-- Evidence paths\n- Review context\n- Retention policy
+| Input | Description |
+|-------|-------------|
+| Evidence paths | File paths or glob patterns for artifacts to include |
+| Review context | Type of review (audit, incident, release gate, governance) and audience |
+| Retention policy | Retention duration and who is authorized to access the bundle |
 
 ## Output Artifacts
 
-- Evidence index\n- Timestamped artifact manifest\n- Redaction checklist
+- Evidence index (`evidence-index.json`) listing every artifact with path, hash, and timestamp
+- Timestamped artifact manifest with capture method (API response, screenshot, file read, bash output)
+- Redaction checklist confirming secrets, PII, and confidential deal terms have been removed or masked
 
 ## Workflow
 
-1. Collect scope, constraints, and success criteria.
-2. Build a deterministic execution plan with explicit checks.
-3. Run read-first diagnostics and capture baseline evidence.
-4. Propose safe execution steps with rollback or abort criteria.
-5. Produce final artifacts with owners and next actions.
+1. Enumerate all artifact paths using Glob — do not rely on a manually provided list; discover what actually exists.
+2. Hash each artifact (SHA-256) to establish integrity at capture time; record in the index.
+3. Apply the redaction checklist: scan each artifact for env var patterns, API keys, email addresses, and deal-specific financials; mask or exclude.
+4. Annotate each artifact with capture context: tool used, timestamp, agent or session ID, and review type.
+5. Generate the evidence index and manifest; write to the designated output path (e.g., `orgs/{org}/evidence/{review-id}/`).
+6. Confirm required artifacts are present against the review-type checklist (see retention policy); flag any gaps.
 
 ## Safety Checks
 
-- Redact secrets and PII\n- Preserve source integrity\n- Flag missing required artifacts
+- Redact secrets and PII before any artifact enters the bundle — never include raw `.env` files or API key values
+- Preserve source integrity: do not modify artifact content; only add metadata wrappers
+- Flag missing required artifacts as BLOCKING — incomplete evidence bundles must not be delivered as final

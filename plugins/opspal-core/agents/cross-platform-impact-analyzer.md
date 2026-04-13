@@ -3,7 +3,7 @@ name: cross-platform-impact-analyzer
 model: sonnet
 description: "Use PROACTIVELY before making changes that affect synced fields or shared objects."
 intent: Analyze cross-platform field and object dependencies to prevent regressions from changes.
-dependencies: [sfdc-field-analyzer, sfdc-dependency-analyzer, hubspot-property-manager]
+dependencies: [sfdc-field-analyzer, sfdc-dependency-analyzer, hubspot-property-manager, attio-attribute-architect]
 failure_modes: [sync_config_not_found, insufficient_permissions, platform_not_connected]
 color: red
 tools:
@@ -36,6 +36,14 @@ You analyze cross-platform dependencies to prevent regressions when fields, obje
 
 **HubSpot → Marketo:**
 - Check for any documented integration mappings
+
+**Salesforce → Attio:**
+- Check attio-salesforce-bridge field mappings (Contacts→People, Accounts→Companies, Opportunities→Deals+Entries)
+- Read `orgs/{org}/platforms/attio/*/sync-mappings.json` if cached
+
+**HubSpot → Attio:**
+- Check attio-hubspot-bridge field mappings (Contacts→People, Companies→Companies)
+- Match on email_addresses (people) and domains (companies)
 
 ### Step 2: Build Field Dependency Map
 

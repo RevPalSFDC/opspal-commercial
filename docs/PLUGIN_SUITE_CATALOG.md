@@ -10,7 +10,7 @@
 | Plugins | 9 |
 | Agents | 327 |
 | Commands | 310 |
-| Skills | 175 |
+| Skills | 177 |
 | Hooks | 225 |
 | Scripts | 1878 |
 
@@ -31,13 +31,13 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.10 | active | 80 | 11 | 126 | 51 | 107 | 602 |
-| `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 4 | 4 | 2 |
+| `opspal-core` | 2.55.10 | active | 80 | 11 | 126 | 49 | 107 | 602 |
+| `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 54 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
 
 ## Registry
 
@@ -468,8 +468,6 @@
 | `session-continuity-ops` | Operate session continuity hooks for scratchpad persistence, context hydration, and transcript backup reliability. | `session-continuity-ops/SKILL.md` |
 | `silent-failure-check` | Comprehensive silent failure detection across the OpsPal plugin ecosystem. | `silent-failure-check/SKILL.md` |
 | `slo-sla-operations-guard` | Classify SLO and SLA breaches, assign response priority, and map remediation workflows. | `slo-sla-operations-guard/SKILL.md` |
-| `state/country-picklist-detection-and-flow-adaptation` | Before deploying flows referencing state fields: (1) query for [COMPANY] existence, (2) if found, rewrite all flow st... | `state/country-picklist-detection-and-flow-adaptation/SKILL.md` |
-| `state/country-picklist-detection-and-handling` | Before bulk address updates, check if BillingStateCode field exists via describe. If yes, use BillingStateCode (2-let... | `state/country-picklist-detection-and-handling/SKILL.md` |
 | `subagent-verification-debugging` | Debug subagent lifecycle hooks, verification failures, and recurring subagent execution issues. | `subagent-verification-debugging/SKILL.md` |
 | `test-smoke-harness-curator` | Curate smoke test harnesses for critical scripts, hooks, and operational workflows. | `test-smoke-harness-curator/SKILL.md` |
 | `tool-contract-engineering` | Design and maintain pre/post tool contract validation hooks and failure triage patterns. | `tool-contract-engineering/SKILL.md` |
@@ -641,7 +639,10 @@
 | `gtm-annual-planning-framework` | GTM annual planning orchestration methodology with 7-phase workflow and approval gates. Use when initiating annual pl... | `gtm-annual-planning-framework/SKILL.md` |
 | `gtm-revenue-modeling` | Revenue modeling methodology including ARR waterfall, scenario planning, and projection models. Use when building rev... | `gtm-revenue-modeling/SKILL.md` |
 | `gtm-scenario-governance-framework` | Govern GTM scenario planning with assumption tracking, sensitivity analysis, and decision records. | `gtm-scenario-governance-framework/SKILL.md` |
+| `market-sizing-methodology` | TAM/SAM/SOM market sizing methodology and penetration analysis. Use when calculating market opportunity, analyzing se... | `market-sizing-methodology/SKILL.md` |
 | `quota-capacity-modeling` | Quota and capacity modeling methodology with Monte Carlo simulations and P10/P50/P90 scenarios. Use when building quo... | `quota-capacity-modeling/SKILL.md` |
+| `revenue-modeling-patterns` | Revenue modeling methodology for multi-year projections and scenario planning. Use when building ARR forecasts, runni... | `revenue-modeling-patterns/SKILL.md` |
+| `strategic-reporting-framework` | Provides standardized guidance for strategic GTM report generation. Use when generating reports from the strategic te... | `strategic-reporting-framework/SKILL.md` |
 
 #### Hooks
 
@@ -1224,6 +1225,7 @@
 
 | Skill | Description | File |
 |-------|-------------|------|
+| `api-selection-guide` | Guide for selecting the correct Salesforce API for different operations. Use when querying metadata objects, performi... | `api-selection-guide/SKILL.md` |
 | `assignment-rules-framework` | Seven-phase framework for Salesforce Lead/Case assignment rule design, validation, deployment, and conflict prevention. | `assignment-rules-framework/SKILL.md` |
 | `automation-audit-framework` | Salesforce automation audit methodology. Use when auditing Flows, Process Builders, Workflow Rules, Apex Triggers, or... | `automation-audit-framework/SKILL.md` |
 | `automation-building-patterns` | Salesforce automation feasibility analysis and building patterns. Use when creating flows, process builders, workflow... | `automation-building-patterns/SKILL.md` |
