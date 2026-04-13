@@ -29,21 +29,21 @@
 
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
-| `opspal-ai-consult` | 1.4.14 | active | 2 | 0 | 3 | 1 | 1 | 6 |
+| `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.10 | active | 80 | 11 | 126 | 49 | 107 | 602 |
-| `opspal-gtm-planning` | 2.3.10 | active | 13 | 1 | 16 | 7 | 4 | 2 |
-| `opspal-hubspot` | 3.9.31 | active | 59 | 6 | 33 | 23 | 15 | 109 |
-| `opspal-marketo` | 2.6.41 | active | 30 | 24 | 30 | 17 | 25 | 33 |
-| `opspal-monday` | 1.4.10 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
+| `opspal-core` | 2.55.11 | active | 80 | 11 | 126 | 49 | 107 | 602 |
+| `opspal-gtm-planning` | 2.3.11 | active | 13 | 1 | 16 | 7 | 4 | 2 |
+| `opspal-hubspot` | 3.9.32 | active | 59 | 6 | 33 | 23 | 15 | 109 |
+| `opspal-marketo` | 2.6.42 | active | 30 | 24 | 30 | 17 | 25 | 33 |
+| `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.14 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.15 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
 
 ## Registry
 
 ### opspal-ai-consult
 
-- Version: `1.4.14`
+- Version: `1.4.15`
 - Status: `active`
 - Path: `plugins/opspal-ai-consult`
 - Manifest: `plugins/opspal-ai-consult/.claude-plugin/plugin.json`
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.10`
+- Version: `2.55.11`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -587,7 +587,7 @@
 
 ### opspal-gtm-planning
 
-- Version: `2.3.10`
+- Version: `2.3.11`
 - Status: `active`
 - Path: `plugins/opspal-gtm-planning`
 - Manifest: `plugins/opspal-gtm-planning/.claude-plugin/plugin.json`
@@ -655,7 +655,7 @@
 
 ### opspal-hubspot
 
-- Version: `3.9.31`
+- Version: `3.9.32`
 - Status: `active`
 - Path: `plugins/opspal-hubspot`
 - Manifest: `plugins/opspal-hubspot/.claude-plugin/plugin.json`
@@ -813,7 +813,7 @@
 
 ### opspal-marketo
 
-- Version: `2.6.41`
+- Version: `2.6.42`
 - Status: `active`
 - Path: `plugins/opspal-marketo`
 - Manifest: `plugins/opspal-marketo/.claude-plugin/plugin.json`
@@ -943,7 +943,7 @@
 
 ### opspal-monday
 
-- Version: `1.4.10`
+- Version: `1.4.11`
 - Status: `experimental`
 - Path: `plugins/opspal-monday`
 - Manifest: `plugins/opspal-monday/.claude-plugin/plugin.json`
@@ -1052,7 +1052,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.14`
+- Version: `3.87.15`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
