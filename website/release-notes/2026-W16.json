@@ -1,36 +1,33 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought important stability improvements to OpsPal's licensing system, eliminating disruptions that could interrupt your workflow. We also expanded and refined our skills library to provide better guidance for common RevOps scenarios.",
-  "published_at": "2026-04-14T12:20:45.133Z",
+  "summary": "This week brought important platform stability improvements and enhanced automation capabilities. We fixed licensing issues that could cause service interruptions and improved how OpsPal processes guidance, making the platform more reliable for your daily RevOps workflows.",
+  "published_at": "2026-04-14T14:21:38.541Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-14",
   "has_breaking": false,
-  "total_commits": 10,
+  "total_commits": 12,
   "entries": [
+    {
+      "category": "improved",
+      "plugin": "Core Platform",
+      "headline": "Better guidance recommendations based on your workflow patterns",
+      "details": null,
+      "commits": [
+        "d24af3a"
+      ]
+    },
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "License activation now works reliably without interruptions",
+      "headline": "Resolved licensing issues that could interrupt your work",
       "details": [
-        "Your OpsPal access stays active without unexpected logouts or activation loops",
-        "You'll receive clear warnings when your license is approaching expiration"
+        "License renewals now happen smoothly without service disruptions",
+        "You'll get clear warnings before any license expires so you can renew on time"
       ],
       "commits": [
         "d9f1c3d",
         "c794211"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Skills",
-      "headline": "Enhanced skills library with better organization and coverage",
-      "details": [
-        "Updated skill guides now have consistent naming and proper placement",
-        "Added missing templates to help you get started with new automation projects faster"
-      ],
-      "commits": [
-        "9d4de94"
       ]
     }
   ]
