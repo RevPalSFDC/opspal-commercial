@@ -1,23 +1,36 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week's release focused on improving system reliability with a key fix to license management that prevents user sessions from getting stuck in activation loops. RevOps teams will experience more stable platform access without interruptions.",
-  "published_at": "2026-04-13T15:22:59.646Z",
+  "summary": "This week brought important stability improvements to OpsPal's licensing system, eliminating disruptions that could interrupt your workflow. We also expanded and refined our skills library to provide better guidance for common RevOps scenarios.",
+  "published_at": "2026-04-14T12:20:45.133Z",
   "week_start": "2026-04-13",
-  "week_end": "2026-04-13",
+  "week_end": "2026-04-14",
   "has_breaking": false,
-  "total_commits": 3,
+  "total_commits": 10,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed license activation getting stuck in endless loops",
+      "headline": "License activation now works reliably without interruptions",
       "details": [
-        "Your OpsPal session now stays active without requiring repeated login attempts",
-        "You'll receive early warnings when your license approaches expiration"
+        "Your OpsPal access stays active without unexpected logouts or activation loops",
+        "You'll receive clear warnings when your license is approaching expiration"
       ],
       "commits": [
+        "d9f1c3d",
         "c794211"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Skills",
+      "headline": "Enhanced skills library with better organization and coverage",
+      "details": [
+        "Updated skill guides now have consistent naming and proper placement",
+        "Added missing templates to help you get started with new automation projects faster"
+      ],
+      "commits": [
+        "9d4de94"
       ]
     }
   ]
