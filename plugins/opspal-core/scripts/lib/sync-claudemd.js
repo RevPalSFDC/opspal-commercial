@@ -224,48 +224,58 @@ function generateRoutingTable(plugins) {
 }
 
 /**
- * Generate critical routing preamble - placed FIRST in CLAUDE.md for maximum visibility
- * Compact (~300 tokens) block with top mandatory routes and Agent() invocation examples
+ * Generate agent routing guidance - placed FIRST in CLAUDE.md for visibility.
+ * Uses task-characteristic matching instead of keyword tables.
+ * Dynamic per-prompt routing is handled by hooks (unified-router.sh, user-prompt-reminder.sh).
  */
 function generateCriticalRoutingPreamble(plugins) {
   const routes = generateRoutingTable(plugins);
-  const topMandatory = routes.filter(r => r.isMandatory).slice(0, 10);
 
-  // If no mandatory routes discovered, use static fallback
-  if (topMandatory.length === 0) {
-    return `## 🚨 CRITICAL: Agent Routing Rules
-
-**STOP** before responding to any request. Check this table first.
-
-| If user mentions... | Use this agent | Invoke with |
-|---------------------|---------------|-------------|
-| revops, audit, pipeline | \`opspal-salesforce:sfdc-revops-auditor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-revops-auditor', prompt=<request>)\` |
-| cpq, quote, pricing | \`opspal-salesforce:sfdc-cpq-assessor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-cpq-assessor', prompt=<request>)\` |
-| automation audit, flow audit | \`opspal-salesforce:sfdc-automation-auditor\` | \`Agent(subagent_type='opspal-salesforce:sfdc-automation-auditor', prompt=<request>)\` |
-| hubspot assessment | \`opspal-hubspot:hubspot-assessment-analyzer\` | \`Agent(subagent_type='opspal-hubspot:hubspot-assessment-analyzer', prompt=<request>)\` |
-| permission set | \`opspal-salesforce:sfdc-permission-orchestrator\` | \`Agent(subagent_type='opspal-salesforce:sfdc-permission-orchestrator', prompt=<request>)\` |
-
-**Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
+  // Build domain table from discovered mandatory agents, grouped by platform
+  const domainGroups = {};
+  for (const route of routes.filter(r => r.isMandatory).slice(0, 20)) {
+    const plugin = route.agent.split(':')[0].replace('opspal-', '');
+    if (!domainGroups[plugin]) domainGroups[plugin] = [];
+    domainGroups[plugin].push(route);
   }
 
-  let content = `## 🚨 CRITICAL: Agent Routing Rules
+  let domainTable = '';
+  for (const [domain, domainRoutes] of Object.entries(domainGroups)) {
+    const agentList = domainRoutes.slice(0, 4).map(r => `\`${r.agent.split(':')[1]}\``).join(', ');
+    const useFor = domainRoutes.slice(0, 4).map(r => r.keywords).join('; ');
+    domainTable += `| ${capitalize(domain)} | ${agentList} | ${useFor} |\n`;
+  }
 
-**STOP** before responding to any request. Check this table first.
-
-| If user mentions... | Use this agent | Invoke with |
-|---------------------|---------------|-------------|
+  // Fallback if no agents discovered
+  if (!domainTable) {
+    domainTable = `| Salesforce | \`sfdc-orchestrator\`, \`sfdc-cpq-assessor\`, \`sfdc-revops-auditor\` | CPQ, RevOps, deployments, permissions |
+| HubSpot | \`hubspot-orchestrator\`, \`hubspot-assessment-analyzer\` | Assessments, workflows, contact management |
+| Marketo | \`marketo-orchestrator\`, \`marketo-campaign-builder\` | Campaigns, programs, lead scoring |
+| Cross-platform | \`diagram-generator\`, \`release-coordinator\` | Diagrams, production deploys, reporting |
 `;
-
-  for (const route of topMandatory) {
-    content += `| ${route.keywords} | \`${route.agent}\` | \`Agent(subagent_type='${route.agent}', prompt=<request>)\` |\n`;
   }
 
-  content += `
-**Self-check**: (1) Does this match a keyword above? (2) Is this multi-step? (3) Is this an assessment/audit?
-If YES to any → use Agent(). If unsure → use Agent(). Override: \`[DIRECT]\` to skip.`;
+  return `## Agent Routing
 
-  return content;
+Before executing complex work directly, check whether a specialist agent should handle it.
+Use \`Agent(subagent_type='plugin:agent-name', prompt=<request>)\` when:
+
+- The task is **multi-step** (discovery, analysis, implementation, verification)
+- The task involves **data mutation** (imports, upserts, bulk updates, deploys)
+- The task is an **assessment or audit** (CPQ, RevOps, automation, permissions, HubSpot)
+- The task spans **multiple systems** (SF + HubSpot, cross-platform reporting)
+- The task requires **domain expertise** (territory models, lead scoring, flow authoring)
+
+Skip agent routing for simple SOQL queries, file reads, status checks, narrow single-file edits, and conversational responses.
+
+### Available specialist domains
+
+| Domain | Key agents | Use for |
+|--------|-----------|---------|
+${domainTable}
+Use fully-qualified names only (e.g., \`opspal-salesforce:sfdc-orchestrator\`).
+Runtime hooks provide per-prompt routing guidance — follow those when they appear in system reminders.
+Override: \`[DIRECT]\` to skip routing.`;
 }
 
 /**
@@ -748,37 +758,12 @@ function generateAgentProtocol(plugins) {
   // of CLAUDE.md — duplicating it wastes tokens and creates maintenance drift.
   const optionalRoutes = routes.filter(r => !r.isMandatory).slice(0, 15);
 
-  let content = `## 🎯 AGENT-FIRST PROTOCOL
+  let content = `## Plugin Documentation & Additional Agents
 
-**MANDATORY**: Always check the routing table at the top of this file before performing tasks!
+The Agent Routing section at the top of this file covers when and how to use specialists.
+For the complete routing table with all patterns, see \`docs/routing-help.md\`.
 
-`;
-
-  // Generate Recommended Routing section (non-mandatory agents)
-  if (optionalRoutes.length > 0) {
-    content += `### Recommended Routing
-
-| Keywords | Agent |
-|----------|-------|
-`;
-
-    for (const route of optionalRoutes) {
-      content += `| ${route.keywords} | \`${route.agent}\` |\n`;
-    }
-
-    content += '\n';
-  }
-
-  content += `**Full routing tables**: See \`docs/routing-help.md\`
-
-### Self-Check Before Every Task
-
-1. Does this task match ANY pattern in the routing tables above?
-2. If in **Critical Routing** (top of file) → MUST use Agent tool
-3. If in **Recommended Routing** → Use Agent tool for best results
-4. If NO match → Proceed with direct execution
-
-### Plugin Documentation
+### Per-Plugin References
 
 `;
 
