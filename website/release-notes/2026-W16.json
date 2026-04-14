@@ -1,33 +1,34 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought important platform stability improvements and enhanced automation capabilities. We fixed licensing issues that could cause service interruptions and improved how OpsPal processes guidance, making the platform more reliable for your daily RevOps workflows.",
-  "published_at": "2026-04-14T14:21:38.541Z",
+  "summary": "This week focused on platform stability improvements and expanding automation capabilities. OpsPal resolved license activation issues that could cause system interruptions, and significantly enhanced the Skills library with 98 updated automation templates to help RevOps teams build workflows faster.",
+  "published_at": "2026-04-14T14:42:13.827Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-14",
   "has_breaking": false,
-  "total_commits": 12,
+  "total_commits": 13,
   "entries": [
-    {
-      "category": "improved",
-      "plugin": "Core Platform",
-      "headline": "Better guidance recommendations based on your workflow patterns",
-      "details": null,
-      "commits": [
-        "d24af3a"
-      ]
-    },
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved licensing issues that could interrupt your work",
+      "headline": "License activation now works smoothly without interruptions",
       "details": [
-        "License renewals now happen smoothly without service disruptions",
-        "You'll get clear warnings before any license expires so you can renew on time"
+        "Your OpsPal license activates properly on the first try and warns you 48 hours before expiration so you never lose access unexpectedly"
       ],
       "commits": [
         "d9f1c3d",
         "c794211"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Skills",
+      "headline": "Skills library expanded with 98 enhanced automation templates",
+      "details": [
+        "Build workflows faster with improved templates for sales planning, Salesforce integration, and dozens of other common RevOps tasks"
+      ],
+      "commits": [
+        "9d4de94"
       ]
     }
   ]
