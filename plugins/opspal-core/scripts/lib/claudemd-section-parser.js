@@ -279,12 +279,33 @@ function mergeClaudeMd(existingSections, generatedSections, options = {}) {
   const skipped = [];
   let hasUserVerbatim = false;
 
+  // Detect whether managed sections exist in the file. If they do, user-verbatim
+  // content that appears BEFORE the first managed section is legacy content that
+  // has been superseded by managed equivalents (installation, versions, etc.).
+  // Drop it to prevent bloat — the managed sections contain the same information.
+  const hasManagedSections = existingSections.some(s => s.type === 'managed');
+  let seenFirstManaged = false;
+
   // Track which generated sections have been placed
   const placed = new Set();
   const result = [];
 
   for (const section of existingSections) {
+    if (section.type === 'managed' || section.type === 'user-section') {
+      seenFirstManaged = true;
+    }
+
     if (section.type === 'user-verbatim') {
+      // If managed sections exist and we haven't seen one yet, this is legacy
+      // pre-marker content (old header, installation, version table, etc.) that
+      // the managed sections now replace. Drop it to prevent duplication/bloat.
+      if (hasManagedSections && !seenFirstManaged) {
+        changes.push({ action: 'dropped-legacy', preview: section.content.trim().slice(0, 80) });
+        continue;
+      }
+
+      // User-verbatim content BETWEEN or AFTER managed sections is preserved —
+      // it's likely intentional custom additions.
       hasUserVerbatim = true;
       skipped.push({ type: 'user-verbatim', preview: section.content.trim().slice(0, 120) });
       result.push(section.content);
@@ -299,6 +320,12 @@ function mergeClaudeMd(existingSections, generatedSections, options = {}) {
     }
 
     if (section.type === 'managed') {
+      // Skip duplicate managed sections (can occur from bad prior syncs)
+      if (placed.has(section.name)) {
+        changes.push({ action: 'dropped-duplicate', name: section.name });
+        continue;
+      }
+
       const newSection = generatedSections.get(section.name);
       placed.add(section.name);
 
@@ -357,6 +384,13 @@ function mergeClaudeMd(existingSections, generatedSections, options = {}) {
       result.push(generateManagedBlock(name, section.content, section.version));
       changes.push({ action: 'added', name });
     }
+  }
+
+  // Ensure 'header' section is always first (may be misplaced from prior bad syncs)
+  const headerIdx = result.findIndex(block => block.includes('section="header"'));
+  if (headerIdx > 0) {
+    const [headerBlock] = result.splice(headerIdx, 1);
+    result.unshift(headerBlock);
   }
 
   const merged = result.join('\n\n');

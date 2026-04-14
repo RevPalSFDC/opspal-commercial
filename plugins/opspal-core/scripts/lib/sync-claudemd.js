@@ -932,67 +932,14 @@ claude plugin validate ./plugins/<plugin-name>
  * Generate brand gallery and templates section
  */
 function generateBrandingSection() {
-  return `---
+  return `## Branding
 
-## 🎨 Brand Gallery & Templates
+Use RevPal branding for all client-facing outputs. Use \`/generate-pdf\` with \`--theme revpal-brand\` — never \`npx md-to-pdf\` directly.
 
-**MANDATORY**: Use RevPal branding for all client-facing outputs.
-
-### Interactive Gallery
-
-Open in browser: \`plugins/opspal-core/templates/branding-gallery/index.html\`
-
-### PDF Cover Templates
-
-| Label | Use For |
-|-------|---------|
-| \`PDF_COVER_SALESFORCE\` | Automation/metadata/RevOps/CPQ audits |
-| \`PDF_COVER_HUBSPOT\` | Portal assessments, workflow audits |
-| \`PDF_COVER_MARKETO\` | Marketing automation assessments |
-| \`PDF_COVER_EXECUTIVE\` | Executive summaries, benchmarks |
-| \`PDF_COVER_SECURITY\` | Permission/compliance reviews |
-| \`PDF_COVER_DATA\` | Data quality, dedup reports |
-| \`PDF_COVER_GTM\` | GTM planning, revenue modeling |
-| \`PDF_COVER_CROSSPLATFORM\` | Multi-platform integration |
-
-### Color Palette (Quick Reference)
-
-| Label | Hex | Usage |
-|-------|-----|-------|
-| \`REVPAL_GRAPE\` | #5F3B8C | Headings, buttons, links |
-| \`REVPAL_APRICOT\` | #E99560 | CTAs, hover states, highlights |
-| \`REVPAL_INDIGO\` | #3E4A61 | Subheadings, body emphasis |
-| \`REVPAL_SAND\` | #EAE4DC | Page backgrounds, cards |
-| \`REVPAL_GREEN\` | #6FBF73 | Success states, checkmarks |
-| \`REVPAL_SURFACE\` | #F7F4EF | Content areas, tables |
-
-### Typography
-
-| Label | Font | Usage |
-|-------|------|-------|
-| \`REVPAL_HEADING_FONT\` | Montserrat (600-800) | H1, H2, H3 |
-| \`REVPAL_BODY_FONT\` | Figtree (400-700) | Body text, lists |
-
-### PDF Generation (REQUIRED)
-
-**Always use the branded generator:**
-
-\`\`\`bash
-/generate-pdf report.md report.pdf \\
-  --theme revpal-brand \\
-  --cover salesforce-audit
-\`\`\`
-
-**Never use:** \`npx md-to-pdf\` or generic converters for client deliverables.
-
-### Assets
-
-| Label | Path |
-|-------|------|
-| \`LOGO_PRIMARY\` | \`plugins/opspal-core/templates/branding-gallery/assets/revpal-logo-primary.png\` |
-| \`LOGO_ICON\` | \`plugins/opspal-core/templates/branding-gallery/assets/revpal-brand-mark.png\` |
-| \`LOGO_EXPORT\` | \`plugins/opspal-core/templates/branding-gallery/assets/revpal-logo-export.png\` |
-`;
+- **Gallery**: \`plugins/opspal-core/templates/branding-gallery/index.html\`
+- **Colors**: Grape #5F3B8C (primary), Apricot #E99560 (accent), Indigo #3E4A61 (text), Sand #EAE4DC (background)
+- **Fonts**: Montserrat (headings), Figtree (body)
+- **Covers**: salesforce-audit, hubspot-assessment, executive-report, security-audit, data-quality, gtm-planning, cross-platform-integration`;
 }
 
 /**
