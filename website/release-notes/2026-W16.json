@@ -1,19 +1,20 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on platform stability improvements and expanding automation capabilities. OpsPal resolved license activation issues that could cause system interruptions, and significantly enhanced the Skills library with 98 updated automation templates to help RevOps teams build workflows faster.",
-  "published_at": "2026-04-14T14:42:13.827Z",
+  "summary": "This week brought significant improvements to platform stability and content organization. We fixed licensing issues that could cause activation loops and enhanced our automation skills library with better organization and expanded capabilities for revenue operations workflows.",
+  "published_at": "2026-04-14T15:26:58.387Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-14",
   "has_breaking": false,
-  "total_commits": 13,
+  "total_commits": 15,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "License activation now works smoothly without interruptions",
+      "headline": "Resolved license activation issues that could cause system loops",
       "details": [
-        "Your OpsPal license activates properly on the first try and warns you 48 hours before expiration so you never lose access unexpectedly"
+        "Fixed a problem where license validation could get stuck in an endless loop",
+        "Added warning notifications when licenses are approaching expiration"
       ],
       "commits": [
         "d9f1c3d",
@@ -23,9 +24,11 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Skills library expanded with 98 enhanced automation templates",
+      "headline": "Enhanced automation skills library with better organization",
       "details": [
-        "Build workflows faster with improved templates for sales planning, Salesforce integration, and dozens of other common RevOps tasks"
+        "Reorganized 98 automation skills for better discoverability",
+        "Improved naming and categorization of sales and marketing automation templates",
+        "Added new skill templates to help you build custom revenue operations workflows"
       ],
       "commits": [
         "9d4de94"
