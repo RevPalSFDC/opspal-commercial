@@ -171,7 +171,7 @@
     {
       "name": "opspal-attio",
       "description": "Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, custom objects, SCIM, files, and cross-platform sync with HubSpot and Salesforce. 29 agents.",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-engineering",
@@ -2138,7 +2138,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.12",
+      "version": "2.55.13",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -12482,7 +12482,7 @@
     {
       "name": "opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.32",
+      "version": "3.9.33",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-hubspot",
@@ -19359,7 +19359,7 @@
     {
       "name": "opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.87.15",
+      "version": "3.87.16",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-salesforce",

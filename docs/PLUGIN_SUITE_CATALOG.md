@@ -30,14 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-attio` | 2.0.0 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.12 | active | 80 | 11 | 126 | 49 | 107 | 602 |
+| `opspal-attio` | 2.0.1 | active | 29 | 16 | 28 | 13 | 21 | 26 |
+| `opspal-core` | 2.55.13 | active | 80 | 11 | 126 | 49 | 107 | 602 |
 | `opspal-gtm-planning` | 2.3.11 | active | 13 | 1 | 16 | 7 | 4 | 2 |
-| `opspal-hubspot` | 3.9.32 | active | 59 | 6 | 33 | 23 | 15 | 109 |
+| `opspal-hubspot` | 3.9.33 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.42 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.15 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.16 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
 
 ## Registry
 
@@ -78,7 +78,7 @@
 
 ### opspal-attio
 
-- Version: `2.0.0`
+- Version: `2.0.1`
 - Status: `active`
 - Path: `plugins/opspal-attio`
 - Manifest: `plugins/opspal-attio/.claude-plugin/plugin.json`
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.12`
+- Version: `2.55.13`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -655,7 +655,7 @@
 
 ### opspal-hubspot
 
-- Version: `3.9.32`
+- Version: `3.9.33`
 - Status: `active`
 - Path: `plugins/opspal-hubspot`
 - Manifest: `plugins/opspal-hubspot/.claude-plugin/plugin.json`
@@ -1052,7 +1052,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.15`
+- Version: `3.87.16`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`

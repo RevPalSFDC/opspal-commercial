@@ -24,13 +24,13 @@
 | Plugin | Version | Status | Owner | Stability | Last Reviewed | Deprecation Date | Replaced By |
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.15 | active | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-attio` | 2.0.0 | active | `revpal-engineering` | `stable` | `2026-04-10` | _unset_ | _unset_ |
-| `opspal-core` | 2.55.12 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-attio` | 2.0.1 | active | `revpal-engineering` | `stable` | `2026-04-10` | _unset_ | _unset_ |
+| `opspal-core` | 2.55.13 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-gtm-planning` | 2.3.11 | active | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
-| `opspal-hubspot` | 3.9.32 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-hubspot` | 3.9.33 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-marketo` | 2.6.42 | active | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-monday` | 1.4.11 | experimental | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-okrs` | 3.0.13 | active | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
-| `opspal-salesforce` | 3.87.15 | active | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-salesforce` | 3.87.16 | active | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 
 _End of auto-generated ownership and lifecycle report._

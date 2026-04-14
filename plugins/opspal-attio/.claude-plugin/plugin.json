@@ -1,0 +1,29 @@
+{
+  "name": "opspal-attio",
+  "description": "Attio CRM: record management, pipeline intelligence, attribute schema, historic values, data operations, webhooks, meetings, notes/tasks, custom objects, SCIM, files, and cross-platform sync with HubSpot and Salesforce. 29 agents.",
+  "version": "2.0.1",
+  "author": {
+    "name": "RevPal Engineering",
+    "email": "engineering@gorevpal.com"
+  },
+  "keywords": [
+    "attio",
+    "crm",
+    "records",
+    "pipelines",
+    "objects",
+    "attributes",
+    "entries",
+    "lists",
+    "notes",
+    "tasks",
+    "webhooks",
+    "historic-values",
+    "data-operations",
+    "governance",
+    "salesforce-sync",
+    "hubspot-sync"
+  ],
+  "repository": "https://github.com/RevPalSFDC/opspal-commercial",
+  "license": "Proprietary"
+}
