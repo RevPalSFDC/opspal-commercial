@@ -90,6 +90,12 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/post-tool-use-contract-validation.sh",
             "timeout": 5000,
             "description": "Validate tool outputs against contracts and data quality gates"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/post-bash-error-handler.sh",
+            "timeout": 10000,
+            "description": "Capture non-zero Bash exit codes from SF CLI and surface structured error context"
           }
         ],
         "matcher": "Bash"
@@ -372,6 +378,83 @@
           }
         ],
         "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/api-quota-monitor.sh",
+            "timeout": 8000,
+            "description": "Track Attio API call volume and warn on rate limit approach"
+          }
+        ],
+        "matcher": "^mcp__attio__.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-webhook-create.sh",
+            "timeout": 10000,
+            "description": "Surface HMAC verification and idempotency guidance after webhook creation"
+          }
+        ],
+        "matcher": "^mcp__attio__webhooks_create$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-meeting-create.sh",
+            "timeout": 10000,
+            "description": "Surface follow-up task and note guidance after meeting creation"
+          }
+        ],
+        "matcher": "^mcp__attio__meetings_create$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-entry-upsert.sh",
+            "timeout": 10000,
+            "description": "Log pipeline entry creation and suggest /attio-pipeline-health"
+          }
+        ],
+        "matcher": "^mcp__attio__entries_(upsert|create)$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-workspace-auth.sh",
+            "timeout": 10000,
+            "description": "Cache workspace identity after successful auth validation"
+          }
+        ],
+        "matcher": "^mcp__attio__self_get$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/post-migration-checkpoint.sh",
+            "timeout": 10000,
+            "description": "Track migration loop progress when active migration file present"
+          }
+        ],
+        "matcher": "^mcp__attio__records_upsert$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/post-marketo-dispatcher.sh",
+            "timeout": 20000,
+            "description": "Dispatch Marketo MCP post-operation hooks (API limit, verification)"
+          }
+        ],
+        "matcher": "^mcp__marketo__.*$"
       }
     ],
     "UserPromptSubmit": [
@@ -379,45 +462,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "env ROUTING_ADAPTIVE_CONTINUE=1 ENABLE_HARD_BLOCKING=0 ENABLE_COMPLEXITY_HARD_BLOCKING=0 USER_PROMPT_MANDATORY_HARD_BLOCKING=1 ENABLE_INTAKE_HARD_BLOCKING=0 /home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/unified-router.sh",
-            "timeout": 10000,
-            "description": "Unified agent routing with complexity analysis (replaces 5-script chain)"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-task-graph-trigger.sh",
-            "timeout": 5000,
-            "description": "Detect when Task Graph orchestration is needed based on complexity"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
-            "timeout": 5000,
-            "description": "Extract ambient reflection candidates from user prompt signals"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/user-prompt-first-run.sh",
-            "timeout": 4000,
-            "description": "Guide first-run activation and workspace initialization before normal OpsPal work"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/task-scope-selector.sh",
-            "timeout": 5000,
-            "description": "Persist a minimal plugin and skill scope for the current task and inject a concise allowlist reminder"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/intake-suggestion.sh",
-            "timeout": 5000,
-            "description": "Suggest /intake for project-level requests using complexity scoring and language detection"
-          },
-          {
-            "type": "command",
-            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/routing-context-refresher.sh",
-            "timeout": 3000,
-            "description": "Inject condensed routing reminder after context compaction or periodically"
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/user-prompt-dispatcher.sh",
+            "timeout": 30000,
+            "description": "Sequential dispatcher: serializes routing, scope selection, reminder injection, and task-graph detection (replaces 7 parallel hooks)"
           }
         ]
       }
@@ -521,6 +568,24 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-tool-use-asset-resolver.sh",
+            "timeout": 8000,
+            "description": "Rewrite Bash commands referencing encrypted asset paths to decrypted runtime copies"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-soql-validation.sh",
+            "timeout": 10000,
+            "description": "Standalone SOQL reserved keyword and optimization validator"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-operation-org-validation.sh",
+            "timeout": 15000,
+            "description": "Warn when working-directory org context mismatches --target-org flag"
           }
         ],
         "matcher": "Bash"
@@ -556,6 +621,12 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-operation-data-validator.sh",
             "timeout": 8000,
             "description": "Validate data inputs using enhanced data-quality-monitor.js (cross-field, freshness, semantic)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-write-alias-linter.sh",
+            "timeout": 8000,
+            "description": "Scan written content for hardcoded --target-org aliases"
           }
         ],
         "matcher": "Write"
@@ -752,6 +823,152 @@
           }
         ],
         "matcher": "*"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-entry-delete.sh",
+            "timeout": 8000,
+            "description": "Warn before irreversible list entry deletion in Attio"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-record-delete.sh",
+            "timeout": 8000,
+            "description": "Warn before permanent record deletion in Attio"
+          }
+        ],
+        "matcher": "^mcp__attio__.*(delete|remove).*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh",
+            "timeout": 8000,
+            "description": "Warn on complex Attio queries approaching rate limit budget"
+          }
+        ],
+        "matcher": "^mcp__attio__(records|entries)_query$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-object-delete.sh",
+            "timeout": 8000,
+            "description": "Critical advisory before custom object deletion (destroys ALL records)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-attribute-delete.sh",
+            "timeout": 8000,
+            "description": "Strongest warning before schema attribute deletion (destroys all field values)"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-schema-mutate.sh",
+            "timeout": 8000,
+            "description": "Advisory before schema mutations with operation-type-specific guidance"
+          }
+        ],
+        "matcher": "^mcp__attio__(attributes|objects)_(create|update|delete)$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-scim-mutate.sh",
+            "timeout": 8000,
+            "description": "Advisory warning before enterprise SCIM user deprovisioning"
+          }
+        ],
+        "matcher": "^mcp__attio__scim_users_delete$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-search-beta-warning.sh",
+            "timeout": 6000,
+            "description": "Warn that Attio search is BETA and eventually consistent"
+          }
+        ],
+        "matcher": "^mcp__attio__records_search$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
+            "timeout": 8000,
+            "description": "Detect raw curl calls to api.attio.com and redirect to MCP tools"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-tool-use-asset-resolver.sh",
+            "timeout": 8000,
+            "description": "Rewrite Bash commands referencing encrypted asset paths to decrypted runtime copies"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-soql-validation.sh",
+            "timeout": 10000,
+            "description": "Standalone SOQL reserved keyword and optimization validator"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/pre-operation-org-validation.sh",
+            "timeout": 15000,
+            "description": "Warn when working-directory org context mismatches --target-org flag"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/pre-bulk-loop.sh",
+            "timeout": 8000,
+            "description": "Detect mass-record loop intent and emit rate-limit advisory"
+          }
+        ],
+        "matcher": "Agent"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-marketo/hooks/pre-marketo-mutating-dispatcher.sh",
+            "timeout": 20000,
+            "description": "Dispatch Marketo MCP mutating operation pre-validation"
+          }
+        ],
+        "matcher": "^mcp__marketo__.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-supabase-validation.sh",
+            "timeout": 10000,
+            "description": "Validate Supabase credentials before MCP tool calls"
+          }
+        ],
+        "matcher": "^mcp__supabase__.*$"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/pre-tool-use-asset-resolver-read.sh",
+            "timeout": 8000,
+            "description": "Rewrite Read tool file_path references to decrypted runtime copies"
+          }
+        ],
+        "matcher": "Read"
       }
     ],
     "PermissionRequest": [
@@ -867,6 +1084,18 @@
             "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-attio/hooks/session-start-attio.sh",
             "timeout": 10000,
             "description": "Load Attio workspace context and validate authentication"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-start-asset-decryptor.sh",
+            "timeout": 30000,
+            "description": "Batch-decrypt encrypted plugin assets at session start"
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-salesforce/hooks/session-start-sf-context.sh",
+            "timeout": 10000,
+            "description": "Canonical consolidated Salesforce org detection at session start"
           }
         ]
       }
@@ -1053,6 +1282,12 @@
             "timeout": 10000,
             "description": "Session-end ambient reflection flush",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "/home/chris/Desktop/RevPal/Agents/opspal-release/opspal-commercial/plugins/opspal-core/hooks/session-stop-asset-cleanup.sh",
+            "timeout": 15000,
+            "description": "Securely wipe decrypted runtime assets on session end"
           }
         ]
       }

@@ -1,6 +1,6 @@
 ---
 name: compliance-report-generator
-description: "Generates compliance reports for SOC2, GDPR, HIPAA requirements."
+description: "Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirements, HIPAA configurations, user access audits, data retention verification, and security configuration checks. Use when asked for audit-ready documentation, compliance evidence, or regulatory assessments."
 model: sonnet
 tools:
   - Read

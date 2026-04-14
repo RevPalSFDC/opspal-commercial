@@ -1,6 +1,6 @@
 ---
 name: unified-exec-dashboard-agent
-description: "Generates unified executive dashboards combining data from all platforms."
+description: "Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-influenced revenue across Salesforce, HubSpot, and Marketo. Use when asked for C-level reporting, board-ready metrics, cross-platform KPIs, or unified revenue views."
 model: sonnet
 tools:
   - Read

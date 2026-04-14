@@ -172,7 +172,7 @@
 #### Hooks
 
 - `api-quota-monitor` (`api-quota-monitor.sh`): API Quota Monitor Hook - Attio Plugin
-- `error-handler` (`lib/error-handler.sh`): Attio Plugin Error Handler
+- `error-handler` (`lib/error-handler.sh`): STATUS: SUPERSEDED — shared library sourced by other hooks, not a standalone registrable hook
 - `observability-quota-monitor` (`observability-quota-monitor.sh`): Observability Quota Monitor Hook - Attio Plugin
 - `post-assessment-trigger` (`post-assessment-trigger.sh`): Post-Assessment Trigger Hook - Attio Plugin
 - `post-entry-upsert` (`post-entry-upsert.sh`): Post-Entry Upsert Hook - Attio Plugin
@@ -220,8 +220,8 @@
 | `conversation-intelligence-aggregator` | MUST BE USED for combined Gong + Fireflies conversation intelligence, transcript deduplication, and cross-platform de... | `conversation-intelligence-aggregator.md` |
 | `cross-platform-impact-analyzer` | Use PROACTIVELY before making changes that affect synced fields or shared objects. | `cross-platform-impact-analyzer.md` |
 | `cross-platform-pipeline-orchestrator` | Orchestrates parallel cross-platform operations across Salesforce, HubSpot, Asana, and Marketo - builds DAGs, spawns ... | `cross-platform-pipeline-orchestrator.md` |
-| `cs-operations-orchestrator` | Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forec... | `cs-operations-orchestrator.md` |
-| `data-migration-orchestrator` | Orchestrates data migrations between platforms with validation. | `data-migration-orchestrator.md` |
+| `cs-operations-orchestrator` | Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk f... | `cs-operations-orchestrator.md` |
+| `data-migration-orchestrator` | Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transforma... | `data-migration-orchestrator.md` |
 | `diagram-generator` | MUST BE USED for diagrams, flowcharts, or ERDs. | `diagram-generator.md` |
 | `environment-profile-manager` | Use PROACTIVELY for environment profile management. | `environment-profile-manager.md` |
 | `field-dictionary-manager` | Use PROACTIVELY for field dictionary operations. | `field-dictionary-manager.md` |
@@ -242,7 +242,7 @@
 | `intelligent-intake-orchestrator` | Use PROACTIVELY for project intake. | `intelligent-intake-orchestrator.md` |
 | `live-wire-sync-test-orchestrator` | Automatically routes for sync testing. | `live-wire-sync-test-orchestrator.md` |
 | `multi-platform-campaign-orchestrator` | Orchestrates campaigns across Salesforce, HubSpot, and Marketo. | `multi-platform-campaign-orchestrator.md` |
-| `multi-platform-workflow-orchestrator` | Orchestrates complex workflows spanning multiple platforms. | `multi-platform-workflow-orchestrator.md` |
+| `multi-platform-workflow-orchestrator` | Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequ... | `multi-platform-workflow-orchestrator.md` |
 | `n8n-execution-monitor` | Use for n8n execution monitoring and debugging. | `n8n-execution-monitor.md` |
 | `n8n-integration-orchestrator` | Use PROACTIVELY for multi-platform n8n orchestration. | `n8n-integration-orchestrator.md` |
 | `n8n-lifecycle-manager` | Manage n8n workflow lifecycle states including activation, deactivation, archival, scheduling, and template cloning | `n8n-lifecycle-manager.md` |
@@ -251,7 +251,7 @@
 | `notebooklm-knowledge-manager` | MUST BE USED for NotebookLM operations. | `notebooklm-knowledge-manager.md` |
 | `outreach-integration-agent` | Integrates Outreach/SalesLoft sales engagement data with Salesforce and HubSpot. | `outreach-integration-agent.md` |
 | `pdf-generator` | Use PROACTIVELY for PDF generation. | `pdf-generator.md` |
-| `pipeline-intelligence-agent` | Pipeline health scoring, bottleneck detection, and deal risk assessment. | `pipeline-intelligence-agent.md` |
+| `pipeline-intelligence-agent` | Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage anal... | `pipeline-intelligence-agent.md` |
 | `platform-instance-manager` | Use PROACTIVELY for multi-platform management. | `platform-instance-manager.md` |
 | `playwright-browser-controller` | Master agent for direct browser automation using Playwright MCP. | `playwright-browser-controller.md` |
 | `plugin-doctor` | Use PROACTIVELY for plugin diagnostics. | `plugin-doctor.md` |
@@ -283,7 +283,7 @@
 | `task-scheduler` | Use PROACTIVELY for scheduling automated tasks. | `task-scheduler.md` |
 | `uat-orchestrator` | Use PROACTIVELY for UAT testing. | `uat-orchestrator.md` |
 | `ui-documentation-generator` | Specialized agent for creating visual documentation by capturing screenshots, annotating workflows, and generating do... | `ui-documentation-generator.md` |
-| `unified-exec-dashboard-agent` | Generates unified executive dashboards combining data from all platforms. | `unified-exec-dashboard-agent.md` |
+| `unified-exec-dashboard-agent` | Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-infl... | `unified-exec-dashboard-agent.md` |
 | `unified-reporting-aggregator` | Aggregates reporting data from Salesforce, HubSpot, and Marketo into unified cross-platform views for executive dashb... | `unified-reporting-aggregator.md` |
 | `visual-regression-tester` | Specialized agent for visual regression testing, comparing UI states before and after changes using Playwright MCP sc... | `visual-regression-tester.md` |
 | `web-viz-generator` | MUST BE USED for interactive web dashboards and data visualization. | `web-viz-generator.md` |
@@ -475,78 +475,78 @@
 
 #### Hooks
 
-- `ambient-candidate-extractor` (`ambient-candidate-extractor.sh`): Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
+- `ambient-candidate-extractor` (`ambient-candidate-extractor.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 - `ambient-flush-trigger` (`ambient-flush-trigger.sh`): Skip in subagent context — flush evaluation only valuable at main session level.
 - `ambient-hook-error-observer` (`ambient-hook-error-observer.sh`): Skip in subagent context — error observation only valuable at main session level.
 - `base-context-loader` (`context-loader/base-context-loader.sh`): Base Context Loader Hook
 - `error-handler` (`lib/error-handler.sh`): Standardized Error Handler Library for Hooks
 - `hubspot` (`context-loader/platform-extensions/hubspot.sh`): HubSpot Context Extension
-- `intake-suggestion` (`intake-suggestion.sh`): DEPRECATED: This hook is no longer registered in hooks.json as of v2.50.0.
+- `intake-suggestion` (`intake-suggestion.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 - `marketo` (`context-loader/platform-extensions/marketo.sh`): Marketo Context Extension
-- `master-prompt-handler` (`master-prompt-handler.sh`): Master Prompt Handler
+- `master-prompt-handler` (`master-prompt-handler.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `permission-request-handler` (`permission-request-handler.sh`): PermissionRequest Hook - Audit & Auto-Approve
 - `post-assessment-work-index` (`post-assessment-work-index.sh`): Post-Assessment Work Index Hook
 - `post-audit-bluf-generator` (`post-audit-bluf-generator.sh`): Post-Audit BLUF+4 Summary Generator Hook
-- `post-edit-verification` (`post-edit-verification.sh`): Post-Edit Verification Hook
+- `post-edit-verification` (`post-edit-verification.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `post-fireflies-sync` (`post-fireflies-sync.sh`): Post-Fireflies Sync Hook
 - `post-gong-sync` (`post-gong-sync.sh`): Post-Gong Sync Hook
 - `post-investigation-execution-proof` (`post-investigation-execution-proof.sh`): Post-Investigation Execution Proof Hook v2.0
-- `post-pdf-verification` (`post-pdf-verification.sh`): Post-PDF Verification Hook
-- `post-plugin-update` (`post-plugin-update.sh`): Post-Plugin-Update Hook
-- `post-plugin-update-customizations` (`post-plugin-update-customizations.sh`): Post-Plugin-Update Customizations Hook
+- `post-pdf-verification` (`post-pdf-verification.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `post-plugin-update` (`post-plugin-update.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `post-plugin-update-customizations` (`post-plugin-update-customizations.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `post-reflect` (`reflection/post-reflect.sh`): Post-Reflect Hook (Unified)
 - `post-reflect-alerter` (`post-reflect-alerter.sh`): Post-Reflect Alerter Hook
 - `post-reflect-strategy-update` (`post-reflect-strategy-update.sh`): Post-Reflect Skill Update Hook
 - `post-subagent-verification` (`post-subagent-verification.sh`): Post Sub-Agent Verification Hook
 - `post-task-runbook-compliance-check` (`post-task-runbook-compliance-check.sh`): Post-Task Runbook Compliance Check Hook
 - `post-task-stall-check` (`post-task-stall-check.sh`): Post Task Stall Check Hook
-- `post-task-verification` (`post-task-verification.sh`): Post-Task Verification Hook
+- `post-task-verification` (`post-task-verification.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `post-todowrite-scratchpad` (`post-todowrite-scratchpad.sh`): Post TodoWrite Scratchpad Hook
-- `post-tool-capture` (`post-tool-capture.sh`): post-tool-capture.sh - Capture tool invocations for session context
+- `post-tool-capture` (`post-tool-capture.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `post-tool-use` (`post-tool-use.sh`): PostToolUse Hook - Tool Result Validation
 - `post-tool-use-agent-dispatcher` (`post-tool-use-agent-dispatcher.sh`): PostToolUse (Agent matcher) Sequential Dispatcher
 - `post-tool-use-contract-validation` (`post-tool-use-contract-validation.sh`): Post-Tool Use Contract Validation Hook
 - `post-tool-use-license-poll` (`post-tool-use-license-poll.sh`): Post Tool Use — License Poll Daemon
-- `post-tool-validator` (`validation/post-tool-validator.sh`): Post-Tool Validator (Unified)
+- `post-tool-validator` (`validation/post-tool-validator.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `post-win-loss-calibration` (`post-win-loss-calibration.sh`): Post-Win-Loss Calibration Hook
 - `pre-agent-plugin-dispatcher` (`pre-agent-plugin-dispatcher.sh`): Pre-Agent Plugin Dispatcher
-- `pre-commit-config-validation` (`pre-commit-config-validation.sh`): Pre-commit Config Validation Hook
+- `pre-commit-config-validation` (`pre-commit-config-validation.sh`): STATUS: STAGED — not registered by design (experimental or non-hook-event script)
 - `pre-compact` (`pre-compact.sh`): PreCompact Hook - Transcript Backup
-- `pre-dependency-check` (`pre-dependency-check.sh`): Pre-Dependency Check Hook
+- `pre-dependency-check` (`pre-dependency-check.sh`): STATUS: STAGED — not registered by design (experimental or non-hook-event script)
 - `pre-fireflies-api-call` (`pre-fireflies-api-call.sh`): Pre-Fireflies API Call Hook
 - `pre-gong-api-call` (`pre-gong-api-call.sh`): Pre-Gong API Call Hook
 - `pre-operation-data-validator` (`pre-operation-data-validator.sh`): Pre-Operation Data Validator Hook
-- `pre-operation-env-validator` (`pre-operation-env-validator.sh`): Pre-Operation Environment Validator Hook
+- `pre-operation-env-validator` (`pre-operation-env-validator.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-operation-idempotency-check` (`pre-operation-idempotency-check.sh`): Pre-Operation Idempotency Check Hook
-- `pre-operation-snapshot` (`pre-operation-snapshot.sh`): Pre-Operation Snapshot Hook
-- `pre-plan-scope-validation` (`pre-plan-scope-validation.sh`): Pre-Plan Scope Validation Hook
+- `pre-operation-snapshot` (`pre-operation-snapshot.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `pre-plan-scope-validation` (`pre-plan-scope-validation.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-reflect` (`reflection/pre-reflect.sh`): Pre-Reflect Hook (Unified)
-- `pre-session-path-validator` (`pre-session-path-validator.sh`): Pre-Session Path Validator Hook
+- `pre-session-path-validator` (`pre-session-path-validator.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-session-silent-failure-check` (`pre-session-silent-failure-check.sh`): Pre-Session Silent Failure Check Hook
 - `pre-stop-org-verification` (`pre-stop-org-verification.sh`): Pre-Stop Org Verification Hook
 - `pre-supabase-validation` (`pre-supabase-validation.sh`): Pre-Supabase Validation Hook
-- `pre-task-agent-recommendation` (`pre-task-agent-recommendation.sh`): Pre-Task Agent Recommendation Hook
+- `pre-task-agent-recommendation` (`pre-task-agent-recommendation.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-task-agent-validator` (`pre-task-agent-validator.sh`): Pre-Agent Validator Hook
-- `pre-task-field-dictionary-injector` (`pre-task-field-dictionary-injector.sh`): Pre-Task Field Dictionary Injector Hook
+- `pre-task-field-dictionary-injector` (`pre-task-field-dictionary-injector.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-task-graph-trigger` (`pre-task-graph-trigger.sh`): Pre-Task Graph Trigger Hook (Simplified)
-- `pre-task-routing-clarity` (`pre-task-routing-clarity.sh`): Pre-Task Routing Clarity Hook
+- `pre-task-routing-clarity` (`pre-task-routing-clarity.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-task-runbook-policy-enforcer` (`pre-task-runbook-policy-enforcer.sh`): Pre-Task Runbook Policy Enforcer Hook
-- `pre-task-runbook-reminder` (`pre-task-runbook-reminder.sh`): Pre-Task Runbook Reminder Hook
-- `pre-task-template-injector` (`pre-task-template-injector.sh`): Pre-Task Template Injector Hook
+- `pre-task-runbook-reminder` (`pre-task-runbook-reminder.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `pre-task-template-injector` (`pre-task-template-injector.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pre-task-work-context` (`pre-task-work-context.sh`): Pre-Task Work Context Hook
 - `pre-tool-execution` (`pre-tool-execution.sh`): # Pre-Tool Execution Validation Hook
 - `pre-tool-use-asset-resolver` (`pre-tool-use-asset-resolver.sh`): Pre-Tool-Use Asset Resolver (Bash)
 - `pre-tool-use-asset-resolver-read` (`pre-tool-use-asset-resolver-read.sh`): Pre-Tool-Use Asset Resolver (Read)
 - `pre-tool-use-contract-validation` (`pre-tool-use-contract-validation.sh`): Pre-Tool Use Contract Validation Hook
-- `pre-tool-validator` (`validation/pre-tool-validator.sh`): Pre-Tool Validator (Unified)
+- `pre-tool-validator` (`validation/pre-tool-validator.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `pretool-agent-contract` (`lib/pretool-agent-contract.sh`): Shared helpers for Agent PreToolUse hooks.
 - `pretool-deny` (`lib/pretool-deny.sh`): Standardized PreToolUse Deny Output Library
-- `prevention-system-orchestrator` (`prevention-system-orchestrator.sh`): Prevention System Orchestrator
+- `prevention-system-orchestrator` (`prevention-system-orchestrator.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `resolve-encrypted-asset` (`lib/resolve-encrypted-asset.sh`): Encrypted Asset Path Resolver (shared helper)
-- `routing-context-refresher` (`routing-context-refresher.sh`): routing-context-refresher.sh - Post-compaction & periodic routing context injection
+- `routing-context-refresher` (`routing-context-refresher.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 - `salesforce` (`context-loader/platform-extensions/salesforce.sh`): Salesforce Context Extension (Cache-Reader)
 - `session-capture-init` (`session-capture-init.sh`): session-capture-init.sh - Initialize session context capture
-- `session-context-loader` (`session-context-loader.sh`): Session Context Loader Hook
+- `session-context-loader` (`session-context-loader.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `session-end` (`session-end.sh`): Session End Hook (Unified)
 - `session-end-reliability` (`session-end-reliability.sh`): Session End Reliability Hook
 - `session-end-scratchpad` (`session-end-scratchpad.sh`): Session End Scratchpad Hook
@@ -560,14 +560,14 @@
 - `session-start-post-update` (`session-start-post-update.sh`): session-start-post-update.sh - Auto-run safe post-update tasks on version change
 - `session-start-prune-orphaned-plugins` (`session-start-prune-orphaned-plugins.sh`): session-start-prune-orphaned-plugins.sh
 - `session-start-repo-sync` (`session-start-repo-sync.sh`): Session Start Repository Sync Hook
-- `session-start-scratchpad` (`session-start-scratchpad.sh`): Session Start Scratchpad Hook
-- `session-start-version-check` (`session-start-version-check.sh`): Session Start Version Check Hook
+- `session-start-scratchpad` (`session-start-scratchpad.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `session-start-version-check` (`session-start-version-check.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `session-stop-asset-cleanup` (`session-stop-asset-cleanup.sh`): Session Stop Asset Cleanup
 - `setup-maintenance` (`setup-maintenance.sh`): Setup Hook - Environment Maintenance & Onboarding
-- `sop-lifecycle-dispatcher` (`sop-lifecycle-dispatcher.sh`): SOP Lifecycle Dispatcher (PostToolUse/Agent)
-- `sop-prompt-lifecycle-detector` (`sop-prompt-lifecycle-detector.sh`): SOP Prompt Lifecycle Detector (UserPromptSubmit child)
-- `sop-session-init` (`sop-session-init.sh`): SOP Session Initialization Hook (SessionStart child)
-- `sop-subagent-completion` (`sop-subagent-completion.sh`): SOP Subagent Completion (SubagentStop child)
+- `sop-lifecycle-dispatcher` (`sop-lifecycle-dispatcher.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `sop-prompt-lifecycle-detector` (`sop-prompt-lifecycle-detector.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `sop-session-init` (`sop-session-init.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
+- `sop-subagent-completion` (`sop-subagent-completion.sh`): STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 - `stop-dispatcher` (`stop-dispatcher.sh`): Stop Sequential Dispatcher
 - `stop-session-silent-failure-summary` (`stop-session-silent-failure-summary.sh`): Stop Session Silent Failure Summary Hook
 - `subagent-capability-gate-openclaw` (`subagent-capability-gate-openclaw.sh`)
@@ -576,12 +576,12 @@
 - `subagent-stop-dispatcher` (`subagent-stop-dispatcher.sh`): SubagentStop Sequential Dispatcher
 - `task-completed-metrics` (`task-completed-metrics.sh`): TaskCompleted Hook - Agent Performance Metrics
 - `task-graph-policy-enforcer` (`task-graph-policy-enforcer.sh`): Task Graph Policy Enforcer Hook
-- `task-scope-selector` (`task-scope-selector.sh`): Task Scope Selector Hook
-- `unified-router` (`unified-router.sh`): Unified Router Hook
+- `task-scope-selector` (`task-scope-selector.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
+- `unified-router` (`unified-router.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 - `user-prompt-dispatcher` (`user-prompt-dispatcher.sh`): UserPromptSubmit Sequential Dispatcher
-- `user-prompt-first-run` (`user-prompt-first-run.sh`): Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.
-- `user-prompt-reminder` (`user-prompt-reminder.sh`)
-- `weekly-strategy-transfer` (`weekly-strategy-transfer.sh`): Weekly Skill Transfer Hook
+- `user-prompt-first-run` (`user-prompt-first-run.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
+- `user-prompt-reminder` (`user-prompt-reminder.sh`): STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
+- `weekly-strategy-transfer` (`weekly-strategy-transfer.sh`): STATUS: STAGED — not registered by design (experimental or non-hook-event script)
 
 ---
 
@@ -666,15 +666,15 @@
 | Agent | Description | File |
 |-------|-------------|------|
 | `hubspot-admin-specialist` | Use PROACTIVELY for portal administration. | `hubspot-admin-specialist.md` |
-| `hubspot-adoption-tracker` | Use PROACTIVELY for adoption tracking. | `hubspot-adoption-tracker.md` |
-| `hubspot-ai-revenue-intelligence` | Use PROACTIVELY for revenue intelligence. | `hubspot-ai-revenue-intelligence.md` |
+| `hubspot-adoption-tracker` | Use PROACTIVELY for HubSpot adoption tracking, feature utilization analysis, user login frequency, training completio... | `hubspot-adoption-tracker.md` |
+| `hubspot-ai-revenue-intelligence` | Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity d... | `hubspot-ai-revenue-intelligence.md` |
 | `hubspot-analytics-reporter` | Use PROACTIVELY for HubSpot analytics. | `hubspot-analytics-reporter.md` |
 | `hubspot-api` | Use PROACTIVELY for API integration. | `hubspot-api.md` |
 | `hubspot-app-card-builder` | Creates HubSpot App Cards for UI extensibility. | `hubspot-app-card-builder.md` |
 | `hubspot-app-developer` | MUST BE USED for HubSpot app development. | `hubspot-app-developer.md` |
 | `hubspot-assessment-analyzer` | MUST BE USED for HubSpot assessments. | `hubspot-assessment-analyzer.md` |
 | `hubspot-attribution-analyst` | Use PROACTIVELY for attribution analysis. | `hubspot-attribution-analyst.md` |
-| `hubspot-autonomous-operations` | Use PROACTIVELY for autonomous operations. | `hubspot-autonomous-operations.md` |
+| `hubspot-autonomous-operations` | Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations... | `hubspot-autonomous-operations.md` |
 | `hubspot-callback-orchestrator` | Manages async workflow callback execution for HubSpot Automation Actions V4. | `hubspot-callback-orchestrator.md` |
 | `hubspot-cms-blog-author-manager` | Use PROACTIVELY for blog author management. | `hubspot-cms-blog-author-manager.md` |
 | `hubspot-cms-blog-post-manager` | Use PROACTIVELY for blog post management. | `hubspot-cms-blog-post-manager.md` |
@@ -703,13 +703,13 @@
 | `hubspot-marketing-automation` | Use PROACTIVELY for marketing automation. | `hubspot-marketing-automation.md` |
 | `hubspot-orchestrator` | MUST BE USED for complex multi-step HubSpot operations. | `hubspot-orchestrator.md` |
 | `hubspot-pipeline-manager` | Use PROACTIVELY for pipeline management. | `hubspot-pipeline-manager.md` |
-| `hubspot-plg-foundation` | Use PROACTIVELY for product-led growth. | `hubspot-plg-foundation.md` |
+| `hubspot-plg-foundation` | Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to... | `hubspot-plg-foundation.md` |
 | `hubspot-property-manager` | Use PROACTIVELY for property management. | `hubspot-property-manager.md` |
 | `hubspot-renewals-specialist` | Use PROACTIVELY for renewal management. | `hubspot-renewals-specialist.md` |
 | `hubspot-reporting-builder` | Use PROACTIVELY for reporting. | `hubspot-reporting-builder.md` |
 | `hubspot-revenue-intelligence` | Use PROACTIVELY for revenue intelligence. | `hubspot-revenue-intelligence.md` |
 | `hubspot-schema-automation-agent` | Automatically routes for schema generation. | `hubspot-schema-automation-agent.md` |
-| `hubspot-sdr-operations` | Use PROACTIVELY for SDR operations. | `hubspot-sdr-operations.md` |
+| `hubspot-sdr-operations` | Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribut... | `hubspot-sdr-operations.md` |
 | `hubspot-seo-competitor-analyzer` | Automatically routes for competitor analysis. | `hubspot-seo-competitor-analyzer.md` |
 | `hubspot-seo-content-optimizer` | Automatically routes for content optimization. | `hubspot-seo-content-optimizer.md` |
 | `hubspot-seo-deployment-agent` | Automatically routes for SEO deployment. | `hubspot-seo-deployment-agent.md` |
@@ -1064,7 +1064,7 @@
 |-------|-------------|------|
 | `apex-debug-analyst` | Automatically routes for Apex debug analysis. | `apex-debug-analyst.md` |
 | `benchmark-research-agent` | Retrieves verified industry benchmarks from authoritative sources with full citations. | `benchmark-research-agent.md` |
-| `compliance-report-generator` | Generates compliance reports for SOC2, GDPR, HIPAA requirements. | `compliance-report-generator.md` |
+| `compliance-report-generator` | Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirement... | `compliance-report-generator.md` |
 | `flow-batch-operator` | Automatically routes for batch Flow operations. | `flow-batch-operator.md` |
 | `flow-diagnostician` | Automatically routes for Flow diagnostics. | `flow-diagnostician.md` |
 | `flow-log-analyst` | Automatically routes for Flow log analysis. | `flow-log-analyst.md` |
@@ -1139,10 +1139,10 @@
 | `sfdc-revops-coordinator` | Use PROACTIVELY for RevOps coordination. | `sfdc-revops-coordinator.md` |
 | `sfdc-sales-operations` | Use PROACTIVELY for sales operations. | `sfdc-sales-operations.md` |
 | `sfdc-security-admin` | Salesforce security administration specialist for audits, profile/role/sharing work, and downstream permission orches... | `sfdc-security-admin.md` |
-| `sfdc-service-cloud-admin` | Use PROACTIVELY for Service Cloud configuration. | `sfdc-service-cloud-admin.md` |
+| `sfdc-service-cloud-admin` | Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, O... | `sfdc-service-cloud-admin.md` |
 | `sfdc-state-discovery` | MUST BE USED for org discovery, schema inspection, metadata drift checks, and pre-change Salesforce state capture. | `sfdc-state-discovery.md` |
 | `sfdc-territory-assignment` | Manages Salesforce Territory2 user and account assignments. | `sfdc-territory-assignment.md` |
-| `sfdc-territory-deployment` | Executes Salesforce Territory2 changes with validation and rollback support. | `sfdc-territory-deployment.md` |
+| `sfdc-territory-deployment` | Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territor... | `sfdc-territory-deployment.md` |
 | `sfdc-territory-discovery` | Read-only analysis of Salesforce Territory2 configuration. | `sfdc-territory-discovery.md` |
 | `sfdc-territory-monitor` | Monitors Salesforce Territory2 operations and health. | `sfdc-territory-monitor.md` |
 | `sfdc-territory-orchestrator` | MUST BE USED for territory management operations. Coordinates Territory2 model lifecycle, hierarchy, and user/account... | `sfdc-territory-orchestrator.md` |
@@ -1283,45 +1283,45 @@
 
 #### Hooks
 
-- `agent-usage-validator` (`agent-usage-validator.sh`): Agent Usage Validator Hook for Claude Code
-- `hook-circuit-breaker` (`hook-circuit-breaker.sh`): Hook Circuit Breaker - Graceful degradation for hook failures
-- `post-agent-operation` (`post-agent-operation.sh`): Post-Agent-Operation Hook
-- `post-assessment-notebooklm-sync` (`post-assessment-notebooklm-sync.sh`): Post-Assessment NotebookLM Sync Hook
+- `agent-usage-validator` (`agent-usage-validator.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `hook-circuit-breaker` (`hook-circuit-breaker.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `post-agent-operation` (`post-agent-operation.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
+- `post-assessment-notebooklm-sync` (`post-assessment-notebooklm-sync.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
 - `post-assessment-planning-trigger` (`post-assessment-planning-trigger.sh`): Post-Assessment Planning Trigger
 - `post-bash-dispatcher` (`post-bash-dispatcher.sh`)
 - `post-bash-error-handler` (`post-bash-error-handler.sh`): Post-Tool Use Failure Bash Error Handler Hook
 - `post-deploy-manager-stop` (`post-deploy-manager-stop.sh`): post-deploy-manager-stop.sh
 - `post-discovery-field-dictionary` (`post-discovery-field-dictionary.sh`): Post-Discovery Field Dictionary Hook
 - `post-field-deployment` (`post-field-deployment.sh`): post-field-deployment.sh - Verify field accessibility after deployment
-- `post-operation-observe` (`post-operation-observe.sh`): Post-Operation Observer Hook
+- `post-operation-observe` (`post-operation-observe.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
 - `post-org-auth` (`post-org-auth.sh`): Post-Org Authentication Hook
-- `post-sf-command` (`post-sf-command.sh`): # Post-SF-Command Hook - API Usage Tracking
-- `post-sf-query-validation` (`post-sf-query-validation.sh`): Post-SF Query Validation Hook
+- `post-sf-command` (`post-sf-command.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `post-sf-query-validation` (`post-sf-query-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `post-territory-operation-logger` (`post-territory-operation-logger.sh`): Post-Territory Operation Logger Hook
 - `pre-bash-dispatcher` (`pre-bash-dispatcher.sh`): Fast-exit for commands that don't involve Salesforce CLI or jq piping —
-- `pre-bash-jq-validator` (`pre-bash-jq-validator.sh`): Pre-Bash jq Validator Hook
-- `pre-bash-soql-validator` (`pre-bash-soql-validator.sh`): Pre-Bash SOQL Validator Hook
-- `pre-batch-validation` (`pre-batch-validation.sh`): Pre-Batch Validation Hook
-- `pre-dashboard-report-check` (`pre-dashboard-report-check.sh`): Pre-Dashboard Report Check Hook
-- `pre-deploy-agent-context-check` (`pre-deploy-agent-context-check.sh`): PreToolUse hook for source-scoped Salesforce deploy commands
-- `pre-deploy-flow-validation` (`pre-deploy-flow-validation.sh`): Pre-Deployment Flow Validation Hook
-- `pre-deploy-queued-check` (`pre-deploy-queued-check.sh`): pre-deploy-queued-check.sh
-- `pre-deploy-report-quality-gate` (`pre-deploy-report-quality-gate.sh`): Pre-Deployment Report Quality Gate Hook
-- `pre-deployment-comprehensive-validation` (`pre-deployment-comprehensive-validation.sh`): Pre-Deployment Comprehensive Validation Hook
+- `pre-bash-jq-validator` (`pre-bash-jq-validator.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-bash-soql-validator` (`pre-bash-soql-validator.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-batch-validation` (`pre-batch-validation.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
+- `pre-dashboard-report-check` (`pre-dashboard-report-check.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
+- `pre-deploy-agent-context-check` (`pre-deploy-agent-context-check.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-deploy-flow-validation` (`pre-deploy-flow-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-deploy-queued-check` (`pre-deploy-queued-check.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-deploy-report-quality-gate` (`pre-deploy-report-quality-gate.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
+- `pre-deployment-comprehensive-validation` (`pre-deployment-comprehensive-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `pre-deployment-permission-sync` (`pre-deployment-permission-sync.sh`): Pre-Deployment Permission Sync Hook
 - `pre-flow-deployment` (`pre-flow-deployment.sh`): Pre-Flow Deployment Hook
-- `pre-high-risk-operation` (`pre-high-risk-operation.sh`): Pre-High-Risk-Operation Hook
+- `pre-high-risk-operation` (`pre-high-risk-operation.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
 - `pre-operation-org-validation` (`pre-operation-org-validation.sh`): Pre-Operation Org Validation Hook
 - `pre-org-operation-validation` (`pre-org-operation-validation.sh`): Pre-Org Operation Validation Hook
-- `pre-picklist-dependency-validation` (`pre-picklist-dependency-validation.sh`): Pre-Picklist-Dependency Validation Hook
+- `pre-picklist-dependency-validation` (`pre-picklist-dependency-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `pre-sfdc-metadata-manager-invocation` (`pre-sfdc-metadata-manager-invocation.sh`): Pre-Agent Hook: sfdc-metadata-manager Progressive Disclosure
 - `pre-soql-validation` (`pre-soql-validation.sh`): Pre-SOQL Validation Hook
 - `pre-task-context-loader` (`pre-task-context-loader.sh`): Pre-Task Context Loader Hook
-- `pre-task-hook` (`pre-task-hook.sh`): Pre-Task Agent Discovery & Organization Enforcement Hook
+- `pre-task-hook` (`pre-task-hook.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `pre-task-mandatory` (`pre-task-mandatory.sh`): Pre-Task Mandatory Hook - Enforces agent usage for critical operations
 - `pre-territory-migration-validator` (`pre-territory-migration-validator.sh`): pre-territory-migration-validator.sh
 - `pre-territory-write-validator` (`pre-territory-write-validator.sh`): Pre-Territory Write Validator Hook
-- `pre-tool-use` (`pre-tool-use.sh`): Deprecated inactive pre-tool hook.
+- `pre-tool-use` (`pre-tool-use.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `pre-tool-use-territory-rule-validator` (`pre-tool-use-territory-rule-validator.sh`): Pre-Tool-Use Territory Rule Validator Hook
 - `pre-write-alias-linter` (`pre-write-alias-linter.sh`): Pre-Write Alias Linter
 - `session-start-agent-reminder` (`session-start-agent-reminder.sh`): Session Start Agent Reminder Hook

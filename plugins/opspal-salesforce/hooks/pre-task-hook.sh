@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 
 # Pre-Task Agent Discovery & Organization Enforcement Hook
 # ENHANCED: Now BLOCKS high-risk operations without agents

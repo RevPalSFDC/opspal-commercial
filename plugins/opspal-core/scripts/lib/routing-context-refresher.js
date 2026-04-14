@@ -110,7 +110,7 @@ Only use fully-qualified agent names exactly as listed. Do not invent shorthand 
 
   text += `
 **Self-check**: (1) Does this match a keyword above? (2) Is this multi-step or cross-system? (3) Is this an assessment, audit, workflow, or configuration change?
-If YES to any, prefer \`Agent(...)\`. If runtime hooks require a route, invoke the approved agent before operational tools. Never call \`Agent\` with unqualified role labels. Direct execution is acceptable for low-risk reads and small local tasks when hooks do not require routing.`;
+If YES to any, you MUST use \`Agent(...)\` with the specialist agent shown. Route through the specialist rather than executing directly — it has domain-specific tools and validation. Never call \`Agent\` with unqualified role labels. Only skip routing for simple reads, status checks, or narrow local edits.`;
 
   return text;
 }
@@ -153,7 +153,22 @@ function generateFull(index) {
 function generateFallback() {
   return `## Agent Routing Guidance
 
-Check routing before starting operational work. For revops or audit use \`opspal-salesforce:sfdc-revops-auditor\`, for cpq or quoting use \`opspal-salesforce:sfdc-cpq-assessor\`, for automation audit use \`opspal-salesforce:sfdc-automation-auditor\`, for HubSpot assessment use \`opspal-hubspot:hubspot-assessment-analyzer\`, and for Marketo work use \`opspal-marketo:marketo-orchestrator\`. Invoke via \`Agent(subagent_type='<fully-qualified-agent>', prompt=<request>)\` when the task clearly matches a specialist domain or hooks require routing. Use only fully-qualified names and never generic role labels such as \`Explore\`.`;
+You MUST route through specialist agents for these task types:
+- **cpq/q2c/pricing** -> \`opspal-salesforce:sfdc-cpq-assessor\`
+- **revops/pipeline/forecast** -> \`opspal-salesforce:sfdc-revops-auditor\`
+- **automation/flow audit** -> \`opspal-salesforce:sfdc-automation-auditor\`
+- **permission set/FLS** -> \`opspal-salesforce:sfdc-permission-orchestrator\`
+- **reports/dashboards** -> \`opspal-salesforce:sfdc-reports-dashboards\`
+- **data import/export** -> \`opspal-salesforce:sfdc-data-operations\`
+- **territory** -> \`opspal-salesforce:sfdc-territory-orchestrator\`
+- **deploy/production** -> \`opspal-core:release-coordinator\`
+- **HubSpot assessment** -> \`opspal-hubspot:hubspot-assessment-analyzer\`
+- **HubSpot workflow** -> \`opspal-hubspot:hubspot-workflow-builder\`
+- **Marketo campaigns** -> \`opspal-marketo:marketo-campaign-builder\`
+- **OKR** -> \`opspal-okrs:okr-strategy-orchestrator\`
+- **diagrams/ERD** -> \`opspal-core:diagram-generator\`
+
+Invoke via \`Agent(subagent_type='<fully-qualified-agent>', prompt=<request>)\`. Use only fully-qualified names. Never invent generic role labels such as \`Explore\` or \`Research\`. Only skip routing for simple reads, status checks, or narrow local edits.`;
 }
 
 // Main

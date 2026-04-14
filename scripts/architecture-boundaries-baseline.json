@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-12T01:12:37.245Z",
+  "generatedAt": "2026-04-14T12:05:44.352Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -11,18 +11,18 @@
       "snippet": "const CROSS_PLATFORM_ROOT = path.resolve(__dirname, '../../../opspal-core');"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|22|# Fallback: navigate from this file's location (../../opspal-core relative to hooks/lib/)",
+      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|23|# Fallback: navigate from this file's location (../../opspal-core relative to hooks/lib/)",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-attio/hooks/lib/error-handler.sh",
-      "line": 22,
+      "line": 23,
       "message": "Cross-plugin path reference to opspal-core found in opspal-attio.",
       "snippet": "# Fallback: navigate from this file's location (../../opspal-core relative to hooks/lib/)"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|24|_CORE_ERROR_HANDLER=\"$(cd \"$_ATTIO_LIB_DIR/../../../opspal-core/hooks/lib\" 2>/dev/null && pwd)/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-attio/hooks/lib/error-handler.sh|25|_CORE_ERROR_HANDLER=\"$(cd \"$_ATTIO_LIB_DIR/../../../opspal-core/hooks/lib\" 2>/dev/null && pwd)/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-attio/hooks/lib/error-handler.sh",
-      "line": 24,
+      "line": 25,
       "message": "Cross-plugin path reference to opspal-core found in opspal-attio.",
       "snippet": "_CORE_ERROR_HANDLER=\"$(cd \"$_ATTIO_LIB_DIR/../../../opspal-core/hooks/lib\" 2>/dev/null && pwd)/error-handler.sh\""
     },
@@ -187,10 +187,10 @@
       "snippet": "# Architecture: Modeled on plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/validation/post-tool-validator.sh|86|local salesforce_root=\"$PLUGIN_ROOT/../opspal-salesforce\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/hooks/validation/post-tool-validator.sh|87|local salesforce_root=\"$PLUGIN_ROOT/../opspal-salesforce\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/hooks/validation/post-tool-validator.sh",
-      "line": 86,
+      "line": 87,
       "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
       "snippet": "local salesforce_root=\"$PLUGIN_ROOT/../opspal-salesforce\""
     },
@@ -1115,82 +1115,82 @@
       "snippet": "} = require('../../../opspal-core/scripts/lib/playwright-checkpoint-helper');"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/agent-usage-validator.sh|12|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/agent-usage-validator.sh|13|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/agent-usage-validator.sh",
-      "line": 12,
+      "line": 13,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh|41|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh|42|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh",
+      "line": 42,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh|38|OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh",
+      "line": 38,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|28|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
+      "line": 28,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|385|\"$PLUGIN_ROOT/../../opspal-core\" \\",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
+      "line": 385,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "\"$PLUGIN_ROOT/../../opspal-core\" \\"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|386|\"$PLUGIN_ROOT/../opspal-core\" \\",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
+      "line": 386,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "\"$PLUGIN_ROOT/../opspal-core\" \\"
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-command.sh|32|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-sf-command.sh",
+      "line": 32,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-query-validation.sh|29|CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/post-sf-query-validation.sh",
+      "line": 29,
+      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
+      "snippet": "CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\""
+    },
+    {
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-batch-validation.sh|41|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "rule": "cross-plugin-path-reference",
+      "file": "plugins/opspal-salesforce/hooks/pre-batch-validation.sh",
       "line": 41,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh|37|OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\"",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh",
-      "line": 37,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\""
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|27|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 27,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|384|\"$PLUGIN_ROOT/../../opspal-core\" \\",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 384,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "\"$PLUGIN_ROOT/../../opspal-core\" \\"
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|385|\"$PLUGIN_ROOT/../opspal-core\" \\",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 385,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "\"$PLUGIN_ROOT/../opspal-core\" \\"
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-command.sh|31|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-sf-command.sh",
-      "line": 31,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-sf-query-validation.sh|28|CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\"",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/post-sf-query-validation.sh",
-      "line": 28,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "CROSS_PLATFORM_ROOT=\"${PLUGIN_ROOT}/../opspal-core\""
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-batch-validation.sh|40|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-salesforce/hooks/pre-batch-validation.sh",
-      "line": 40,
-      "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
-      "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
-    },
-    {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh|40|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh|41|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh",
-      "line": 40,
+      "line": 41,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
@@ -1203,18 +1203,18 @@
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh|48|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh|49|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh",
-      "line": 48,
+      "line": 49,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh|55|ASSET_RESOLVER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh|56|ASSET_RESOLVER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh",
-      "line": 55,
+      "line": 56,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ASSET_RESOLVER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/resolve-encrypted-asset.sh\""
     },
@@ -1243,10 +1243,10 @@
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-hook.sh|17|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-hook.sh|18|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/pre-task-hook.sh",
-      "line": 17,
+      "line": 18,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },

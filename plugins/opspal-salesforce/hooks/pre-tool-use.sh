@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 #
 # Deprecated inactive pre-tool hook.
 #

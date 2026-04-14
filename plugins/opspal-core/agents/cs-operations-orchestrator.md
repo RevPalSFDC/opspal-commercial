@@ -1,6 +1,6 @@
 ---
 name: cs-operations-orchestrator
-description: "Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forecasting."
+description: "Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk forecasting, churn prevention playbooks, and CS KPI reporting. Use when asked about quarterly business reviews, at-risk accounts, renewal pipeline, or CSM workflows."
 model: sonnet
 tools:
   - Read

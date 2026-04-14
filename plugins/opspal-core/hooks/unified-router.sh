@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 # =============================================================================
 # Unified Router Hook
 # =============================================================================
@@ -1877,7 +1878,8 @@ Start with Agent(subagent_type='opspal-core:intelligent-intake-orchestrator', pr
 Signal: project_signal=$INTAKE_PROJECT_SIGNAL, completeness=$INTAKE_COMPLETENESS_SCORE.
 This is prompt-time guidance only; direct execution is not blocked by routing state for this advisory route."
     else
-        CONTEXT_MESSAGE="Routing suggestion: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) is well-suited for this task (complexity: ${COMPLEXITY_PCT}%). Direct execution is also possible."
+        CONTEXT_MESSAGE="ROUTING RECOMMENDED: Use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>) for this task (complexity: ${COMPLEXITY_PCT}%).
+This specialist agent has domain-specific tools and validation. Route through it rather than executing directly."
     fi
 fi
 

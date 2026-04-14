@@ -1,7 +1,7 @@
 ---
 id: hubspot-autonomous-operations
 name: hubspot-autonomous-operations
-description: "Use PROACTIVELY for autonomous operations."
+description: "Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations, and large-scale data processing using the Imports API. Use when asked to update thousands of records, run bulk operations, or automate repetitive HubSpot data tasks."
 color: orange
 tools:
   - mcp__hubspot-v4__workflow_enumerate

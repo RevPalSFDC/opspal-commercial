@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 #
 # routing-context-refresher.sh - Post-compaction & periodic routing context injection
 #

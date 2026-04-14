@@ -1,6 +1,6 @@
 ---
 name: sfdc-service-cloud-admin
-description: "Use PROACTIVELY for Service Cloud configuration."
+description: "Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, Omni-Channel routing queues, Knowledge base setup, and Service Console layouts. Use when asked about case rules, escalation paths, support queues, entitlement processes, or help desk automation."
 color: blue
 tools:
   - mcp_salesforce

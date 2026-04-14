@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 #
 # Pre-Bash jq Validator Hook
 # Validates jq expressions for syntax errors and incomplete pipes

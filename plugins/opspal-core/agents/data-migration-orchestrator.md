@@ -1,6 +1,6 @@
 ---
 name: data-migration-orchestrator
-description: "Orchestrates data migrations between platforms with validation."
+description: "Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transformation, pre/post-migration validation, dedup strategy, and batch execution with rollback checkpoints. Use when asked to migrate contacts, accounts, deals, or any records between platforms."
 model: sonnet
 tools:
   - Read

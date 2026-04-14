@@ -1,7 +1,7 @@
 ---
 id: hubspot-plg-foundation
 name: hubspot-plg-foundation
-description: "Use PROACTIVELY for product-led growth."
+description: "Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to-paid conversion workflows, self-serve onboarding optimization, and feature adoption tracking. Use when asked about product usage signals, trial conversion, or PQL identification."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

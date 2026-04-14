@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 # pre-deploy-queued-check.sh
 # Advisory check for in-progress or queued deployments on the target org.
 # Emits a warning if another deployment is active — never blocks execution.

@@ -813,7 +813,7 @@ When delegating to sub-agents, **ALWAYS include condensed runbook context** in t
 const context = extractRunbookContext(orgAlias, { operationType: 'deployment' });
 
 await Task({
-    subagent_type: 'opspal-salesforce:sfdc-deployment-validator',
+    subagent_type: 'opspal-salesforce:sfdc-deployment-manager',
     description: 'Validate deployment',
     prompt: `Validate deployment package for ${orgAlias}.
 

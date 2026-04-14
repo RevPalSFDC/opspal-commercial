@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)
 #
 # DEPRECATED: This hook is no longer registered in hooks.json as of v2.50.0.
 # Active intake gating is handled by unified-router.sh (called via user-prompt-dispatcher.sh).

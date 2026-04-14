@@ -1,7 +1,7 @@
 ---
 id: hubspot-sdr-operations
 name: hubspot-sdr-operations
-description: "Use PROACTIVELY for SDR operations."
+description: "Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribution, cadence optimization, and SDR performance scorecards. Use when asked about enrollment sequences, meeting booking automation, response rate analysis, or SDR pipeline contribution."
 color: orange
 tools:
   - mcp__hubspot-v4__sequence_list

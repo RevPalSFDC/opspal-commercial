@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
 set -euo pipefail
 
 if ! command -v jq &>/dev/null; then

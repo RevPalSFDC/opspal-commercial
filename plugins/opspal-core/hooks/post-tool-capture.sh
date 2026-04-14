@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 set -euo pipefail
 # post-tool-capture.sh - Capture tool invocations for session context
 #

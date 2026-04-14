@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 # PreToolUse hook for source-scoped Salesforce deploy commands
 # Steers direct deploy mutations toward sfdc-deployment-manager unless the
 # target org is explicitly sandbox-like, which avoids the deployment-agent

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook
 #
 # Pre-Task Template Injector Hook
 #

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: STAGED — not registered by design (experimental or non-hook-event script)
 #
 # Pre-commit Config Validation Hook
 #

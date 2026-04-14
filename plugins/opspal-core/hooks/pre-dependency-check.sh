@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: STAGED — not registered by design (experimental or non-hook-event script)
 
 # Pre-Dependency Check Hook
 # Validates system dependencies before operations that require them

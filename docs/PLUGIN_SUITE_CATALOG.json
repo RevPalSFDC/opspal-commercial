@@ -1858,7 +1858,7 @@
         {
           "name": "error-handler",
           "file": "lib/error-handler.sh",
-          "description": "Attio Plugin Error Handler",
+          "description": "STATUS: SUPERSEDED — shared library sourced by other hooks, not a standalone registrable hook",
           "sourcePath": "plugins/opspal-attio/hooks/lib/error-handler.sh"
         },
         {
@@ -2567,11 +2567,11 @@
         },
         {
           "name": "cs-operations-orchestrator",
-          "description": "Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forecasting.",
+          "description": "Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk forecasting, churn prevention playbooks, and CS KPI reporting. Use when asked about quarterly business reviews, at-risk accounts, renewal pipeline, or CSM workflows.",
           "file": "cs-operations-orchestrator.md",
           "frontmatter": {
             "name": "cs-operations-orchestrator",
-            "description": "Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forecasting.",
+            "description": "Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk forecasting, churn prevention playbooks, and CS KPI reporting. Use when asked about quarterly business reviews, at-risk accounts, renewal pipeline, or CSM workflows.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -2588,11 +2588,11 @@
         },
         {
           "name": "data-migration-orchestrator",
-          "description": "Orchestrates data migrations between platforms with validation.",
+          "description": "Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transformation, pre/post-migration validation, dedup strategy, and batch execution with rollback checkpoints. Use when asked to migrate contacts, accounts, deals, or any records between platforms.",
           "file": "data-migration-orchestrator.md",
           "frontmatter": {
             "name": "data-migration-orchestrator",
-            "description": "Orchestrates data migrations between platforms with validation.",
+            "description": "Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transformation, pre/post-migration validation, dedup strategy, and batch execution with rollback checkpoints. Use when asked to migrate contacts, accounts, deals, or any records between platforms.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -3313,11 +3313,11 @@
         },
         {
           "name": "multi-platform-workflow-orchestrator",
-          "description": "Orchestrates complex workflows spanning multiple platforms.",
+          "description": "Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequencing, checkpoint state management, retry logic, and rollback support. Use when asked to coordinate cross-platform automation, new customer onboarding flows, or multi-system data sync.",
           "file": "multi-platform-workflow-orchestrator.md",
           "frontmatter": {
             "name": "multi-platform-workflow-orchestrator",
-            "description": "Orchestrates complex workflows spanning multiple platforms.",
+            "description": "Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequencing, checkpoint state management, retry logic, and rollback support. Use when asked to coordinate cross-platform automation, new customer onboarding flows, or multi-system data sync.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -3599,11 +3599,11 @@
         },
         {
           "name": "pipeline-intelligence-agent",
-          "description": "Pipeline health scoring, bottleneck detection, and deal risk assessment.",
+          "description": "Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage analysis, and next-best-action recommendations. Use when asked about pipeline quality, stalled deals, win rate trends, weighted pipeline, or forecast accuracy.",
           "file": "pipeline-intelligence-agent.md",
           "frontmatter": {
             "name": "pipeline-intelligence-agent",
-            "description": "Pipeline health scoring, bottleneck detection, and deal risk assessment.",
+            "description": "Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage analysis, and next-best-action recommendations. Use when asked about pipeline quality, stalled deals, win rate trends, weighted pipeline, or forecast accuracy.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -4624,11 +4624,11 @@
         },
         {
           "name": "unified-exec-dashboard-agent",
-          "description": "Generates unified executive dashboards combining data from all platforms.",
+          "description": "Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-influenced revenue across Salesforce, HubSpot, and Marketo. Use when asked for C-level reporting, board-ready metrics, cross-platform KPIs, or unified revenue views.",
           "file": "unified-exec-dashboard-agent.md",
           "frontmatter": {
             "name": "unified-exec-dashboard-agent",
-            "description": "Generates unified executive dashboards combining data from all platforms.",
+            "description": "Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-influenced revenue across Salesforce, HubSpot, and Marketo. Use when asked for C-level reporting, board-ready metrics, cross-platform KPIs, or unified revenue views.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -7513,7 +7513,7 @@
         {
           "name": "ambient-candidate-extractor",
           "file": "ambient-candidate-extractor.sh",
-          "description": "Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh"
         },
         {
@@ -7549,7 +7549,7 @@
         {
           "name": "intake-suggestion",
           "file": "intake-suggestion.sh",
-          "description": "DEPRECATED: This hook is no longer registered in hooks.json as of v2.50.0.",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/intake-suggestion.sh"
         },
         {
@@ -7561,7 +7561,7 @@
         {
           "name": "master-prompt-handler",
           "file": "master-prompt-handler.sh",
-          "description": "Master Prompt Handler",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/master-prompt-handler.sh"
         },
         {
@@ -7585,7 +7585,7 @@
         {
           "name": "post-edit-verification",
           "file": "post-edit-verification.sh",
-          "description": "Post-Edit Verification Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-edit-verification.sh"
         },
         {
@@ -7609,19 +7609,19 @@
         {
           "name": "post-pdf-verification",
           "file": "post-pdf-verification.sh",
-          "description": "Post-PDF Verification Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-pdf-verification.sh"
         },
         {
           "name": "post-plugin-update",
           "file": "post-plugin-update.sh",
-          "description": "Post-Plugin-Update Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-plugin-update.sh"
         },
         {
           "name": "post-plugin-update-customizations",
           "file": "post-plugin-update-customizations.sh",
-          "description": "Post-Plugin-Update Customizations Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-plugin-update-customizations.sh"
         },
         {
@@ -7663,7 +7663,7 @@
         {
           "name": "post-task-verification",
           "file": "post-task-verification.sh",
-          "description": "Post-Task Verification Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-task-verification.sh"
         },
         {
@@ -7675,7 +7675,7 @@
         {
           "name": "post-tool-capture",
           "file": "post-tool-capture.sh",
-          "description": "post-tool-capture.sh - Capture tool invocations for session context",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/post-tool-capture.sh"
         },
         {
@@ -7705,7 +7705,7 @@
         {
           "name": "post-tool-validator",
           "file": "validation/post-tool-validator.sh",
-          "description": "Post-Tool Validator (Unified)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/validation/post-tool-validator.sh"
         },
         {
@@ -7723,7 +7723,7 @@
         {
           "name": "pre-commit-config-validation",
           "file": "pre-commit-config-validation.sh",
-          "description": "Pre-commit Config Validation Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or non-hook-event script)",
           "sourcePath": "plugins/opspal-core/hooks/pre-commit-config-validation.sh"
         },
         {
@@ -7735,7 +7735,7 @@
         {
           "name": "pre-dependency-check",
           "file": "pre-dependency-check.sh",
-          "description": "Pre-Dependency Check Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or non-hook-event script)",
           "sourcePath": "plugins/opspal-core/hooks/pre-dependency-check.sh"
         },
         {
@@ -7759,7 +7759,7 @@
         {
           "name": "pre-operation-env-validator",
           "file": "pre-operation-env-validator.sh",
-          "description": "Pre-Operation Environment Validator Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-operation-env-validator.sh"
         },
         {
@@ -7771,13 +7771,13 @@
         {
           "name": "pre-operation-snapshot",
           "file": "pre-operation-snapshot.sh",
-          "description": "Pre-Operation Snapshot Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-operation-snapshot.sh"
         },
         {
           "name": "pre-plan-scope-validation",
           "file": "pre-plan-scope-validation.sh",
-          "description": "Pre-Plan Scope Validation Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-plan-scope-validation.sh"
         },
         {
@@ -7789,7 +7789,7 @@
         {
           "name": "pre-session-path-validator",
           "file": "pre-session-path-validator.sh",
-          "description": "Pre-Session Path Validator Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-session-path-validator.sh"
         },
         {
@@ -7813,7 +7813,7 @@
         {
           "name": "pre-task-agent-recommendation",
           "file": "pre-task-agent-recommendation.sh",
-          "description": "Pre-Task Agent Recommendation Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-task-agent-recommendation.sh"
         },
         {
@@ -7825,7 +7825,7 @@
         {
           "name": "pre-task-field-dictionary-injector",
           "file": "pre-task-field-dictionary-injector.sh",
-          "description": "Pre-Task Field Dictionary Injector Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-task-field-dictionary-injector.sh"
         },
         {
@@ -7837,7 +7837,7 @@
         {
           "name": "pre-task-routing-clarity",
           "file": "pre-task-routing-clarity.sh",
-          "description": "Pre-Task Routing Clarity Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-task-routing-clarity.sh"
         },
         {
@@ -7849,13 +7849,13 @@
         {
           "name": "pre-task-runbook-reminder",
           "file": "pre-task-runbook-reminder.sh",
-          "description": "Pre-Task Runbook Reminder Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-task-runbook-reminder.sh"
         },
         {
           "name": "pre-task-template-injector",
           "file": "pre-task-template-injector.sh",
-          "description": "Pre-Task Template Injector Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/pre-task-template-injector.sh"
         },
         {
@@ -7891,7 +7891,7 @@
         {
           "name": "pre-tool-validator",
           "file": "validation/pre-tool-validator.sh",
-          "description": "Pre-Tool Validator (Unified)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/validation/pre-tool-validator.sh"
         },
         {
@@ -7909,7 +7909,7 @@
         {
           "name": "prevention-system-orchestrator",
           "file": "prevention-system-orchestrator.sh",
-          "description": "Prevention System Orchestrator",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/prevention-system-orchestrator.sh"
         },
         {
@@ -7921,7 +7921,7 @@
         {
           "name": "routing-context-refresher",
           "file": "routing-context-refresher.sh",
-          "description": "routing-context-refresher.sh - Post-compaction & periodic routing context injection",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/routing-context-refresher.sh"
         },
         {
@@ -7939,7 +7939,7 @@
         {
           "name": "session-context-loader",
           "file": "session-context-loader.sh",
-          "description": "Session Context Loader Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/session-context-loader.sh"
         },
         {
@@ -8023,13 +8023,13 @@
         {
           "name": "session-start-scratchpad",
           "file": "session-start-scratchpad.sh",
-          "description": "Session Start Scratchpad Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/session-start-scratchpad.sh"
         },
         {
           "name": "session-start-version-check",
           "file": "session-start-version-check.sh",
-          "description": "Session Start Version Check Hook",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/session-start-version-check.sh"
         },
         {
@@ -8047,25 +8047,25 @@
         {
           "name": "sop-lifecycle-dispatcher",
           "file": "sop-lifecycle-dispatcher.sh",
-          "description": "SOP Lifecycle Dispatcher (PostToolUse/Agent)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/sop-lifecycle-dispatcher.sh"
         },
         {
           "name": "sop-prompt-lifecycle-detector",
           "file": "sop-prompt-lifecycle-detector.sh",
-          "description": "SOP Prompt Lifecycle Detector (UserPromptSubmit child)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/sop-prompt-lifecycle-detector.sh"
         },
         {
           "name": "sop-session-init",
           "file": "sop-session-init.sh",
-          "description": "SOP Session Initialization Hook (SessionStart child)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/sop-session-init.sh"
         },
         {
           "name": "sop-subagent-completion",
           "file": "sop-subagent-completion.sh",
-          "description": "SOP Subagent Completion (SubagentStop child)",
+          "description": "STATUS: SUPERSEDED — absorbed by a registered dispatcher or consolidated hook",
           "sourcePath": "plugins/opspal-core/hooks/sop-subagent-completion.sh"
         },
         {
@@ -8119,13 +8119,13 @@
         {
           "name": "task-scope-selector",
           "file": "task-scope-selector.sh",
-          "description": "Task Scope Selector Hook",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/task-scope-selector.sh"
         },
         {
           "name": "unified-router",
           "file": "unified-router.sh",
-          "description": "Unified Router Hook",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/unified-router.sh"
         },
         {
@@ -8137,19 +8137,19 @@
         {
           "name": "user-prompt-first-run",
           "file": "user-prompt-first-run.sh",
-          "description": "Dispatcher guard — this hook is invoked by user-prompt-dispatcher.sh.",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/user-prompt-first-run.sh"
         },
         {
           "name": "user-prompt-reminder",
           "file": "user-prompt-reminder.sh",
-          "description": "",
+          "description": "STATUS: SUPERSEDED — called as child hook by user-prompt-dispatcher.sh (the registered UserPromptSubmit hook)",
           "sourcePath": "plugins/opspal-core/hooks/user-prompt-reminder.sh"
         },
         {
           "name": "weekly-strategy-transfer",
           "file": "weekly-strategy-transfer.sh",
-          "description": "Weekly Skill Transfer Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or non-hook-event script)",
           "sourcePath": "plugins/opspal-core/hooks/weekly-strategy-transfer.sh"
         }
       ],
@@ -12534,12 +12534,12 @@
         },
         {
           "name": "hubspot-adoption-tracker",
-          "description": "Use PROACTIVELY for adoption tracking.",
+          "description": "Use PROACTIVELY for HubSpot adoption tracking, feature utilization analysis, user login frequency, training completion rates, and ROI reporting. Use when asked about who is using HubSpot, underutilized features, power users, or platform value realization.",
           "file": "hubspot-adoption-tracker.md",
           "frontmatter": {
             "id": "hubspot-adoption-tracker",
             "name": "hubspot-adoption-tracker",
-            "description": "Use PROACTIVELY for adoption tracking.",
+            "description": "Use PROACTIVELY for HubSpot adoption tracking, feature utilization analysis, user login frequency, training completion rates, and ROI reporting. Use when asked about who is using HubSpot, underutilized features, power users, or platform value realization.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-v4__search_with_total",
@@ -12559,12 +12559,12 @@
         },
         {
           "name": "hubspot-ai-revenue-intelligence",
-          "description": "Use PROACTIVELY for revenue intelligence.",
+          "description": "Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity detection, and revenue forecasting with scenario planning. Use when asked about pipeline risk, deal velocity, rep performance prediction, or buying signal analysis.",
           "file": "hubspot-ai-revenue-intelligence.md",
           "frontmatter": {
             "id": "hubspot-ai-revenue-intelligence",
             "name": "hubspot-ai-revenue-intelligence",
-            "description": "Use PROACTIVELY for revenue intelligence.",
+            "description": "Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity detection, and revenue forecasting with scenario planning. Use when asked about pipeline risk, deal velocity, rep performance prediction, or buying signal analysis.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-v4__search_with_total",
@@ -12769,12 +12769,12 @@
         },
         {
           "name": "hubspot-autonomous-operations",
-          "description": "Use PROACTIVELY for autonomous operations.",
+          "description": "Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations, and large-scale data processing using the Imports API. Use when asked to update thousands of records, run bulk operations, or automate repetitive HubSpot data tasks.",
           "file": "hubspot-autonomous-operations.md",
           "frontmatter": {
             "id": "hubspot-autonomous-operations",
             "name": "hubspot-autonomous-operations",
-            "description": "Use PROACTIVELY for autonomous operations.",
+            "description": "Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations, and large-scale data processing using the Imports API. Use when asked to update thousands of records, run bulk operations, or automate repetitive HubSpot data tasks.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-v4__workflow_enumerate",
@@ -13722,12 +13722,12 @@
         },
         {
           "name": "hubspot-plg-foundation",
-          "description": "Use PROACTIVELY for product-led growth.",
+          "description": "Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to-paid conversion workflows, self-serve onboarding optimization, and feature adoption tracking. Use when asked about product usage signals, trial conversion, or PQL identification.",
           "file": "hubspot-plg-foundation.md",
           "frontmatter": {
             "id": "hubspot-plg-foundation",
             "name": "hubspot-plg-foundation",
-            "description": "Use PROACTIVELY for product-led growth.",
+            "description": "Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to-paid conversion workflows, self-serve onboarding optimization, and feature adoption tracking. Use when asked about product usage signals, trial conversion, or PQL identification.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-enhanced-v3__hubspot_search",
@@ -13897,12 +13897,12 @@
         },
         {
           "name": "hubspot-sdr-operations",
-          "description": "Use PROACTIVELY for SDR operations.",
+          "description": "Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribution, cadence optimization, and SDR performance scorecards. Use when asked about enrollment sequences, meeting booking automation, response rate analysis, or SDR pipeline contribution.",
           "file": "hubspot-sdr-operations.md",
           "frontmatter": {
             "id": "hubspot-sdr-operations",
             "name": "hubspot-sdr-operations",
-            "description": "Use PROACTIVELY for SDR operations.",
+            "description": "Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribution, cadence optimization, and SDR performance scorecards. Use when asked about enrollment sequences, meeting booking automation, response rate analysis, or SDR pipeline contribution.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-v4__sequence_list",
@@ -19446,11 +19446,11 @@
         },
         {
           "name": "compliance-report-generator",
-          "description": "Generates compliance reports for SOC2, GDPR, HIPAA requirements.",
+          "description": "Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirements, HIPAA configurations, user access audits, data retention verification, and security configuration checks. Use when asked for audit-ready documentation, compliance evidence, or regulatory assessments.",
           "file": "compliance-report-generator.md",
           "frontmatter": {
             "name": "compliance-report-generator",
-            "description": "Generates compliance reports for SOC2, GDPR, HIPAA requirements.",
+            "description": "Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirements, HIPAA configurations, user access audits, data retention verification, and security configuration checks. Use when asked for audit-ready documentation, compliance evidence, or regulatory assessments.",
             "model": "sonnet",
             "tools": [
               "Read",
@@ -22352,11 +22352,11 @@
         },
         {
           "name": "sfdc-service-cloud-admin",
-          "description": "Use PROACTIVELY for Service Cloud configuration.",
+          "description": "Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, Omni-Channel routing queues, Knowledge base setup, and Service Console layouts. Use when asked about case rules, escalation paths, support queues, entitlement processes, or help desk automation.",
           "file": "sfdc-service-cloud-admin.md",
           "frontmatter": {
             "name": "sfdc-service-cloud-admin",
-            "description": "Use PROACTIVELY for Service Cloud configuration.",
+            "description": "Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, Omni-Channel routing queues, Knowledge base setup, and Service Console layouts. Use when asked about case rules, escalation paths, support queues, entitlement processes, or help desk automation.",
             "color": "blue",
             "tools": [
               "mcp_salesforce",
@@ -22464,11 +22464,11 @@
         },
         {
           "name": "sfdc-territory-deployment",
-          "description": "Executes Salesforce Territory2 changes with validation and rollback support.",
+          "description": "Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territory2Type metadata, executing Territory2Rule deployment, and rolling back territory changes from checkpoints. Use when asked to deploy territories, activate a territory model, or make bulk territory changes.",
           "file": "sfdc-territory-deployment.md",
           "frontmatter": {
             "name": "sfdc-territory-deployment",
-            "description": "Executes Salesforce Territory2 changes with validation and rollback support.",
+            "description": "Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territory2Type metadata, executing Territory2Rule deployment, and rolling back territory changes from checkpoints. Use when asked to deploy territories, activate a territory model, or make bulk territory changes.",
             "color": "blue",
             "tools": [
               "mcp_salesforce",
@@ -24575,25 +24575,25 @@
         {
           "name": "agent-usage-validator",
           "file": "agent-usage-validator.sh",
-          "description": "Agent Usage Validator Hook for Claude Code",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/agent-usage-validator.sh"
         },
         {
           "name": "hook-circuit-breaker",
           "file": "hook-circuit-breaker.sh",
-          "description": "Hook Circuit Breaker - Graceful degradation for hook failures",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/hook-circuit-breaker.sh"
         },
         {
           "name": "post-agent-operation",
           "file": "post-agent-operation.sh",
-          "description": "Post-Agent-Operation Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/post-agent-operation.sh"
         },
         {
           "name": "post-assessment-notebooklm-sync",
           "file": "post-assessment-notebooklm-sync.sh",
-          "description": "Post-Assessment NotebookLM Sync Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/post-assessment-notebooklm-sync.sh"
         },
         {
@@ -24635,7 +24635,7 @@
         {
           "name": "post-operation-observe",
           "file": "post-operation-observe.sh",
-          "description": "Post-Operation Observer Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/post-operation-observe.sh"
         },
         {
@@ -24647,13 +24647,13 @@
         {
           "name": "post-sf-command",
           "file": "post-sf-command.sh",
-          "description": "# Post-SF-Command Hook - API Usage Tracking",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/post-sf-command.sh"
         },
         {
           "name": "post-sf-query-validation",
           "file": "post-sf-query-validation.sh",
-          "description": "Post-SF Query Validation Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/post-sf-query-validation.sh"
         },
         {
@@ -24671,55 +24671,55 @@
         {
           "name": "pre-bash-jq-validator",
           "file": "pre-bash-jq-validator.sh",
-          "description": "Pre-Bash jq Validator Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-bash-jq-validator.sh"
         },
         {
           "name": "pre-bash-soql-validator",
           "file": "pre-bash-soql-validator.sh",
-          "description": "Pre-Bash SOQL Validator Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-bash-soql-validator.sh"
         },
         {
           "name": "pre-batch-validation",
           "file": "pre-batch-validation.sh",
-          "description": "Pre-Batch Validation Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-batch-validation.sh"
         },
         {
           "name": "pre-dashboard-report-check",
           "file": "pre-dashboard-report-check.sh",
-          "description": "Pre-Dashboard Report Check Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-dashboard-report-check.sh"
         },
         {
           "name": "pre-deploy-agent-context-check",
           "file": "pre-deploy-agent-context-check.sh",
-          "description": "PreToolUse hook for source-scoped Salesforce deploy commands",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-deploy-agent-context-check.sh"
         },
         {
           "name": "pre-deploy-flow-validation",
           "file": "pre-deploy-flow-validation.sh",
-          "description": "Pre-Deployment Flow Validation Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-deploy-flow-validation.sh"
         },
         {
           "name": "pre-deploy-queued-check",
           "file": "pre-deploy-queued-check.sh",
-          "description": "pre-deploy-queued-check.sh",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-deploy-queued-check.sh"
         },
         {
           "name": "pre-deploy-report-quality-gate",
           "file": "pre-deploy-report-quality-gate.sh",
-          "description": "Pre-Deployment Report Quality Gate Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-deploy-report-quality-gate.sh"
         },
         {
           "name": "pre-deployment-comprehensive-validation",
           "file": "pre-deployment-comprehensive-validation.sh",
-          "description": "Pre-Deployment Comprehensive Validation Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-deployment-comprehensive-validation.sh"
         },
         {
@@ -24737,7 +24737,7 @@
         {
           "name": "pre-high-risk-operation",
           "file": "pre-high-risk-operation.sh",
-          "description": "Pre-High-Risk-Operation Hook",
+          "description": "STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-high-risk-operation.sh"
         },
         {
@@ -24755,7 +24755,7 @@
         {
           "name": "pre-picklist-dependency-validation",
           "file": "pre-picklist-dependency-validation.sh",
-          "description": "Pre-Picklist-Dependency Validation Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-picklist-dependency-validation.sh"
         },
         {
@@ -24779,7 +24779,7 @@
         {
           "name": "pre-task-hook",
           "file": "pre-task-hook.sh",
-          "description": "Pre-Task Agent Discovery & Organization Enforcement Hook",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-task-hook.sh"
         },
         {
@@ -24803,7 +24803,7 @@
         {
           "name": "pre-tool-use",
           "file": "pre-tool-use.sh",
-          "description": "Deprecated inactive pre-tool hook.",
+          "description": "STATUS: SUPERSEDED — called as child by a registered dispatcher hook",
           "sourcePath": "plugins/opspal-salesforce/hooks/pre-tool-use.sh"
         },
         {

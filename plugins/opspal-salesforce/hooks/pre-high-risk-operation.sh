@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
 
 ###############################################################################
 # Pre-High-Risk-Operation Hook

@@ -1,7 +1,7 @@
 ---
 id: hubspot-ai-revenue-intelligence
 name: hubspot-ai-revenue-intelligence
-description: "Use PROACTIVELY for revenue intelligence."
+description: "Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity detection, and revenue forecasting with scenario planning. Use when asked about pipeline risk, deal velocity, rep performance prediction, or buying signal analysis."
 color: orange
 tools:
   - mcp__hubspot-v4__search_with_total

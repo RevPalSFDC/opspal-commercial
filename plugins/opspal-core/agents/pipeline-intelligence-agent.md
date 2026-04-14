@@ -1,6 +1,6 @@
 ---
 name: pipeline-intelligence-agent
-description: "Pipeline health scoring, bottleneck detection, and deal risk assessment."
+description: "Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage analysis, and next-best-action recommendations. Use when asked about pipeline quality, stalled deals, win rate trends, weighted pipeline, or forecast accuracy."
 model: sonnet
 tools:
   - Read

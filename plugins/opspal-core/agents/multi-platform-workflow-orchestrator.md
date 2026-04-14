@@ -1,6 +1,6 @@
 ---
 name: multi-platform-workflow-orchestrator
-description: "Orchestrates complex workflows spanning multiple platforms."
+description: "Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequencing, checkpoint state management, retry logic, and rollback support. Use when asked to coordinate cross-platform automation, new customer onboarding flows, or multi-system data sync."
 model: sonnet
 tools:
   - Read

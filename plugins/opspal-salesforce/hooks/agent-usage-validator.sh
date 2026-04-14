@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 set -euo pipefail
 
 # Agent Usage Validator Hook for Claude Code

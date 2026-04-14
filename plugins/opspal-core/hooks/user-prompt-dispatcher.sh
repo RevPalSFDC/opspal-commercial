@@ -18,9 +18,11 @@
 #   1. user-prompt-first-run.sh     (onboarding gate — rarely fires)
 #   2. pre-task-graph-trigger.sh    (flag detection — rarely fires)
 #   3. routing-context-refresher.sh (periodic reminder — every ~20 msgs)
-#   4. unified-router.sh            (PRIMARY — WRITES routing-state)
-#   5. task-scope-selector.sh       (READS routing-state — MUST follow #4)
-#   6. ambient-candidate-extractor  (fire-and-forget — zero Claude output)
+#   4. user-prompt-reminder.sh      (static routing map from docs/reminder.md)
+#   5. sop-prompt-lifecycle-detector (SOP lifecycle detection)
+#   6. unified-router.sh            (PRIMARY — WRITES routing-state)
+#   7. task-scope-selector.sh       (READS routing-state — MUST follow #6)
+#   8. ambient-candidate-extractor  (fire-and-forget — zero Claude output)
 #
 # intake-suggestion.sh is intentionally omitted — unified-router handles
 # intake gating. The script itself says: "Active intake gating is implemented
@@ -163,6 +165,7 @@ fi
 run_child_hook "${PLUGIN_ROOT}/hooks/user-prompt-first-run.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/pre-task-graph-trigger.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/routing-context-refresher.sh"
+run_child_hook "${PLUGIN_ROOT}/hooks/user-prompt-reminder.sh"
 run_child_hook "${PLUGIN_ROOT}/hooks/sop-prompt-lifecycle-detector.sh"
 
 # Phase 2: Primary governance engine — WRITES routing-state
@@ -170,7 +173,7 @@ run_child_hook env \
   ROUTING_ADAPTIVE_CONTINUE=1 \
   ENABLE_HARD_BLOCKING=0 \
   ENABLE_COMPLEXITY_HARD_BLOCKING=0 \
-  USER_PROMPT_MANDATORY_HARD_BLOCKING=0 \
+  USER_PROMPT_MANDATORY_HARD_BLOCKING=1 \
   ENABLE_INTAKE_HARD_BLOCKING=0 \
   "${PLUGIN_ROOT}/hooks/unified-router.sh"
 

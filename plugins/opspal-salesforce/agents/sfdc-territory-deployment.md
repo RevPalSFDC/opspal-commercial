@@ -1,6 +1,6 @@
 ---
 name: sfdc-territory-deployment
-description: "Executes Salesforce Territory2 changes with validation and rollback support."
+description: "Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territory2Type metadata, executing Territory2Rule deployment, and rolling back territory changes from checkpoints. Use when asked to deploy territories, activate a territory model, or make bulk territory changes."
 color: blue
 tools:
   - mcp_salesforce

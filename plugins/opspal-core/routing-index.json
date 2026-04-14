@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-13T15:17:06.379Z",
+  "buildDate": "2026-04-14T12:08:18.349Z",
   "totalAgents": 326,
   "totalAgentsFull": 327,
   "totalCommands": 310,
@@ -2333,6 +2333,7 @@
     ],
     "core workflow": [
       "contact-dedup-orchestrator",
+      "cs-operations-orchestrator",
       "fireflies-sync-orchestrator",
       "gong-sync-orchestrator",
       "multi-platform-workflow-orchestrator",
@@ -5713,6 +5714,15 @@
     "hubspot hubspot autonomous": [
       "hubspot-autonomous-operations"
     ],
+    "hubspot workflow": [
+      "hubspot-autonomous-operations",
+      "hubspot-callback-orchestrator",
+      "hubspot-custom-action-builder",
+      "hubspot-plg-foundation",
+      "hubspot-workflow-auditor",
+      "hubspot-workflow-builder",
+      "hubspot-workflow"
+    ],
     "callback": [
       "hubspot-callback-orchestrator",
       "marketo-integration-specialist"
@@ -5743,13 +5753,6 @@
     ],
     "hubspot hubspot callback": [
       "hubspot-callback-orchestrator"
-    ],
-    "hubspot workflow": [
-      "hubspot-callback-orchestrator",
-      "hubspot-custom-action-builder",
-      "hubspot-workflow-auditor",
-      "hubspot-workflow-builder",
-      "hubspot-workflow"
     ],
     "blog author": [
       "hubspot-cms-blog-author-manager"
@@ -13044,6 +13047,7 @@
     ],
     "core workflow": [
       "opspal-core:contact-dedup-orchestrator",
+      "opspal-core:cs-operations-orchestrator",
       "opspal-core:fireflies-sync-orchestrator",
       "opspal-core:gong-sync-orchestrator",
       "opspal-core:multi-platform-workflow-orchestrator",
@@ -16424,6 +16428,15 @@
     "hubspot hubspot autonomous": [
       "opspal-hubspot:hubspot-autonomous-operations"
     ],
+    "hubspot workflow": [
+      "opspal-hubspot:hubspot-autonomous-operations",
+      "opspal-hubspot:hubspot-callback-orchestrator",
+      "opspal-hubspot:hubspot-custom-action-builder",
+      "opspal-hubspot:hubspot-plg-foundation",
+      "opspal-hubspot:hubspot-workflow-auditor",
+      "opspal-hubspot:hubspot-workflow-builder",
+      "opspal-hubspot:hubspot-workflow"
+    ],
     "callback": [
       "opspal-hubspot:hubspot-callback-orchestrator",
       "opspal-marketo:marketo-integration-specialist"
@@ -16454,13 +16467,6 @@
     ],
     "hubspot hubspot callback": [
       "opspal-hubspot:hubspot-callback-orchestrator"
-    ],
-    "hubspot workflow": [
-      "opspal-hubspot:hubspot-callback-orchestrator",
-      "opspal-hubspot:hubspot-custom-action-builder",
-      "opspal-hubspot:hubspot-workflow-auditor",
-      "opspal-hubspot:hubspot-workflow-builder",
-      "opspal-hubspot:hubspot-workflow"
     ],
     "blog author": [
       "opspal-hubspot:hubspot-cms-blog-author-manager"
@@ -24106,7 +24112,7 @@
       "file": "cs-operations-orchestrator.md",
       "path": "opspal-core/agents/cs-operations-orchestrator.md",
       "name": "cs-operations-orchestrator",
-      "description": "Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forecasting.",
+      "description": "Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk forecasting, churn prevention playbooks, and CS KPI reporting. Use when asked about quarterly business reviews, at-risk accounts, renewal pipeline, or CSM workflows.",
       "model": "sonnet",
       "color": "teal",
       "tools": [
@@ -24126,7 +24132,8 @@
         "cs core",
         "core operations",
         "operations core",
-        "core cs operations"
+        "core cs operations",
+        "core workflow"
       ],
       "shortName": "cs-operations-orchestrator",
       "fullName": "opspal-core:cs-operations-orchestrator"
@@ -24136,7 +24143,7 @@
       "file": "data-migration-orchestrator.md",
       "path": "opspal-core/agents/data-migration-orchestrator.md",
       "name": "data-migration-orchestrator",
-      "description": "Orchestrates data migrations between platforms with validation.",
+      "description": "Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transformation, pre/post-migration validation, dedup strategy, and batch execution with rollback checkpoints. Use when asked to migrate contacts, accounts, deals, or any records between platforms.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -25020,7 +25027,7 @@
       "file": "multi-platform-workflow-orchestrator.md",
       "path": "opspal-core/agents/multi-platform-workflow-orchestrator.md",
       "name": "multi-platform-workflow-orchestrator",
-      "description": "Orchestrates complex workflows spanning multiple platforms.",
+      "description": "Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequencing, checkpoint state management, retry logic, and rollback support. Use when asked to coordinate cross-platform automation, new customer onboarding flows, or multi-system data sync.",
       "model": "sonnet",
       "color": "cyan",
       "tools": [
@@ -25402,7 +25409,7 @@
       "file": "pipeline-intelligence-agent.md",
       "path": "opspal-core/agents/pipeline-intelligence-agent.md",
       "name": "pipeline-intelligence-agent",
-      "description": "Pipeline health scoring, bottleneck detection, and deal risk assessment.",
+      "description": "Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage analysis, and next-best-action recommendations. Use when asked about pipeline quality, stalled deals, win rate trends, weighted pipeline, or forecast accuracy.",
       "model": "sonnet",
       "color": "yellow",
       "tools": [
@@ -26037,7 +26044,7 @@
       "file": "revops-maturity-orchestrator.md",
       "path": "opspal-core/agents/revops-maturity-orchestrator.md",
       "name": "revops-maturity-orchestrator",
-      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
+      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
       "model": "opus",
       "color": "purple",
       "tools": [
@@ -26660,7 +26667,7 @@
       "file": "unified-exec-dashboard-agent.md",
       "path": "opspal-core/agents/unified-exec-dashboard-agent.md",
       "name": "unified-exec-dashboard-agent",
-      "description": "Generates unified executive dashboards combining data from all platforms.",
+      "description": "Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-influenced revenue across Salesforce, HubSpot, and Marketo. Use when asked for C-level reporting, board-ready metrics, cross-platform KPIs, or unified revenue views.",
       "model": "sonnet",
       "color": "purple",
       "tools": [
@@ -27336,7 +27343,7 @@
       "file": "hubspot-adoption-tracker.md",
       "path": "opspal-hubspot/agents/hubspot-adoption-tracker.md",
       "name": "hubspot-adoption-tracker",
-      "description": "Use PROACTIVELY for adoption tracking.",
+      "description": "Use PROACTIVELY for HubSpot adoption tracking, feature utilization analysis, user login frequency, training completion rates, and ROI reporting. Use when asked about who is using HubSpot, underutilized features, power users, or platform value realization.",
       "model": "haiku",
       "color": "orange",
       "tools": [
@@ -27373,7 +27380,7 @@
       "file": "hubspot-ai-revenue-intelligence.md",
       "path": "opspal-hubspot/agents/hubspot-ai-revenue-intelligence.md",
       "name": "hubspot-ai-revenue-intelligence",
-      "description": "Use PROACTIVELY for revenue intelligence.",
+      "description": "Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity detection, and revenue forecasting with scenario planning. Use when asked about pipeline risk, deal velocity, rep performance prediction, or buying signal analysis.",
       "model": "opus",
       "color": "orange",
       "tools": [
@@ -27643,7 +27650,7 @@
       "file": "hubspot-autonomous-operations.md",
       "path": "opspal-hubspot/agents/hubspot-autonomous-operations.md",
       "name": "hubspot-autonomous-operations",
-      "description": "Use PROACTIVELY for autonomous operations.",
+      "description": "Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations, and large-scale data processing using the Imports API. Use when asked to update thousands of records, run bulk operations, or automate repetitive HubSpot data tasks.",
       "color": "orange",
       "tools": [
         "mcp__hubspot-v4__workflow_enumerate",
@@ -27671,7 +27678,8 @@
         "autonomous hubspot",
         "hubspot operations",
         "operations hubspot",
-        "hubspot hubspot autonomous"
+        "hubspot hubspot autonomous",
+        "hubspot workflow"
       ],
       "shortName": "hubspot-autonomous-operations",
       "fullName": "opspal-hubspot:hubspot-autonomous-operations"
@@ -28787,7 +28795,7 @@
       "file": "hubspot-plg-foundation.md",
       "path": "opspal-hubspot/agents/hubspot-plg-foundation.md",
       "name": "hubspot-plg-foundation",
-      "description": "Use PROACTIVELY for product-led growth.",
+      "description": "Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to-paid conversion workflows, self-serve onboarding optimization, and feature adoption tracking. Use when asked about product usage signals, trial conversion, or PQL identification.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -28814,7 +28822,8 @@
         "plg hubspot",
         "hubspot foundation",
         "foundation hubspot",
-        "hubspot hubspot plg"
+        "hubspot hubspot plg",
+        "hubspot workflow"
       ],
       "shortName": "hubspot-plg-foundation",
       "fullName": "opspal-hubspot:hubspot-plg-foundation"
@@ -28998,7 +29007,7 @@
       "file": "hubspot-sdr-operations.md",
       "path": "opspal-hubspot/agents/hubspot-sdr-operations.md",
       "name": "hubspot-sdr-operations",
-      "description": "Use PROACTIVELY for SDR operations.",
+      "description": "Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribution, cadence optimization, and SDR performance scorecards. Use when asked about enrollment sequences, meeting booking automation, response rate analysis, or SDR pipeline contribution.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -31898,7 +31907,7 @@
       "file": "compliance-report-generator.md",
       "path": "opspal-salesforce/agents/compliance-report-generator.md",
       "name": "compliance-report-generator",
-      "description": "Generates compliance reports for SOC2, GDPR, HIPAA requirements.",
+      "description": "Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirements, HIPAA configurations, user access audits, data retention verification, and security configuration checks. Use when asked for audit-ready documentation, compliance evidence, or regulatory assessments.",
       "model": "sonnet",
       "color": "red",
       "tools": [
@@ -34945,7 +34954,7 @@
       "file": "sfdc-service-cloud-admin.md",
       "path": "opspal-salesforce/agents/sfdc-service-cloud-admin.md",
       "name": "sfdc-service-cloud-admin",
-      "description": "Use PROACTIVELY for Service Cloud configuration.",
+      "description": "Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, Omni-Channel routing queues, Knowledge base setup, and Service Console layouts. Use when asked about case rules, escalation paths, support queues, entitlement processes, or help desk automation.",
       "model": "sonnet",
       "color": "blue",
       "tools": [
@@ -35068,7 +35077,7 @@
       "file": "sfdc-territory-deployment.md",
       "path": "opspal-salesforce/agents/sfdc-territory-deployment.md",
       "name": "sfdc-territory-deployment",
-      "description": "Executes Salesforce Territory2 changes with validation and rollback support.",
+      "description": "Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territory2Type metadata, executing Territory2Rule deployment, and rolling back territory changes from checkpoints. Use when asked to deploy territories, activate a territory model, or make bulk territory changes.",
       "model": "sonnet",
       "color": "blue",
       "version": "1.0.0",
@@ -37578,7 +37587,7 @@
       "file": "cs-operations-orchestrator.md",
       "path": "opspal-core/agents/cs-operations-orchestrator.md",
       "name": "cs-operations-orchestrator",
-      "description": "Customer Success operations automation including QBR generation, health-score-driven interventions, and renewal forecasting.",
+      "description": "Use PROACTIVELY for Customer Success operations including QBR preparation, health score interventions, renewal risk forecasting, churn prevention playbooks, and CS KPI reporting. Use when asked about quarterly business reviews, at-risk accounts, renewal pipeline, or CSM workflows.",
       "model": "sonnet",
       "color": "teal",
       "tools": [
@@ -37598,7 +37607,8 @@
         "cs core",
         "core operations",
         "operations core",
-        "core cs operations"
+        "core cs operations",
+        "core workflow"
       ],
       "shortName": "cs-operations-orchestrator",
       "fullName": "opspal-core:cs-operations-orchestrator"
@@ -37608,7 +37618,7 @@
       "file": "data-migration-orchestrator.md",
       "path": "opspal-core/agents/data-migration-orchestrator.md",
       "name": "data-migration-orchestrator",
-      "description": "Orchestrates data migrations between platforms with validation.",
+      "description": "Use PROACTIVELY for data migrations between Salesforce, HubSpot, and Marketo including field mapping, data transformation, pre/post-migration validation, dedup strategy, and batch execution with rollback checkpoints. Use when asked to migrate contacts, accounts, deals, or any records between platforms.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -38492,7 +38502,7 @@
       "file": "multi-platform-workflow-orchestrator.md",
       "path": "opspal-core/agents/multi-platform-workflow-orchestrator.md",
       "name": "multi-platform-workflow-orchestrator",
-      "description": "Orchestrates complex workflows spanning multiple platforms.",
+      "description": "Use PROACTIVELY for orchestrating multi-step workflows spanning Salesforce, HubSpot, and Marketo with dependency sequencing, checkpoint state management, retry logic, and rollback support. Use when asked to coordinate cross-platform automation, new customer onboarding flows, or multi-system data sync.",
       "model": "sonnet",
       "color": "cyan",
       "tools": [
@@ -38874,7 +38884,7 @@
       "file": "pipeline-intelligence-agent.md",
       "path": "opspal-core/agents/pipeline-intelligence-agent.md",
       "name": "pipeline-intelligence-agent",
-      "description": "Pipeline health scoring, bottleneck detection, and deal risk assessment.",
+      "description": "Use PROACTIVELY for pipeline health scoring, deal risk assessment, stage bottleneck detection, pipeline coverage analysis, and next-best-action recommendations. Use when asked about pipeline quality, stalled deals, win rate trends, weighted pipeline, or forecast accuracy.",
       "model": "sonnet",
       "color": "yellow",
       "tools": [
@@ -39509,7 +39519,7 @@
       "file": "revops-maturity-orchestrator.md",
       "path": "opspal-core/agents/revops-maturity-orchestrator.md",
       "name": "revops-maturity-orchestrator",
-      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, and Marketo.",
+      "description": "MUST BE USED for unified RevOps maturity assessments across Salesforce, HubSpot, Marketo, and Attio.",
       "model": "opus",
       "color": "purple",
       "tools": [
@@ -40132,7 +40142,7 @@
       "file": "unified-exec-dashboard-agent.md",
       "path": "opspal-core/agents/unified-exec-dashboard-agent.md",
       "name": "unified-exec-dashboard-agent",
-      "description": "Generates unified executive dashboards combining data from all platforms.",
+      "description": "Use PROACTIVELY for executive dashboards combining ARR, NRR, pipeline, MQL-to-SQL conversion, CAC, and marketing-influenced revenue across Salesforce, HubSpot, and Marketo. Use when asked for C-level reporting, board-ready metrics, cross-platform KPIs, or unified revenue views.",
       "model": "sonnet",
       "color": "purple",
       "tools": [
@@ -40808,7 +40818,7 @@
       "file": "hubspot-adoption-tracker.md",
       "path": "opspal-hubspot/agents/hubspot-adoption-tracker.md",
       "name": "hubspot-adoption-tracker",
-      "description": "Use PROACTIVELY for adoption tracking.",
+      "description": "Use PROACTIVELY for HubSpot adoption tracking, feature utilization analysis, user login frequency, training completion rates, and ROI reporting. Use when asked about who is using HubSpot, underutilized features, power users, or platform value realization.",
       "model": "haiku",
       "color": "orange",
       "tools": [
@@ -40845,7 +40855,7 @@
       "file": "hubspot-ai-revenue-intelligence.md",
       "path": "opspal-hubspot/agents/hubspot-ai-revenue-intelligence.md",
       "name": "hubspot-ai-revenue-intelligence",
-      "description": "Use PROACTIVELY for revenue intelligence.",
+      "description": "Use PROACTIVELY for AI-powered deal scoring, win probability prediction, churn risk modeling, expansion opportunity detection, and revenue forecasting with scenario planning. Use when asked about pipeline risk, deal velocity, rep performance prediction, or buying signal analysis.",
       "model": "opus",
       "color": "orange",
       "tools": [
@@ -41115,7 +41125,7 @@
       "file": "hubspot-autonomous-operations.md",
       "path": "opspal-hubspot/agents/hubspot-autonomous-operations.md",
       "name": "hubspot-autonomous-operations",
-      "description": "Use PROACTIVELY for autonomous operations.",
+      "description": "Use PROACTIVELY for bulk HubSpot record updates, autonomous workflow execution, batch contact/deal/company operations, and large-scale data processing using the Imports API. Use when asked to update thousands of records, run bulk operations, or automate repetitive HubSpot data tasks.",
       "color": "orange",
       "tools": [
         "mcp__hubspot-v4__workflow_enumerate",
@@ -41143,7 +41153,8 @@
         "autonomous hubspot",
         "hubspot operations",
         "operations hubspot",
-        "hubspot hubspot autonomous"
+        "hubspot hubspot autonomous",
+        "hubspot workflow"
       ],
       "shortName": "hubspot-autonomous-operations",
       "fullName": "opspal-hubspot:hubspot-autonomous-operations"
@@ -42259,7 +42270,7 @@
       "file": "hubspot-plg-foundation.md",
       "path": "opspal-hubspot/agents/hubspot-plg-foundation.md",
       "name": "hubspot-plg-foundation",
-      "description": "Use PROACTIVELY for product-led growth.",
+      "description": "Use PROACTIVELY for product-led growth (PLG) setup including PQL scoring, usage-based lead qualification, freemium-to-paid conversion workflows, self-serve onboarding optimization, and feature adoption tracking. Use when asked about product usage signals, trial conversion, or PQL identification.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -42286,7 +42297,8 @@
         "plg hubspot",
         "hubspot foundation",
         "foundation hubspot",
-        "hubspot hubspot plg"
+        "hubspot hubspot plg",
+        "hubspot workflow"
       ],
       "shortName": "hubspot-plg-foundation",
       "fullName": "opspal-hubspot:hubspot-plg-foundation"
@@ -42470,7 +42482,7 @@
       "file": "hubspot-sdr-operations.md",
       "path": "opspal-hubspot/agents/hubspot-sdr-operations.md",
       "name": "hubspot-sdr-operations",
-      "description": "Use PROACTIVELY for SDR operations.",
+      "description": "Use PROACTIVELY for SDR outbound sequence management, lead routing rules, territory assignment, round-robin distribution, cadence optimization, and SDR performance scorecards. Use when asked about enrollment sequences, meeting booking automation, response rate analysis, or SDR pipeline contribution.",
       "model": "sonnet",
       "color": "orange",
       "tools": [
@@ -45405,7 +45417,7 @@
       "file": "compliance-report-generator.md",
       "path": "opspal-salesforce/agents/compliance-report-generator.md",
       "name": "compliance-report-generator",
-      "description": "Generates compliance reports for SOC2, GDPR, HIPAA requirements.",
+      "description": "Use PROACTIVELY for generating Salesforce compliance reports covering SOC2 controls, GDPR data processing requirements, HIPAA configurations, user access audits, data retention verification, and security configuration checks. Use when asked for audit-ready documentation, compliance evidence, or regulatory assessments.",
       "model": "sonnet",
       "color": "red",
       "tools": [
@@ -48452,7 +48464,7 @@
       "file": "sfdc-service-cloud-admin.md",
       "path": "opspal-salesforce/agents/sfdc-service-cloud-admin.md",
       "name": "sfdc-service-cloud-admin",
-      "description": "Use PROACTIVELY for Service Cloud configuration.",
+      "description": "Use PROACTIVELY for Salesforce Service Cloud configuration including case management, entitlements, SLA milestones, Omni-Channel routing queues, Knowledge base setup, and Service Console layouts. Use when asked about case rules, escalation paths, support queues, entitlement processes, or help desk automation.",
       "model": "sonnet",
       "color": "blue",
       "tools": [
@@ -48575,7 +48587,7 @@
       "file": "sfdc-territory-deployment.md",
       "path": "opspal-salesforce/agents/sfdc-territory-deployment.md",
       "name": "sfdc-territory-deployment",
-      "description": "Executes Salesforce Territory2 changes with validation and rollback support.",
+      "description": "Use PROACTIVELY for deploying Salesforce Territory2 models, creating or updating territory records, managing Territory2Type metadata, executing Territory2Rule deployment, and rolling back territory changes from checkpoints. Use when asked to deploy territories, activate a territory model, or make bulk territory changes.",
       "model": "sonnet",
       "color": "blue",
       "version": "1.0.0",
@@ -54528,7 +54540,7 @@
     "agentsWithKeywordsFull": 327,
     "agentsWithTools": 326,
     "agentsWithToolsFull": 327,
-    "avgKeywordsPerAgent": "15.27",
+    "avgKeywordsPerAgent": "15.28",
     "hooksByEvent": {
       "PostToolUse": 41,
       "SessionStart": 7,

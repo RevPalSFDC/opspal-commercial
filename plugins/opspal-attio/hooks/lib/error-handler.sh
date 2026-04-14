@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — shared library sourced by other hooks, not a standalone registrable hook
 #
 # Attio Plugin Error Handler
 #

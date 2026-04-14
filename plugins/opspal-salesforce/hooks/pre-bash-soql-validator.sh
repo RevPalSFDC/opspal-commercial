@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 #
 # Pre-Bash SOQL Validator Hook
 # Validates SOQL field names and query safety before execution.
