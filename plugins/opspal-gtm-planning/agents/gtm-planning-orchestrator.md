@@ -2,6 +2,7 @@
 name: gtm-planning-orchestrator
 model: opus
 description: "MUST BE USED for GTM annual planning."
+whenToUse: "Use PROACTIVELY for GTM annual planning workflows: territory design, quota modeling (including Monte Carlo simulations), compensation plan structuring, headcount capacity planning, and revenue attribution governance. Mandatory coordinator for multi-stage planning that requires specialist sub-agents. NOT for ad-hoc CRM reporting or single-metric analysis."
 color: blue
 tools:
   - Task

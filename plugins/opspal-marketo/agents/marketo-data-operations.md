@@ -1,6 +1,7 @@
 ---
 name: marketo-data-operations
 description: "MUST BE USED for Marketo bulk data operations."
+whenToUse: "Use this agent for Marketo bulk data work: lead imports, bulk exports (leads and activity), field updates at scale, lead merges, partition management, and data quality operations. Good for large-volume lead lifecycle operations and extract-transform-load pipelines. NOT for campaign execution or scoring model changes."
 color: purple
 tools:
   - Read

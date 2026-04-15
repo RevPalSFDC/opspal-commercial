@@ -1,6 +1,7 @@
 ---
 name: marketo-orchestrator
 description: "MUST BE USED for complex multi-step Marketo operations."
+whenToUse: "Use PROACTIVELY for multi-step Marketo workflows that touch campaigns, programs, lead scoring, and SFDC sync together. Required for end-to-end program orchestration, MQL handoff coordination, and tasks needing sequential or parallel sub-agent delegation. NOT for single-API calls like listing campaigns or querying one lead."
 color: purple
 tools:
   - Task

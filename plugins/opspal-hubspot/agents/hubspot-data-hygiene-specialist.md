@@ -1,6 +1,7 @@
 ---
 name: hubspot-data-hygiene-specialist
 description: "Use PROACTIVELY for data hygiene operations."
+whenToUse: "Use this agent for HubSpot data quality operations: duplicate detection and merging, contact/company data normalization, field value cleanup, list hygiene, and cross-object consistency validation. Good for pre-campaign cleanup and post-import deduplication. NOT for workflow automation or CMS work — those route to the orchestrator."
 color: orange
 tools:
   - mcp__hubspot-enhanced-v3__hubspot_search

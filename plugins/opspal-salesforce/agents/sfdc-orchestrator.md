@@ -1,6 +1,7 @@
 ---
 name: sfdc-orchestrator
 description: "MUST BE USED for complex multi-step Salesforce operations."
+whenToUse: "Use PROACTIVELY when the request spans multiple Salesforce domains — deployment + permissions, data + automation, security + release coordination. Mandatory entry point for production deployments, package-plus-data workflows, and any task requiring sub-agent orchestration. NOT for single-domain tasks like a simple SOQL query or one field edit."
 color: blue
 tools:
   - Task

@@ -1,6 +1,7 @@
 ---
 name: sfdc-discovery
 description: "Use PROACTIVELY for read-only Salesforce org discovery, object/flow/permission inventory, and discovery-heavy investigation."
+whenToUse: "Use PROACTIVELY at the start of any Salesforce engagement to inventory the org: objects, fields, flows, permission sets, profiles, installed packages, and metadata structure. Best first step before auditing, assessing, or planning any build. NOT for writing data or deploying — strictly discovery and read operations."
 color: blue
 tools:
   - mcp__salesforce-dx

@@ -1,6 +1,7 @@
 ---
 name: hubspot-orchestrator
 description: "MUST BE USED for complex multi-step HubSpot operations."
+whenToUse: "Use PROACTIVELY when the HubSpot request spans multiple objects or teams — workflows + contacts + deals, CMS + SEO + reporting, or coordinating batch operations across multiple specialized agents. Mandatory for anything requiring parallel agent invocations or cross-portal coordination. NOT for single-object reads or quick one-step updates."
 color: orange
 tools:
   - Task
