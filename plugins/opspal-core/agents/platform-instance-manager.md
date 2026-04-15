@@ -21,9 +21,7 @@ triggerKeywords:
   - platform
   - multiple
   - instance
-  - salesforce
   - sf
-  - hubspot
 ---
 
 # Platform Instance Manager Agent

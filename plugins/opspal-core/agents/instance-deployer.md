@@ -14,7 +14,6 @@ triggerKeywords:
   - deploy
   - instance
   - metadata
-  - salesforce
   - sandbox
   - deployer
   - deployment

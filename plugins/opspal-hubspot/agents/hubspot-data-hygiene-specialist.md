@@ -31,7 +31,6 @@ triggerKeywords:
   - duplicate
   - sync
   - quality
-  - salesforce
   - operations
 ---
 

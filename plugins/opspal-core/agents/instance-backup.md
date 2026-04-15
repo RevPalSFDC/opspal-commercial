@@ -11,7 +11,6 @@ tools:
   - TodoWrite
   - mcp_salesforce_data_query
 triggerKeywords:
-  - salesforce
   - instance
   - backup
   - manage
