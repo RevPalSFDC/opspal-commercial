@@ -25,10 +25,8 @@ triggerKeywords:
   - hubspot
   - sfdc
   - automation
-  - salesforce
   - scraper
   - api
-  - connect
 model: haiku
 ---
 
