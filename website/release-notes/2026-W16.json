@@ -1,20 +1,20 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought significant improvements to platform stability and content organization. We fixed licensing issues that could cause activation loops and enhanced our automation skills library with better organization and expanded capabilities for revenue operations workflows.",
-  "published_at": "2026-04-14T15:26:58.387Z",
+  "summary": "This week focused on platform improvements that make OpsPal more reliable and organized. We fixed licensing issues that could cause disruptions and improved our Skills library organization to help you find and use automation templates more easily.",
+  "published_at": "2026-04-15T14:41:27.597Z",
   "week_start": "2026-04-13",
-  "week_end": "2026-04-14",
+  "week_end": "2026-04-15",
   "has_breaking": false,
-  "total_commits": 15,
+  "total_commits": 16,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved license activation issues that could cause system loops",
+      "headline": "Fixed licensing errors that could interrupt your work",
       "details": [
-        "Fixed a problem where license validation could get stuck in an endless loop",
-        "Added warning notifications when licenses are approaching expiration"
+        "Resolved issues where license validation could get stuck in loops",
+        "Added clear warnings when your license is approaching expiration"
       ],
       "commits": [
         "d9f1c3d",
@@ -24,11 +24,11 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced automation skills library with better organization",
+      "headline": "Better organized Skills library makes automation templates easier to find",
       "details": [
-        "Reorganized 98 automation skills for better discoverability",
-        "Improved naming and categorization of sales and marketing automation templates",
-        "Added new skill templates to help you build custom revenue operations workflows"
+        "Cleaned up and reorganized 98 automation templates",
+        "Fixed naming inconsistencies that made some skills hard to locate",
+        "Removed outdated templates that were no longer useful"
       ],
       "commits": [
         "9d4de94"
