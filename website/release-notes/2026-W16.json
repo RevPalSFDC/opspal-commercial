@@ -1,21 +1,21 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on platform stability improvements and expanding our automation capabilities. We fixed licensing issues that could cause service interruptions and enhanced our skills library to provide better automation options for your revenue operations workflows.",
-  "published_at": "2026-04-16T22:05:33.101Z",
+  "summary": "This week focused on improving system reliability and expanding automation capabilities. We fixed licensing issues that could cause unexpected interruptions and enhanced our skills library with better organization and more comprehensive automation options for your revenue operations workflows.",
+  "published_at": "2026-04-16T22:49:07.301Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-16",
   "has_breaking": false,
-  "total_commits": 24,
+  "total_commits": 27,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved license activation issues that could interrupt service",
+      "headline": "Fixed licensing issues that caused workflow interruptions",
       "details": [
-        "Fixed a problem where license renewals could get stuck in a loop",
-        "You'll now see clear warnings 48 hours before your license expires",
-        "License status updates happen more reliably without service disruption"
+        "Resolved problems where license validation could get stuck in endless loops",
+        "Added clear warnings when your license is approaching expiration",
+        "Improved license renewal process to prevent unexpected service disruptions"
       ],
       "commits": [
         "d9f1c3d",
@@ -27,9 +27,9 @@
       "plugin": "Skills",
       "headline": "Enhanced automation skills library with better organization",
       "details": [
-        "Improved 98 automation templates for more reliable workflows",
-        "Better organized skill categories make it easier to find the right automation",
-        "Fixed naming issues that made some automations harder to locate"
+        "Improved naming and organization of automation templates for easier discovery",
+        "Added missing templates for common revenue operations workflows",
+        "Cleaned up duplicate and misplaced automation options"
       ],
       "commits": [
         "9d4de94"
