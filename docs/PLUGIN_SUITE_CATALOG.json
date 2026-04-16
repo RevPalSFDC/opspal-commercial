@@ -2138,7 +2138,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.15",
+      "version": "2.55.17",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -2235,7 +2235,6 @@
             "triggerKeywords": [
               "manage",
               "integration",
-              "salesforce",
               "both",
               "asana",
               "task",
@@ -3117,7 +3116,6 @@
               "mcp_salesforce_data_query"
             ],
             "triggerKeywords": [
-              "salesforce",
               "instance",
               "backup",
               "manage",
@@ -3149,7 +3147,6 @@
               "deploy",
               "instance",
               "metadata",
-              "salesforce",
               "sandbox",
               "deployer",
               "deployment",
@@ -3201,7 +3198,6 @@
             "triggerKeywords": [
               "sync",
               "data",
-              "salesforce",
               "instance",
               "metadata",
               "sf"
@@ -3279,7 +3275,6 @@
               "test",
               "wire",
               "workflow",
-              "salesforce",
               "orchestrator",
               "orchestrate",
               "flow",
@@ -3641,9 +3636,7 @@
               "platform",
               "multiple",
               "instance",
-              "salesforce",
-              "sf",
-              "hubspot"
+              "sf"
             ]
           },
           "sourcePath": "plugins/opspal-core/agents/platform-instance-manager.md"
@@ -11771,7 +11764,7 @@
     {
       "name": "opspal-gtm-planning",
       "description": "GTM Annual Planning framework with strategic reporting templates and session governance hooks. Includes territory design, quota modeling, compensation planning, revenue modeling, retention analysis, market intelligence, 13 strategic report templates, session context loading, telemetry, and path validation. 12 agents, 15 commands, 3 hooks, 4 skill frameworks.",
-      "version": "2.3.11",
+      "version": "2.3.12",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-gtm",
@@ -11948,6 +11941,7 @@
             "name": "gtm-planning-orchestrator",
             "model": "opus",
             "description": "MUST BE USED for GTM annual planning.",
+            "whenToUse": "Use PROACTIVELY for GTM annual planning workflows: territory design, quota modeling (including Monte Carlo simulations), compensation plan structuring, headcount capacity planning, and revenue attribution governance. Mandatory coordinator for multi-stage planning that requires specialist sub-agents. NOT for ad-hoc CRM reporting or single-metric analysis.",
             "color": "blue",
             "tools": [
               "Task",
@@ -12482,7 +12476,7 @@
     {
       "name": "opspal-hubspot",
       "description": "HubSpot operations: workflows, contacts, deals, marketing campaigns, CMS blog management, HubDB, serverless functions, Developer Platform apps with app cards and settings components, Imports V3 API, Goal Targets V3 API (quotas, attainment), Automation Actions V4 API (custom workflow actions, callbacks), analytics, Salesforce sync, Service Hub, revenue intelligence, and list-workflow pairing validation. 54 agents.",
-      "version": "3.9.33",
+      "version": "3.9.34",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-hubspot",
@@ -13393,6 +13387,7 @@
           "frontmatter": {
             "name": "hubspot-data-hygiene-specialist",
             "description": "Use PROACTIVELY for data hygiene operations.",
+            "whenToUse": "Use this agent for HubSpot data quality operations: duplicate detection and merging, contact/company data normalization, field value cleanup, list hygiene, and cross-object consistency validation. Good for pre-campaign cleanup and post-import deduplication. NOT for workflow automation or CMS work — those route to the orchestrator.",
             "color": "orange",
             "tools": [
               "mcp__hubspot-enhanced-v3__hubspot_search",
@@ -13417,7 +13412,6 @@
               "duplicate",
               "sync",
               "quality",
-              "salesforce",
               "operations"
             ]
           },
@@ -13645,6 +13639,7 @@
           "frontmatter": {
             "name": "hubspot-orchestrator",
             "description": "MUST BE USED for complex multi-step HubSpot operations.",
+            "whenToUse": "Use PROACTIVELY when the HubSpot request spans multiple objects or teams — workflows + contacts + deals, CMS + SEO + reporting, or coordinating batch operations across multiple specialized agents. Mandatory for anything requiring parallel agent invocations or cross-portal coordination. NOT for single-object reads or quick one-step updates.",
             "color": "orange",
             "tools": [
               "Task",
@@ -14151,10 +14146,8 @@
               "hubspot",
               "sfdc",
               "automation",
-              "salesforce",
               "scraper",
-              "api",
-              "connect"
+              "api"
             ],
             "model": "haiku"
           },
@@ -15856,7 +15849,7 @@
     {
       "name": "opspal-marketo",
       "description": "Marketo marketing automation: leads, smart campaigns, email, landing pages, programs, analytics, Salesforce sync, MQL handoff, agentic automation, Claude-powered observability, campaign diagnostics, and lead routing diagnostics with safe remediation workflows.",
-      "version": "2.6.42",
+      "version": "2.6.43",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-marketing-ops",
@@ -16179,6 +16172,7 @@
           "frontmatter": {
             "name": "marketo-data-operations",
             "description": "MUST BE USED for Marketo bulk data operations.",
+            "whenToUse": "Use this agent for Marketo bulk data work: lead imports, bulk exports (leads and activity), field updates at scale, lead merges, partition management, and data quality operations. Good for large-volume lead lifecycle operations and extract-transform-load pipelines. NOT for campaign execution or scoring model changes.",
             "color": "purple",
             "tools": [
               "Read",
@@ -16920,6 +16914,7 @@
           "frontmatter": {
             "name": "marketo-orchestrator",
             "description": "MUST BE USED for complex multi-step Marketo operations.",
+            "whenToUse": "Use PROACTIVELY for multi-step Marketo workflows that touch campaigns, programs, lead scoring, and SFDC sync together. Required for end-to-end program orchestration, MQL handoff coordination, and tasks needing sequential or parallel sub-agent delegation. NOT for single-API calls like listing campaigns or querying one lead.",
             "color": "purple",
             "tools": [
               "Task",
@@ -19359,7 +19354,7 @@
     {
       "name": "opspal-salesforce",
       "description": "Salesforce metadata, CPQ/RevOps assessments, Flow automation with intelligent segmentation, layout management, and permission sets with automated error prevention. Now with deterministic Report CRUD pipeline: ReportPlan contract, type fallback engine, constraint auto-correction, semantic disambiguation, preflight auto-repair, patch-based updates, dependency-aware deletion, and operational telemetry. 92 agents.",
-      "version": "3.87.16",
+      "version": "3.87.17",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-salesforce",
@@ -20076,6 +20071,7 @@
           "frontmatter": {
             "name": "sfdc-automation-auditor",
             "description": "MUST BE USED for automation or flow audits.",
+            "whenToUse": "Use this agent to audit Salesforce automation: Flow coverage, trigger conflicts, Process Builder debt, duplicate rule gaps, and automation performance issues. Good for identifying tech debt, redundant automations, and governor limit risks before a deployment. NOT for building or activating automations — read-only audit scope only.",
             "color": "blue",
             "tools": [
               "mcp_salesforce",
@@ -20403,6 +20399,7 @@
           "frontmatter": {
             "name": "sfdc-cpq-assessor",
             "description": "MUST BE USED for CPQ, quote, or pricing assessments.",
+            "whenToUse": "Use this agent to assess Salesforce CPQ configuration: quote line rules, pricing waterfalls, discount schedules, approval matrix, product catalog health, and Q2C process gaps. Good for pre-implementation reviews and post-go-live CPQ audits. NOT for building or deploying CPQ changes — this is an assessment-only agent.",
             "color": "blue",
             "tools": [
               "mcp_salesforce",
@@ -20966,6 +20963,7 @@
           "frontmatter": {
             "name": "sfdc-discovery",
             "description": "Use PROACTIVELY for read-only Salesforce org discovery, object/flow/permission inventory, and discovery-heavy investigation.",
+            "whenToUse": "Use PROACTIVELY at the start of any Salesforce engagement to inventory the org: objects, fields, flows, permission sets, profiles, installed packages, and metadata structure. Best first step before auditing, assessing, or planning any build. NOT for writing data or deploying — strictly discovery and read operations.",
             "color": "blue",
             "tools": [
               "mcp__salesforce-dx",
@@ -21567,6 +21565,7 @@
           "frontmatter": {
             "name": "sfdc-orchestrator",
             "description": "MUST BE USED for complex multi-step Salesforce operations.",
+            "whenToUse": "Use PROACTIVELY when the request spans multiple Salesforce domains — deployment + permissions, data + automation, security + release coordination. Mandatory entry point for production deployments, package-plus-data workflows, and any task requiring sub-agent orchestration. NOT for single-domain tasks like a simple SOQL query or one field edit.",
             "color": "blue",
             "tools": [
               "Task",
@@ -22194,6 +22193,7 @@
           "frontmatter": {
             "name": "sfdc-revops-auditor",
             "description": "MUST BE USED for RevOps, pipeline, or forecast audits.",
+            "whenToUse": "Use this agent for read-only RevOps analysis: pipeline health checks, forecast accuracy reviews, stage conversion audits, opportunity hygiene, and revenue attribution reporting against Salesforce data. Good for executive-level pipeline diagnostics and funnel gap analysis. NOT for writing data or deploying changes — this agent is strictly read-only.",
             "color": "blue",
             "tools": [
               "mcp_salesforce_data_query",

@@ -216,14 +216,69 @@ run_child_hook() {
   local exit_code
   local stdout_content
   local stderr_content
+  local child_timeout_s
+  local start_ns end_ns elapsed_ms
+  local child_name
+  local timing_log
+
+  child_timeout_s="${SFDC_CHILD_HOOK_TIMEOUT_SECS:-15}"
 
   stdout_file="$(mktemp)"
   stderr_file="$(mktemp)"
 
-  if printf '%s' "$HOOK_INPUT" | env DISPATCHER_CONTEXT=1 "$@" >"$stdout_file" 2>"$stderr_file"; then
-    exit_code=0
+  # Capture child identity (last arg of env chain is typically the hook script path)
+  child_name="$(basename "${!#}" 2>/dev/null || echo "unknown")"
+
+  start_ns="$(date +%s%N 2>/dev/null || echo 0)"
+
+  # Wrap in `timeout` so a hung child can't stall every subsequent Bash call.
+  # --preserve-status keeps the child's real exit code on success; timeout
+  # itself exits 124 on TERM. -k adds a 2s grace period before SIGKILL.
+  if command -v timeout >/dev/null 2>&1; then
+    if printf '%s' "$HOOK_INPUT" | env DISPATCHER_CONTEXT=1 \
+        timeout --preserve-status -k 2s "${child_timeout_s}s" "$@" \
+        >"$stdout_file" 2>"$stderr_file"; then
+      exit_code=0
+    else
+      exit_code=$?
+    fi
   else
-    exit_code=$?
+    if printf '%s' "$HOOK_INPUT" | env DISPATCHER_CONTEXT=1 "$@" \
+        >"$stdout_file" 2>"$stderr_file"; then
+      exit_code=0
+    else
+      exit_code=$?
+    fi
+  fi
+
+  end_ns="$(date +%s%N 2>/dev/null || echo 0)"
+  if [ "$start_ns" -gt 0 ] && [ "$end_ns" -gt 0 ]; then
+    elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
+  else
+    elapsed_ms=0
+  fi
+
+  # Emit timing to a jsonl log so slow hooks can be identified post-hoc.
+  # Best-effort only — never fails the dispatch.
+  timing_log="${HOME}/.claude/logs/sfdc-child-hook-timing.jsonl"
+  mkdir -p "$(dirname "$timing_log")" 2>/dev/null || true
+  if [ -w "$(dirname "$timing_log")" ] 2>/dev/null; then
+    printf '{"ts":"%s","child":"%s","ms":%d,"exit":%d,"timeout_s":%d}\n' \
+      "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$child_name" "$elapsed_ms" "$exit_code" "$child_timeout_s" \
+      >> "$timing_log" 2>/dev/null || true
+  fi
+
+  # Emit stderr warning for slow children (>5s) so the agent sees the friction
+  if [ "$elapsed_ms" -gt 5000 ]; then
+    printf '[pre-bash-dispatcher] WARNING: child hook %s took %dms (timeout=%ds)\n' \
+      "$child_name" "$elapsed_ms" "$child_timeout_s" >&2
+  fi
+
+  # Exit code 124 = timeout killed the child. Surface this clearly instead of
+  # treating it as a generic failure.
+  if [ "$exit_code" -eq 124 ]; then
+    printf '[pre-bash-dispatcher] ERROR: child hook %s timed out after %ds (set SFDC_CHILD_HOOK_TIMEOUT_SECS to override)\n' \
+      "$child_name" "$child_timeout_s" >&2
   fi
 
   stdout_content="$(cat "$stdout_file")"

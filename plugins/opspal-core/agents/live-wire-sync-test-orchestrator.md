@@ -16,7 +16,6 @@ triggerKeywords:
   - test
   - wire
   - workflow
-  - salesforce
   - orchestrator
   - orchestrate
   - flow

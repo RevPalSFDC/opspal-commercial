@@ -1,6 +1,7 @@
 ---
 name: sfdc-revops-auditor
 description: "MUST BE USED for RevOps, pipeline, or forecast audits."
+whenToUse: "Use this agent for read-only RevOps analysis: pipeline health checks, forecast accuracy reviews, stage conversion audits, opportunity hygiene, and revenue attribution reporting against Salesforce data. Good for executive-level pipeline diagnostics and funnel gap analysis. NOT for writing data or deploying changes — this agent is strictly read-only."
 color: blue
 tools:
   - mcp_salesforce_data_query

@@ -23,7 +23,6 @@ tools:
 triggerKeywords:
   - manage
   - integration
-  - salesforce
   - both
   - asana
   - task

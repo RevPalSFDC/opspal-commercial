@@ -1,6 +1,7 @@
 ---
 name: sfdc-cpq-assessor
 description: "MUST BE USED for CPQ, quote, or pricing assessments."
+whenToUse: "Use this agent to assess Salesforce CPQ configuration: quote line rules, pricing waterfalls, discount schedules, approval matrix, product catalog health, and Q2C process gaps. Good for pre-implementation reviews and post-go-live CPQ audits. NOT for building or deploying CPQ changes — this is an assessment-only agent."
 color: blue
 tools:
   - mcp_salesforce

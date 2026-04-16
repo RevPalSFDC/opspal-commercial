@@ -13,7 +13,6 @@ tools:
 triggerKeywords:
   - sync
   - data
-  - salesforce
   - instance
   - metadata
   - sf

@@ -261,6 +261,23 @@ PASSED_CHECKS=0
 FAILED_CHECKS=0
 SKIPPED_CHECKS=0
 FAILED_CHECK_NAMES=""
+FAILED_CHECK_BYPASS_HINTS=""
+
+# Per-check bypass env vars. Prefer surgical skips over the nuclear
+# SKIP_COMPREHENSIVE_VALIDATION=1, which disables every guardrail in this hook.
+# Set to 1 to skip a specific check (the check is recorded as SKIPPED, not
+# PASSED, so summaries remain honest).
+SFDC_SKIP_SOURCE_VALIDATION="${SFDC_SKIP_SOURCE_VALIDATION:-0}"
+SFDC_SKIP_FLOW_XML="${SFDC_SKIP_FLOW_XML:-0}"
+SFDC_SKIP_FIELD_DEPS="${SFDC_SKIP_FIELD_DEPS:-0}"
+SFDC_SKIP_CSV_DATA="${SFDC_SKIP_CSV_DATA:-0}"
+SFDC_SKIP_FHT="${SFDC_SKIP_FHT:-0}"
+SFDC_SKIP_PICKLIST_FORMULA="${SFDC_SKIP_PICKLIST_FORMULA:-0}"
+SFDC_SKIP_DEPLOY_ORDER="${SFDC_SKIP_DEPLOY_ORDER:-0}"
+SFDC_SKIP_UNIFIED_PREOP="${SFDC_SKIP_UNIFIED_PREOP:-0}"
+SFDC_SKIP_LOOKUP_DELETE="${SFDC_SKIP_LOOKUP_DELETE:-0}"
+SFDC_SKIP_REQ_FIELD_PERMS="${SFDC_SKIP_REQ_FIELD_PERMS:-0}"
+SFDC_SKIP_PICKLIST_DEACT="${SFDC_SKIP_PICKLIST_DEACT:-0}"
 
 ##############################################################################
 # Step 1: Deployment Source Validation
@@ -269,19 +286,26 @@ FAILED_CHECK_NAMES=""
 echo "📦 Step 1/11: Deployment Source Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
-VALIDATOR="${SCRIPT_DIR}/../scripts/lib/deployment-source-validator.js"
-if [ -f "$VALIDATOR" ]; then
-    if node "$VALIDATOR" validate-source "$DEPLOY_DIR" > /dev/null 2>&1; then
-        log_success "Deployment source structure valid"
-        PASSED_CHECKS=$((PASSED_CHECKS + 1))
-    else
-        log_error "Invalid deployment source structure"
-        FAILED_CHECKS=$((FAILED_CHECKS + 1))
-        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Source Validation"
-        VALIDATION_FAILED=1
-    fi
+if [ "$SFDC_SKIP_SOURCE_VALIDATION" = "1" ]; then
+    log_info "Skipping source validation (SFDC_SKIP_SOURCE_VALIDATION=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 else
-    log_warning "Deployment source validator not found, skipping"
+    VALIDATOR="${SCRIPT_DIR}/../scripts/lib/deployment-source-validator.js"
+    if [ -f "$VALIDATOR" ]; then
+        if node "$VALIDATOR" validate-source "$DEPLOY_DIR" > /dev/null 2>&1; then
+            log_success "Deployment source structure valid"
+            PASSED_CHECKS=$((PASSED_CHECKS + 1))
+        else
+            log_error "Invalid deployment source structure"
+            FAILED_CHECKS=$((FAILED_CHECKS + 1))
+            FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Source Validation"
+            FAILED_CHECK_BYPASS_HINTS="${FAILED_CHECK_BYPASS_HINTS:+$FAILED_CHECK_BYPASS_HINTS, }SFDC_SKIP_SOURCE_VALIDATION=1"
+            VALIDATION_FAILED=1
+        fi
+    else
+        log_warning "Deployment source validator not found, skipping"
+        SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+    fi
 fi
 echo ""
 
@@ -539,7 +563,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 # Find objects with tracked fields in the deployment
 TRACKED_FIELDS=$(find "$DEPLOY_DIR" -name "*.field-meta.xml" -exec grep -l "trackHistory>true" {} \; 2>/dev/null || echo "")
 
-if [ "$HAS_TARGET_ORG" -eq 0 ]; then
+if [ "$SFDC_SKIP_FHT" = "1" ]; then
+    log_info "Skipping field history tracking limits (SFDC_SKIP_FHT=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ "$HAS_TARGET_ORG" -eq 0 ]; then
     log_info "Skipping field history tracking limits (no target org)"
     SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 elif [ -n "$TRACKED_FIELDS" ]; then
@@ -604,6 +631,7 @@ elif [ -n "$TRACKED_FIELDS" ]; then
         log_error "$TRACKING_ERRORS object(s) would exceed field history tracking limit"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Field History Tracking"
+        FAILED_CHECK_BYPASS_HINTS="${FAILED_CHECK_BYPASS_HINTS:+$FAILED_CHECK_BYPASS_HINTS, }SFDC_SKIP_FHT=1"
         VALIDATION_FAILED=1
     fi
 else
@@ -976,7 +1004,11 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
         "{\"targetOrg\":\"$TARGET_ORG\",\"totalChecks\":$TOTAL_CHECKS,\"passed\":$PASSED_CHECKS,\"failed\":$FAILED_CHECKS}"
 
     if [ "$PRETOOLUSE_MODE" = "1" ]; then
-        emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
+        if [ -n "$FAILED_CHECK_BYPASS_HINTS" ]; then
+            emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details. Per-check bypass (preferred): ${FAILED_CHECK_BYPASS_HINTS}. Nuclear bypass: SKIP_COMPREHENSIVE_VALIDATION=1."
+        else
+            emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
+        fi
         exit 0
     elif [ -f "$OUTPUT_FORMATTER" ]; then
         node "$OUTPUT_FORMATTER" error \

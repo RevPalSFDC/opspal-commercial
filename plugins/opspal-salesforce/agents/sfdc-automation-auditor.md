@@ -1,6 +1,7 @@
 ---
 name: sfdc-automation-auditor
 description: "MUST BE USED for automation or flow audits."
+whenToUse: "Use this agent to audit Salesforce automation: Flow coverage, trigger conflicts, Process Builder debt, duplicate rule gaps, and automation performance issues. Good for identifying tech debt, redundant automations, and governor limit risks before a deployment. NOT for building or activating automations — read-only audit scope only."
 color: blue
 tools:
   - mcp_salesforce
