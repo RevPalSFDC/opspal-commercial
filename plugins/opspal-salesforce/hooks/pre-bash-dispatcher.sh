@@ -263,7 +263,7 @@ run_child_hook() {
   timing_log="${HOME}/.claude/logs/sfdc-child-hook-timing.jsonl"
   mkdir -p "$(dirname "$timing_log")" 2>/dev/null || true
   if [ -w "$(dirname "$timing_log")" ] 2>/dev/null; then
-    printf '{"ts":"%s","child":"%s","ms":%d,"exit":%d,"timeout_s":%d}\n' \
+    printf '{"ts":"%s","child":"%s","ms":%d,"exit":%d,"timeout_s":%d,"source":"pre-bash-dispatcher"}\n' \
       "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$child_name" "$elapsed_ms" "$exit_code" "$child_timeout_s" \
       >> "$timing_log" 2>/dev/null || true
   fi

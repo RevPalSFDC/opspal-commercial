@@ -377,8 +377,21 @@ class HookHealthChecker {
     const stageName = 'Hook Execution Timing';
 
     const home = process.env.HOME || process.env.USERPROFILE || '';
+    // Each entry gets a per-source p95 budget. Session-start children should
+    // feel instant (3s warn, 10s fail). SF deploy-chain children have more
+    // room because some include live SOQL (10s warn, 15s fail via timeout).
+    // Keys are matched against either the entry's `source` field (preferred —
+    // set by the emitting hook) or the log-file basename (fallback).
+    const sourceBudgets = {
+      'sfdc-child-hook-timing.jsonl': { warnMs: 10000, failMs: 15000 },
+      'pre-bash-dispatcher': { warnMs: 10000, failMs: 15000 },
+      'session-start-child-timing.jsonl': { warnMs: 3000, failMs: 10000 },
+      'session-start-dispatcher': { warnMs: 3000, failMs: 10000 }
+    };
+    const defaultBudget = { warnMs: 10000, failMs: 15000 };
     const defaultLogs = [
-      path.join(home, '.claude', 'logs', 'sfdc-child-hook-timing.jsonl')
+      path.join(home, '.claude', 'logs', 'sfdc-child-hook-timing.jsonl'),
+      path.join(home, '.claude', 'logs', 'session-start-child-timing.jsonl')
     ];
     const extraEnv = process.env.OPSPAL_TIMING_LOG_PATHS || '';
     const extras = extraEnv ? extraEnv.split(':').filter(Boolean) : [];
@@ -391,6 +404,7 @@ class HookHealthChecker {
         missingPaths.push(logPath);
         continue;
       }
+      const logBasename = path.basename(logPath);
       try {
         const raw = fs.readFileSync(logPath, 'utf8');
         for (const line of raw.split('\n')) {
@@ -398,6 +412,11 @@ class HookHealthChecker {
           try {
             const obj = JSON.parse(line);
             if (typeof obj.ms === 'number' && typeof obj.child === 'string') {
+              // Prefer the entry's intrinsic `source` (set by the emitting
+              // dispatcher) over the log-file basename, because log paths
+              // can be overridden via OPSPAL_TIMING_LOG_PATHS. Either value
+              // resolves against sourceBudgets below.
+              obj._source = obj.source || logBasename;
               entries.push(obj);
             }
           } catch (_) {
@@ -438,45 +457,70 @@ class HookHealthChecker {
       return Math.round(sorted[idx]);
     };
 
+    // Bucket by (source, child) so budgets apply correctly — a session-start
+    // child named "session-init.sh" should not inherit the 10s sf-deploy
+    // budget.
     const byChild = new Map();
     for (const entry of entries) {
-      if (!byChild.has(entry.child)) {
-        byChild.set(entry.child, { samples: [], timeouts: 0, errors: 0 });
+      const source = entry._source || 'unknown';
+      const key = `${source}::${entry.child}`;
+      if (!byChild.has(key)) {
+        byChild.set(key, { child: entry.child, source, samples: [], timeouts: 0, errors: 0 });
       }
-      const bucket = byChild.get(entry.child);
+      const bucket = byChild.get(key);
       bucket.samples.push(entry.ms);
       if (entry.exit === 124) bucket.timeouts++;
       else if (entry.exit !== 0) bucket.errors++;
     }
 
     const summary = [];
-    for (const [child, bucket] of byChild.entries()) {
+    for (const bucket of byChild.values()) {
       const n = bucket.samples.length;
       const p50 = percentile(bucket.samples, 0.5);
       const p95 = percentile(bucket.samples, 0.95);
       const p99 = percentile(bucket.samples, 0.99);
       const max = Math.max(...bucket.samples);
-      summary.push({ child, n, p50_ms: p50, p95_ms: p95, p99_ms: p99, max_ms: max, timeouts: bucket.timeouts, errors: bucket.errors });
+      const budget = sourceBudgets[bucket.source] || defaultBudget;
+      summary.push({
+        child: bucket.child,
+        source: bucket.source,
+        n,
+        p50_ms: p50,
+        p95_ms: p95,
+        p99_ms: p99,
+        max_ms: max,
+        timeouts: bucket.timeouts,
+        errors: bucket.errors,
+        budget_warn_ms: budget.warnMs,
+        budget_fail_ms: budget.failMs
+      });
     }
 
     // Sort worst-first by p95 so operators see pain points immediately.
     summary.sort((a, b) => b.p95_ms - a.p95_ms);
 
-    // Classify status: unhealthy if any child timed out, degraded if any p95
-    // exceeds 10s, healthy otherwise.
+    // Per-source budget classification. A child is "slow" if its p95 exceeds
+    // that source's warn threshold; "critical" if over the fail threshold.
     const anyTimeouts = summary.some(s => s.timeouts > 0);
-    const slowChildren = summary.filter(s => s.p95_ms > 10000);
+    const criticalChildren = summary.filter(s => s.p95_ms > s.budget_fail_ms);
+    const slowChildren = summary.filter(s => s.p95_ms > s.budget_warn_ms);
     let status = HEALTH_STATUS.HEALTHY;
     let message = `Analyzed ${entries.length} child-hook invocation(s) across ${summary.length} child(ren). p95 within budget.`;
 
-    if (anyTimeouts) {
+    if (anyTimeouts || criticalChildren.length > 0) {
       status = HEALTH_STATUS.UNHEALTHY;
-      const offenders = summary.filter(s => s.timeouts > 0).map(s => `${s.child} (${s.timeouts})`).join(', ');
-      message = `Timeout kills detected (exit 124): ${offenders}. Raise SFDC_CHILD_HOOK_TIMEOUT_SECS or move work out of the hot path.`;
+      const offenders = [];
+      if (anyTimeouts) {
+        offenders.push(...summary.filter(s => s.timeouts > 0).map(s => `${s.child} (${s.timeouts} timeout)`));
+      }
+      if (criticalChildren.length > 0) {
+        offenders.push(...criticalChildren.map(s => `${s.child} (p95=${s.p95_ms}ms > ${s.budget_fail_ms}ms)`));
+      }
+      message = `Hook timing critical: ${offenders.join(', ')}. Raise budget or move work out of the hot path.`;
     } else if (slowChildren.length > 0) {
       status = HEALTH_STATUS.DEGRADED;
-      const offenders = slowChildren.map(s => `${s.child} (p95=${s.p95_ms}ms)`).join(', ');
-      message = `Slow child hooks (p95 > 10s): ${offenders}.`;
+      const offenders = slowChildren.map(s => `${s.child} (p95=${s.p95_ms}ms > warn ${s.budget_warn_ms}ms)`).join(', ');
+      message = `Slow child hooks (p95 over source warn budget): ${offenders}.`;
     }
 
     this.results.push(new CheckResult(

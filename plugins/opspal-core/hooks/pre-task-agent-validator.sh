@@ -1205,6 +1205,26 @@ main() {
                           "deadlock_circuit_break" \
                           "Projection-loss circuit-breaker fired: 2+ different agents denied. Auto-clearing pending route and allowing '$RESOLVED' through. pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
 
+                        # Telemetry: record the taxonomy gap so we can refine keyword
+                        # maps offline. Each circuit-break fire is a signal that two
+                        # different agents were denied against the same pending route —
+                        # usually an overlap or gap in the routing taxonomy.
+                        # Best-effort; never fails the hook.
+                        {
+                            _TAXO_LOG="${HOME}/.claude/logs/routing-taxonomy-gaps.jsonl"
+                            mkdir -p "$(dirname "$_TAXO_LOG")" 2>/dev/null || true
+                            if [ -w "$(dirname "$_TAXO_LOG")" ] 2>/dev/null; then
+                                printf '{"ts":"%s","session":"%s","pending_agent":"%s","requested_agent":"%s","pending_family":"%s","requested_family":"%s","event":"deadlock_circuit_break"}\n' \
+                                  "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+                                  "${SESSION_KEY:-unknown}" \
+                                  "${REQUIRED_AGENT:-unknown}" \
+                                  "${RESOLVED:-unknown}" \
+                                  "${pending_family:-unknown}" \
+                                  "${requested_family:-unknown}" \
+                                  >> "$_TAXO_LOG" 2>/dev/null || true
+                            fi
+                        } 2>/dev/null || true
+
                         if [ -n "$ADDITIONAL_CONTEXT" ]; then
                             ADDITIONAL_CONTEXT="${ADDITIONAL_CONTEXT} DEADLOCK_CIRCUIT_BREAK: Pending route for '${REQUIRED_AGENT:-unknown}' auto-cleared after repeated agent mismatches. '${RESOLVED}' is now allowed through."
                         else

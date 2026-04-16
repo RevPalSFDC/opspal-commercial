@@ -214,6 +214,20 @@ if [ -n "$SCOPE_ANALYSIS" ] && printf '%s' "$SCOPE_ANALYSIS" | jq -e . >/dev/nul
     fi
 fi
 
+# Fallback: parse --target-org / -o out of the raw command when neither
+# SF_TARGET_ORG nor SCOPE_ANALYSIS supplied a value. This is what fixes the
+# "Skipping field history tracking limits (no target org)" paradox seen in
+# customer logs where the command literally contained --target-org.
+if [ -z "$TARGET_ORG" ] && [ -n "${local_deploy_command:-}" ]; then
+    TARGET_ORG=$(printf '%s' "$local_deploy_command" | sed -nE 's/.*--target-org[[:space:]=]+([^[:space:]]+).*/\1/p' | head -1)
+    if [ -z "$TARGET_ORG" ]; then
+        TARGET_ORG=$(printf '%s' "$local_deploy_command" | sed -nE 's/.*[[:space:]]-o[[:space:]]+([^[:space:]]+).*/\1/p' | head -1)
+    fi
+    if [ -n "$TARGET_ORG" ]; then
+        log_info "Extracted target org '$TARGET_ORG' from command-line fallback"
+    fi
+fi
+
 # Check if validation should be skipped
 if [ "$SKIP_COMPREHENSIVE_VALIDATION" = "1" ] || [ "$COMMAND_SKIP" = "1" ]; then
     if [ -f "$OUTPUT_FORMATTER" ]; then
@@ -691,7 +705,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 # Find validation rules and formula fields
 FORMULAS=$(find "$DEPLOY_DIR" \( -name "*.validationRule-meta.xml" -o -name "*.field-meta.xml" \) -exec grep -l "formula" {} \; 2>/dev/null || echo "")
 
-if [ -n "$FORMULAS" ]; then
+if [ "$SFDC_SKIP_PICKLIST_FORMULA" = "1" ]; then
+    log_info "Skipping picklist formula validation (SFDC_SKIP_PICKLIST_FORMULA=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ -n "$FORMULAS" ]; then
     FORMULA_ERRORS=0
 
     while IFS= read -r formula_file; do
@@ -735,7 +752,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 ENV_CONFIG_VALIDATOR="$(resolve_sibling_asset 'scripts/lib/env-config-validator.js')"
 
 # Detect metadata types in deployment and validate order
-if [ -f "$ENV_CONFIG_VALIDATOR" ]; then
+if [ "$SFDC_SKIP_DEPLOY_ORDER" = "1" ]; then
+    log_info "Skipping deployment order validation (SFDC_SKIP_DEPLOY_ORDER=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ -f "$ENV_CONFIG_VALIDATOR" ]; then
     # Extract instance name from org alias or path
     INSTANCE_NAME="${TARGET_ORG##*/}"  # Get last part of path/alias
     if [ -z "$INSTANCE_NAME" ]; then
@@ -834,7 +854,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
 PRE_OP_ORCHESTRATOR="$(resolve_sibling_asset 'scripts/lib/pre-operation-validation-orchestrator.js')"
 
-if [ "$HAS_TARGET_ORG" -eq 0 ]; then
+if [ "$SFDC_SKIP_UNIFIED_PREOP" = "1" ]; then
+    log_info "Skipping unified pre-operation validation (SFDC_SKIP_UNIFIED_PREOP=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ "$HAS_TARGET_ORG" -eq 0 ]; then
     log_info "Skipping unified pre-operation validation (no target org)"
     SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 elif [ -f "$PRE_OP_ORCHESTRATOR" ]; then
@@ -911,26 +934,31 @@ echo ""
 echo "🔗 Step 9/11: Lookup Delete Constraint Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
-LOOKUP_CONSTRAINT_ERRORS=0
-while IFS= read -r field_file; do
-    [ -z "$field_file" ] && continue
-    if grep -q "<type>Lookup</type>" "$field_file" && \
-       grep -q "<required>true</required>" "$field_file" && \
-       grep -q "<deleteConstraint>SetNull</deleteConstraint>" "$field_file"; then
-        FIELD_LABEL=$(basename "$field_file" .field-meta.xml)
-        log_error "Required lookup '$FIELD_LABEL' has deleteConstraint=SetNull (use Restrict or Cascade)"
-        LOOKUP_CONSTRAINT_ERRORS=$((LOOKUP_CONSTRAINT_ERRORS + 1))
-    fi
-done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
-
-if [ "$LOOKUP_CONSTRAINT_ERRORS" -gt 0 ]; then
-    FAILED_CHECKS=$((FAILED_CHECKS + 1))
-    FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Lookup Delete Constraint"
-    remediation_hint_add "Lookup Delete Constraint" "SFDC_SKIP_LOOKUP_DELETE=1"
-    VALIDATION_FAILED=1
+if [ "$SFDC_SKIP_LOOKUP_DELETE" = "1" ]; then
+    log_info "Skipping lookup delete constraint validation (SFDC_SKIP_LOOKUP_DELETE=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 else
-    log_success "Lookup delete constraints valid"
-    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    LOOKUP_CONSTRAINT_ERRORS=0
+    while IFS= read -r field_file; do
+        [ -z "$field_file" ] && continue
+        if grep -q "<type>Lookup</type>" "$field_file" && \
+           grep -q "<required>true</required>" "$field_file" && \
+           grep -q "<deleteConstraint>SetNull</deleteConstraint>" "$field_file"; then
+            FIELD_LABEL=$(basename "$field_file" .field-meta.xml)
+            log_error "Required lookup '$FIELD_LABEL' has deleteConstraint=SetNull (use Restrict or Cascade)"
+            LOOKUP_CONSTRAINT_ERRORS=$((LOOKUP_CONSTRAINT_ERRORS + 1))
+        fi
+    done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
+
+    if [ "$LOOKUP_CONSTRAINT_ERRORS" -gt 0 ]; then
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Lookup Delete Constraint"
+        remediation_hint_add "Lookup Delete Constraint" "SFDC_SKIP_LOOKUP_DELETE=1"
+        VALIDATION_FAILED=1
+    else
+        log_success "Lookup delete constraints valid"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    fi
 fi
 echo ""
 
@@ -941,37 +969,42 @@ echo ""
 echo "🚫 Step 10/11: Required Field Permissions Validation"
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 
-PERM_DIR="$DEPLOY_DIR/force-app/main/default/permissionsets"
-REQ_FIELD_PERM_ERRORS=0
-
-while IFS= read -r field_file; do
-    [ -z "$field_file" ] && continue
-    if grep -q "<required>true</required>" "$field_file"; then
-        OBJECT_DIR=$(dirname "$(dirname "$field_file")")
-        OBJ_NAME=$(basename "$OBJECT_DIR")
-        FLD_NAME=$(basename "$field_file" .field-meta.xml)
-        REQ_FIELD_KEY="${OBJ_NAME}.${FLD_NAME}"
-        if [ -d "$PERM_DIR" ]; then
-            while IFS= read -r perm_file; do
-                [ -z "$perm_file" ] && continue
-                if grep -q "<field>${REQ_FIELD_KEY}</field>" "$perm_file" 2>/dev/null; then
-                    PERM_NAME=$(basename "$perm_file" .permissionset-meta.xml)
-                    log_error "Permission set '$PERM_NAME' has FLS entry for required field '$REQ_FIELD_KEY'"
-                    REQ_FIELD_PERM_ERRORS=$((REQ_FIELD_PERM_ERRORS + 1))
-                fi
-            done < <(find "$PERM_DIR" -name "*.permissionset-meta.xml" -type f 2>/dev/null)
-        fi
-    fi
-done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
-
-if [ "$REQ_FIELD_PERM_ERRORS" -gt 0 ]; then
-    FAILED_CHECKS=$((FAILED_CHECKS + 1))
-    FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Required Field Permissions"
-    remediation_hint_add "Required Field Permissions" "SFDC_SKIP_REQ_FIELD_PERMS=1"
-    VALIDATION_FAILED=1
+if [ "$SFDC_SKIP_REQ_FIELD_PERMS" = "1" ]; then
+    log_info "Skipping required field permissions validation (SFDC_SKIP_REQ_FIELD_PERMS=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 else
-    log_success "No required field permissions found in permission sets"
-    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    PERM_DIR="$DEPLOY_DIR/force-app/main/default/permissionsets"
+    REQ_FIELD_PERM_ERRORS=0
+
+    while IFS= read -r field_file; do
+        [ -z "$field_file" ] && continue
+        if grep -q "<required>true</required>" "$field_file"; then
+            OBJECT_DIR=$(dirname "$(dirname "$field_file")")
+            OBJ_NAME=$(basename "$OBJECT_DIR")
+            FLD_NAME=$(basename "$field_file" .field-meta.xml)
+            REQ_FIELD_KEY="${OBJ_NAME}.${FLD_NAME}"
+            if [ -d "$PERM_DIR" ]; then
+                while IFS= read -r perm_file; do
+                    [ -z "$perm_file" ] && continue
+                    if grep -q "<field>${REQ_FIELD_KEY}</field>" "$perm_file" 2>/dev/null; then
+                        PERM_NAME=$(basename "$perm_file" .permissionset-meta.xml)
+                        log_error "Permission set '$PERM_NAME' has FLS entry for required field '$REQ_FIELD_KEY'"
+                        REQ_FIELD_PERM_ERRORS=$((REQ_FIELD_PERM_ERRORS + 1))
+                    fi
+                done < <(find "$PERM_DIR" -name "*.permissionset-meta.xml" -type f 2>/dev/null)
+            fi
+        fi
+    done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
+
+    if [ "$REQ_FIELD_PERM_ERRORS" -gt 0 ]; then
+        FAILED_CHECKS=$((FAILED_CHECKS + 1))
+        FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Required Field Permissions"
+        remediation_hint_add "Required Field Permissions" "SFDC_SKIP_REQ_FIELD_PERMS=1"
+        VALIDATION_FAILED=1
+    else
+        log_success "No required field permissions found in permission sets"
+        PASSED_CHECKS=$((PASSED_CHECKS + 1))
+    fi
 fi
 echo ""
 
@@ -985,7 +1018,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 DEACTIVATED_PICKLIST_FILES=$(find "$DEPLOY_DIR" -name "*.field-meta.xml" \
     -exec grep -l "<isActive>false</isActive>" {} \; 2>/dev/null | head -20)
 
-if [ "$HAS_TARGET_ORG" -eq 0 ]; then
+if [ "$SFDC_SKIP_PICKLIST_DEACT" = "1" ]; then
+    log_info "Skipping picklist deactivation impact check (SFDC_SKIP_PICKLIST_DEACT=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ "$HAS_TARGET_ORG" -eq 0 ]; then
     log_info "Skipping picklist deactivation impact check (no target org)"
     SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 elif [ -z "$DEACTIVATED_PICKLIST_FILES" ]; then
