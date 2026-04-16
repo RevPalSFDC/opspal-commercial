@@ -1,21 +1,20 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on improving system reliability and expanding automation capabilities. We fixed licensing issues that could cause unexpected interruptions and enhanced our skills library with better organization and more comprehensive automation options for your revenue operations workflows.",
-  "published_at": "2026-04-16T22:49:07.301Z",
+  "summary": "This week focused on platform stability improvements and expanding automation capabilities. We fixed licensing issues that could cause system interruptions and enhanced our Skills library with better automation templates for revenue operations workflows.",
+  "published_at": "2026-04-16T23:55:50.713Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-16",
   "has_breaking": false,
-  "total_commits": 27,
+  "total_commits": 28,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed licensing issues that caused workflow interruptions",
+      "headline": "Fixed licensing issues that could interrupt your workflows",
       "details": [
-        "Resolved problems where license validation could get stuck in endless loops",
-        "Added clear warnings when your license is approaching expiration",
-        "Improved license renewal process to prevent unexpected service disruptions"
+        "Resolved problems where license renewals could get stuck in endless loops",
+        "You'll now see clear warnings 48 hours before your license expires"
       ],
       "commits": [
         "d9f1c3d",
@@ -25,11 +24,11 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced automation skills library with better organization",
+      "headline": "Enhanced automation templates for better workflow setup",
       "details": [
-        "Improved naming and organization of automation templates for easier discovery",
-        "Added missing templates for common revenue operations workflows",
-        "Cleaned up duplicate and misplaced automation options"
+        "Updated 98 automation templates with clearer instructions and better organization",
+        "Fixed naming issues that made some templates harder to find",
+        "Added missing template files for easier workflow creation"
       ],
       "commits": [
         "9d4de94"
