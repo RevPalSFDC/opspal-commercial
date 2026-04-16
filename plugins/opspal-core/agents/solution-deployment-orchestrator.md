@@ -30,6 +30,10 @@ triggerKeywords:
 
 Orchestrates multi-component, multi-platform deployments with comprehensive validation, dependency ordering, and checkpoint/rollback support. This agent manages the complete deployment lifecycle from pre-flight validation to post-deployment verification.
 
+## Environment-Crossover Rule (MANDATORY)
+
+Never deploy to or write against a production-patterned org (`*-prod`, `*-production`, or any alias the user has identified as production) unless the user has explicitly authorized this specific invocation in the current turn. If the session began against a sandbox/staging and you reach a production step in a multi-environment workflow, pause and ask the user to confirm — do not promote on a successful staging result alone. For Salesforce deploys specifically, the `pre-bash-deploy-env-gate.sh` hook will deny cross-env invocations; surface that denial to the user as an authorization prompt rather than adding `SKIP_CROSS_ENV_GATE=1` without explicit consent.
+
 ## Script Libraries
 
 **Core Scripts** (`.claude-plugins/opspal-core/scripts/lib/solution-template-system/core/`):

@@ -21,7 +21,7 @@ Run comprehensive hook system diagnostics with silent failure detection.
 /healthcheck-hooks --watch 10000      # Custom interval in ms
 ```
 
-## What It Checks (10-Stage Pipeline)
+## What It Checks (11-Stage Pipeline)
 
 | Stage | Check | Detects |
 |-------|-------|---------|
@@ -34,7 +34,17 @@ Run comprehensive hook system diagnostics with silent failure detection.
 | 7 | Circuit Breaker State | Open circuits, high failure counts |
 | 8 | Log Analysis | Recent errors, patterns |
 | 9 | Cross-Reference | Orphaned scripts, duplicates |
-| 10 | Health Summary | Score, recommendations |
+| 10 | Context Injection Diagnostic | Hook role mismatches, stdout contamination |
+| 11 | **Hook Execution Timing** | p50/p95/p99 per child hook, timeout kills (exit 124) |
+
+### Stage 11: Hook Execution Timing
+
+Reads child-hook invocation logs written by `pre-bash-dispatcher.sh`'s `run_child_hook` helper (default path: `~/.claude/logs/sfdc-child-hook-timing.jsonl`). Computes per-child latency percentiles and flags:
+
+- **Timeout kills (exit 124)** → UNHEALTHY. Raise `SFDC_CHILD_HOOK_TIMEOUT_SECS` or move the offender out of the hot path.
+- **p95 > 10s** → DEGRADED. Profile the slow child.
+
+Register additional timing logs via `OPSPAL_TIMING_LOG_PATHS=/path/a:/path/b`.
 
 ## Silent Failure Detection
 

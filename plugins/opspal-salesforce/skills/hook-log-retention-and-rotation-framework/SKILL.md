@@ -24,6 +24,7 @@ Use this skill when:
 | Log File | Location | Growth Rate | Purpose |
 |----------|----------|-------------|---------|
 | `routing.jsonl` | `~/.claude/logs/` | ~1KB per tool call | Routing decisions |
+| `sfdc-child-hook-timing.jsonl` | `~/.claude/logs/` | ~120B per child-hook run | `pre-bash-dispatcher` child-hook latency (p50/p95/p99 via `/healthcheck-hooks`) |
 | `hook-errors.log` | `~/.claude/logs/` | Variable | Hook execution failures |
 | `audit-log.jsonl` | `~/.claude/logs/` | ~500B per mutation | Mutation audit trail |
 | `api-limits.jsonl` | `~/.claude/api-limits/` | ~200B per API call | API rate tracking |
@@ -50,6 +51,7 @@ echo "$LOG_ENTRY" >> "$LOG_FILE"
 | Log Type | Max Size | Max Age | Max Backups |
 |----------|----------|---------|-------------|
 | Routing logs | 5MB | 7 days | 3 |
+| Child-hook timing logs (`sfdc-child-hook-timing.jsonl`) | 5MB | 7 days | 3 |
 | Audit logs | 10MB | 30 days | 5 |
 | Error logs | 2MB | 14 days | 3 |
 | API limit logs | 1MB | 7 days | 2 |

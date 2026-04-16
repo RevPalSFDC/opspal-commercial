@@ -208,6 +208,18 @@ if [[ "${WORK_CONTEXT_ENABLED:-1}" == "1" ]]; then
     fi
 fi
 
+# ─── 5. ToolSearch Availability Reminder ───────────────────────────────────
+# Deferred tools (listed in system-reminder messages as "available via
+# ToolSearch") are visible in the subagent context but their schemas are NOT
+# pre-loaded. Subagents often don't realize they can resolve them. This
+# reminder surfaces the pattern so specialists know to fetch schemas on
+# demand instead of giving up when a tool shows as "unavailable".
+#
+# Disable with SUBAGENT_TOOLSEARCH_REMINDER=0.
+if [[ "${SUBAGENT_TOOLSEARCH_REMINDER:-1}" == "1" ]]; then
+    CONTEXT_PARTS+=("TOOLSEARCH: If the system-reminder lists deferred tools (e.g. 'available via ToolSearch') you need, fetch their schemas before calling them: ToolSearch(query='select:<name>[,<name>...]'). For keyword discovery use ToolSearch(query='<terms>', max_results=5). Do not assume a deferred tool is disabled — resolve its schema first.")
+fi
+
 # ─── Build Output ──────────────────────────────────────────────────────────
 if [[ ${#CONTEXT_PARTS[@]} -gt 0 ]]; then
     # Join context parts
