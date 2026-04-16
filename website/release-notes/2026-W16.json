@@ -1,20 +1,19 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on platform improvements that make OpsPal more reliable and organized. We fixed licensing issues that could cause disruptions and improved our Skills library organization to help you find and use automation templates more easily.",
-  "published_at": "2026-04-15T14:41:27.597Z",
+  "summary": "This week focused on behind-the-scenes improvements to make OpsPal more reliable and organized. We fixed several platform stability issues that could cause licensing problems and improved our internal skill management system to ensure better performance and consistency across all automation features.",
+  "published_at": "2026-04-16T14:43:56.426Z",
   "week_start": "2026-04-13",
-  "week_end": "2026-04-15",
+  "week_end": "2026-04-16",
   "has_breaking": false,
-  "total_commits": 16,
+  "total_commits": 17,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed licensing errors that could interrupt your work",
+      "headline": "Fixed licensing issues that could cause platform access problems",
       "details": [
-        "Resolved issues where license validation could get stuck in loops",
-        "Added clear warnings when your license is approaching expiration"
+        "Resolved a problem where license validation could get stuck in a loop, preventing proper platform access"
       ],
       "commits": [
         "d9f1c3d",
@@ -24,11 +23,10 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Better organized Skills library makes automation templates easier to find",
+      "headline": "Enhanced automation skills for better performance",
       "details": [
-        "Cleaned up and reorganized 98 automation templates",
-        "Fixed naming inconsistencies that made some skills hard to locate",
-        "Removed outdated templates that were no longer useful"
+        "Updated and organized 98 automation skills to work more reliably",
+        "Fixed naming inconsistencies that could affect skill discovery and execution"
       ],
       "commits": [
         "9d4de94"
