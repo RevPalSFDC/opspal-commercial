@@ -143,13 +143,13 @@ Reference guide: `docs/DEVELOPER_TOOLS_GUIDE.md`.
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.1 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.18 | active | 80 | 11 | 126 | 49 | 107 | 603 |
+| `opspal-core` | 2.55.19 | active | 80 | 11 | 126 | 49 | 107 | 603 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.34 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.18 | active | 94 | 21 | 59 | 55 | 47 | 1093 |
+| `opspal-salesforce` | 3.87.19 | active | 94 | 21 | 59 | 55 | 47 | 1093 |
 <!-- AUTO_GENERATED_END:plugin-matrix -->
 
 ## Runtime Registry

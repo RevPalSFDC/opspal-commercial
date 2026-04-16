@@ -294,14 +294,47 @@ run_child_hook() {
   local exit_code
   local stdout_content
   local stderr_content
+  local child_name
+  local start_ns end_ns elapsed_ms
+  local timing_log
 
   stdout_file="$(mktemp)"
   stderr_file="$(mktemp)"
+
+  # Capture child identity (last arg is typically the hook script path)
+  child_name="$(basename "${!#}" 2>/dev/null || echo "unknown")"
+
+  start_ns="$(date +%s%N 2>/dev/null || echo 0)"
 
   if printf '%s' "$HOOK_INPUT" | env DISPATCHER_CONTEXT=1 "$@" >"$stdout_file" 2>"$stderr_file"; then
     exit_code=0
   else
     exit_code=$?
+  fi
+
+  end_ns="$(date +%s%N 2>/dev/null || echo 0)"
+  if [ "$start_ns" -gt 0 ] && [ "$end_ns" -gt 0 ]; then
+    elapsed_ms=$(( (end_ns - start_ns) / 1000000 ))
+  else
+    elapsed_ms=0
+  fi
+
+  # Per-child timing log — consumed by hook-health-checker.js Stage 11. Best
+  # effort; never blocks session startup if the log can't be written.
+  timing_log="${HOME}/.claude/logs/session-start-child-timing.jsonl"
+  mkdir -p "$(dirname "$timing_log")" 2>/dev/null || true
+  if [ -w "$(dirname "$timing_log")" ] 2>/dev/null; then
+    printf '{"ts":"%s","child":"%s","ms":%d,"exit":%d,"source":"session-start-dispatcher"}\n' \
+      "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$child_name" "$elapsed_ms" "$exit_code" \
+      >> "$timing_log" 2>/dev/null || true
+  fi
+
+  # Stderr warning for slow session-start children (>3s — session startup
+  # should feel instant). Raise with SESSION_START_CHILD_WARN_MS.
+  local warn_ms="${SESSION_START_CHILD_WARN_MS:-3000}"
+  if [ "$elapsed_ms" -gt "$warn_ms" ]; then
+    printf '[session-start-dispatcher] WARNING: child hook %s took %dms (warn>%dms)\n' \
+      "$child_name" "$elapsed_ms" "$warn_ms" >&2
   fi
 
   stdout_content="$(cat "$stdout_file")"

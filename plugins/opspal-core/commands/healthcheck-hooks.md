@@ -39,12 +39,18 @@ Run comprehensive hook system diagnostics with silent failure detection.
 
 ### Stage 11: Hook Execution Timing
 
-Reads child-hook invocation logs written by `pre-bash-dispatcher.sh`'s `run_child_hook` helper (default path: `~/.claude/logs/sfdc-child-hook-timing.jsonl`). Computes per-child latency percentiles and flags:
+Reads child-hook invocation logs from **two dispatchers**:
+
+- `~/.claude/logs/sfdc-child-hook-timing.jsonl` — `pre-bash-dispatcher` children (SF deploy chain). Budget: p95 warn > 10s, fail > 15s.
+- `~/.claude/logs/session-start-child-timing.jsonl` — `session-start-dispatcher` children. Tighter budget: p95 warn > 3s, fail > 10s (session startup should feel instant).
+
+Each entry is classified by its `source` field against the per-source budget. Computes per-(source, child) latency percentiles and flags:
 
 - **Timeout kills (exit 124)** → UNHEALTHY. Raise `SFDC_CHILD_HOOK_TIMEOUT_SECS` or move the offender out of the hot path.
-- **p95 > 10s** → DEGRADED. Profile the slow child.
+- **p95 over source `budget_fail_ms`** → UNHEALTHY.
+- **p95 over source `budget_warn_ms`** → DEGRADED. Profile the slow child.
 
-Register additional timing logs via `OPSPAL_TIMING_LOG_PATHS=/path/a:/path/b`.
+Register additional timing logs via `OPSPAL_TIMING_LOG_PATHS=/path/a:/path/b`. Override session-start stderr threshold via `SESSION_START_CHILD_WARN_MS`.
 
 ## Silent Failure Detection
 
