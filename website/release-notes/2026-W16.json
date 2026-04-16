@@ -1,19 +1,21 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on behind-the-scenes improvements to make OpsPal more reliable and organized. We fixed several platform stability issues that could cause licensing problems and improved our internal skill management system to ensure better performance and consistency across all automation features.",
-  "published_at": "2026-04-16T14:43:56.426Z",
+  "summary": "This week focused on platform stability improvements and expanding our automation capabilities. We fixed licensing issues that could cause service interruptions and enhanced our skills library to provide better automation options for your revenue operations workflows.",
+  "published_at": "2026-04-16T22:05:33.101Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-16",
   "has_breaking": false,
-  "total_commits": 17,
+  "total_commits": 24,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed licensing issues that could cause platform access problems",
+      "headline": "Resolved license activation issues that could interrupt service",
       "details": [
-        "Resolved a problem where license validation could get stuck in a loop, preventing proper platform access"
+        "Fixed a problem where license renewals could get stuck in a loop",
+        "You'll now see clear warnings 48 hours before your license expires",
+        "License status updates happen more reliably without service disruption"
       ],
       "commits": [
         "d9f1c3d",
@@ -23,10 +25,11 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced automation skills for better performance",
+      "headline": "Enhanced automation skills library with better organization",
       "details": [
-        "Updated and organized 98 automation skills to work more reliably",
-        "Fixed naming inconsistencies that could affect skill discovery and execution"
+        "Improved 98 automation templates for more reliable workflows",
+        "Better organized skill categories make it easier to find the right automation",
+        "Fixed naming issues that made some automations harder to locate"
       ],
       "commits": [
         "9d4de94"
