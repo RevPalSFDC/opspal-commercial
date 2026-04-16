@@ -74,8 +74,8 @@ NODE_TIMEOUT_SECONDS="${PRE_TOOL_USE_CONTRACT_VALIDATOR_NODE_TIMEOUT_SECONDS:-2}
 DEFAULT_HARDENED_CHANNEL_ID="${OPSPAL_HARDENED_ENFORCED_CHANNEL_ID:-C0AGVQFDB18}"
 BASH_BUDGET_ENABLED="${OPSPAL_BASH_BUDGET_ENABLED:-1}"
 BASH_BUDGET_WINDOW_SECONDS="${OPSPAL_BASH_BUDGET_WINDOW_SECONDS:-180}"
-BASH_BUDGET_MAX_COMMANDS="${OPSPAL_BASH_BUDGET_MAX_COMMANDS:-24}"
-BASH_DISCOVERY_BUDGET_MAX_COMMANDS="${OPSPAL_DISCOVERY_BASH_BUDGET_MAX_COMMANDS:-48}"
+BASH_BUDGET_MAX_COMMANDS="${OPSPAL_BASH_BUDGET_MAX_COMMANDS:-36}"
+BASH_DISCOVERY_BUDGET_MAX_COMMANDS="${OPSPAL_DISCOVERY_BASH_BUDGET_MAX_COMMANDS:-72}"
 BASH_BUDGET_MAX_REPEATS="${OPSPAL_BASH_BUDGET_MAX_REPEATS:-5}"
 BUDGET_STATE_DIR="${LOG_ROOT}/hook-state"
 PENDING_ROUTE_MCP_POLICY='{}'
@@ -1007,9 +1007,24 @@ command_is_discovery_heavy_context() {
     local command="${1:-}"
     local caller_agent=""
     local sf_classification=""
+    local discovery_agents_csv
+    local discovery_pattern
+
+    # Fast path: generic read-only shell patterns (grep/ls/find/cat/head/tail/wc/awk/jq/git-read).
+    # These are overwhelmingly used for discovery by any specialist agent, so they
+    # qualify for the expanded budget regardless of caller_agent identity.
+    if printf '%s' "$command" | grep -qE '^[[:space:]]*(grep|rg|ls|find|cat|head|tail|wc|awk|jq|git[[:space:]]+(log|status|diff|show|blame|branch|ls-files|rev-parse|config[[:space:]]+--get))([[:space:]]|$)'; then
+        return 0
+    fi
 
     caller_agent="$(resolve_caller_agent main 2>&1)"
-    if printf '%s' "$caller_agent" | grep -qE '(^|:)(sfdc-state-discovery|sfdc-discovery|sfdc-planner|sfdc-field-analyzer)$'; then
+
+    # Env-configurable discovery agent allowlist (comma-separated). Matches the
+    # agent *basename* with optional `plugin:` prefix, consistent with the original
+    # hardcoded regex below. Override via OPSPAL_DISCOVERY_AGENTS="agent1,agent2".
+    discovery_agents_csv="${OPSPAL_DISCOVERY_AGENTS:-sfdc-state-discovery,sfdc-discovery,sfdc-planner,sfdc-field-analyzer,sfdc-query-specialist,sfdc-revops-auditor,sfdc-cpq-assessor,sfdc-automation-auditor,sfdc-architecture-auditor,hubspot-assessment-analyzer,marketo-instance-discovery}"
+    discovery_pattern="$(printf '%s' "$discovery_agents_csv" | sed 's/,/|/g')"
+    if [ -n "$discovery_pattern" ] && printf '%s' "$caller_agent" | grep -qE "(^|:)(${discovery_pattern})$"; then
         return 0
     fi
 
