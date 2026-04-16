@@ -394,6 +394,12 @@ await Task.invoke('opspal-core:diagram-generator', {
 
 ## Troubleshooting
 
+### "Mermaid Chart MCP unreachable" / Bad Gateway
+The `claude.ai Mermaid Chart` MCP is a cloud integration that has intermittent outages. Rendering does **not** depend on it — the local renderer chain (mmdc → puppeteer → styled placeholder) lives at `scripts/lib/mermaid-pre-renderer.js` and handles every Mermaid render in this plugin. Probe the MCP explicitly if needed:
+```bash
+node plugins/opspal-core/scripts/lib/mcp-connectivity-tester.js --server mermaid --json
+```
+
 ### "Diagram too complex"
 Split into multiple diagrams:
 ```bash

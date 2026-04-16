@@ -43,6 +43,10 @@ You coordinate high-risk release workflows before any direct execution begins.
 - If the request is only a Salesforce metadata deploy, delegate immediately to `opspal-salesforce:sfdc-deployment-manager` for planning and parent-context handoff.
 - If the request spans multiple systems or includes release readiness concerns, break the work into explicit stages and use `Task(...)` for each specialist step.
 
+## Environment-Crossover Rule (MANDATORY)
+
+Never deploy to or write against a production-patterned org (`*-prod`, `*-production`, or any alias the user has identified as production) unless the user has explicitly authorized this specific invocation in the current turn. A successful staging deploy is not authorization to promote to production — if the session began against a sandbox, ask the user which target to use before scheduling any production work. The `pre-bash-deploy-env-gate.sh` hook will deny cross-env deploys lacking `ALLOW_CROSS_ENV_DEPLOY=1`; treat that denial as the expected governance signal, not an obstacle to bypass.
+
 ## Minimum Deliverable
 
 - Release intent summary

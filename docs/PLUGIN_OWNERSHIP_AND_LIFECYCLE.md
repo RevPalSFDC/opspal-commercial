@@ -25,12 +25,12 @@
 |--------|---------|--------|-------|-----------|---------------|------------------|-------------|
 | `opspal-ai-consult` | 1.4.15 | active | `revpal-ai` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-attio` | 2.0.1 | active | `revpal-engineering` | `stable` | `2026-04-10` | _unset_ | _unset_ |
-| `opspal-core` | 2.55.17 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-core` | 2.55.18 | active | `revpal-platform` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-gtm-planning` | 2.3.12 | active | `revpal-gtm` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-hubspot` | 3.9.34 | active | `revpal-hubspot` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-marketo` | 2.6.43 | active | `revpal-marketing-ops` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-monday` | 1.4.11 | experimental | `revpal-experimental` | `experimental` | `2026-02-15` | _unset_ | _unset_ |
 | `opspal-okrs` | 3.0.13 | active | `revpal-strategy` | `experimental` | `2026-03-10` | _unset_ | _unset_ |
-| `opspal-salesforce` | 3.87.17 | active | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
+| `opspal-salesforce` | 3.87.18 | active | `revpal-salesforce` | `stable` | `2026-02-15` | _unset_ | _unset_ |
 
 _End of auto-generated ownership and lifecycle report._

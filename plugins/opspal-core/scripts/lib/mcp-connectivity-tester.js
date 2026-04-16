@@ -200,6 +200,7 @@ class MCPConnectivityTester {
     if (nameLower.includes('salesforce') || nameLower.includes('sfdx')) return 'salesforce';
     if (nameLower.includes('playwright')) return 'playwright';
     if (nameLower.includes('context7')) return 'context7';
+    if (nameLower.includes('mermaid')) return 'mermaid';
 
     return 'generic';
   }
@@ -255,6 +256,9 @@ class MCPConnectivityTester {
           break;
         case 'context7':
           await this.testContext7(result);
+          break;
+        case 'mermaid':
+          await this.testMermaidChart(result);
           break;
         default:
           await this.testGeneric(result, server);
@@ -761,6 +765,71 @@ class MCPConnectivityTester {
     // For generic servers, we can't test without more info
     result.status = 'skipped';
     result.details.note = 'Generic server type - manual testing required';
+  }
+
+  /**
+   * Test the claude.ai-hosted Mermaid Chart MCP.
+   *
+   * This server is a cloud integration (no mcpServers stanza in repo config);
+   * we probe its SSE endpoint to detect the Bad Gateway / reconnect-loop
+   * pattern seen in customer sessions. If the probe fails, we also report
+   * whether the local MermaidPreRenderer chain is available, so callers can
+   * route diagram work to the local fallback without a silent degradation.
+   */
+  async testMermaidChart(result) {
+    const path = require('path');
+    const mermaidRendererPath = path.join(__dirname, 'mermaid-pre-renderer.js');
+
+    let probeError = null;
+    try {
+      // SSE endpoint. HEAD surfaces reachability without opening a stream.
+      // Treat 2xx/3xx as connected, 401/403 as reachable-but-auth-required
+      // (claude.ai integration auth lives at the account level), and 5xx or
+      // network errors as the genuine Bad Gateway pattern we want to catch.
+      const probe = await this.makeRequest('https://mcp.mermaidchart.com/sse', {
+        method: 'HEAD'
+      });
+      if (probe.statusCode >= 200 && probe.statusCode < 400) {
+        result.status = 'connected';
+        result.details.probeStatus = probe.statusCode;
+      } else if (probe.statusCode === 401 || probe.statusCode === 403) {
+        result.status = 'configured';
+        result.details.probeStatus = probe.statusCode;
+        result.details.note = 'Endpoint reachable; auth required (expected for cloud integration).';
+      } else {
+        result.status = 'error';
+        probeError = `Probe returned HTTP ${probe.statusCode}`;
+      }
+    } catch (err) {
+      result.status = 'error';
+      probeError = err.message;
+    }
+
+    if (probeError) {
+      result.error = probeError;
+      result.details.probeError = probeError;
+    }
+
+    // Always report local fallback availability — this is what agents should
+    // pivot to when the MCP is unreachable.
+    try {
+      const MermaidPreRenderer = require(mermaidRendererPath);
+      const renderer = new MermaidPreRenderer();
+      const caps = typeof renderer.detectCapabilities === 'function'
+        ? await renderer.detectCapabilities()
+        : { note: 'detectCapabilities() not available on this version' };
+      result.details.localRenderer = {
+        path: mermaidRendererPath,
+        capabilities: caps,
+        recommendation: 'Agents should use scripts/lib/mermaid-pre-renderer.js for all Mermaid rendering; it has mmdc → puppeteer → placeholder fallback.'
+      };
+    } catch (fallbackErr) {
+      result.details.localRenderer = {
+        path: mermaidRendererPath,
+        available: false,
+        error: fallbackErr.message
+      };
+    }
   }
 
   /**

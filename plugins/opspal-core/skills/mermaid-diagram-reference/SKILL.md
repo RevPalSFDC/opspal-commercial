@@ -6,6 +6,12 @@ allowed-tools: Read, Grep, Glob
 
 # Mermaid Diagram Reference
 
+## Rendering: Use the Local Renderer
+
+**Canonical renderer**: `plugins/opspal-core/scripts/lib/mermaid-pre-renderer.js`
+
+It provides a three-tier fallback chain (mmdc → puppeteer → styled placeholder + mermaid.live link) with content-hash caching. Do not call the `claude.ai Mermaid Chart` MCP as a primary renderer — it is a cloud integration with known Bad Gateway issues. Probe health via `node plugins/opspal-core/scripts/lib/mcp-connectivity-tester.js --server mermaid --json` if you need to check. See `agent-scoped-mcp-loading-framework/failure-handling.md` for the full fallback policy.
+
 ## When to Use This Skill
 
 - Creating flowcharts for process documentation

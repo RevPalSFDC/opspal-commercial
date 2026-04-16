@@ -353,10 +353,145 @@ class HookHealthChecker {
     // Stage 10: Context Injection Diagnostic
     await this.checkContextInjection();
 
+    // Stage 11: Hook Execution Timing (child-hook p50/p95/p99 from JSONL logs)
+    await this.checkHookExecutionTiming();
+
     // Generate Summary
     const summary = this.generateSummary(Date.now() - startTime);
 
     return summary;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Stage 11: Hook Execution Timing
+  //
+  // Reads ~/.claude/logs/sfdc-child-hook-timing.jsonl (emitted by the
+  // pre-bash-dispatcher run_child_hook helper) and surfaces p50/p95/p99
+  // latency per child plus any runs that hit the timeout. Additional
+  // timing logs can be registered via OPSPAL_TIMING_LOG_PATHS (colon-
+  // separated absolute paths).
+  // ---------------------------------------------------------------------------
+
+  async checkHookExecutionTiming() {
+    const stage = 11;
+    const stageName = 'Hook Execution Timing';
+
+    const home = process.env.HOME || process.env.USERPROFILE || '';
+    const defaultLogs = [
+      path.join(home, '.claude', 'logs', 'sfdc-child-hook-timing.jsonl')
+    ];
+    const extraEnv = process.env.OPSPAL_TIMING_LOG_PATHS || '';
+    const extras = extraEnv ? extraEnv.split(':').filter(Boolean) : [];
+    const logPaths = [...defaultLogs, ...extras];
+
+    const entries = [];
+    const missingPaths = [];
+    for (const logPath of logPaths) {
+      if (!fs.existsSync(logPath)) {
+        missingPaths.push(logPath);
+        continue;
+      }
+      try {
+        const raw = fs.readFileSync(logPath, 'utf8');
+        for (const line of raw.split('\n')) {
+          if (!line.trim()) continue;
+          try {
+            const obj = JSON.parse(line);
+            if (typeof obj.ms === 'number' && typeof obj.child === 'string') {
+              entries.push(obj);
+            }
+          } catch (_) {
+            // Ignore malformed lines — likely a partial write.
+          }
+        }
+      } catch (err) {
+        this.results.push(new CheckResult(
+          stage,
+          `read log ${path.basename(logPath)}`,
+          HEALTH_STATUS.DEGRADED,
+          `Could not read timing log: ${err.message}`,
+          { logPath, stageName }
+        ));
+      }
+    }
+
+    if (entries.length === 0) {
+      this.results.push(new CheckResult(
+        stage,
+        'hook execution timing',
+        HEALTH_STATUS.HEALTHY,
+        'No timing data yet (hooks haven\'t produced logs). Run SF deploys to populate.',
+        {
+          isEnvironmentConstraint: true,
+          checkedPaths: logPaths,
+          missingPaths,
+          stageName
+        }
+      ));
+      return;
+    }
+
+    const percentile = (values, pct) => {
+      if (values.length === 0) return 0;
+      const sorted = [...values].sort((a, b) => a - b);
+      const idx = Math.max(0, Math.ceil(sorted.length * pct) - 1);
+      return Math.round(sorted[idx]);
+    };
+
+    const byChild = new Map();
+    for (const entry of entries) {
+      if (!byChild.has(entry.child)) {
+        byChild.set(entry.child, { samples: [], timeouts: 0, errors: 0 });
+      }
+      const bucket = byChild.get(entry.child);
+      bucket.samples.push(entry.ms);
+      if (entry.exit === 124) bucket.timeouts++;
+      else if (entry.exit !== 0) bucket.errors++;
+    }
+
+    const summary = [];
+    for (const [child, bucket] of byChild.entries()) {
+      const n = bucket.samples.length;
+      const p50 = percentile(bucket.samples, 0.5);
+      const p95 = percentile(bucket.samples, 0.95);
+      const p99 = percentile(bucket.samples, 0.99);
+      const max = Math.max(...bucket.samples);
+      summary.push({ child, n, p50_ms: p50, p95_ms: p95, p99_ms: p99, max_ms: max, timeouts: bucket.timeouts, errors: bucket.errors });
+    }
+
+    // Sort worst-first by p95 so operators see pain points immediately.
+    summary.sort((a, b) => b.p95_ms - a.p95_ms);
+
+    // Classify status: unhealthy if any child timed out, degraded if any p95
+    // exceeds 10s, healthy otherwise.
+    const anyTimeouts = summary.some(s => s.timeouts > 0);
+    const slowChildren = summary.filter(s => s.p95_ms > 10000);
+    let status = HEALTH_STATUS.HEALTHY;
+    let message = `Analyzed ${entries.length} child-hook invocation(s) across ${summary.length} child(ren). p95 within budget.`;
+
+    if (anyTimeouts) {
+      status = HEALTH_STATUS.UNHEALTHY;
+      const offenders = summary.filter(s => s.timeouts > 0).map(s => `${s.child} (${s.timeouts})`).join(', ');
+      message = `Timeout kills detected (exit 124): ${offenders}. Raise SFDC_CHILD_HOOK_TIMEOUT_SECS or move work out of the hot path.`;
+    } else if (slowChildren.length > 0) {
+      status = HEALTH_STATUS.DEGRADED;
+      const offenders = slowChildren.map(s => `${s.child} (p95=${s.p95_ms}ms)`).join(', ');
+      message = `Slow child hooks (p95 > 10s): ${offenders}.`;
+    }
+
+    this.results.push(new CheckResult(
+      stage,
+      'child-hook timing p50/p95/p99',
+      status,
+      message,
+      {
+        totalInvocations: entries.length,
+        childrenAnalyzed: summary.length,
+        byChild: summary,
+        sampledPaths: logPaths.filter(p => !missingPaths.includes(p)),
+        stageName
+      }
+    ));
   }
 
   // ---------------------------------------------------------------------------
@@ -2252,7 +2387,7 @@ class HookHealthChecker {
     // over the environment variable. This ensures we check the correct paths
     // for each plugin's hooks.json file.
     if (pluginRoot) {
-      // Use the explicitly provided plugin root (e.g., plugins/opspal-hubspot)
+      // Use the explicitly provided plugin root (the caller's own plugin directory)
       result = result.replace(/\$\{CLAUDE_PLUGIN_ROOT\}/g, pluginRoot);
       result = result.replace(/\$CLAUDE_PLUGIN_ROOT/g, pluginRoot);
     } else if (process.env.CLAUDE_PLUGIN_ROOT) {

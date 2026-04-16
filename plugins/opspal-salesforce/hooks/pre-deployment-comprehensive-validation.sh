@@ -103,6 +103,35 @@ else
     log_error() { echo "[$(date '+%H:%M:%S')] ✗ $1"; }
 fi
 
+# Shared remediation-hints lib (opspal-core). Falls back to inline no-ops if
+# the cross-plugin asset cannot be resolved — hint emission still works via
+# the local FAILED_CHECK_BYPASS_HINTS string variable below, just without
+# deduplication.
+REMEDIATION_HINTS_LIB="$(resolve_sibling_asset 'scripts/lib/hook-remediation-hints.sh')"
+if [ -f "$REMEDIATION_HINTS_LIB" ]; then
+    # shellcheck source=/dev/null
+    source "$REMEDIATION_HINTS_LIB"
+else
+    # Fallback shims so call sites can always invoke these functions safely.
+    remediation_hint_reset() { __OPSPAL_REMEDIATION_HINTS=""; }
+    remediation_hint_add() {
+        local assignment="${2:-}"
+        [ -z "$assignment" ] && return 0
+        case ",${__OPSPAL_REMEDIATION_HINTS:-}," in
+            *",${assignment},"*) return 0 ;;
+        esac
+        if [ -z "${__OPSPAL_REMEDIATION_HINTS:-}" ]; then
+            __OPSPAL_REMEDIATION_HINTS="$assignment"
+        else
+            __OPSPAL_REMEDIATION_HINTS="${__OPSPAL_REMEDIATION_HINTS},${assignment}"
+        fi
+    }
+    remediation_hint_emit() {
+        [ -z "${__OPSPAL_REMEDIATION_HINTS:-}" ] && return 0
+        printf '%s' "$__OPSPAL_REMEDIATION_HINTS" | sed 's/,/, /g'
+    }
+fi
+
 HOOK_INPUT=""
 if [ ! -t 0 ]; then
     HOOK_INPUT=$(cat 2>/dev/null || true)
@@ -261,7 +290,7 @@ PASSED_CHECKS=0
 FAILED_CHECKS=0
 SKIPPED_CHECKS=0
 FAILED_CHECK_NAMES=""
-FAILED_CHECK_BYPASS_HINTS=""
+remediation_hint_reset
 
 # Per-check bypass env vars. Prefer surgical skips over the nuclear
 # SKIP_COMPREHENSIVE_VALIDATION=1, which disables every guardrail in this hook.
@@ -299,7 +328,7 @@ else
             log_error "Invalid deployment source structure"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Source Validation"
-            FAILED_CHECK_BYPASS_HINTS="${FAILED_CHECK_BYPASS_HINTS:+$FAILED_CHECK_BYPASS_HINTS, }SFDC_SKIP_SOURCE_VALIDATION=1"
+            remediation_hint_add "Source Validation" "SFDC_SKIP_SOURCE_VALIDATION=1"
             VALIDATION_FAILED=1
         fi
     else
@@ -320,7 +349,10 @@ FLOW_VALIDATOR="${SCRIPT_DIR}/../scripts/lib/flow-xml-validator.js"
 DEPENDENCY_ANALYZER="${SCRIPT_DIR}/../scripts/lib/metadata-dependency-analyzer.js"
 FLOW_FILES=$(find "$DEPLOY_DIR" -name "*.flow-meta.xml" 2>/dev/null || echo "")
 
-if [ "$PRETOOLUSE_MODE" = "1" ]; then
+if [ "$SFDC_SKIP_FLOW_XML" = "1" ]; then
+    log_info "Skipping Flow XML validation (SFDC_SKIP_FLOW_XML=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ "$PRETOOLUSE_MODE" = "1" ]; then
     log_info "Skipping comprehensive Flow XML validation in PreToolUse mode; pre-deploy-flow-validation.sh owns flow-specific blocking checks"
     SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 elif [ -n "$FLOW_FILES" ]; then
@@ -392,6 +424,7 @@ elif [ -n "$FLOW_FILES" ]; then
         log_error "$FLOW_ERRORS flow(s) failed validation"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Flow XML"
+        remediation_hint_add "Flow XML" "SFDC_SKIP_FLOW_XML=1"
         VALIDATION_FAILED=1
     fi
 else
@@ -433,7 +466,10 @@ ${DELETED_SUFFIX}"
     DELETED_FIELDS=$(echo "$DELETED_FIELDS" | sort -u | grep -v '^$')
 fi
 
-if [ "$HAS_TARGET_ORG" -eq 0 ]; then
+if [ "$SFDC_SKIP_FIELD_DEPS" = "1" ]; then
+    log_info "Skipping field dependency analysis (SFDC_SKIP_FIELD_DEPS=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ "$HAS_TARGET_ORG" -eq 0 ]; then
     log_info "Skipping field dependency analysis (no target org)"
     SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
 elif [ -n "$DELETED_FIELDS" ]; then
@@ -490,6 +526,7 @@ elif [ -n "$DELETED_FIELDS" ]; then
             echo "This deployment will FAIL if attempted. Fix the dependencies first."
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Field Dependencies"
+            remediation_hint_add "Field Dependencies" "SFDC_SKIP_FIELD_DEPS=1"
             VALIDATION_FAILED=1
         fi
     else
@@ -512,7 +549,10 @@ TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
 CSV_PARSER="${SCRIPT_DIR}/../scripts/lib/csv-parser-safe.js"
 CSV_FILES=$(find "$DEPLOY_DIR" -name "*.csv" 2>/dev/null || echo "")
 
-if [ -n "$CSV_FILES" ]; then
+if [ "$SFDC_SKIP_CSV_DATA" = "1" ]; then
+    log_info "Skipping CSV data validation (SFDC_SKIP_CSV_DATA=1)"
+    SKIPPED_CHECKS=$((SKIPPED_CHECKS + 1))
+elif [ -n "$CSV_FILES" ]; then
     CSV_COUNT=$(echo "$CSV_FILES" | wc -l)
     log_info "Found $CSV_COUNT CSV file(s) to validate"
 
@@ -542,6 +582,7 @@ if [ -n "$CSV_FILES" ]; then
             log_error "$CSV_ERRORS CSV file(s) failed validation"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }CSV Data"
+            remediation_hint_add "CSV Data" "SFDC_SKIP_CSV_DATA=1"
             VALIDATION_FAILED=1
         fi
     else
@@ -631,7 +672,7 @@ elif [ -n "$TRACKED_FIELDS" ]; then
         log_error "$TRACKING_ERRORS object(s) would exceed field history tracking limit"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Field History Tracking"
-        FAILED_CHECK_BYPASS_HINTS="${FAILED_CHECK_BYPASS_HINTS:+$FAILED_CHECK_BYPASS_HINTS, }SFDC_SKIP_FHT=1"
+        remediation_hint_add "Field History Tracking" "SFDC_SKIP_FHT=1"
         VALIDATION_FAILED=1
     fi
 else
@@ -675,6 +716,7 @@ if [ -n "$FORMULAS" ]; then
         log_error "$FORMULA_ERRORS formula(s) use invalid picklist syntax"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Picklist Formula"
+        remediation_hint_add "Picklist Formula" "SFDC_SKIP_PICKLIST_FORMULA=1"
         VALIDATION_FAILED=1
     fi
 else
@@ -774,6 +816,7 @@ if [ -f "$ENV_CONFIG_VALIDATOR" ]; then
         log_error "$DEPLOYMENT_ORDER_ERRORS deployment order error(s)"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Deployment Order"
+        remediation_hint_add "Deployment Order" "SFDC_SKIP_DEPLOY_ORDER=1"
         VALIDATION_FAILED=1
     fi
 else
@@ -838,6 +881,7 @@ elif [ -f "$PRE_OP_ORCHESTRATOR" ]; then
             log_error "Unified validation failed: $ORCH_BLOCKERS blocker(s), $ORCH_ERRORS error(s)"
             FAILED_CHECKS=$((FAILED_CHECKS + 1))
             FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Unified Pre-Operation"
+            remediation_hint_add "Unified Pre-Operation" "SFDC_SKIP_UNIFIED_PREOP=1"
             VALIDATION_FAILED=1
 
             # Show blocking issues
@@ -882,6 +926,7 @@ done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
 if [ "$LOOKUP_CONSTRAINT_ERRORS" -gt 0 ]; then
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
     FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Lookup Delete Constraint"
+    remediation_hint_add "Lookup Delete Constraint" "SFDC_SKIP_LOOKUP_DELETE=1"
     VALIDATION_FAILED=1
 else
     log_success "Lookup delete constraints valid"
@@ -922,6 +967,7 @@ done < <(find "$DEPLOY_DIR" -name "*.field-meta.xml" -type f 2>/dev/null)
 if [ "$REQ_FIELD_PERM_ERRORS" -gt 0 ]; then
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
     FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Required Field Permissions"
+    remediation_hint_add "Required Field Permissions" "SFDC_SKIP_REQ_FIELD_PERMS=1"
     VALIDATION_FAILED=1
 else
     log_success "No required field permissions found in permission sets"
@@ -980,6 +1026,7 @@ else
         log_error "$PICKLIST_DEACT_ERRORS picklist value(s) blocked — records still reference them"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         FAILED_CHECK_NAMES="${FAILED_CHECK_NAMES:+$FAILED_CHECK_NAMES, }Picklist Deactivation"
+        remediation_hint_add "Picklist Deactivation" "SFDC_SKIP_PICKLIST_DEACT=1"
         VALIDATION_FAILED=1
     fi
 fi
@@ -1004,8 +1051,9 @@ if [ $VALIDATION_FAILED -eq 1 ]; then
         "{\"targetOrg\":\"$TARGET_ORG\",\"totalChecks\":$TOTAL_CHECKS,\"passed\":$PASSED_CHECKS,\"failed\":$FAILED_CHECKS}"
 
     if [ "$PRETOOLUSE_MODE" = "1" ]; then
-        if [ -n "$FAILED_CHECK_BYPASS_HINTS" ]; then
-            emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details. Per-check bypass (preferred): ${FAILED_CHECK_BYPASS_HINTS}. Nuclear bypass: SKIP_COMPREHENSIVE_VALIDATION=1."
+        _BYPASS_HINTS="$(remediation_hint_emit)"
+        if [ -n "$_BYPASS_HINTS" ]; then
+            emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details. Per-check bypass (preferred): ${_BYPASS_HINTS}. Nuclear bypass: SKIP_COMPREHENSIVE_VALIDATION=1."
         else
             emit_block "Deployment validation failed: $FAILED_CHECKS of $TOTAL_CHECKS checks failed (${FAILED_CHECK_NAMES}). Review stderr for details or set SKIP_COMPREHENSIVE_VALIDATION=1 to bypass."
         fi

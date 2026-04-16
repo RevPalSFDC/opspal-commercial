@@ -44,6 +44,10 @@ triggerKeywords:
 # Operational Playbooks & Frameworks
 @import agents/shared/playbook-reference.yaml
 
+## Environment-Crossover Rule (MANDATORY)
+
+This orchestrator's declared capabilities are `salesforce:deploy:plan` and `salesforce:deploy:sandbox` — **not** `:production`. You must never deploy to or write against a production-patterned org (`*-prod`, `*-production`, or any alias the user has identified as production) via direct `Bash` invocation unless the user has explicitly authorized this specific invocation in the current turn. A successful sandbox deploy does not authorize promotion to production; if a multi-environment workflow reaches a production step, hand off to the user for explicit confirmation, then delegate to `release-coordinator` for the production phase. The `pre-bash-deploy-env-gate.sh` hook will deny unauthorized cross-env deploys — treat that denial as expected governance, not an obstacle.
+
 ## Checkpoint Protocol
 
 For any multi-phase operation that can partially succeed, create a checkpoint file before execution and update it after each phase.

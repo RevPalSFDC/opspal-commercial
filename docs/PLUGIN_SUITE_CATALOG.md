@@ -11,8 +11,8 @@
 | Agents | 327 |
 | Commands | 310 |
 | Skills | 177 |
-| Hooks | 225 |
-| Scripts | 1878 |
+| Hooks | 226 |
+| Scripts | 1879 |
 
 ## Regeneration
 
@@ -31,13 +31,13 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.1 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.17 | active | 80 | 11 | 126 | 49 | 107 | 602 |
+| `opspal-core` | 2.55.18 | active | 80 | 11 | 126 | 49 | 107 | 603 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.34 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.17 | active | 94 | 21 | 59 | 55 | 46 | 1093 |
+| `opspal-salesforce` | 3.87.18 | active | 94 | 21 | 59 | 55 | 47 | 1093 |
 
 ## Registry
 
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.17`
+- Version: `2.55.18`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -1052,7 +1052,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.17`
+- Version: `3.87.18`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
@@ -1298,6 +1298,7 @@
 - `post-sf-command` (`post-sf-command.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `post-sf-query-validation` (`post-sf-query-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `post-territory-operation-logger` (`post-territory-operation-logger.sh`): Post-Territory Operation Logger Hook
+- `pre-bash-deploy-env-gate` (`pre-bash-deploy-env-gate.sh`): PreToolUse guardrail that blocks cross-environment Salesforce deploys that
 - `pre-bash-dispatcher` (`pre-bash-dispatcher.sh`): Fast-exit for commands that don't involve Salesforce CLI or jq piping —
 - `pre-bash-jq-validator` (`pre-bash-jq-validator.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `pre-bash-soql-validator` (`pre-bash-soql-validator.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook

@@ -325,6 +325,9 @@ if is_salesforce_cli_command && has_pipeline_without_pipefail && (uses_jq || use
 fi
 
 if is_deploy_scope_command; then
+  # Cross-environment gate runs FIRST — if a subagent infers production from a
+  # staging session, block before any other deploy-chain work happens.
+  run_child_hook "${PLUGIN_ROOT}/hooks/pre-bash-deploy-env-gate.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-queued-check.sh"
   run_child_hook "${PLUGIN_ROOT}/hooks/pre-deploy-agent-context-check.sh"
   run_child_hook env PRETOOLUSE_MODE=1 "${PLUGIN_ROOT}/hooks/pre-deployment-comprehensive-validation.sh"
