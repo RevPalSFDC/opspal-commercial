@@ -1,20 +1,34 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week focused on platform stability improvements and expanding automation capabilities. We fixed licensing issues that could cause system interruptions and enhanced our Skills library with better automation templates for revenue operations workflows.",
-  "published_at": "2026-04-16T23:55:50.713Z",
+  "summary": "This week brought significant improvements to platform stability and content organization. OpsPal now prevents documentation bloat and duplicate content issues, while licensing activation problems that could cause system loops have been resolved. Additionally, our Skills library received a comprehensive audit with 98 automation templates now properly organized and enhanced.",
+  "published_at": "2026-04-17T00:48:36.739Z",
   "week_start": "2026-04-13",
-  "week_end": "2026-04-16",
+  "week_end": "2026-04-17",
   "has_breaking": false,
-  "total_commits": 28,
+  "total_commits": 46,
   "entries": [
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Fixed licensing issues that could interrupt your workflows",
+      "headline": "Documentation stays clean and organized automatically",
       "details": [
-        "Resolved problems where license renewals could get stuck in endless loops",
-        "You'll now see clear warnings 48 hours before your license expires"
+        "Removes duplicate content sections that could cause confusion",
+        "Eliminates outdated legacy content that clutters documentation",
+        "Keeps documentation headers properly positioned for easy navigation"
+      ],
+      "commits": [
+        "3b24dc2"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "License activation works smoothly without getting stuck",
+      "details": [
+        "Prevents endless loops when activating or renewing licenses",
+        "Shows clear warnings when your license expires within 48 hours",
+        "Handles license termination cleanly without system interruption"
       ],
       "commits": [
         "d9f1c3d",
@@ -24,14 +38,27 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced automation templates for better workflow setup",
+      "headline": "Skills library reorganized with 98 automation templates enhanced",
       "details": [
-        "Updated 98 automation templates with clearer instructions and better organization",
-        "Fixed naming issues that made some templates harder to find",
-        "Added missing template files for easier workflow creation"
+        "Fixed naming issues with go-to-market planning and Salesforce templates",
+        "Moved test templates out of production library for cleaner experience",
+        "Added proper template structure for creating new automation skills"
       ],
       "commits": [
         "9d4de94"
+      ]
+    },
+    {
+      "category": "improved",
+      "plugin": "Salesforce",
+      "headline": "Salesforce workflow validation works with proper permissions",
+      "details": [
+        "Validates Salesforce flows with correct read and write permissions",
+        "Automatically assigns proper permission sets for workflow operations",
+        "Ensures compliance with Salesforce security requirements"
+      ],
+      "commits": [
+        "620ca48"
       ]
     }
   ]
