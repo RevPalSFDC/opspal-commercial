@@ -2138,7 +2138,7 @@
     {
       "name": "opspal-core",
       "description": "OpsPal Core - Cross-platform pipeline orchestration with parallel execution, environment preflight & self-healing, offline PPTX/PDF generation, diagrams (Mermaid/Lucid), Google Slides, Asana integration, task scheduling, sub-agent routing, ACE self-learning, project intake system, Standard Operating Procedures (SOP) subsystem with declarative policy engine, RevOps data quality governance, cross-platform HubSpot+Salesforce deduplication, NotebookLM client knowledge bases, LLM-ready field dictionaries, Supabase credential validation, Gong conversation intelligence (deal risk, competitive tracking, CRM sync), Fireflies.ai meeting intelligence (transcript sync, action items, engagement insights), and task retry helper with circuit breaker. 74 agents.",
-      "version": "2.55.19",
+      "version": "2.55.20",
       "status": "active",
       "manifestStatus": "active",
       "owner": "revpal-platform",
@@ -11128,6 +11128,12 @@
           "file": "lib/transcript-parser.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/transcript-parser.js"
+        },
+        {
+          "name": "transcript-reflection-extractor",
+          "file": "lib/transcript-reflection-extractor.js",
+          "extension": ".js",
+          "sourcePath": "plugins/opspal-core/scripts/lib/transcript-reflection-extractor.js"
         },
         {
           "name": "transcript-semantic-analyzer",
@@ -31429,6 +31435,6 @@
     "commands": 310,
     "skills": 177,
     "hooks": 226,
-    "scripts": 1879
+    "scripts": 1880
   }
 }

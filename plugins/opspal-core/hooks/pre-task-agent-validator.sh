@@ -1052,9 +1052,14 @@ main() {
                     fi
                 else
                     log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" "routing_profile_mismatch_advisory" "Resolved agent failed active route profile fit"
+                    # Advisory-only signal. Surface the detail to stderr + routing
+                    # metric log (above) rather than into permissionDecisionReason,
+                    # which agents read as authoritative guidance. Keeps the
+                    # "allow" decision intact without the noise.
+                    echo "[pre-task-agent-validator] ROUTING_ADVISORY_PROFILE_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist} but '${RESOLVED}' does not match the active route profile. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}. [advisory-only]" >&2
                     emit_pretool_response \
                       "allow" \
-                      "ROUTING_ADVISORY_PROFILE_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist} but '${RESOLVED}' does not match the active route profile. Consider using the suggested agent for best results. Required tools: ${required_tools:-none}. Actual tools: ${actual_tools:-none}. Required capabilities: ${required_capabilities:-none}. Eligible actor types: ${allowed_actor_types:-any}. [advisory-only: agent execution permitted]" \
+                      "" \
                       "" \
                       "" \
                       "ROUTING_ADVISORY_PROFILE_MISMATCH" \
@@ -1235,9 +1240,14 @@ main() {
                         log_routing_metric "$AGENT_NAME" "$RESOLVED" "false" "true" \
                           "routing_requirement_mismatch_advisory" \
                           "Pending route requires approved agent family. mismatch_type=${mismatch_type}, pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}"
+                        # Advisory-only signal (see PROFILE_MISMATCH above for
+                        # rationale). Stderr + routing metric capture the detail;
+                        # permissionDecisionReason stays clean so agents don't
+                        # interpret the nudge as a denial.
+                        echo "[pre-task-agent-validator] ROUTING_ADVISORY_AGENT_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist}. Consider subagent_type='${REQUIRED_AGENT:-unknown}' or another family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}]" >&2
                         emit_pretool_response \
                           "allow" \
-                          "ROUTING_ADVISORY_AGENT_MISMATCH: Pending route suggests ${REQUIRED_AGENT:-an approved specialist}. For best results, use the Agent tool with subagent_type='${REQUIRED_AGENT:-unknown}' or another approved family member: ${allowed_agents:-none}. Current action=${ROUTE_ACTION:-unknown}. [pending_family=${pending_family:-unknown}, requested_family=${requested_family:-unknown}, mismatch_type=${mismatch_type}, advisory-only: agent execution permitted]" \
+                          "" \
                           "" \
                           "" \
                           "ROUTING_ADVISORY_AGENT_MISMATCH" \
