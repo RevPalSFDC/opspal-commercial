@@ -1109,6 +1109,18 @@ class CohortFixPlanner {
       || normalizePlanText(fixPlan.rootCauseAnalysis.why1)
       || 'The cohort lacks the preventive validation needed for its dominant failure mode.';
 
+    // Build recommended_fix from this cohort's OWN reflections' issues only.
+    // Filter to issues whose taxonomy matches the cohort's taxonomy, then collect
+    // the unique recommended_fix / agnostic_fix texts. This prevents one reflection's
+    // fix text from broadcasting to every cohort it happens to touch.
+    const perCohortRecommendedFix = this._extractPerCohortRecommendedFix(
+      reflections,
+      taxonomy,
+      fixPlan,
+      components,
+      implementationSteps
+    );
+
     return {
       id: `plan-${slugifyPlan(sourceCohortId)}`,
       source_cohort_ids: [sourceCohortId],
@@ -1122,7 +1134,7 @@ class CohortFixPlanner {
         recurrence_count: Math.max(cohortData.frequency || reflectionIds.length || 1, 1)
       },
       likely_root_cause: primaryRootCause,
-      recommended_fix: this._buildRecommendedFix(fixPlan, components, implementationSteps),
+      recommended_fix: perCohortRecommendedFix,
       prevention_safeguard: this._buildPreventionSafeguard(fixPlan, successCriteria),
       implementation_steps: implementationSteps,
       owner_suggestion: this._suggestOwner(taxonomy),
@@ -1132,6 +1144,77 @@ class CohortFixPlanner {
       expected_roi_annual: fixPlan.reflections.totalROI || cohortData.total_roi || 0,
       affected_components: components
     };
+  }
+
+  /**
+   * Extract recommended_fix text using ONLY this cohort's own reflections.
+   *
+   * Previous behaviour: _buildRecommendedFix used the solution template name, which
+   * was the same for every cohort of the same taxonomy regardless of the actual
+   * reflection content. When a single reflection appeared in multiple cohorts (because
+   * it had issues spanning several taxonomies), its fix text leaked into all of them.
+   *
+   * This method:
+   *  1. Iterates the cohort's reflections and filters each reflection's issues to those
+   *     whose taxonomy matches THIS cohort's taxonomy.
+   *  2. Collects unique recommended_fix / agnostic_fix strings from only those issues.
+   *  3. Falls back to _buildRecommendedFix (template-based) only when no per-cohort
+   *     fix text is available.
+   *
+   * @param {Array} reflections - Reflection objects belonging to this cohort
+   * @param {string} cohortTaxonomy - Normalized taxonomy for this cohort
+   * @param {Object} fixPlan - Generated fix plan (for fallback)
+   * @param {Array} components - Affected components (for fallback)
+   * @param {Array} implementationSteps - Steps (for fallback)
+   * @returns {string} recommended_fix text grounded in this cohort's own reflection data
+   */
+  _extractPerCohortRecommendedFix(reflections, cohortTaxonomy, fixPlan, components, implementationSteps) {
+    const normalizedCohortTaxonomy = normalizePlanText(cohortTaxonomy).toLowerCase();
+    const seen = new Set();
+    const fixes = [];
+
+    for (const reflection of reflections) {
+      // Support both structured issue arrays and flat reflection data
+      const issues = Array.isArray(reflection.issues)
+        ? reflection.issues
+        : Array.isArray(reflection.data?.issues_identified)
+          ? reflection.data.issues_identified
+          : [];
+
+      for (const issue of issues) {
+        // Only take fix text from issues whose taxonomy matches this cohort.
+        // A reflection may have issues spanning multiple taxonomies; we must
+        // not let those bleed into unrelated cohorts.
+        const issueTaxonomy = normalizePlanText(issue.taxonomy || issue.focus_area || '').toLowerCase();
+        if (issueTaxonomy && issueTaxonomy !== normalizedCohortTaxonomy) {
+          continue;
+        }
+
+        // Collect fix text from canonical field names used across schema versions
+        const fixCandidates = [
+          issue.recommended_fix,
+          issue.agnostic_fix,
+          issue.fix,
+          issue.resolution
+        ];
+
+        for (const candidate of fixCandidates) {
+          const cleaned = normalizePlanText(candidate);
+          if (!cleaned || isPlaceholderValue(cleaned)) continue;
+          const key = cleaned.toLowerCase();
+          if (seen.has(key)) continue;
+          seen.add(key);
+          fixes.push(cleaned);
+        }
+      }
+    }
+
+    if (fixes.length > 0) {
+      return fixes.slice(0, 3).join(' ');
+    }
+
+    // Fallback: template-based text when no reflection-level fix text exists
+    return this._buildRecommendedFix(fixPlan, components, implementationSteps);
   }
 
   _buildIssueSummary(cohortData, primaryRootCause, fixPlan) {

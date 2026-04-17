@@ -2,6 +2,14 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.25 — 2026-04-17
+
+### Fixed
+- `scripts/lib/cohort-fix-planner.js`: Fixed per-cohort `recommended_fix` broadcast bug in `/processreflections` Phase 1 plan generator. Previously, a single reflection whose `issues_identified` spanned multiple taxonomies (e.g., `tool-contract` + `idempotency/state` + `schema/parse`) caused its fix text to bleed into every cohort that included that reflection, producing identical `recommended_fix` paragraphs across unrelated cohorts. New `_extractPerCohortRecommendedFix()` method filters each reflection's issues to those whose `taxonomy` matches the cohort's own taxonomy before extracting `recommended_fix`/`agnostic_fix` text; falls back to the static template only when no reflection-level fix text is found. Confirmed fix via 7 regression tests in `test/process-reflections-phase1.test.js`. (2026-04-17 plan: 6 of 8 cohorts shared identical CampaignMemberStatus fix; regenerated plan: all 10 cohorts have distinct, taxonomy-relevant fix text.)
+
+### Added
+- `test/process-reflections-phase1.test.js`: Regression test suite (7 tests) for `CohortFixPlanner.generateImprovementPlanItem()` per-cohort fix isolation. Guards: distinct fix text across cohorts with different reflections; fix vocabulary must reference cohort's own root-cause domain; cross-taxonomy reflection issues must not bleed into unrelated cohorts.
+
 ## 2.55.24 — 2026-04-17
 
 ### Fixed
