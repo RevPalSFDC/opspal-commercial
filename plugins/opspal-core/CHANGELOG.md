@@ -2,6 +2,14 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.24 — 2026-04-17
+
+### Fixed
+- `hooks/unified-router.sh`: Renamed "MANDATORY SPECIALIST ROUTE" context message to "SUGGESTED SPECIALIST ROUTE" to accurately reflect advisory-only enforcement (no hard block). Per routing advisory policy (2026-04-01 P1-9).
+
+### Added
+- `test/hooks/integration/routing-advisory-contract.test.js`: Contract test asserting all routing hooks are advisory-only — no hook may exit 2, emit `"decision": "deny"/"block"`, `"permissionDecision": "deny"`, or `"continue": false`. Regression lock for reflection 9e6373b8 (2026-04-13).
+
 ## 2.55.23 — 2026-04-17
 
 ### Fixed

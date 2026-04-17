@@ -5,6 +5,11 @@ All notable changes to the hubspot-plugin will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.9.35] - 2026-04-17 (Routing Advisory-Only Migration)
+
+### Fixed
+- `pre-task-mandatory.sh`: Converted routing-based `permissionDecision: "deny"` responses to advisory-only (`permissionDecision: "allow"`) with `[ADVISORY]` prefix. High-risk operation routing now surfaces as guidance, not a hard block. Renamed "MANDATORY" → "SUGGESTED" in banner text. Regression lock: reflection 9e6373b8 (2026-04-13). Memory: `feedback_routing_advisory.md` (P1-9 remediation, 2026-04-01).
+
 ## [3.9.10] - 2026-03-23 (Hook Safety + Agent Tool Gaps)
 
 ### Fixed
