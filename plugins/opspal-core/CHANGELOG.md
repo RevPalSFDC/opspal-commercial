@@ -2,6 +2,13 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.26 — 2026-04-17
+
+### Changed
+- Regenerated `routing-index.json` from current agent tree (removes 29 stale `opspal-attio` ghost entries, resyncs NotebookLM tool metadata from agent frontmatter).
+- Removed 5 orphan `opspal-attio` patterns from `routing-patterns.json` (`platformPatterns.attio` block + `/attio-auth`, `/attio-workspace`, `/attio-dedup`, `/attio-audit`, `/attio-preflight` command mappings). opspal-attio agents/ dir is under reconstruction; entries will be re-added when that work lands.
+
+
 ## 2.55.25 — 2026-04-17
 
 ### Fixed
