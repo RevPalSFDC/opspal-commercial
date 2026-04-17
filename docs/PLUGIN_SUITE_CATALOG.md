@@ -37,7 +37,7 @@
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.22 | active | 94 | 21 | 59 | 55 | 47 | 1094 |
+| `opspal-salesforce` | 3.87.23 | active | 94 | 21 | 59 | 55 | 47 | 1094 |
 
 ## Registry
 
@@ -1008,7 +1008,7 @@ _None_
 
 ### opspal-salesforce
 
-- Version: `3.87.22`
+- Version: `3.87.23`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
