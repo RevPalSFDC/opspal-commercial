@@ -2,6 +2,12 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## 3.87.23 — 2026-04-17
+
+### Changed
+- Consolidated `post-operation-observe.sh` under `post-bash-dispatcher.sh` to respect the `PostToolUse :: Bash` fanout budget (3 registrations max). Observe now invoked as a child hook via dispatcher when command is a deploy or data-query; previously registered as a peer PostToolUse:Bash matcher. No behavior change — observe still fires for the same commands.
+
+
 ## 3.87.22 — 2026-04-17
 
 ### Fixed

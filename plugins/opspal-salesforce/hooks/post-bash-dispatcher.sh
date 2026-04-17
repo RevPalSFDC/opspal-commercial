@@ -107,6 +107,10 @@ if is_data_query_command; then
   run_child_hook "${PLUGIN_ROOT}/hooks/post-sf-query-validation.sh"
 fi
 
+if is_deploy_command || is_data_query_command; then
+  run_child_hook "${PLUGIN_ROOT}/hooks/post-operation-observe.sh"
+fi
+
 if [ -n "$LAST_JSON" ] && [ "$LAST_JSON" != "{}" ]; then
   printf '%s\n' "$LAST_JSON"
   exit 0

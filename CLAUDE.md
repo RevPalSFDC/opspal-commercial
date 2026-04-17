@@ -49,7 +49,7 @@ Override: `[DIRECT]` to skip routing.
 - ✅ **opspal-mcp-client** (v1.1.0) - 3 agents, 3 commands, 3 hooks
 - ✅ **opspal-monday** (v1.4.11) - 6 agents, 3 scripts, 1 commands, 2 hooks
 - ✅ **opspal-okrs** (v3.0.13) - 14 agents, 4 scripts, 14 commands, 4 hooks
-- ✅ **opspal-salesforce** (v3.87.22) - 94 agents, 596 scripts, 59 commands, 45 hooks
+- ✅ **opspal-salesforce** (v3.87.23) - 94 agents, 596 scripts, 59 commands, 45 hooks
 
 **Last synced**: 2026-04-14
 

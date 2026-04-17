@@ -8,7 +8,7 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/pre-bash-dispatcher.sh",
             "timeout": 60,
-            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher — dispatcher fast-exits for non-SF commands within ~1ms"
+            "description": "Dispatch Salesforce deploy, query, and jq Bash validations. Intentionally broad Bash matcher \u2014 dispatcher fast-exits for non-SF commands within ~1ms"
           }
         ]
       }
@@ -21,7 +21,7 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start-sf-context.sh",
             "timeout": 10,
-            "description": "Canonical SF org detection — writes /tmp/sf-org-context.json (O1 consolidation)"
+            "description": "Canonical SF org detection \u2014 writes /tmp/sf-org-context.json (O1 consolidation)"
           }
         ]
       }
@@ -35,17 +35,6 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-bash-dispatcher.sh",
             "timeout": 30,
             "description": "Dispatch Salesforce deploy and query post-processing with structured output"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/post-operation-observe.sh",
-            "timeout": 10,
-            "description": "Capture structured telemetry for Living Runbook System after deployments, assessments, and data operations. Non-blocking; writes to workspace orgs/<slug>/platforms/salesforce/<org>/observations/."
           }
         ]
       }
