@@ -12,7 +12,7 @@
 | Commands | 310 |
 | Skills | 177 |
 | Hooks | 226 |
-| Scripts | 1880 |
+| Scripts | 1881 |
 
 ## Regeneration
 
@@ -31,7 +31,7 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.1 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.20 | active | 80 | 11 | 126 | 49 | 107 | 604 |
+| `opspal-core` | 2.55.21 | active | 80 | 11 | 126 | 49 | 107 | 605 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.34 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
@@ -197,7 +197,7 @@
 
 ### opspal-core
 
-- Version: `2.55.20`
+- Version: `2.55.21`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -370,7 +370,7 @@
 | `/promote-skills` |  | Analyze, deduplicate, enrich, and promote skill scaffolds from skills-staging/ to active skills/ | `promote-skills.md` |
 | `/qbr` | `[quarter e.g. Q1-2026] [--format qbr|board-pack] [--org <slug>]` | Assemble a QBR or board pack from multi-platform data — ARR waterfall, pipeline health, engagement, Gong signals, and... | `qbr.md` |
 | `/query-field-dictionary` | `acme-corp Amount` | Query field dictionary by name, tag, audience, or free-text search | `query-field-dictionary.md` |
-| `/reflect` | `[options]` | Analyze session for errors, feedback, and generate improvement playbook | `reflect.md` |
+| `/reflect` | `[--debug-log <path>]` | Analyze session for errors, feedback, and generate improvement playbook | `reflect.md` |
 | `/resolve-plugin-path` | `[list|validate|resolve-root <plugin>]` | Show resolved plugin installation paths for debugging MODULE_NOT_FOUND errors | `resolve-plugin-path.md` |
 | `/review-queue` | `[--action list|approve|reject|bulk] [--type merge|enrichment|correction]` | Process pending data quality actions from the review queue | `review-queue.md` |
 | `/revops-maturity` | `[optional: --platforms sf,hs,mk] [--org <slug>]` | Run a unified RevOps maturity assessment across all connected platforms — produces maturity score, benchmark comparis... | `revops-maturity.md` |
