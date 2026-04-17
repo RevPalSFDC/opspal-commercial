@@ -30,7 +30,7 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-attio` | 2.0.1 | active | 0 | 0 | 28 | 0 | 21 | 0 |
+| `opspal-attio` | 2.0.2 | active | 0 | 0 | 28 | 0 | 21 | 0 |
 | `opspal-core` | 2.55.28 | active | 80 | 11 | 126 | 49 | 107 | 605 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.35 | active | 59 | 6 | 33 | 23 | 15 | 109 |
@@ -78,7 +78,7 @@
 
 ### opspal-attio
 
-- Version: `2.0.1`
+- Version: `2.0.2`
 - Status: `active`
 - Path: `plugins/opspal-attio`
 - Manifest: `plugins/opspal-attio/.claude-plugin/plugin.json`
