@@ -1,34 +1,32 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought significant improvements to platform stability and content organization. OpsPal now prevents documentation bloat and duplicate content issues, while licensing activation problems that could cause system loops have been resolved. Additionally, our Skills library received a comprehensive audit with 98 automation templates now properly organized and enhanced.",
-  "published_at": "2026-04-17T00:48:36.739Z",
+  "summary": "This week brought significant improvements to session performance tracking and platform reliability. OpsPal now provides better insights into workflow efficiency while running more smoothly behind the scenes. The Skills library was also expanded with 98 enhanced automation templates to help RevOps teams work faster.",
+  "published_at": "2026-04-17T00:58:13.688Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-17",
   "has_breaking": false,
-  "total_commits": 46,
+  "total_commits": 49,
   "entries": [
     {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Documentation stays clean and organized automatically",
+      "category": "new",
+      "plugin": "Reflect",
+      "headline": "Track workflow performance and troubleshoot session issues",
       "details": [
-        "Removes duplicate content sections that could cause confusion",
-        "Eliminates outdated legacy content that clutters documentation",
-        "Keeps documentation headers properly positioned for easy navigation"
+        "Monitor how smoothly your automation workflows run and identify bottlenecks that slow down your processes",
+        "Get detailed performance insights to optimize your RevOps operations"
       ],
       "commits": [
-        "3b24dc2"
+        "356774e"
       ]
     },
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "License activation works smoothly without getting stuck",
+      "headline": "Resolved license activation issues",
       "details": [
-        "Prevents endless loops when activating or renewing licenses",
-        "Shows clear warnings when your license expires within 48 hours",
-        "Handles license termination cleanly without system interruption"
+        "Fixed problems where OpsPal would get stuck trying to reactivate licenses",
+        "Platform now runs more reliably without interruption"
       ],
       "commits": [
         "d9f1c3d",
@@ -38,11 +36,10 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Skills library reorganized with 98 automation templates enhanced",
+      "headline": "Enhanced 98 automation skills for better RevOps workflows",
       "details": [
-        "Fixed naming issues with go-to-market planning and Salesforce templates",
-        "Moved test templates out of production library for cleaner experience",
-        "Added proper template structure for creating new automation skills"
+        "Updated and expanded the Skills library with more comprehensive automation templates",
+        "Improved organization makes it easier to find the right automation for your needs"
       ],
       "commits": [
         "9d4de94"
@@ -51,11 +48,10 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Salesforce workflow validation works with proper permissions",
+      "headline": "Better Salesforce workflow validation and permissions",
       "details": [
-        "Validates Salesforce flows with correct read and write permissions",
-        "Automatically assigns proper permission sets for workflow operations",
-        "Ensures compliance with Salesforce security requirements"
+        "Improved accuracy when checking Salesforce Flow configurations",
+        "Automatic permission assignment ensures workflows run without access errors"
       ],
       "commits": [
         "620ca48"
