@@ -33,7 +33,6 @@ const METADATA_FOLDERS = Object.freeze({
   'standardValueSets': 'StandardValueSet',
   'standardValueSetTranslations': 'StandardValueSetTranslation',
   'customLabels': 'CustomLabels',
-  'labels': 'CustomLabels',
   // UI
   'layouts': 'Layout',
   'tabs': 'CustomTab',

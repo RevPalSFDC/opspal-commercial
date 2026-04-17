@@ -301,7 +301,6 @@ class DeploymentSourceValidator {
      */
     async scanMetadataTypes(metadataRoot) {
         const types = [];
-        const metadataFolders = METADATA_FOLDERS;
 
         try {
             const contents = await fs.readdir(metadataRoot);
@@ -311,7 +310,7 @@ class DeploymentSourceValidator {
             }
 
             for (const folder of contents) {
-                if (metadataFolders[folder]) {
+                if (METADATA_FOLDERS[folder]) {
                     const folderPath = path.join(metadataRoot, folder);
                     const stats = await fs.stat(folderPath);
 
@@ -320,7 +319,7 @@ class DeploymentSourceValidator {
                         if (files.length > 0) {
                             types.push({
                                 folder,
-                                type: metadataFolders[folder],
+                                type: METADATA_FOLDERS[folder],
                                 count: files.length
                             });
                         }
