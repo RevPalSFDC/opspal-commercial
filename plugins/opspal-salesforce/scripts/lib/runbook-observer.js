@@ -30,7 +30,7 @@
  * }
  *
  * Storage:
- *   instances/{org}/observations/{operation}-{timestamp}.json
+ *   orgs/{org_slug}/platforms/salesforce/{org_alias}/observations/{operation}-{timestamp}.json
  *
  * Exit Codes:
  *   0 - Success
@@ -39,6 +39,25 @@
 
 const fs = require('fs');
 const path = require('path');
+
+/**
+ * Resolve the workspace root where observations should be written.
+ * Priority: CLAUDE_PROJECT_ROOT env -> git rev-parse -> process.cwd().
+ * Caller should NOT pass plugin install dir here.
+ */
+function getWorkspaceRoot() {
+  if (process.env.CLAUDE_PROJECT_ROOT) {
+    return process.env.CLAUDE_PROJECT_ROOT;
+  }
+  try {
+    const { execSync } = require('child_process');
+    const root = execSync('git rev-parse --show-toplevel', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] }).trim();
+    if (root) return root;
+  } catch (_) {
+    // not in a git repo, fall through
+  }
+  return process.cwd();
+}
 
 /**
  * Parse command-line arguments
@@ -165,17 +184,14 @@ function detectPluginRoot() {
 }
 
 /**
- * Get instances directory path
+ * Get observations directory for an operation.
+ * Layout: <workspace>/orgs/<ORG_SLUG>/platforms/salesforce/<orgAlias>/observations/
+ * ORG_SLUG (client identifier) falls back to orgAlias if not set.
  */
-function getInstancesDir(pluginRoot) {
-  return path.join(pluginRoot, 'instances');
-}
-
-/**
- * Get observations directory for a specific org
- */
-function getObservationsDir(pluginRoot, org) {
-  return path.join(getInstancesDir(pluginRoot), org, 'observations');
+function getObservationsDir(_unusedPluginRoot, orgAlias) {
+  const workspace = getWorkspaceRoot();
+  const orgSlug = process.env.ORG_SLUG || orgAlias;
+  return path.join(workspace, 'orgs', orgSlug, 'platforms', 'salesforce', orgAlias, 'observations');
 }
 
 /**

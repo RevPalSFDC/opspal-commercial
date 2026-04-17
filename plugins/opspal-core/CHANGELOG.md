@@ -2,6 +2,11 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.23 — 2026-04-17
+
+### Fixed
+- `runbook-observer.js` now resolves output path from workspace (`CLAUDE_PROJECT_ROOT` → `git rev-parse --show-toplevel` → `cwd`) instead of the plugin install directory. Observations land at the workspace's `orgs/<slug>/platforms/salesforce/<alias>/observations/` path, matching what the runbook synthesizer reads. (Paired with opspal-salesforce 3.87.21 hook registration.)
+
 ## 2.55.22 — 2026-04-17
 
 ### Fixed

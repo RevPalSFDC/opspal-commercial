@@ -2,6 +2,11 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## 3.87.21 — 2026-04-17
+
+### Fixed
+- `post-operation-observe` hook is now registered (PostToolUse on Bash) instead of marked `STATUS: STAGED`. Observation files now write to workspace-rooted org-centric path `<workspace>/orgs/<ORG_SLUG>/platforms/salesforce/<ORG_ALIAS>/observations/` (previously wrote to plugin install dir, invisible to the runbook synthesizer). Resolves reflections `28462039-609b-4a5d-93c7-63e89ca86991` and `e417944f-c14b-4f00-bd9c-1c497b80998a`.
+
 ## 3.87.20 — 2026-04-17
 
 ### Fixed
