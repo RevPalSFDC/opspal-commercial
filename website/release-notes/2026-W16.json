@@ -1,20 +1,19 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought significant improvements to session performance tracking and platform reliability. OpsPal now provides better insights into workflow efficiency while running more smoothly behind the scenes. The Skills library was also expanded with 98 enhanced automation templates to help RevOps teams work faster.",
-  "published_at": "2026-04-17T00:58:13.688Z",
+  "summary": "This week's updates focus on making OpsPal more reliable and easier to use. We've added better session monitoring to help identify performance issues, improved how the platform handles skills and content management, and fixed several behind-the-scenes issues that were causing inefficiencies. These improvements will result in smoother workflows and fewer interruptions during your revenue operations work.",
+  "published_at": "2026-04-17T01:03:05.973Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-17",
   "has_breaking": false,
-  "total_commits": 49,
+  "total_commits": 52,
   "entries": [
     {
       "category": "new",
       "plugin": "Reflect",
-      "headline": "Track workflow performance and troubleshoot session issues",
+      "headline": "Added session performance scoring and troubleshooting tools",
       "details": [
-        "Monitor how smoothly your automation workflows run and identify bottlenecks that slow down your processes",
-        "Get detailed performance insights to optimize your RevOps operations"
+        "You can now see how smoothly your OpsPal sessions are running and get detailed logs to help resolve any performance issues"
       ],
       "commits": [
         "356774e"
@@ -23,10 +22,20 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Resolved license activation issues",
+      "headline": "Cleaned up content management to prevent duplicate information",
       "details": [
-        "Fixed problems where OpsPal would get stuck trying to reactivate licenses",
-        "Platform now runs more reliably without interruption"
+        "OpsPal now automatically removes duplicate sections and outdated content, keeping your workspace organized and reducing clutter"
+      ],
+      "commits": [
+        "3b24dc2"
+      ]
+    },
+    {
+      "category": "fixed",
+      "plugin": "Core Platform",
+      "headline": "Resolved license activation issues that caused system loops",
+      "details": [
+        "Fixed a problem where license verification would get stuck in a cycle, causing delays and interruptions to your work"
       ],
       "commits": [
         "d9f1c3d",
@@ -36,10 +45,9 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced 98 automation skills for better RevOps workflows",
+      "headline": "Enhanced and organized 98 automation skills for better performance",
       "details": [
-        "Updated and expanded the Skills library with more comprehensive automation templates",
-        "Improved organization makes it easier to find the right automation for your needs"
+        "Updated nearly 100 built-in skills with better organization and naming, making them more reliable and easier to find"
       ],
       "commits": [
         "9d4de94"
@@ -48,10 +56,9 @@
     {
       "category": "improved",
       "plugin": "Salesforce",
-      "headline": "Better Salesforce workflow validation and permissions",
+      "headline": "Enhanced Salesforce workflow validation and permission management",
       "details": [
-        "Improved accuracy when checking Salesforce Flow configurations",
-        "Automatic permission assignment ensures workflows run without access errors"
+        "Improved how OpsPal checks and manages Salesforce workflows and user permissions, reducing setup errors and access issues"
       ],
       "commits": [
         "620ca48"
