@@ -143,7 +143,7 @@ Reference guide: `docs/DEVELOPER_TOOLS_GUIDE.md`.
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.1 | active | 0 | 0 | 28 | 0 | 21 | 0 |
-| `opspal-core` | 2.55.27 | active | 80 | 11 | 126 | 49 | 107 | 605 |
+| `opspal-core` | 2.55.28 | active | 80 | 11 | 126 | 49 | 107 | 605 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.35 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
