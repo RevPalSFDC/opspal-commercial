@@ -25,6 +25,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
+const { METADATA_FOLDERS, ROOT_DETECTION_FOLDERS } = require('./sf-metadata-folders');
 
 class DeploymentSourceValidator {
     constructor(options = {}) {
@@ -280,9 +281,7 @@ class DeploymentSourceValidator {
                 if (stats.isDirectory()) {
                     // Check if it contains metadata directories
                     const contents = await fs.readdir(testPath);
-                    const hasMetadata = contents.some(name =>
-                        ['classes', 'triggers', 'flows', 'objects', 'layouts', 'permissionsets', 'profiles'].includes(name)
-                    );
+                    const hasMetadata = contents.some(name => ROOT_DETECTION_FOLDERS.has(name));
                     const hasObjectScopedMetadata = this.isObjectMetadataDirectory(testPath, contents);
                     if (hasMetadata || hasObjectScopedMetadata) {
                         return testPath;
@@ -302,20 +301,7 @@ class DeploymentSourceValidator {
      */
     async scanMetadataTypes(metadataRoot) {
         const types = [];
-        const metadataFolders = {
-            'classes': 'ApexClass',
-            'triggers': 'ApexTrigger',
-            'flows': 'Flow',
-            'objects': 'CustomObject',
-            'layouts': 'Layout',
-            'permissionsets': 'PermissionSet',
-            'profiles': 'Profile',
-            'flexipages': 'FlexiPage',
-            'lwc': 'LightningComponentBundle',
-            'aura': 'AuraDefinitionBundle',
-            'tabs': 'CustomTab',
-            'customMetadata': 'CustomMetadata'
-        };
+        const metadataFolders = METADATA_FOLDERS;
 
         try {
             const contents = await fs.readdir(metadataRoot);

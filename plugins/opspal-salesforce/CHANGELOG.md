@@ -2,6 +2,11 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## 3.87.20 — 2026-04-17
+
+### Fixed
+- `deployment-source-validator.js` now recognizes the full SFDX metadata folder catalog via new `sf-metadata-folders.js` registry. Previously only 7 folders were recognized in the root-detection path and 12 in the scan path, causing false "No source-formatted metadata found" / "no deployable metadata" errors for deploys containing standardValueSets, reports, dashboards, customLabels, staticresources, recordTypes, globalValueSets, customPermissions, emailTemplates, approvalProcesses, workflows, assignmentRules, quickActions, applications, connectedApps, escalationRules, queues, and related types. (Reflection `28462039-609b-4a5d-93c7-63e89ca86991`.)
+
 ## [3.84.23] - 2026-03-23 (Agent Handoff + Hook Fixes)
 
 ### Fixed — Deployment Agent Deadlock

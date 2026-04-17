@@ -670,3 +670,99 @@ describe('DeploymentSourceValidator', () => {
     });
   });
 });
+
+describe('metadata folder registry', () => {
+  it('registry includes folders previously missing (reflection 28462039)', () => {
+    const { METADATA_FOLDERS, ROOT_DETECTION_FOLDERS } = require('../scripts/lib/sf-metadata-folders');
+    const required = [
+      'standardValueSets', 'reports', 'dashboards', 'customLabels',
+      'staticresources', 'recordTypes', 'globalValueSets',
+      'customPermissions', 'emailTemplates', 'approvalProcesses',
+      'workflows', 'assignmentRules', 'quickActions', 'applications',
+      'connectedApps', 'escalationRules', 'queues'
+    ];
+    for (const folder of required) {
+      assert.ok(
+        Object.prototype.hasOwnProperty.call(METADATA_FOLDERS, folder),
+        `METADATA_FOLDERS missing key: ${folder}`
+      );
+      assert.ok(
+        ROOT_DETECTION_FOLDERS.has(folder),
+        `ROOT_DETECTION_FOLDERS missing: ${folder}`
+      );
+    }
+  });
+});
+
+describe('findMetadataRoot + scanMetadataTypes — expanded folder recognition', () => {
+  let validator;
+  let tempDir;
+
+  beforeEach(() => {
+    validator = new DeploymentSourceValidator({ verbose: false });
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'deploy-expanded-test-'));
+  });
+
+  afterEach(() => {
+    if (fs.existsSync(tempDir)) {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  function createDirStructure(basePath, structure) {
+    for (const [name, content] of Object.entries(structure)) {
+      const itemPath = path.join(basePath, name);
+      if (typeof content === 'object' && content !== null && !Buffer.isBuffer(content)) {
+        fs.mkdirSync(itemPath, { recursive: true });
+        createDirStructure(itemPath, content);
+      } else {
+        fs.mkdirSync(path.dirname(itemPath), { recursive: true });
+        fs.writeFileSync(itemPath, content || '');
+      }
+    }
+  }
+
+  it('recognizes a metadata root containing only standardValueSets/', async () => {
+    createDirStructure(tempDir, {
+      'force-app': {
+        'main': {
+          'default': {
+            'standardValueSets': {
+              'LeadSource.standardValueSet-meta.xml': '<StandardValueSet/>'
+            }
+          }
+        }
+      }
+    });
+
+    const result = await validator.validateSourceDir(tempDir);
+    assert.strictEqual(result.valid, true, `Expected valid but got errors: ${JSON.stringify(result.errors)}`);
+    assert.ok(
+      result.metadata.types.some(t => t.folder === 'standardValueSets'),
+      'Expected standardValueSets in detected types'
+    );
+  });
+
+  it('recognizes a metadata root containing only reports/', async () => {
+    createDirStructure(tempDir, {
+      'force-app': {
+        'main': {
+          'default': {
+            'reports': {
+              'MyFolder': {
+                'MyReport.report-meta.xml': '<Report/>'
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const result = await validator.validateSourceDir(tempDir);
+    assert.strictEqual(result.valid, true, `Expected valid but got errors: ${JSON.stringify(result.errors)}`);
+    assert.ok(
+      result.metadata.types.some(t => t.folder === 'reports'),
+      'Expected reports in detected types'
+    );
+  });
+});
