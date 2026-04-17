@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-12T01:12:21.756Z",
+  "generatedAt": "2026-04-17T03:01:59.255Z",
   "ruleSetVersion": "1.0.0",
   "warnDays": 90,
   "failDays": 120,
@@ -15,174 +15,6 @@
       "rule": "agent-missing-dependencies",
       "file": "plugins/opspal-ai-consult/agents/gemini-domain-shadow-analyzer.md",
       "message": "[opspal-ai-consult] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-companies-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-companies-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-data-operations.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-data-operations.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-deals-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-deals-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-files-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-files-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-people-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-people-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-query-specialist.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-query-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-record-historian.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-record-historian.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-scim-admin.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-scim-admin.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
-    },
-    {
-      "signature": "agent-missing-dependencies|plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "rule": "agent-missing-dependencies",
-      "file": "plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "message": "[opspal-attio] agent missing frontmatter field: dependencies"
     },
     {
       "signature": "agent-missing-dependencies|plugins/opspal-core/agents/account-expansion-orchestrator.md",
@@ -1827,180 +1659,6 @@
       "rule": "agent-missing-failure-modes",
       "file": "plugins/opspal-ai-consult/agents/gemini-domain-shadow-analyzer.md",
       "message": "[opspal-ai-consult] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-companies-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-companies-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-data-operations.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-data-operations.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-deals-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-deals-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-files-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-files-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-orchestrator.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-orchestrator.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-people-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-people-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-query-specialist.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-query-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-record-historian.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-record-historian.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-scim-admin.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-scim-admin.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
-    },
-    {
-      "signature": "agent-missing-failure-modes|plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "rule": "agent-missing-failure-modes",
-      "file": "plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "message": "[opspal-attio] agent missing frontmatter field: failure_modes"
     },
     {
       "signature": "agent-missing-failure-modes|plugins/opspal-core/agents/account-expansion-orchestrator.md",
@@ -3663,174 +3321,6 @@
       "rule": "agent-missing-intent",
       "file": "plugins/opspal-ai-consult/agents/gemini-domain-shadow-analyzer.md",
       "message": "[opspal-ai-consult] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-admin-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-assessment-analyzer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-attribute-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-automation-auditor.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-comments-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-companies-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-companies-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-custom-objects-architect.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-data-hygiene-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-data-migration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-data-operations.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-data-operations.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-deals-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-deals-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-files-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-files-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-governance-enforcer.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-hubspot-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-integration-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-lists-pipeline-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-meeting-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-notes-tasks-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-observability-orchestrator.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-people-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-people-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-pipeline-analyst.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-query-specialist.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-query-specialist.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-record-historian.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-record-historian.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-revenue-intelligence.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-salesforce-bridge.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-scim-admin.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-scim-admin.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-users-workspaces-manager.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
-    },
-    {
-      "signature": "agent-missing-intent|plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "rule": "agent-missing-intent",
-      "file": "plugins/opspal-attio/agents/attio-workspace-discovery.md",
-      "message": "[opspal-attio] agent missing frontmatter field: intent"
     },
     {
       "signature": "agent-missing-intent|plugins/opspal-core/agents/account-expansion-orchestrator.md",
@@ -10647,6 +10137,30 @@
       "rule": "command-missing-intent",
       "file": "plugins/opspal-salesforce/commands/win-loss.md",
       "message": "[opspal-salesforce] command missing frontmatter field: intent"
+    },
+    {
+      "signature": "plugin-missing-last-reviewed|plugins/opspal-attio/.claude-plugin/plugin.json",
+      "rule": "plugin-missing-last-reviewed",
+      "file": "plugins/opspal-attio/.claude-plugin/plugin.json",
+      "message": "[opspal-attio] missing required lifecycle field: last_reviewed_at"
+    },
+    {
+      "signature": "plugin-missing-owner|plugins/opspal-attio/.claude-plugin/plugin.json",
+      "rule": "plugin-missing-owner",
+      "file": "plugins/opspal-attio/.claude-plugin/plugin.json",
+      "message": "[opspal-attio] missing required lifecycle field: owner"
+    },
+    {
+      "signature": "plugin-missing-stability|plugins/opspal-attio/.claude-plugin/plugin.json",
+      "rule": "plugin-missing-stability",
+      "file": "plugins/opspal-attio/.claude-plugin/plugin.json",
+      "message": "[opspal-attio] missing required lifecycle field: stability"
+    },
+    {
+      "signature": "plugin-missing-status|plugins/opspal-attio/.claude-plugin/plugin.json",
+      "rule": "plugin-missing-status",
+      "file": "plugins/opspal-attio/.claude-plugin/plugin.json",
+      "message": "[opspal-attio] missing required lifecycle field: status"
     }
   ]
 }

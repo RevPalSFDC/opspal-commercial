@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-14T12:05:44.352Z",
+  "generatedAt": "2026-04-17T03:02:25.587Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -307,14 +307,6 @@
       "snippet": "const hsModule = require('../../../opspal-hubspot/scripts/lib/field-dictionary-generator');"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/hook-health-checker.js|2255|// Use the explicitly provided plugin root (e.g., plugins/opspal-hubspot)",
-      "rule": "cross-plugin-path-reference",
-      "file": "plugins/opspal-core/scripts/lib/hook-health-checker.js",
-      "line": 2255,
-      "message": "Cross-plugin path reference to opspal-hubspot found in opspal-core.",
-      "snippet": "// Use the explicitly provided plugin root (e.g., plugins/opspal-hubspot)"
-    },
-    {
       "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/hook-settings-normalizer.js|191|* See: plugins/opspal-salesforce/hooks/pre-bash-dispatcher.sh",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/scripts/lib/hook-settings-normalizer.js",
@@ -411,18 +403,18 @@
       "snippet": "console.log(' node plugin-runbook-generator.js --plugin .claude-plugins/opspal-salesforce');"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|162|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|181|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/scripts/lib/runbook-observer.js",
-      "line": 162,
+      "line": 181,
       "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
       "snippet": "// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|162|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
+      "signature": "cross-plugin-path-reference|plugins/opspal-core/scripts/lib/runbook-observer.js|181|// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-core/scripts/lib/runbook-observer.js",
-      "line": 162,
+      "line": 181,
       "message": "Cross-plugin path reference to opspal-salesforce found in opspal-core.",
       "snippet": "// This script is at: .claude-plugins/opspal-salesforce/scripts/lib/runbook-observer.js"
     },
@@ -675,18 +667,18 @@
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-mandatory.sh|20|\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\" \\",
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-mandatory.sh|21|\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\" \\",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
-      "line": 20,
+      "line": 21,
       "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
       "snippet": "\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\" \\"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-mandatory.sh|22|\"$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh\"; do",
+      "signature": "cross-plugin-path-reference|plugins/opspal-hubspot/hooks/pre-task-mandatory.sh|23|\"$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh\"; do",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-hubspot/hooks/pre-task-mandatory.sh",
-      "line": 22,
+      "line": 23,
       "message": "Cross-plugin path reference to opspal-core found in opspal-hubspot.",
       "snippet": "\"$HOME/.claude/plugins/marketplaces/opspal-commercial/plugins/opspal-core/hooks/lib/error-handler.sh\"; do"
     },
@@ -1139,26 +1131,26 @@
       "snippet": "OPSPAL_CORE=\"${PLUGIN_ROOT}/../opspal-core\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|28|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|42|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 28,
+      "line": 42,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|385|\"$PLUGIN_ROOT/../../opspal-core\" \\",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|408|\"$PLUGIN_ROOT/../../opspal-core\" \\",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 385,
+      "line": 408,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "\"$PLUGIN_ROOT/../../opspal-core\" \\"
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|386|\"$PLUGIN_ROOT/../opspal-core\" \\",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/post-operation-observe.sh|409|\"$PLUGIN_ROOT/../opspal-core\" \\",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
-      "line": 386,
+      "line": 409,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "\"$PLUGIN_ROOT/../opspal-core\" \\"
     },
@@ -1251,10 +1243,10 @@
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
     {
-      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-mandatory.sh|11|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
+      "signature": "cross-plugin-path-reference|plugins/opspal-salesforce/hooks/pre-task-mandatory.sh|12|ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\"",
       "rule": "cross-plugin-path-reference",
       "file": "plugins/opspal-salesforce/hooks/pre-task-mandatory.sh",
-      "line": 11,
+      "line": 12,
       "message": "Cross-plugin path reference to opspal-core found in opspal-salesforce.",
       "snippet": "ERROR_HANDLER=\"${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh\""
     },
