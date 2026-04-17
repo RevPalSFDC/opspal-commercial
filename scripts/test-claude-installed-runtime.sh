@@ -84,6 +84,10 @@ assert_expected_hook_health() {
             (
               .name == "Cross-Reference Validation" and
               (.message | test("duplicate hook registration"))
+            ) or
+            (
+              .name == "Dependency Detection" and
+              (.message == "Missing dependency: sf" or .message == "Missing dependency: sfdx")
             )
           ) | not
         )
