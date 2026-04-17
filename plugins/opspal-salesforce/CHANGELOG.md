@@ -2,6 +2,19 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## 3.87.22 — 2026-04-17
+
+### Fixed
+- `hooks/pre-task-mandatory.sh`: Applied advisory-only migration matching the
+  HubSpot version (55c9300). The file contained the same hard-block pattern
+  (`HIGH_RISK_BLOCKED` log event, `exit 1` hard-block paths, "BLOCKED:" banner)
+  and was unregistered in hooks.json but posed a latent re-registration risk.
+  Applied the full advisory-only transform: `permissionDecision: "allow"`,
+  `[ADVISORY]` banner prefix, `HIGH_RISK_ADVISORY` log event, `SUGGESTED`
+  header text, and name-guard (`sfdc`/`salesforce` in subagent_type) so the
+  hook only governs Salesforce agents. Routing is now suggestion-only per
+  2026-04-01 P1-9 policy. (Spec review follow-up on 55c9300.)
+
 ## 3.87.21 — 2026-04-17
 
 ### Fixed
