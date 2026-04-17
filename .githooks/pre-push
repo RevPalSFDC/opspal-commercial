@@ -103,6 +103,18 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     continue
   fi
 
+  # Tag pushes point at already-merged commits. They do not represent new
+  # code entering main — running the version-bump / boundary / runtime-
+  # fidelity guardrails on them produces false positives (the tagged
+  # commit's state is valid by construction, having passed these checks
+  # at merge time). Skip range-check guards for tag refs; secret scanning
+  # above still applies.
+  case "${local_ref:-}" in
+    refs/tags/*)
+      continue
+      ;;
+  esac
+
   base_ref="$(resolve_base_ref "$remote_sha")"
 
   node scripts/lib/verify-plugin-version-bumps.js --base "$base_ref" --head "$local_sha" >/dev/null
