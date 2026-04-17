@@ -41,7 +41,7 @@ Override: `[DIRECT]` to skip routing.
 
 - ✅ **opspal-ai-consult** (v1.4.15) - 2 agents, 6 scripts, 3 commands, 1 hooks
 - ✅ **opspal-attio** (v2.0.1) - 29 agents, 26 scripts, 28 commands, 20 hooks
-- ✅ **opspal-core** (v2.55.26) - 80 agents, 360 scripts, 126 commands, 94 hooks
+- ✅ **opspal-core** (v2.55.27) - 80 agents, 360 scripts, 126 commands, 94 hooks
 - ✅ **opspal-data-hygiene** (v1.2.5) - 2 agents, 7 scripts, 1 commands, 1 hooks
 - ✅ **opspal-gtm-planning** (v2.3.12) - 13 agents, 2 scripts, 16 commands, 4 hooks
 - ✅ **opspal-hubspot** (v3.9.35) - 59 agents, 103 scripts, 33 commands, 15 hooks
