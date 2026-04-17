@@ -8,11 +8,11 @@
 | Metric | Count |
 |--------|-------|
 | Plugins | 9 |
-| Agents | 327 |
+| Agents | 298 |
 | Commands | 310 |
-| Skills | 177 |
+| Skills | 164 |
 | Hooks | 226 |
-| Scripts | 1881 |
+| Scripts | 1856 |
 
 ## Regeneration
 
@@ -30,14 +30,14 @@
 | Plugin | Version | Status | Agents | Mandatory Agents | Commands | Skills | Hooks | Scripts |
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
-| `opspal-attio` | 2.0.1 | active | 29 | 16 | 28 | 13 | 21 | 26 |
-| `opspal-core` | 2.55.21 | active | 80 | 11 | 126 | 49 | 107 | 605 |
+| `opspal-attio` | 2.0.1 | active | 0 | 0 | 28 | 0 | 21 | 0 |
+| `opspal-core` | 2.55.25 | active | 80 | 11 | 126 | 49 | 107 | 605 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
-| `opspal-hubspot` | 3.9.34 | active | 59 | 6 | 33 | 23 | 15 | 109 |
+| `opspal-hubspot` | 3.9.35 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.19 | active | 94 | 21 | 59 | 55 | 47 | 1093 |
+| `opspal-salesforce` | 3.87.22 | active | 94 | 21 | 59 | 55 | 47 | 1094 |
 
 ## Registry
 
@@ -86,37 +86,7 @@
 
 #### Agents
 
-| Agent | Description | File |
-|-------|-------------|------|
-| `attio-admin-specialist` | Use for Attio workspace administration: members, views, object configuration. | `attio-admin-specialist.md` |
-| `attio-assessment-analyzer` | Use for read-only Attio workspace assessments and health reports. | `attio-assessment-analyzer.md` |
-| `attio-attribute-architect` | MUST BE USED for Attio attribute and schema management. | `attio-attribute-architect.md` |
-| `attio-automation-auditor` | Use for auditing Attio webhook chains, integration health, and automation coverage. | `attio-automation-auditor.md` |
-| `attio-comments-specialist` | Use for Attio comments and collaboration thread management. | `attio-comments-specialist.md` |
-| `attio-companies-manager` | MUST BE USED for Attio company record operations. | `attio-companies-manager.md` |
-| `attio-custom-objects-architect` | MUST BE USED for Attio custom object creation, schema design, and object lifecycle management. | `attio-custom-objects-architect.md` |
-| `attio-data-hygiene-specialist` | Use for Attio data quality: deduplication detection, completeness scoring, stale record cleanup. | `attio-data-hygiene-specialist.md` |
-| `attio-data-migration-specialist` | MUST BE USED for large-scale Attio data migration from CRMs or CSV sources. | `attio-data-migration-specialist.md` |
-| `attio-data-operations` | MUST BE USED for Attio bulk data import, export, and sequential batch operations. | `attio-data-operations.md` |
-| `attio-deals-manager` | MUST BE USED for Attio deal record operations and pipeline entries. | `attio-deals-manager.md` |
-| `attio-files-specialist` | Use for Attio file upload, download, and folder management. | `attio-files-specialist.md` |
-| `attio-governance-enforcer` | Use for Attio governance, delete validation, and change control. | `attio-governance-enforcer.md` |
-| `attio-hubspot-bridge` | MUST BE USED for HubSpot-Attio data synchronization and record matching. | `attio-hubspot-bridge.md` |
-| `attio-integration-specialist` | MUST BE USED for Attio webhooks and integration configuration. | `attio-integration-specialist.md` |
-| `attio-lists-pipeline-manager` | MUST BE USED for Attio list (pipeline) management. | `attio-lists-pipeline-manager.md` |
-| `attio-meeting-intelligence` | MUST BE USED for Attio meetings, call recordings, and transcripts. | `attio-meeting-intelligence.md` |
-| `attio-notes-tasks-manager` | MUST BE USED for Attio notes and tasks. | `attio-notes-tasks-manager.md` |
-| `attio-observability-orchestrator` | Use for continuous Attio workspace intelligence: daily data quality monitoring, pipeline drift detection. | `attio-observability-orchestrator.md` |
-| `attio-orchestrator` | MUST BE USED for complex multi-step Attio operations. | `attio-orchestrator.md` |
-| `attio-people-manager` | MUST BE USED for Attio people record operations. | `attio-people-manager.md` |
-| `attio-pipeline-analyst` | Use for Attio pipeline health analysis, stage conversion rates, and deal velocity. | `attio-pipeline-analyst.md` |
-| `attio-query-specialist` | MUST BE USED for complex Attio filtering, cross-object path queries, and search operations. | `attio-query-specialist.md` |
-| `attio-record-historian` | Use for Attio historic attribute value analysis — value changes over time. | `attio-record-historian.md` |
-| `attio-revenue-intelligence` | Use for Attio revenue analytics, ARR modeling, and GTM funnel analysis. | `attio-revenue-intelligence.md` |
-| `attio-salesforce-bridge` | MUST BE USED for Salesforce-Attio data synchronization. | `attio-salesforce-bridge.md` |
-| `attio-scim-admin` | Use for Attio enterprise SCIM 2.0 user and group provisioning. | `attio-scim-admin.md` |
-| `attio-users-workspaces-manager` | Use for Attio custom object management (users, workspaces) and SCIM configuration. | `attio-users-workspaces-manager.md` |
-| `attio-workspace-discovery` | MUST BE USED for read-only Attio workspace exploration. | `attio-workspace-discovery.md` |
+_None_
 
 #### Commands
 
@@ -153,21 +123,7 @@
 
 #### Skills
 
-| Skill | Description | File |
-|-------|-------------|------|
-| `attio-api-reference` | Attio REST API reference: authentication, rate limits, pagination, error codes, and common query patterns. | `attio-api-reference/SKILL.md` |
-| `attio-attribute-types` | Attio attribute types: all 17 types with creation patterns, value shapes, validation rules, and configuration options. | `attio-attribute-types/SKILL.md` |
-| `attio-custom-objects-guide` | Attio custom object design: creation patterns, relationship modeling, migration from flat CRM schemas, and lifecycle ... | `attio-custom-objects-guide/SKILL.md` |
-| `attio-data-model` | Attio data model: objects, records, attributes (17 types), lists (pipelines), entries, actors, and how they relate. | `attio-data-model/SKILL.md` |
-| `attio-governance-framework` | Attio governance methodology: delete safety, change control, compliance auditing, and workspace governance scoring. | `attio-governance-framework/SKILL.md` |
-| `attio-historic-values` | Attio historic attribute values: value timeline, actor tracking, change detection, and audit trail patterns. | `attio-historic-values/SKILL.md` |
-| `attio-integration-patterns` | Attio integration patterns: webhooks, HMAC verification, cross-platform field mapping, and sync strategies. | `attio-integration-patterns/SKILL.md` |
-| `attio-meeting-intelligence` | Attio meeting operations: meeting lifecycle, call recordings, transcripts, and meeting-to-CRM enrichment patterns. | `attio-meeting-intelligence/SKILL.md` |
-| `attio-observability-layer` | Attio observability: workspace health snapshots, pipeline drift detection, continuous monitoring, and alerting patterns. | `attio-observability-layer/SKILL.md` |
-| `attio-pipeline-operations` | Attio pipeline operations: list lifecycle, entry management, stage configuration, funnel analysis, and velocity track... | `attio-pipeline-operations/SKILL.md` |
-| `attio-query-patterns` | Attio query and filter patterns: shorthand vs verbose syntax, operators, cross-object path filtering, pagination, and... | `attio-query-patterns/SKILL.md` |
-| `attio-revenue-analytics` | Attio revenue analytics: ARR waterfall, pipeline coverage, weighted pipeline, cohort analysis, and revenue forecastin... | `attio-revenue-analytics/SKILL.md` |
-| `attio-scim-enterprise` | Attio SCIM 2.0 enterprise provisioning: user/group management, IdP integration patterns, and compliance auditing. | `attio-scim-enterprise/SKILL.md` |
+_None_
 
 #### Hooks
 
@@ -197,7 +153,7 @@
 
 ### opspal-core
 
-- Version: `2.55.21`
+- Version: `2.55.25`
 - Status: `active`
 - Path: `plugins/opspal-core`
 - Manifest: `plugins/opspal-core/.claude-plugin/plugin.json`
@@ -655,7 +611,7 @@
 
 ### opspal-hubspot
 
-- Version: `3.9.34`
+- Version: `3.9.35`
 - Status: `active`
 - Path: `plugins/opspal-hubspot`
 - Manifest: `plugins/opspal-hubspot/.claude-plugin/plugin.json`
@@ -804,7 +760,7 @@
 - `pre-property-write-validation` (`pre-property-write-validation.sh`): pre-property-write-validation.sh
 - `pre-task-agent-validator` (`pre-task-agent-validator.sh`): Pre-Agent Validator Hook
 - `pre-task-context-loader` (`pre-task-context-loader.sh`): Pre-Task Context Loader Hook
-- `pre-task-mandatory` (`pre-task-mandatory.sh`): Pre-Task Mandatory Hook - Enforces agent usage for critical HubSpot operations
+- `pre-task-mandatory` (`pre-task-mandatory.sh`): Pre-Task Advisory Hook - Suggests agent usage for critical HubSpot operations
 - `pre-workflow-list-validation` (`pre-workflow-list-validation.sh`): Pre-Workflow List Validation Hook
 - `pre-write-path-validator` (`pre-write-path-validator.sh`): Pre-Write Path Validator Hook
 - `universal-agent-governance` (`universal-agent-governance.sh`): Universal Agent Governance Hook — HubSpot
@@ -1052,7 +1008,7 @@
 
 ### opspal-salesforce
 
-- Version: `3.87.19`
+- Version: `3.87.22`
 - Status: `active`
 - Path: `plugins/opspal-salesforce`
 - Manifest: `plugins/opspal-salesforce/.claude-plugin/plugin.json`
@@ -1293,7 +1249,7 @@
 - `post-deploy-manager-stop` (`post-deploy-manager-stop.sh`): post-deploy-manager-stop.sh
 - `post-discovery-field-dictionary` (`post-discovery-field-dictionary.sh`): Post-Discovery Field Dictionary Hook
 - `post-field-deployment` (`post-field-deployment.sh`): post-field-deployment.sh - Verify field accessibility after deployment
-- `post-operation-observe` (`post-operation-observe.sh`): STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
+- `post-operation-observe` (`post-operation-observe.sh`): STATUS: ACTIVE — registered in .claude-plugin/hooks.json PostToolUse
 - `post-org-auth` (`post-org-auth.sh`): Post-Org Authentication Hook
 - `post-sf-command` (`post-sf-command.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
 - `post-sf-query-validation` (`post-sf-query-validation.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
@@ -1319,7 +1275,7 @@
 - `pre-soql-validation` (`pre-soql-validation.sh`): Pre-SOQL Validation Hook
 - `pre-task-context-loader` (`pre-task-context-loader.sh`): Pre-Task Context Loader Hook
 - `pre-task-hook` (`pre-task-hook.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
-- `pre-task-mandatory` (`pre-task-mandatory.sh`): Pre-Task Mandatory Hook - Enforces agent usage for critical operations
+- `pre-task-mandatory` (`pre-task-mandatory.sh`): Pre-Task Advisory Hook - Suggests agent usage for critical Salesforce operations
 - `pre-territory-migration-validator` (`pre-territory-migration-validator.sh`): pre-territory-migration-validator.sh
 - `pre-territory-write-validator` (`pre-territory-write-validator.sh`): Pre-Territory Write Validator Hook
 - `pre-tool-use` (`pre-tool-use.sh`): STATUS: SUPERSEDED — called as child by a registered dispatcher hook
