@@ -3,8 +3,8 @@ name: notebook-sync
 description: Sync a file or assessment report to NotebookLM knowledge base
 argument-hint: "eta-corp ./reports/cpq-assessment.md"
 allowed-tools:
-  - mcp__notebooklm__source_add_text
-  - mcp__notebooklm__source_add_url
+  - mcp__notebooklm__notebook_add_text
+  - mcp__notebooklm__notebook_add_url
   - mcp__notebooklm__source_list
   - mcp__notebooklm__source_delete
   - Read
@@ -177,7 +177,7 @@ Params:
 
 **Via MCP tool:**
 ```
-Tool: source_add_text
+Tool: notebook_add_text
 Params:
   - notebook_id: {notebook_id}
   - title: {title}

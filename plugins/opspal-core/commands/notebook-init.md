@@ -6,7 +6,7 @@ allowed-tools:
   - mcp__notebooklm__notebook_create
   - mcp__notebooklm__notebook_list
   - mcp__notebooklm__notebook_get
-  - mcp__notebooklm__source_add_text
+  - mcp__notebooklm__notebook_add_text
   - Read
   - Write
   - Bash
@@ -154,7 +154,7 @@ find "${INSTANCE_PATH}" -name "*SUMMARY*.md" -mtime -30 | head -5
 
 **Add each source via MCP:**
 ```
-Tool: source_add_text
+Tool: notebook_add_text
 Params:
   - notebook_id: {notebook_id}
   - title: "Operational Runbook"

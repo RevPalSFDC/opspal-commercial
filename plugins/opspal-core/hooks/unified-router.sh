@@ -1837,9 +1837,9 @@ Required specialist: Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original re
 Prompt submission continues and execution-time specialist enforcement is bypassed for this request only. Treat this as an audited exception."
 
 elif [[ "$IS_MANDATORY" == "true" ]]; then
-    CONTEXT_MESSAGE="MANDATORY SPECIALIST ROUTE: This request requires Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
-Do not continue direct operational execution in the parent path.
-CRITICAL: Use the EXACT fully-qualified agent name shown above. Short names will fail.
+    CONTEXT_MESSAGE="SUGGESTED SPECIALIST ROUTE: This request should use Agent(subagent_type='$SUGGESTED_AGENT', prompt=<original request>).
+STRONGLY RECOMMENDED: route through the specialist for safety and correctness.
+IMPORTANT: Use the EXACT fully-qualified agent name shown above. Short names will fail.
 ${AUTO_DELEGATION_CONTEXT}
 Prompt submission continues; execution-time validators remain active until the specialist route is cleared."
 

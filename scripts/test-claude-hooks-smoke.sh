@@ -90,8 +90,8 @@ assert_expected_hook_health() {
         .results[] |
         select(.status != "HEALTHY") |
         select(
-          .name != "Configuration Discovery" or
-          .message != "No project-level hooks.json found"
+          (.name != "Configuration Discovery" or .message != "No project-level hooks.json found") and
+          (.name != "Dependency Detection" or (.message != "Missing dependency: sf" and .message != "Missing dependency: sfdx"))
         )
       ] | length
     ) == 0

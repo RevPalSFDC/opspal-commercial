@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T17:45:07.944Z",
+  "generatedAt": "2026-04-17T13:56:44.366Z",
   "ruleSetVersion": "1.0.0",
   "violations": [
     {
@@ -297,6 +297,13 @@
       "message": "Asset appears unused (no textual references found in opspal-salesforce)"
     },
     {
+      "signature": "orphan-asset|plugins/opspal-salesforce/templates/adr/ADR-TEMPLATE.md",
+      "rule": "orphan-asset",
+      "plugin": "opspal-salesforce",
+      "file": "plugins/opspal-salesforce/templates/adr/ADR-TEMPLATE.md",
+      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
+    },
+    {
       "signature": "orphan-asset|plugins/opspal-salesforce/templates/agent-capability-boundaries-template.md",
       "rule": "orphan-asset",
       "plugin": "opspal-salesforce",
@@ -350,34 +357,6 @@
       "rule": "orphan-asset",
       "plugin": "opspal-salesforce",
       "file": "plugins/opspal-salesforce/templates/permission-sets/specialized/api-integration-template.xml",
-      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
-    },
-    {
-      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/04-territory-performance.json",
-      "rule": "orphan-asset",
-      "plugin": "opspal-salesforce",
-      "file": "plugins/opspal-salesforce/templates/reports/dashboards/04-territory-performance.json",
-      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
-    },
-    {
-      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/05-executive-summary.json",
-      "rule": "orphan-asset",
-      "plugin": "opspal-salesforce",
-      "file": "plugins/opspal-salesforce/templates/reports/dashboards/05-executive-summary.json",
-      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
-    },
-    {
-      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/dashboards/06-board-report.json",
-      "rule": "orphan-asset",
-      "plugin": "opspal-salesforce",
-      "file": "plugins/opspal-salesforce/templates/reports/dashboards/06-board-report.json",
-      "message": "Asset appears unused (no textual references found in opspal-salesforce)"
-    },
-    {
-      "signature": "orphan-asset|plugins/opspal-salesforce/templates/reports/test-patch-filters.json",
-      "rule": "orphan-asset",
-      "plugin": "opspal-salesforce",
-      "file": "plugins/opspal-salesforce/templates/reports/test-patch-filters.json",
       "message": "Asset appears unused (no textual references found in opspal-salesforce)"
     },
     {

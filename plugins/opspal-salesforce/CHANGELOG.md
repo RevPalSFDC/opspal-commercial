@@ -2,6 +2,35 @@
 
 All notable changes to the Salesforce Plugin will be documented in this file.
 
+## 3.87.23 — 2026-04-17
+
+### Changed
+- Consolidated `post-operation-observe.sh` under `post-bash-dispatcher.sh` to respect the `PostToolUse :: Bash` fanout budget (3 registrations max). Observe now invoked as a child hook via dispatcher when command is a deploy or data-query; previously registered as a peer PostToolUse:Bash matcher. No behavior change — observe still fires for the same commands.
+
+
+## 3.87.22 — 2026-04-17
+
+### Fixed
+- `hooks/pre-task-mandatory.sh`: Applied advisory-only migration matching the
+  HubSpot version (55c9300). The file contained the same hard-block pattern
+  (`HIGH_RISK_BLOCKED` log event, `exit 1` hard-block paths, "BLOCKED:" banner)
+  and was unregistered in hooks.json but posed a latent re-registration risk.
+  Applied the full advisory-only transform: `permissionDecision: "allow"`,
+  `[ADVISORY]` banner prefix, `HIGH_RISK_ADVISORY` log event, `SUGGESTED`
+  header text, and name-guard (`sfdc`/`salesforce` in subagent_type) so the
+  hook only governs Salesforce agents. Routing is now suggestion-only per
+  2026-04-01 P1-9 policy. (Spec review follow-up on 55c9300.)
+
+## 3.87.21 — 2026-04-17
+
+### Fixed
+- `post-operation-observe` hook is now registered (PostToolUse on Bash) instead of marked `STATUS: STAGED`. Observation files now write to workspace-rooted org-centric path `<workspace>/orgs/<ORG_SLUG>/platforms/salesforce/<ORG_ALIAS>/observations/` (previously wrote to plugin install dir, invisible to the runbook synthesizer). Resolves reflections `28462039-609b-4a5d-93c7-63e89ca86991` and `e417944f-c14b-4f00-bd9c-1c497b80998a`.
+
+## 3.87.20 — 2026-04-17
+
+### Fixed
+- `deployment-source-validator.js` now recognizes the full SFDX metadata folder catalog via new `sf-metadata-folders.js` registry. Previously only 7 folders were recognized in the root-detection path and 12 in the scan path, causing false "No source-formatted metadata found" / "no deployable metadata" errors for deploys containing standardValueSets, reports, dashboards, customLabels, staticresources, recordTypes, globalValueSets, customPermissions, emailTemplates, approvalProcesses, workflows, assignmentRules, quickActions, applications, connectedApps, escalationRules, queues, and related types. (Reflection `28462039-609b-4a5d-93c7-63e89ca86991`.)
+
 ## [3.84.23] - 2026-03-23 (Agent Handoff + Hook Fixes)
 
 ### Fixed — Deployment Agent Deadlock

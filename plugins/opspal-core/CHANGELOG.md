@@ -2,6 +2,45 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.29 — 2026-04-17
+
+### Fixed
+- `test/hooks/unit/salesforce-pre-bash-dispatcher.test.js`: 4 subtests ("Allows deploy report lifecycle", "Blocks direct Salesforce deploy commands", "Advises on sfdx project deploy start", "Validates sfdx data query through SOQL validator") now stub `sf`/`sfdx` binaries via `createTempCliBin` + PATH override. Previously they inherited the CI runner's bare PATH (no `sf` installed), causing the dispatcher to short-circuit to SF_CLI_NOT_FOUND deny before the deploy/SOQL logic under test could fire. Brings the test file to parity with the 3 tests that were already stubbing correctly (tests 5, 7, 8).
+
+
+## 2.55.26 — 2026-04-17
+
+### Changed
+- Regenerated `routing-index.json` from current agent tree (removes 29 stale `opspal-attio` ghost entries, resyncs NotebookLM tool metadata from agent frontmatter).
+- Removed 5 orphan `opspal-attio` patterns from `routing-patterns.json` (`platformPatterns.attio` block + `/attio-auth`, `/attio-workspace`, `/attio-dedup`, `/attio-audit`, `/attio-preflight` command mappings). opspal-attio agents/ dir is under reconstruction; entries will be re-added when that work lands.
+
+
+## 2.55.25 — 2026-04-17
+
+### Fixed
+- `scripts/lib/cohort-fix-planner.js`: Fixed per-cohort `recommended_fix` broadcast bug in `/processreflections` Phase 1 plan generator. Previously, a single reflection whose `issues_identified` spanned multiple taxonomies (e.g., `tool-contract` + `idempotency/state` + `schema/parse`) caused its fix text to bleed into every cohort that included that reflection, producing identical `recommended_fix` paragraphs across unrelated cohorts. New `_extractPerCohortRecommendedFix()` method filters each reflection's issues to those whose `taxonomy` matches the cohort's own taxonomy before extracting `recommended_fix`/`agnostic_fix` text; falls back to the static template only when no reflection-level fix text is found. Confirmed fix via 7 regression tests in `test/process-reflections-phase1.test.js`. (2026-04-17 plan: 6 of 8 cohorts shared identical CampaignMemberStatus fix; regenerated plan: all 10 cohorts have distinct, taxonomy-relevant fix text.)
+
+### Added
+- `test/process-reflections-phase1.test.js`: Regression test suite (7 tests) for `CohortFixPlanner.generateImprovementPlanItem()` per-cohort fix isolation. Guards: distinct fix text across cohorts with different reflections; fix vocabulary must reference cohort's own root-cause domain; cross-taxonomy reflection issues must not bleed into unrelated cohorts.
+
+## 2.55.24 — 2026-04-17
+
+### Fixed
+- `hooks/unified-router.sh`: Renamed "MANDATORY SPECIALIST ROUTE" context message to "SUGGESTED SPECIALIST ROUTE" to accurately reflect advisory-only enforcement (no hard block). Per routing advisory policy (2026-04-01 P1-9).
+
+### Added
+- `test/hooks/integration/routing-advisory-contract.test.js`: Contract test asserting all routing hooks are advisory-only — no hook may exit 2, emit `"decision": "deny"/"block"`, `"permissionDecision": "deny"`, or `"continue": false`. Regression lock for reflection 9e6373b8 (2026-04-13).
+
+## 2.55.23 — 2026-04-17
+
+### Fixed
+- `runbook-observer.js` now resolves output path from workspace (`CLAUDE_PROJECT_ROOT` → `git rev-parse --show-toplevel` → `cwd`) instead of the plugin install directory. Observations land at the workspace's `orgs/<slug>/platforms/salesforce/<alias>/observations/` path, matching what the runbook synthesizer reads. (Paired with opspal-salesforce 3.87.21 hook registration.)
+
+## 2.55.22 — 2026-04-17
+
+### Fixed
+- Renamed NotebookLM MCP tool references from legacy `source_add_text/url/drive` to current `notebook_add_text/url/drive` in notebooklm-knowledge-manager agent, 4 commands (notebook-init, notebook-sync, generate-runbook, setup-notebooklm), and routing-index. Agent calls to NotebookLM had been failing with "tool not found" since the upstream MCP rename. (Reflection `e417944f-c14b-4f00-bd9c-1c497b80998a`.)
+
 ## [2.55.12] - 2026-04-13 (License Activation Loss — Permanent Fix)
 
 ### Fixed — License Activation Restore Loop (root cause)

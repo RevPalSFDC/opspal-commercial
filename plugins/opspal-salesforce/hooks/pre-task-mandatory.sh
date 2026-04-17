@@ -1,17 +1,18 @@
 #!/bin/bash
 
-# Pre-Task Mandatory Hook - Enforces agent usage for critical operations
-# This version REQUIRES agents for high-risk operations (no bypass)
+# Pre-Task Advisory Hook - Suggests agent usage for critical Salesforce operations
+# This version emits ADVISORY guidance only (no hard deny) per 2026-04-01 P1-9 routing policy.
+# Routing enforcement is suggestion-only; downstream specialist agents enforce safety.
 #
-# Version: 1.1.0 (Error Handler Integration)
-# Date: 2025-11-24
+# Version: 1.2.0 (Advisory-Only Migration — spec review follow-up on 55c9300)
+# Date: 2026-04-17
 
 # Source standardized error handler for centralized logging
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ERROR_HANDLER="${SCRIPT_DIR}/../../opspal-core/hooks/lib/error-handler.sh"
 if [[ -f "$ERROR_HANDLER" ]]; then
     source "$ERROR_HANDLER"
-    HOOK_NAME="pre-task-mandatory"
+    HOOK_NAME="pre-task-mandatory-salesforce"
     # Keep strict mode for security-critical hook
 fi
 
@@ -28,22 +29,70 @@ NC="${NC:-\033[0m}" # No Color
 
 # Get the user's input/task from stdin (Claude Code hooks receive JSON via stdin)
 HOOK_INPUT="$(cat)"
-TASK_INPUT="$(echo "$HOOK_INPUT" | jq -r '.prompt // .description // .task // ""' 2>/dev/null || echo "")"
+
+# Extract subagent_type to guard Salesforce-only governance
+AGENT_NAME="$(echo "$HOOK_INPUT" | jq -r '.tool_input.subagent_type // .subagent_type // .agent // ""' 2>/dev/null || echo "")"
+AGENT_NAME_LOWER="$(printf '%s' "$AGENT_NAME" | tr '[:upper:]' '[:lower:]')"
+
+TASK_INPUT="$(echo "$HOOK_INPUT" | jq -r '.tool_input.prompt // .prompt // .description // .task // ""' 2>/dev/null || echo "")"
 OPERATION_TYPE="$(echo "$HOOK_INPUT" | jq -r '.tool_name // "unknown"' 2>/dev/null || echo "unknown")"
 
+# Only apply this governance to Salesforce agents. Other plugin agent launches
+# should never be affected by Salesforce-local policy.
+if [[ -z "$AGENT_NAME_LOWER" ]] || [[ "$AGENT_NAME_LOWER" != *"sfdc"* ]] && [[ "$AGENT_NAME_LOWER" != *"salesforce"* ]]; then
+    printf '{}\n'
+    exit 0
+fi
+
 # Log file for tracking
-LOG_FILE="${TMPDIR:-/tmp}/agent-hook-mandatory.log"
-BYPASS_FILE="${TMPDIR:-/tmp}/agent-bypass-reasons.log"
+LOG_FILE="${TMPDIR:-/tmp}/agent-hook-mandatory-salesforce.log"
+BYPASS_FILE="${TMPDIR:-/tmp}/agent-bypass-reasons-salesforce.log"
+
+emit_pretool_noop() {
+    printf '{}\n'
+}
+
+emit_pretool_response() {
+    local permission_decision="$1"
+    local permission_reason="$2"
+    local additional_context="${3:-}"
+
+    if [[ -n "$additional_context" ]]; then
+        if [[ -n "$permission_reason" ]]; then
+            permission_reason="${permission_reason}\n\n${additional_context}"
+        else
+            permission_reason="$additional_context"
+        fi
+    fi
+
+    if ! command -v jq >/dev/null 2>&1; then
+        emit_pretool_noop
+        return 0
+    fi
+
+    jq -nc \
+      --arg decision "$permission_decision" \
+      --arg reason "$permission_reason" \
+      '{
+        suppressOutput: true,
+        hookSpecificOutput: (
+          { hookEventName: "PreToolUse" }
+          + (if $decision != "" then { permissionDecision: $decision } else {} end)
+          + (if $reason != "" then { permissionDecisionReason: $reason } else {} end)
+        )
+      }'
+}
 
 # Function to log events
 log_event() {
     local event="$1"
     local details="$2"
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     echo "[$timestamp] $event: $details" >> "$LOG_FILE"
 }
 
-# Define HIGH-RISK operations that REQUIRE agents
+# Define HIGH-RISK Salesforce operations that REQUIRE agents
 declare -A HIGH_RISK_OPERATIONS=(
     ["production_deploy"]="production.*deploy|deploy.*prod"
     ["delete_operations"]="delete.*(field|object|class|trigger|flow)"
@@ -82,76 +131,76 @@ check_high_risk() {
     return 1
 }
 
-# Function to display mandatory agent requirement
+# Function to display suggested agent requirement (advisory-only per 2026-04-01 P1-9)
 display_mandatory_requirement() {
     local category="$1"
     local required_agent="${REQUIRED_AGENTS[$category]}"
 
-    clear
-    echo ""
-    echo -e "${RED}${BLINK}╔════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${RED}${BOLD}║              🛑 AGENT REQUIRED - STOP! 🛑              ║${NC}"
-    echo -e "${RED}${BLINK}╚════════════════════════════════════════════════════════╝${NC}"
-    echo ""
+    echo "" >&2
+    echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}" >&2
+    echo -e "${YELLOW}${BOLD}║      [ADVISORY] SPECIALIST AGENT SUGGESTED            ║${NC}" >&2
+    echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}" >&2
+    echo "" >&2
 
-    echo -e "${YELLOW}${BOLD}HIGH-RISK OPERATION DETECTED${NC}"
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${YELLOW}${BOLD}HIGH-RISK SALESFORCE OPERATION DETECTED (advisory routing)${NC}" >&2
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
 
     # Show risk category
     case "$category" in
         "production_deploy")
-            echo -e "${RED}⚠️  PRODUCTION DEPLOYMENT${NC}"
-            echo "   Risk: Can impact all users immediately"
-            echo "   Potential Issues: Downtime, data loss, broken functionality"
+            echo -e "${YELLOW}⚠️  PRODUCTION DEPLOYMENT${NC}" >&2
+            echo "   Risk: Can impact all users immediately" >&2
+            echo "   Potential Issues: Downtime, data loss, broken functionality" >&2
             ;;
         "delete_operations")
-            echo -e "${RED}⚠️  DESTRUCTIVE OPERATION${NC}"
-            echo "   Risk: Permanent data/metadata loss"
-            echo "   Potential Issues: Broken dependencies, data corruption"
+            echo -e "${YELLOW}⚠️  DESTRUCTIVE OPERATION${NC}" >&2
+            echo "   Risk: Permanent data/metadata loss" >&2
+            echo "   Potential Issues: Broken dependencies, data corruption" >&2
             ;;
         "bulk_operations")
-            echo -e "${RED}⚠️  BULK DATA OPERATION${NC}"
-            echo "   Risk: Governor limit violations"
-            echo "   Potential Issues: Operation failure, partial updates"
+            echo -e "${YELLOW}⚠️  BULK DATA OPERATION${NC}" >&2
+            echo "   Risk: Governor limit violations" >&2
+            echo "   Potential Issues: Operation failure, partial updates" >&2
             ;;
         "permission_changes")
-            echo -e "${RED}⚠️  SECURITY MODIFICATION${NC}"
-            echo "   Risk: Access control breach"
-            echo "   Potential Issues: Unauthorized access, compliance violations"
+            echo -e "${YELLOW}⚠️  SECURITY MODIFICATION${NC}" >&2
+            echo "   Risk: Access control breach" >&2
+            echo "   Potential Issues: Unauthorized access, compliance violations" >&2
             ;;
         *)
-            echo -e "${RED}⚠️  CRITICAL OPERATION${NC}"
-            echo "   Risk: System-wide impact"
+            echo -e "${YELLOW}⚠️  CRITICAL OPERATION${NC}" >&2
+            echo "   Risk: System-wide impact" >&2
             ;;
     esac
 
-    echo ""
-    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-    echo -e "${GREEN}${BOLD}REQUIRED AGENT(S):${NC} ${PURPLE}$required_agent${NC}"
-    echo ""
+    echo "" >&2
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
+    echo -e "${GREEN}${BOLD}SUGGESTED AGENT(S):${NC} ${PURPLE}$required_agent${NC}" >&2
+    echo "" >&2
 
-    echo -e "${YELLOW}This operation CANNOT proceed without the proper agent.${NC}"
-    echo -e "${YELLOW}The agent will:${NC}"
-    echo "  ✓ Validate prerequisites"
-    echo "  ✓ Create rollback plan"
-    echo "  ✓ Handle errors gracefully"
-    echo "  ✓ Ensure compliance"
-    echo "  ✓ Document changes"
+    echo -e "${YELLOW}This operation is STRONGLY RECOMMENDED to use the suggested agent.${NC}" >&2
+    echo -e "${YELLOW}The agent will:${NC}" >&2
+    echo "  ✓ Validate prerequisites" >&2
+    echo "  ✓ Create rollback plan" >&2
+    echo "  ✓ Handle errors gracefully" >&2
+    echo "  ✓ Ensure compliance" >&2
+    echo "  ✓ Document changes" >&2
 
-    echo ""
-    log_event "HIGH_RISK_BLOCKED" "$category: $TASK_INPUT"
+    echo "" >&2
+    log_event "HIGH_RISK_ADVISORY" "$category: $TASK_INPUT"
 }
 
 # Function to check agent bypass attempts
 check_bypass_attempt() {
     local task="$1"
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
     # Check if user is trying to bypass
-    if echo "$task" | grep -iE "\\bforce\\b|\\bbypass\\b|skip.*check|ignore.*warning" | grep -viE "salesforce" > /dev/null; then
-        echo ""
-        echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}"
-        echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}"
+    if echo "$task" | grep -iE '\bforce\b|\bbypass\b|skip.*check|ignore.*warning' | grep -viE 'salesforce' > /dev/null; then
+        echo "" >&2
+        echo -e "${RED}${BOLD}⚠️  BYPASS ATTEMPT DETECTED ⚠️${NC}" >&2
+        echo -e "${RED}Attempting to bypass safety checks is not allowed.${NC}" >&2
         echo "[$timestamp] BYPASS_ATTEMPT: $task" >> "$BYPASS_FILE"
         return 0
     fi
@@ -183,78 +232,76 @@ suggest_for_medium_risk() {
     done
 
     if [ ${#suggested_agents[@]} -gt 0 ]; then
-        echo ""
-        echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║         💡 AGENT RECOMMENDATION (Medium Risk) 💡        ║${NC}"
-        echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}"
-        echo ""
+        echo "" >&2
+        echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}" >&2
+        echo -e "${YELLOW}║         💡 AGENT RECOMMENDATION (Medium Risk) 💡        ║${NC}" >&2
+        echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}" >&2
+        echo "" >&2
 
-        echo -e "${BLUE}Suggested agents for this task:${NC}"
+        echo -e "${BLUE}Suggested agents for this task:${NC}" >&2
         for agent in "${suggested_agents[@]}"; do
-            echo -e "  ${GREEN}▸${NC} ${PURPLE}$agent${NC}"
+            echo -e "  ${GREEN}▸${NC} ${PURPLE}$agent${NC}" >&2
         done
 
-        echo ""
-        echo -e "${YELLOW}While not mandatory, using an agent will:${NC}"
-        echo "  • Reduce errors by 80%"
-        echo "  • Save 60-90% time"
-        echo "  • Ensure best practices"
+        echo "" >&2
+        echo -e "${YELLOW}While not mandatory, using an agent will:${NC}" >&2
+        echo "  • Reduce errors by 80%" >&2
+        echo "  • Save 60-90% time" >&2
+        echo "  • Ensure best practices" >&2
 
         log_event "MEDIUM_RISK_SUGGESTED" "$task: ${suggested_agents[*]}"
-    fi
-}
-
-# Function to track agent usage decision
-track_decision() {
-    local task="$1"
-    local decision="$2"
-    local reason="${3:-none}"
-
-    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$timestamp] DECISION: $decision | TASK: $task | REASON: $reason" >> "$LOG_FILE"
-
-    # Update analytics if available
-    if [ -f "${PROJECT_ROOT:-/path/to/project}/platforms/SFDC/.claude/agent-analytics.js" ]; then
-        if [ "$decision" = "SKIPPED" ]; then
-            node "${PROJECT_ROOT:-/path/to/project}/platforms/SFDC/.claude/agent-analytics.js" missed "$task" "suggested" "$reason" 2>/dev/null
-        fi
     fi
 }
 
 # Main execution
 main() {
     # Sub-agents bypass mandatory checks — routing already ensured specialist was spawned
+    local HOOK_AGENT_TYPE_CHECK
     HOOK_AGENT_TYPE_CHECK="$(echo "${HOOK_INPUT:-}" | jq -r '.agent_type // empty' 2>/dev/null || echo "")"
     if [ -n "${CLAUDE_TASK_ID:-}" ] || [ -n "$HOOK_AGENT_TYPE_CHECK" ]; then
+        emit_pretool_noop
         exit 0
     fi
 
     # Check for bypass attempts first
+    # [ADVISORY] Per routing advisory-only policy (2026-04-01 P1-9), bypass attempts
+    # are logged and surfaced as advisory guidance rather than hard denials.
     if check_bypass_attempt "$TASK_INPUT"; then
-        exit 1
+        echo "[ADVISORY] SFDC_BYPASS_ADVISORY: Bypass semantics detected in task input." >&2
+        emit_pretool_response \
+          "allow" \
+          "[ADVISORY] SFDC_BYPASS_ADVISORY: Bypass semantics detected. Routing checks are advisory only — use the required Salesforce agent flow for high-risk operations." \
+          "Task input requested bypass semantics. Proceeding with advisory guidance; use the appropriate Salesforce agent for data safety."
+        exit 0
     fi
 
     # Check if high-risk operation
-    RISK_CATEGORY=$(check_high_risk "$TASK_INPUT")
+    local _risk_rc=0
+    local RISK_CATEGORY
+    RISK_CATEGORY=$(check_high_risk "$TASK_INPUT") || _risk_rc=$?
 
-    if [ $? -eq 0 ]; then
-        # High-risk operation - MANDATORY agent use
+    if [ "$_risk_rc" -eq 0 ] && [ -n "$RISK_CATEGORY" ]; then
+        # High-risk operation - SUGGESTED agent use (advisory only per 2026-04-01 P1-9 remediation)
         display_mandatory_requirement "$RISK_CATEGORY"
 
-        echo ""
-        agent="${REQUIRED_AGENTS[$RISK_CATEGORY]%% or*}"
-        echo "BLOCKED: This operation requires a specialist agent."
-        echo "Use: Agent(subagent_type='$agent', prompt=<your request>)"
-        echo "The agent provides validation, rollback planning, and compliance checks."
-        exit 1
+        echo "" >&2
+        echo -e "${BOLD}${YELLOW}[ADVISORY] This operation SHOULD use the required agent for safety.${NC}" >&2
+        echo "" >&2
+        echo -e "${GREEN}SUGGESTED: use:${NC}" >&2
+        local suggested_agent="${REQUIRED_AGENTS[$RISK_CATEGORY]%% or*}"
+        echo -e "${CYAN}  Agent tool with subagent_type='${suggested_agent}'${NC}" >&2
+        echo "" >&2
+        echo -e "${YELLOW}Or check the agent matrix: /agent-matrix${NC}" >&2
+        echo -e "${YELLOW}Proceeding with advisory warning — routing is suggestion-only.${NC}" >&2
+
+        emit_pretool_response \
+          "allow" \
+          "[ADVISORY] SFDC_AGENT_SUGGESTED: High-risk Salesforce operation should use agent '${suggested_agent}'." \
+          "Risk category: ${RISK_CATEGORY}. STRONGLY RECOMMENDED: route through the required Salesforce specialist. Proceeding autonomously per advisory-only routing policy."
+        exit 0
     else
         # Not high-risk, but check for suggestions
         suggest_for_medium_risk "$TASK_INPUT"
-
-        # For medium-risk, log and allow proceeding (hooks cannot read interactive input)
-        if [ -n "$TASK_INPUT" ]; then
-            track_decision "$TASK_INPUT" "MEDIUM_RISK_ALLOWED" "auto-proceed"
-        fi
     fi
 }
 
@@ -262,4 +309,5 @@ main() {
 main
 
 # Exit successfully to continue execution (for non-blocked operations)
+emit_pretool_noop
 exit 0

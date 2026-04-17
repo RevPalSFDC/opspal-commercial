@@ -1,0 +1,298 @@
+opspal-ai-consult	gemini-consult	True	True	- Read - Bash - Grep - Glob - TodoWrite
+opspal-ai-consult	gemini-domain-shadow-analyzer	True	True	- Read - Bash - Grep - Glob - TodoWrite
+opspal-core	account-expansion-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query
+opspal-core	alert-streaming-manager	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - WebFetch - mcp_salesforce_data_query
+opspal-core	asana-task-manager	True	False	- Task - mcp_asana_list_workspaces - mcp_asana_search_projects - mcp_asana_get_project - mcp_asana_create_task - mcp_asana_update_task - mcp_asana_get_task - mcp_asana_list_tasks - mcp_asana_add_comme
+opspal-core	autofix-agent	True	True	- Read - Write - Edit - Grep - Glob - Bash
+opspal-core	benchmark-research-agent	True	False	- WebSearch - WebFetch - Read - Write - Grep - TodoWrite
+opspal-core	board-pack-orchestrator	True	True	- Task - Read - Write - TodoWrite - Bash - Grep - TaskCreate - TaskUpdate - TaskList - TaskGet
+opspal-core	bugfix-hypothesis-agent	True	True	- Read - Grep - Glob - Bash
+opspal-core	client-notebook-orchestrator	True	True	- Task - mcp__notebooklm__notebook_query - mcp__notebooklm__studio_briefing_create - mcp__notebooklm__studio_audio_create - mcp__notebooklm__studio_flashcards_create - mcp__notebooklm__studio_infograp
+opspal-core	compensation-calculator	True	True	- Read - Write - Bash - Grep - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	contact-dedup-orchestrator	True	True	- Read - Write - Bash - Grep - Task - TodoWrite
+opspal-core	conversation-intelligence-aggregator	True	True	- Read - Grep - Glob - Bash - TodoWrite - Task - mcp__gong__calls_list - mcp__gong__calls_extensive - mcp__gong__run_risk_analysis - mcp__gong__competitor_report - mcp__fireflies__transcripts_list - m
+opspal-core	cross-platform-impact-analyzer	True	True	- Task - Read - Write - Grep - Glob - Bash - TodoWrite - mcp_salesforce_data_query
+opspal-core	cross-platform-pipeline-orchestrator	True	True	- Task - Read - Write - Grep - Glob - TodoWrite - AskUserQuestion - Bash - mcp__asana__asana_search_tasks - mcp__asana__asana_create_task - mcp__asana__asana_get_task
+opspal-core	cs-operations-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query
+opspal-core	data-migration-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query - mcp__hubspot-v4__search_contacts - mcp__hubspot-v4__search_companies
+opspal-core	diagram-generator	True	True	- Read - Write - Bash - Grep - Glob - TodoWrite - mcp_salesforce - mcp_salesforce_metadata_describe - mcp_hubspot - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwri
+opspal-core	environment-profile-manager	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - Task
+opspal-core	field-dictionary-manager	True	True	- Bash - Read - Write - Edit - Grep - Glob - TodoWrite - AskUserQuestion
+opspal-core	fireflies-action-tracker-agent	True	True	- Read - Grep - Glob - Bash - TodoWrite - mcp__fireflies__transcripts_list - mcp__fireflies__transcript_get - mcp__fireflies__extract_action_items - mcp_salesforce_data_query
+opspal-core	fireflies-integration-agent	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - WebFetch - mcp__fireflies__transcripts_list - mcp__fireflies__transcript_get - mcp__fireflies__transcript_search - mcp__fireflies__users_list -
+opspal-core	fireflies-meeting-intelligence-agent	True	True	- Read - Grep - Glob - Bash - TodoWrite - mcp__fireflies__transcripts_list - mcp__fireflies__transcript_get - mcp__fireflies__transcript_search - mcp__fireflies__run_meeting_analysis - mcp_salesforce_
+opspal-core	fireflies-sync-orchestrator	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp__fireflies__transcripts_list - mcp__fireflies__transcript_get - mcp__fireflies__sync_transcripts_to_crm - mcp__fireflies__download_recordin
+opspal-core	gong-competitive-intelligence-agent	True	True	- Read - Grep - Glob - Bash - TodoWrite - mcp__gong__calls_extensive - mcp__gong__trackers_list - mcp__gong__competitor_report - mcp_salesforce_data_query
+opspal-core	gong-deal-intelligence-agent	True	True	- Read - Grep - Glob - Bash - TodoWrite - WebFetch - mcp__gong__calls_list - mcp__gong__calls_extensive - mcp__gong__calls_transcript - mcp__gong__trackers_list - mcp__gong__run_risk_analysis - mcp_sa
+opspal-core	gong-integration-agent	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - WebFetch - mcp__gong__calls_list - mcp__gong__calls_extensive - mcp__gong__calls_transcript - mcp__gong__users_list - mcp__gong__trackers_list 
+opspal-core	gong-sync-orchestrator	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp__gong__calls_list - mcp__gong__calls_extensive - mcp__gong__sync_calls_to_crm - mcp__gong__run_risk_analysis - mcp__gong__users_list - mcp_
+opspal-core	google-slides-generator	True	True	- Read - Write - Bash - Grep - Glob - TodoWrite
+opspal-core	implementation-planner	True	True	- Task - mcp_asana_list_workspaces - mcp_asana_search_projects - mcp_asana_get_project - mcp_asana_create_task - mcp_asana_update_task - mcp_asana_get_task - mcp_asana_list_tasks - mcp_asana_add_comme
+opspal-core	instance-backup	True	True	- Bash - Read - Write - Grep - TodoWrite - mcp_salesforce_data_query
+opspal-core	instance-deployer	True	True	- Bash - Grep - Read - Write - TodoWrite - ExitPlanMode
+opspal-core	instance-manager	True	True	- Bash - Read - Write - Grep - Glob - TodoWrite
+opspal-core	instance-sync	True	True	- Bash - Read - Write - Grep - TodoWrite - mcp_salesforce_data_query
+opspal-core	intelligent-intake-orchestrator	True	True	- Read - Write - Bash - Glob - Grep - AskUserQuestion - TodoWrite - mcp__asana__asana_list_workspaces - mcp__asana__asana_search_projects - mcp__asana__asana_get_project - mcp__asana__asana_get_projec
+opspal-core	live-wire-sync-test-orchestrator	True	True	- Bash - Grep - Read - Write - Task
+opspal-core	multi-platform-campaign-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query - mcp__hubspot-v4__search_contacts - mcp__hubspot-v4__search_companies
+opspal-core	multi-platform-workflow-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query - mcp__hubspot-v4__search_contacts - mcp__hubspot-v4__search_companies
+opspal-core	n8n-execution-monitor	True	True	- Read - Bash - Grep - TodoWrite - mcp_n8n
+opspal-core	n8n-integration-orchestrator	True	True	- Task - Read - Write - Bash - Grep - Glob - TodoWrite - mcp_n8n - mcp_salesforce - mcp_hubspot - mcp_asana
+opspal-core	n8n-lifecycle-manager	True	True	- Bash - Grep - Read - Write - TodoWrite - Task
+opspal-core	n8n-optimizer	True	True	- Bash - Grep - Read - Write - TodoWrite - Task
+opspal-core	n8n-workflow-builder	True	True	- Task - Read - Write - Bash - Grep - Glob - TodoWrite - mcp_n8n - mcp_salesforce - mcp_hubspot
+opspal-core	notebooklm-knowledge-manager	True	False	- mcp__notebooklm__notebook_create - mcp__notebooklm__notebook_list - mcp__notebooklm__notebook_get - mcp__notebooklm__notebook_rename - mcp__notebooklm__notebook_delete - mcp__notebooklm__notebook_qu
+opspal-core	outreach-integration-agent	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - WebFetch - mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp_hubspot_*
+opspal-core	pdf-generator	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_take_screenshot - mcp__playwright__browser_save_as_pd
+opspal-core	pipeline-intelligence-agent	True	True	- Read - Write - Bash - Grep - TodoWrite - mcp_salesforce_data_query
+opspal-core	platform-instance-manager	True	True	- Bash - Read - Write - Grep - Glob - TodoWrite - Task
+opspal-core	playwright-browser-controller	True	True	- mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__playwright__browser_fill - mcp__playwright__browser_type - mcp__playwright__browser_sele
+opspal-core	plugin-doctor	True	True	- Read - Bash - Grep - Glob - mcp__asana__* - Write - TodoWrite
+opspal-core	pptx-generator	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite
+opspal-core	product-analytics-bridge	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - WebFetch - mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp_hubspot_*
+opspal-core	project-connect	True	True	- mcp__asana__* - Read - Write - Bash - TodoWrite - Grep - ExitPlanMode
+opspal-core	realtime-dashboard-coordinator	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	release-coordinator	True	True	- Read - Grep - Glob - Bash - Task - TodoWrite
+opspal-core	remediation-sequencer	True	True	- Task - Read - Write - Grep - Glob - TodoWrite - Bash
+opspal-core	revops-churn-risk-scorer	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	revops-customer-health-scorer	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	revops-data-quality-orchestrator	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_* - mcp_hubspot_*
+opspal-core	revops-deal-scorer	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	revops-dedup-specialist	True	True	- Read - Write - Grep - Glob - Bash - TodoWrite - mcp_salesforce_data_query - mcp_salesforce_data_update - mcp_hubspot_*
+opspal-core	revops-lead-scorer	True	True	- Read - Write - Grep - Glob - Bash - Task - TodoWrite - mcp_salesforce_data_query - mcp_hubspot_*
+opspal-core	revops-maturity-orchestrator	True	True	- Task - Read - Write - TodoWrite - Bash - Grep - TaskCreate - TaskUpdate - TaskList - TaskGet
+opspal-core	revops-query-agent	True	True	- Task - Read - Write - Grep - Glob - Bash - TodoWrite - mcp_salesforce_data_query
+opspal-core	revops-reporting-assistant	True	True	- Task - Read - Write - Grep - Glob - Bash - TodoWrite - AskUserQuestion - mcp_salesforce_data_query - mcp_hubspot_crm_search
+opspal-core	sales-enablement-coordinator	True	True	- Read - Write - Bash - Grep - TodoWrite
+opspal-core	sales-funnel-diagnostic	True	True	- Task - mcp_salesforce_data_query - mcp_salesforce - mcp_hubspot_* - Read - Write - Grep - TodoWrite - Bash
+opspal-core	sales-playbook-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query
+opspal-core	sfdc-hubspot-dedup-orchestrator	True	True	- Read - Write - Bash - Grep - Task - TodoWrite
+opspal-core	solution-analyzer	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - Task - mcp__salesforce__*
+opspal-core	solution-catalog-manager	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite
+opspal-core	solution-deployment-orchestrator	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - Task - mcp__salesforce__*
+opspal-core	solution-runbook-generator	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - Task
+opspal-core	solution-template-manager	True	True	- Read - Write - Bash - Glob - Grep - TodoWrite - Task
+opspal-core	task-graph-orchestrator	True	True	- Task - Read - Write - Grep - Glob - TodoWrite - AskUserQuestion - Bash
+opspal-core	task-scheduler	True	True	- Bash - Grep - Read - Write - TodoWrite - SlashCommand
+opspal-core	uat-orchestrator	True	True	- Read - Write - Edit - Bash - Grep - Glob - Task - TodoWrite - AskUserQuestion - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__playwrig
+opspal-core	ui-documentation-generator	True	True	- mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__playwright__browser_fill - mcp__playwright__browser_take_screenshot - mcp__playwright__b
+opspal-core	unified-exec-dashboard-agent	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query - mcp__hubspot-v4__search_contacts - mcp__hubspot-v4__search_companies
+opspal-core	unified-reporting-aggregator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query - mcp__hubspot-v4__search_contacts - mcp__hubspot-v4__search_companies
+opspal-core	visual-regression-tester	True	True	- mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_take_screenshot - mcp__playwright__browser_wait - mcp__playwright__browser_resize - mcp__playwright__
+opspal-core	web-viz-generator	True	True	- Read - Write - Bash - Grep - Glob - TodoWrite - mcp_salesforce - mcp_salesforce_data_query - mcp_hubspot - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__br
+opspal-gtm-planning	forecast-orchestrator	True	True	- Read - Write - Bash - Grep - TodoWrite - Task - mcp_salesforce_data_query
+opspal-gtm-planning	gtm-asana-bridge	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-gtm-planning	gtm-attribution-governance	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp_salesforce_data_query
+opspal-gtm-planning	gtm-comp-planner	True	True	- Bash - Grep - Read - Write - TodoWrite
+opspal-gtm-planning	gtm-data-insights	True	True	- Task - Bash - Grep - Read - Write - TodoWrite - mcp_salesforce_data_query
+opspal-gtm-planning	gtm-market-intelligence	True	True	- Bash - Grep - Read - Write - TodoWrite - WebSearch - WebFetch - mcp_salesforce_data_query - mcp__hubspot__search_companies - mcp__hubspot__search_deals
+opspal-gtm-planning	gtm-planning-orchestrator	True	True	- Task - Read - Write - TodoWrite - TaskCreate - TaskUpdate - TaskList - TaskGet - Bash - Grep
+opspal-gtm-planning	gtm-quota-capacity	True	True	- Bash - Grep - Read - Write - TodoWrite
+opspal-gtm-planning	gtm-retention-analyst	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp_salesforce_data_query - mcp__hubspot__search_companies - mcp__hubspot__search_deals
+opspal-gtm-planning	gtm-revenue-modeler	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp_salesforce_data_query - mcp__hubspot__search_companies - mcp__hubspot__search_deals
+opspal-gtm-planning	gtm-strategic-reports-orchestrator	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-gtm-planning	gtm-strategy-planner	True	True	- Bash - Grep - Read - Write - TodoWrite
+opspal-gtm-planning	gtm-territory-designer	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp_salesforce_data_query
+opspal-hubspot	hubspot-admin-specialist	True	True	- mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__validate_scopes - mcp__hubspot-enhanced-v3__hubspot_get_schema - mcp__hubspot-enhanced-v3__hubspot_check_policy - mcp__hubspot-enhanced-v3__hub
+opspal-hubspot	hubspot-adoption-tracker	True	True	- mcp__hubspot-v4__search_with_total - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get_metrics - Read - Write - TodoWrite - Grep - Task - Bash
+opspal-hubspot	hubspot-ai-revenue-intelligence	True	True	- mcp__hubspot-v4__search_with_total - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_export - mcp__hubspot-enhanced-v3__hubspot_get_metrics - Read - Write - TodoWrite - 
+opspal-hubspot	hubspot-analytics-reporter	True	True	- mcp__hubspot-v4__workflow_performance - mcp__hubspot-v4__search_with_total - mcp__hubspot-v4__get_total_count - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - mcp
+opspal-hubspot	hubspot-api	True	False	- mcp__hubspot-enhanced-v3__hubspot_get - Read
+opspal-hubspot	hubspot-app-card-builder	True	True	- mcp__context7__* - Read - Write - Edit - TodoWrite - Grep - Glob - Bash
+opspal-hubspot	hubspot-app-developer	True	True	- mcp__hubspot-v4__* - mcp__hubspot-enhanced-v3__* - mcp__context7__* - Read - Write - Edit - TodoWrite - Grep - Glob - Bash - Task
+opspal-hubspot	hubspot-assessment-analyzer	True	True	- mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__workflow_hydrate - mcp__hubspot-v4__workflow_get_all - mcp__hubspot-v4__workflow_performance - mcp__hubspot-v4__search_with_total - mcp__hubspo
+opspal-hubspot	hubspot-attribution-analyst	True	True	[mcp__hubspot-v4__search_with_total, mcp__hubspot-v4__get_total_count, mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, Read, Write, TodoWrite, Grep, Task, Bash]
+opspal-hubspot	hubspot-autonomous-operations	True	True	- mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__workflow_hydrate - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - Task - Read - Write - TodoWrite - Grep
+opspal-hubspot	hubspot-callback-orchestrator	True	True	[mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-enhanced-v3__*, Read, Write, TodoWrite, Grep, Bash]
+opspal-hubspot	hubspot-cms-blog-author-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Read - 
+opspal-hubspot	hubspot-cms-blog-post-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Task - 
+opspal-hubspot	hubspot-cms-content-manager	True	True	- Task - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_export - mcp__context7__* - 
+opspal-hubspot	hubspot-cms-cta-manager	True	True	- mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__playwright__browser_type - mcp__playwright__browser_select_option - mcp__playwright__bro
+opspal-hubspot	hubspot-cms-domain-monitor	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__context7__* - Read - Write - TodoWrite - Grep - Bash - WebFetch
+opspal-hubspot	hubspot-cms-files-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Bash - Read - Write - TodoWrite - Grep
+opspal-hubspot	hubspot-cms-form-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Task - 
+opspal-hubspot	hubspot-cms-hubdb-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Read - 
+opspal-hubspot	hubspot-cms-page-publisher	True	True	- Read - Write - TodoWrite - Bash - Grep
+opspal-hubspot	hubspot-cms-redirect-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_delete - mcp__context7__* - Read - 
+opspal-hubspot	hubspot-cms-theme-manager	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp__hubspot-enhanced-v3__hubspot_search - mcp__context7__*
+opspal-hubspot	hubspot-commerce-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_batch_upsert - mcp__hubspot-enhance
+opspal-hubspot	hubspot-contact-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hub
+opspal-hubspot	hubspot-content-automation-agent	True	True	- Bash - Read - Write - Grep
+opspal-hubspot	hubspot-conversation-intelligence	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - mcp__hubspot-enhanced-v3__hubspot_export - Read - Write - TodoWrite - Grep - WebFetch - Bash
+opspal-hubspot	hubspot-custom-action-builder	True	True	[mcp__hubspot-v4__*, mcp__hubspot-enhanced-v3__*, mcp__context7__*, Read, Write, TodoWrite, Grep, Bash]
+opspal-hubspot	hubspot-data-hygiene-specialist	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_batch_upsert - mcp__hubspot-enhanced-v
+opspal-hubspot	hubspot-data-operations-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_batch_upsert - mcp__hubspot-enhanced-v3__hubspot_export - mcp__hubspot-enhanced-v3__hubspot_import - mcp__hubspot-enhance
+opspal-hubspot	hubspot-data	True	False	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - Read - Write - Grep
+opspal-hubspot	hubspot-email-campaign-manager	True	True	[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__context7__*, Read, W
+opspal-hubspot	hubspot-goals-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - Read - Write - TodoWrite - Grep - Task - Bash
+opspal-hubspot	hubspot-governance-enforcer	True	True	- mcp__hubspot-enhanced-v3__hubspot_check_policy - mcp__hubspot-enhanced-v3__hubspot_set_policy - mcp__hubspot-enhanced-v3__hubspot_validate_schema - mcp__hubspot-enhanced-v3__hubspot_health_check - m
+opspal-hubspot	hubspot-integration-specialist	True	True	[mcp__hubspot-v4__webhook_process, mcp__hubspot-v4__webhook_status, mcp__hubspot-v4__validate_scopes, mcp__hubspot-enhanced-v3__hubspot_associate, mcp__context7__*, Read, Write, TodoWrite, Grep, Bash,
+opspal-hubspot	hubspot-lead-scoring-specialist	True	True	[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydr
+opspal-hubspot	hubspot-marketing-automation	True	True	- mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__workflow_hydrate - mcp__hubspot-v4__workflow_get_all - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mc
+opspal-hubspot	hubspot-orchestrator	True	True	- Task - mcp_hubspot_accounts_get - Read - Write - TodoWrite - ExitPlanMode - Bash - Grep - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp
+opspal-hubspot	hubspot-pipeline-manager	True	True	[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_get, mcp__hubspot-enhanced-v3__hubspot_create, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-v4__search_with_total
+opspal-hubspot	hubspot-plg-foundation	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__workflow_hydrate - Read - Write - TodoWrite - Grep - Task
+opspal-hubspot	hubspot-property-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_get_schema - mcp__hubspot-enhanced-v3__hubspot_validate_schema - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-
+opspal-hubspot	hubspot-renewals-specialist	True	True	- mcp__hubspot-v4__search_with_total - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_create - Read - Write - TodoWrite - Grep 
+opspal-hubspot	hubspot-reporting-builder	True	True	- mcp__hubspot-v4__search_with_total - mcp__hubspot-v4__workflow_performance - mcp__hubspot-enhanced-v3__hubspot_export - mcp__hubspot-enhanced-v3__hubspot_search - Read - Write - TodoWrite - Grep - T
+opspal-hubspot	hubspot-revenue-intelligence	True	True	- mcp__hubspot-v4__search_with_total - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_get - mcp__hubspot-enhanced-v3__hubspot_export - Read - Write - TodoWrite - Grep - T
+opspal-hubspot	hubspot-schema-automation-agent	True	True	- Bash - Read - Write - Grep
+opspal-hubspot	hubspot-sdr-operations	True	True	- mcp__hubspot-v4__sequence_list - mcp__hubspot-v4__sequence_get - mcp__hubspot-v4__sequence_enroll - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - Read - Write
+opspal-hubspot	hubspot-seo-competitor-analyzer	True	True	- Task - Read - Write - Bash - Grep - WebSearch - WebFetch
+opspal-hubspot	hubspot-seo-content-optimizer	True	True	- Task - Bash - Read - Write - Grep - TodoWrite
+opspal-hubspot	hubspot-seo-deployment-agent	True	True	- Bash - Read - Write - Grep
+opspal-hubspot	hubspot-seo-optimizer	True	True	- WebSearch - WebFetch - Read - Write - Bash - Task - mcp_hubspot_accounts_get - mcp_hubspot_enhanced_v3_blogs_list_posts - mcp_hubspot_enhanced_v3_blogs_get_post - mcp_hubspot_enhanced_v3_blogs_updat
+opspal-hubspot	hubspot-seo-site-crawler	True	True	- WebFetch - WebSearch - Bash - Read - Write - Grep - Glob - TodoWrite
+opspal-hubspot	hubspot-service-hub-manager	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_create - mcp__hubspot-enhanced-v3__hubspot_update - mcp__hubspot-enhanced-v3__hubspot_get - Read - Write - TodoWrite - Gr
+opspal-hubspot	hubspot-settings-builder	True	True	- mcp__context7__* - Read - Write - Edit - TodoWrite - Grep - Glob - Bash
+opspal-hubspot	hubspot-sfdc-sync-scraper	True	True	- Bash - Grep - Read - Write - Task - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__playwright__browser_fill - mcp__playwright__browser_
+opspal-hubspot	hubspot-stripe-connector	True	True	- mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_sync - mcp__hubspot-enhanced-v3__hubspot_associate - Read - Write - TodoWrite - Bash - Grep - WebFetch - Task
+opspal-hubspot	hubspot-territory-manager	True	True	[mcp__hubspot-enhanced-v3__hubspot_search, mcp__hubspot-enhanced-v3__hubspot_update, mcp__hubspot-enhanced-v3__hubspot_batch_upsert, mcp__hubspot-enhanced-v3__hubspot_associate, Read, Write, TodoWrite
+opspal-hubspot	hubspot-web-enricher	True	True	- WebFetch - WebSearch - mcp__playwright__* - mcp__hubspot-enhanced-v3__hubspot_search - mcp__hubspot-enhanced-v3__hubspot_update - Read - Write - TodoWrite - Bash - Grep
+opspal-hubspot	hubspot-workflow-auditor	True	True	- mcp__hubspot-v4__workflow_get_all - mcp__hubspot-v4__workflow_hydrate - Read - Write - Bash - Grep - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_
+opspal-hubspot	hubspot-workflow-builder	True	True	[mcp__hubspot-v4__workflow_enumerate, mcp__hubspot-v4__workflow_hydrate, mcp__hubspot-v4__workflow_get_all, mcp__hubspot-v4__callback_complete, mcp__hubspot-v4__callback_auto_complete, mcp__hubspot-en
+opspal-hubspot	hubspot-workflow	True	True	- mcp__hubspot-v4__workflow_enumerate - mcp__hubspot-v4__workflow_hydrate - mcp__hubspot-v4__workflow_get_all - Read - Write - Bash - Grep
+opspal-marketo	marketo-analytics-assessor	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__analytics_program_report - mcp__marketo__analytics_email_report - mcp__marketo__analytics_lead_changes - mcp__marketo__analytics_activit
+opspal-marketo	marketo-automation-auditor	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp__marketo__campaign_get_smart_list - mcp__marketo__program_list - mcp__marketo__program_
+opspal-marketo	marketo-automation-orchestrator	True	True	- Task - Read - Write - Grep - Bash - TodoWrite # Program & Token Management - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_clone - mcp__marketo__program_tokens_get -
+opspal-marketo	marketo-campaign-builder	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp__marketo__campaign_create - mcp__marketo__campaign_clone - mcp__marketo__campaign_activ
+opspal-marketo	marketo-campaign-diagnostician	True	True	- mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp__marketo__campaign_get_smart_list - mcp__marketo__smart_list_list - mcp__marketo__smart_list_get - mcp__marketo__list_list - mcp__marke
+opspal-marketo	marketo-data-normalizer	True	True	- mcp__marketo__activity_types_list - Read - Write - Bash - Glob - Grep
+opspal-marketo	marketo-data-operations	True	True	- Read - Write - Grep - Bash - Task - TodoWrite # Lead Operations - mcp__marketo__lead_query - mcp__marketo__lead_create - mcp__marketo__lead_update - mcp__marketo__lead_describe - mcp__marketo__lead_
+opspal-marketo	marketo-email-deliverability-auditor	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__email_list - mcp__marketo__email_get - mcp__marketo__email_content - mcp__marketo__analytics_email_report - mcp__marketo__analytics_acti
+opspal-marketo	marketo-email-specialist	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__email_list - mcp__marketo__email_get - mcp__marketo__email_create - mcp__marketo__email_approve - mcp__marketo__email_send_sample - mcp_
+opspal-marketo	marketo-form-builder	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__lead_describe - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__form_create - mcp__marketo__form_get - mcp__marke
+opspal-marketo	marketo-governance-enforcer	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp__marketo__campaign_get_smart_l
+opspal-marketo	marketo-hubspot-bridge	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_create - mcp__marketo__lead_update - mcp__marketo__lead_describe - mcp__hubspot__contact_search - mcp__h
+opspal-marketo	marketo-instance-discovery	True	True	- Read - Write - Grep - Bash - TodoWrite - mcp__marketo__lead_describe - mcp__marketo__lead_query - mcp__marketo__lead_partitions - mcp__marketo__campaign_list - mcp__marketo__campaign_types - mcp__ma
+opspal-marketo	marketo-integration-specialist	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - WebFetch - mcp__marketo__webhook_list - mcp__marketo__webhook_get - mcp__marketo__webhook_create - mcp__marketo__webhook_update - mcp__marketo__webhoo
+opspal-marketo	marketo-intelligence-analyst	True	False	- Read - Write - Task - Glob
+opspal-marketo	marketo-landing-page-manager	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__lead_query - mcp__marketo__landing_page_create - mcp__marketo__landing_page_get
+opspal-marketo	marketo-lead-manager	True	True	- Read - Write - Grep - Bash - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_create - mcp__marketo__lead_update - mcp__marketo__lead_merge - mcp__marketo__lead_describe - mcp__marketo__lea
+opspal-marketo	marketo-lead-quality-assessor	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_describe - mcp__marketo__lead_activities - mcp__marketo__analytics_lead_changes - mcp__marketo__analytic
+opspal-marketo	marketo-lead-routing-diagnostician	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_routing_trace - mcp__marketo__lead_list_membership - mcp__marketo__lead_program_membership - mcp__market
+opspal-marketo	marketo-lead-scoring-architect	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_create - mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp
+opspal-marketo	marketo-mql-handoff-orchestrator	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_create - mcp__marketo__campaign_list - mcp__marketo__campaign_get - mcp
+opspal-marketo	marketo-observability-orchestrator	True	True	- mcp__marketo__bulk_lead_export_create - mcp__marketo__bulk_lead_export_enqueue - mcp__marketo__bulk_lead_export_status - mcp__marketo__bulk_lead_export_file - mcp__marketo__bulk_activity_export_crea
+opspal-marketo	marketo-orchestrator	True	True	- Task - Read - Write - Grep - Bash - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_describe - mcp__marketo__campaign_list - mcp__marketo__program_list
+opspal-marketo	marketo-performance-optimizer	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__analytics_api_usage - mcp__marketo__lead_query - mcp__marketo__campaign_list - mcp__marketo__program_list
+opspal-marketo	marketo-program-architect	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_create - mcp__marketo__program_clone - mcp__marketo__program_members - 
+opspal-marketo	marketo-program-roi-assessor	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_members - mcp__marketo__analytics_program_report - mcp__marketo__analyt
+opspal-marketo	marketo-revenue-cycle-analyst	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__analytics_lead_changes - mcp__marketo__analytics_activities - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__lea
+opspal-marketo	marketo-sfdc-sync-specialist	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__lead_query - mcp__marketo__lead_describe - mcp__marketo__lead_activities - mcp__marketo__sync_status - mcp__marketo__sync_errors - mcp__
+opspal-marketo	marketo-smart-campaign-api-specialist	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__campaign_create - mcp__marketo__campaign_get - mcp__marketo__campaign_update - mcp__marketo__campaign_clone - mcp__marketo__campaign_del
+opspal-marketo	marketo-webinar-orchestrator	True	True	- Read - Write - Grep - Bash - Task - TodoWrite - mcp__marketo__program_list - mcp__marketo__program_get - mcp__marketo__program_create - mcp__marketo__program_clone - mcp__marketo__program_members - 
+opspal-monday	monday-batch-operator	True	True	- Read - Write - Bash - Grep - mcp__monday__*
+opspal-monday	monday-board-analyzer	True	True	- Read - Write - Bash - Glob - Grep
+opspal-monday	monday-board-manager	True	True	- Read - Write - Bash - Grep - mcp__monday__*
+opspal-monday	monday-file-catalog-generator	True	True	- Read - Write - Bash - Glob - Grep
+opspal-monday	monday-file-extractor	True	True	- Read - Write - Bash - Glob - Grep - mcp__monday__* - WebFetch
+opspal-monday	monday-item-manager	True	True	- Read - Write - Bash - Grep - mcp__monday__*
+opspal-okrs	okr-alignment-auditor	True	True	- Task - Read - Write - Bash - Grep
+opspal-okrs	okr-asana-bridge	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-cadence-manager	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-dashboard-generator	True	True	- Task - Read - Write - Bash - Grep
+opspal-okrs	okr-data-aggregator	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-executive-reporter	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-funnel-analyst	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-generator	True	True	- Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-initiative-evaluator	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-initiative-prioritizer	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-learning-engine	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-plg-specialist	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-progress-tracker	True	True	- Task - Read - Write - TodoWrite - Bash - Grep
+opspal-okrs	okr-strategy-orchestrator	True	True	- Task - Read - Write - TodoWrite - TaskCreate - TaskUpdate - TaskList - TaskGet - Bash - Grep
+opspal-salesforce	apex-debug-analyst	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	benchmark-research-agent	True	False	- WebSearch - WebFetch - Read - Write - Grep - TodoWrite
+opspal-salesforce	compliance-report-generator	True	True	- Read - Write - Bash - Grep - TodoWrite - mcp_salesforce_data_query
+opspal-salesforce	flow-batch-operator	True	True	- Read - Write - Bash - TodoWrite - Grep - Glob # Production deployment protection - requires explicit approval # Flow activation in production requires validation
+opspal-salesforce	flow-diagnostician	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	flow-log-analyst	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	flow-segmentation-specialist	True	True	- Read - Write - Bash - Grep - TodoWrite # Production deployment protection - requires explicit approval # Flow activation in production requires validation
+opspal-salesforce	flow-template-specialist	True	True	- Read - Write - Bash - Grep - TodoWrite
+opspal-salesforce	flow-test-orchestrator	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	permission-orchestrator	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite - Bash - Task
+opspal-salesforce	permission-segmentation-specialist	True	True	- Read - Write - Bash - Grep - TodoWrite - Task
+opspal-salesforce	response-validator	True	True	- Read - Grep - Glob - Bash - Task
+opspal-salesforce	sfdc-advocate-assignment	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-agent-governance	True	True	- mcp_salesforce - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-apex-developer	True	True	- mcp_salesforce - mcp_salesforce_apex_execute - mcp_salesforce_apex_test - mcp_salesforce_apex_coverage - mcp_salesforce_apex_deploy - mcp_salesforce_apex_create_class - mcp_salesforce_apex_create_tr
+opspal-salesforce	sfdc-apex	True	True	- Read - Write - Grep - Glob - Bash(sf:*) - mcp__context7__*
+opspal-salesforce	sfdc-api-monitor	True	True	- Read - Bash - Grep - Glob
+opspal-salesforce	sfdc-architecture-auditor	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_metadata_retrieve - mcp_salesforce_data_query - Read - Grep - TodoWrite - Bash - Task - mcp__playwright__browser_navigate - mcp__pl
+opspal-salesforce	sfdc-assignment-rules-manager	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite - Bash - Task
+opspal-salesforce	sfdc-automation-auditor	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_metadata_retrieve - mcp_salesforce_data_query - Read - Grep - TodoWrite - Bash - Task - mcp__playwright__browser_navigate - mcp__pl
+opspal-salesforce	sfdc-automation-builder	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-bulkops-orchestrator	True	True	- Task - Read - Write - Grep - Glob - Bash - TodoWrite - AskUserQuestion - mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp_salesforce_data_delete
+opspal-salesforce	sfdc-bulkops-validator	True	False	- mcp_salesforce_data_query - Read - Grep
+opspal-salesforce	sfdc-cli-executor	True	True	- Bash - Grep - Read - Write - TodoWrite
+opspal-salesforce	sfdc-communication-manager	True	True	- Bash - Grep - Read - Write - TodoWrite - mcp_salesforce
+opspal-salesforce	sfdc-compliance-officer	True	False	- mcp_salesforce - mcp_salesforce_user_create - mcp_salesforce_permission_assign - mcp_salesforce_sharing_rule_create - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-conflict-resolver	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_field_describe - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-cpq-assessor	True	True	- mcp_salesforce - mcp_salesforce_data_query - mcp__playwright__* - Read - Grep - TodoWrite - Bash - Task
+opspal-salesforce	sfdc-cpq-specialist	True	False	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_field_create - mcp_salesforce_object_create - mcp_salesforce_flow_create - mcp__context7__* - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-csv-enrichment	True	True	- Task - mcp_salesforce - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-dashboard-analyzer	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_metadata_retrieve - Read - Grep - TodoWrite - Task - Bash
+opspal-salesforce	sfdc-dashboard-designer	True	True	- Read - Write - Bash - Grep - TodoWrite - Task
+opspal-salesforce	sfdc-dashboard-migrator	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_object_list - mcp_salesforce_field_list - Read - Write - Bash - Grep - Task
+opspal-salesforce	sfdc-dashboard-optimizer	True	False	- mcp_salesforce - mcp_salesforce_data_query - Read - Write - TodoWrite - Grep
+opspal-salesforce	sfdc-data-export-manager	True	True	- mcp_salesforce_data_query - mcp__context7__* - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-data-generator	True	False	- mcp_salesforce - mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_metadata_retrieve - mcp_salesforce_object_create - mcp_salesforce_field_create - Read - Write - TodoWrite
+opspal-salesforce	sfdc-data-import-manager	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp__context7__* - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-data-operations	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp_salesforce_data_delete - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-dedup-safety-copilot	True	True	- Bash - Read - Write - Grep
+opspal-salesforce	sfdc-dependency-analyzer	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_field_describe - mcp__context7__* - Read - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-deployment-manager	True	True	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash - Task
+opspal-salesforce	sfdc-discovery	True	True	- mcp__salesforce-dx - Read - Grep - Glob - Bash - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_take_screenshot - mcp__playwright__browser_save_as_p
+opspal-salesforce	sfdc-einstein-admin	True	False	- mcp_salesforce - mcp_salesforce_analytics_dataset_query - mcp_salesforce_report_create - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-enrichment-manager	True	False	- mcp_salesforce_data_query - mcp_salesforce_data_update - WebFetch - Read - Write - TodoWrite
+opspal-salesforce	sfdc-field-analyzer	True	True	- mcp_salesforce - mcp_salesforce_data_query - mcp__context7__* - Read - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-integration-specialist	True	False	- mcp_salesforce - mcp__context7__* - Read - Write - Grep - TodoWrite - WebFetch
+opspal-salesforce	sfdc-layout-analyzer	True	True	- Read - Bash - Grep - TodoWrite
+opspal-salesforce	sfdc-layout-deployer	True	True	- Read - Write - Bash - Grep - TodoWrite - Task
+opspal-salesforce	sfdc-layout-generator	True	True	- Read - Write - Bash - Grep - Task - TodoWrite
+opspal-salesforce	sfdc-lead-auto-converter	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - Task - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-lightning-developer	True	True	- mcp_salesforce - mcp_salesforce_apex_deploy - mcp_salesforce_metadata_deploy - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-lucid-diagrams	True	True	- mcp_lucid - mcp_salesforce - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-merge-orchestrator	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - mcp_salesforce_data_update - Read - Write - Grep - TodoWrite - Task - Bash
+opspal-salesforce	sfdc-metadata-analyzer	True	True	- mcp_salesforce - mcp_salesforce_data_query - mcp_salesforce_metadata_describe - Read - Grep - TodoWrite - Bash - Task
+opspal-salesforce	sfdc-metadata-manager	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_field_create - mcp_salesforce_object_create - mcp__context7__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-metadata	True	True	- mcp__salesforce-dx - Read - Grep - Glob - "Bash(sf:*)"
+opspal-salesforce	sfdc-object-auditor	True	False	- mcp_salesforce - mcp_salesforce_data_query - Read - Grep - TodoWrite - ExitPlanMode
+opspal-salesforce	sfdc-orchestrator	True	True	- Task - mcp_salesforce - Read - Write - TodoWrite - ExitPlanMode - Bash - Grep - SlashCommand - TaskCreate - TaskUpdate - TaskList - TaskGet
+opspal-salesforce	sfdc-ownership-router	True	False	- mcp_salesforce_data_query - mcp_salesforce_data_update - Read - Write - TodoWrite
+opspal-salesforce	sfdc-performance-optimizer	True	True	- mcp_salesforce - mcp_salesforce_apex_test - mcp_salesforce_apex_debug_log - Read - Grep - TodoWrite - Task - Bash
+opspal-salesforce	sfdc-permission-assessor	True	True	- Read - Bash - Grep - Glob - TodoWrite - Task
+opspal-salesforce	sfdc-permission-orchestrator	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite - Bash - Task
+opspal-salesforce	sfdc-planner	True	False	- mcp_salesforce - Read - Grep - TodoWrite - ExitPlanMode - Task
+opspal-salesforce	sfdc-quality-auditor	True	True	- Read - Bash - Grep - Glob - TodoWrite - Task
+opspal-salesforce	sfdc-query-specialist	True	True	- mcp_salesforce_data_query - mcp_salesforce - mcp__context7__* - Read - Write - Bash - Grep - TodoWrite
+opspal-salesforce	sfdc-remediation-executor	True	True	- Read - Write - Edit - Bash - Grep - Glob - TodoWrite - Task
+opspal-salesforce	sfdc-renewal-import	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-report-designer	True	True	- Read - Write - Bash - Grep - TodoWrite - Task
+opspal-salesforce	sfdc-report-template-deployer	True	True	- Read - Bash - Grep - TodoWrite
+opspal-salesforce	sfdc-report-type-manager	True	True	- mcp_salesforce - mcp_salesforce_report_type_list - mcp_salesforce_report_type_describe - mcp_salesforce_data_query - Read - Write - Bash - Grep - TodoWrite
+opspal-salesforce	sfdc-report-validator	True	False	- mcp_salesforce - mcp_salesforce_report_type_list - mcp_salesforce_report_type_describe - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-reports-dashboards	True	True	- mcp_salesforce - mcp_salesforce_report_type_list - mcp_salesforce_report_type_describe - mcp_salesforce_report_create - mcp_salesforce_report_clone - mcp_salesforce_report_deploy - mcp_salesforce_re
+opspal-salesforce	sfdc-reports-usage-auditor	True	True	- mcp_salesforce - mcp_salesforce_data_query - Read - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-revops-auditor	True	True	- mcp_salesforce_data_query - mcp_salesforce - Read - TodoWrite - Bash - Grep - Task - mcp__playwright__browser_navigate - mcp__playwright__browser_snapshot - mcp__playwright__browser_click - mcp__pla
+opspal-salesforce	sfdc-revops-coordinator	True	True	- Task - Bash - Grep - mcp_salesforce_data_query - mcp_salesforce - mcp__playwright__* - TodoWrite - WebFetch - Read - Write
+opspal-salesforce	sfdc-sales-operations	True	True	- Bash - Grep - Read - Write - TodoWrite - Task - mcp_salesforce - mcp_salesforce_data_query
+opspal-salesforce	sfdc-security-admin	True	True	- mcp_salesforce - mcp__playwright__* - Read - Write - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-service-cloud-admin	True	False	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_field_create - mcp_salesforce_object_create - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-state-discovery	True	True	- mcp_salesforce - mcp_salesforce_metadata_describe - mcp_salesforce_object_list - mcp_salesforce_field_list - mcp__playwright__* - Read - Grep - TodoWrite - Bash
+opspal-salesforce	sfdc-territory-assignment	True	True	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp_salesforce_data_delete - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	sfdc-territory-deployment	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - Bash - Read - Write - Grep - TodoWrite
+opspal-salesforce	sfdc-territory-discovery	True	False	- mcp_salesforce_data_query - Read - Grep - TodoWrite
+opspal-salesforce	sfdc-territory-monitor	True	False	- mcp_salesforce_data_query - Read - Grep - TodoWrite
+opspal-salesforce	sfdc-territory-orchestrator	True	True	- Task - Read - Write - Grep - TodoWrite - Bash - mcp_salesforce - mcp_salesforce_data_query
+opspal-salesforce	sfdc-territory-planner	True	False	- Read - Write - Grep - TodoWrite - Task
+opspal-salesforce	sfdc-ui-customizer	True	True	- Bash - Grep - Read - Write - TodoWrite - Task - mcp_salesforce - mcp_salesforce_data_query - mcp_salesforce_profile_layout_assign - mcp_salesforce_profile_layout_assign_all - mcp_salesforce_profile_
+opspal-salesforce	sfdc-upsert-error-handler	True	False	- mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - Read - Write - TodoWrite
+opspal-salesforce	sfdc-upsert-matcher	True	True	- mcp_salesforce_data_query - Read - Write - Bash - Grep - TodoWrite
+opspal-salesforce	sfdc-upsert-orchestrator	True	True	- Task - mcp_salesforce_data_query - mcp_salesforce_data_create - mcp_salesforce_data_update - mcp__context7__* - Read - Write - TodoWrite - Bash - Grep
+opspal-salesforce	trigger-orchestrator	True	True	- Bash - Read - Write - Edit - Grep - Glob - Task
+opspal-salesforce	trigger-segmentation-specialist	True	True	- Read - Write - Edit - Bash - Grep
+opspal-salesforce	validation-rule-orchestrator	True	True	- mcp_salesforce - mcp_salesforce_metadata_deploy - mcp_salesforce_data_query - Read - Write - Grep - TodoWrite - Bash - Task
+opspal-salesforce	validation-rule-segmentation-specialist	True	True	- Read - Write - Bash - Grep - TodoWrite - Task # Production deployment protection - requires explicit approval # Data deletion protection
+opspal-salesforce	win-loss-analyzer	True	True	- Read - Write - Bash - Grep - TodoWrite - mcp_salesforce_data_query

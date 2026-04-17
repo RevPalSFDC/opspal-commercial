@@ -1,139 +1,13 @@
 {
-  "generatedAt": "2026-04-12T23:02:10.869Z",
+  "generatedAt": "2026-04-17T11:52:38.748Z",
   "totals": {
-    "activeHooks": 122,
-    "coveredHooks": 92,
-    "allowlistedUntested": 30,
+    "activeHooks": 103,
+    "coveredHooks": 91,
+    "allowlistedUntested": 12,
     "missingCoverage": 0
   },
   "missingCoverage": [],
   "allowlistedUntested": [
-    {
-      "hookPath": "plugins/opspal-attio/hooks/api-quota-monitor.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__*",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-assessment-trigger.sh",
-      "plugin": "opspal-attio",
-      "eventType": "SubagentStop",
-      "matcher": "attio-assessment-analyzer",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-entry-upsert.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__entries_upsert|mcp__attio__entries_create",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-meeting-create.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__meetings_create",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-migration-checkpoint.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__records_upsert",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-webhook-create.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__webhooks_create",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-workspace-auth.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__self_get",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-attribute-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__attributes_delete|mcp__attio__objects_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "Bash",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-bulk-loop.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "Agent",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-entry-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__entries_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-object-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__objects_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_query|mcp__attio__entries_query",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-record-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-schema-mutate.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-scim-mutate.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__scim_users_delete",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-search-beta-warning.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_search",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/session-start-attio.sh",
-      "plugin": "opspal-attio",
-      "eventType": "SessionStart",
-      "matcher": "*",
-      "reason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
     {
       "hookPath": "plugins/opspal-core/hooks/ambient-candidate-extractor.sh",
       "plugin": "opspal-core",
@@ -228,193 +102,6 @@
       "matcher": "Agent",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/post-tool-use.test.js"
-      ],
-      "covered": true,
-      "allowReason": null
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/api-quota-monitor.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__*",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/observability-quota-monitor.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__records_query|mcp__attio__entries_query|mcp__attio__records_list|mcp__attio__entries_list",
-      "matchedTests": [
-        "plugins/opspal-core/test/hooks/unit/marketo-observability-quota-monitor.test.js"
-      ],
-      "covered": true,
-      "allowReason": null
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-assessment-trigger.sh",
-      "plugin": "opspal-attio",
-      "eventType": "SubagentStop",
-      "matcher": "attio-assessment-analyzer",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-entry-upsert.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__entries_upsert|mcp__attio__entries_create",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-meeting-create.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__meetings_create",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-migration-checkpoint.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__records_upsert",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-webhook-create.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__webhooks_create",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/post-workspace-auth.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PostToolUse",
-      "matcher": "mcp__attio__self_get",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-attribute-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__attributes_delete|mcp__attio__objects_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-bash-attio-api.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "Bash",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-bulk-loop.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "Agent",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-entry-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__entries_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-object-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__objects_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-rate-limit-read-warn.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_query|mcp__attio__entries_query",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-record-delete.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-schema-mutate.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__attributes_create|mcp__attio__attributes_update|mcp__attio__attributes_delete|mcp__attio__objects_create|mcp__attio__objects_update|mcp__attio__objects_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-scim-mutate.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__scim_users_delete",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/pre-search-beta-warning.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "mcp__attio__records_search",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/session-start-attio.sh",
-      "plugin": "opspal-attio",
-      "eventType": "SessionStart",
-      "matcher": "*",
-      "matchedTests": [],
-      "covered": false,
-      "allowReason": "New plugin (opspal-attio) — hook tests pending initial integration."
-    },
-    {
-      "hookPath": "plugins/opspal-attio/hooks/universal-agent-governance.sh",
-      "plugin": "opspal-attio",
-      "eventType": "PreToolUse",
-      "matcher": "Agent",
-      "matchedTests": [
-        "plugins/opspal-core/test/hooks/unit/marketo-universal-agent-governance.test.js",
-        "plugins/opspal-core/test/hooks/unit/monday-universal-agent-governance.test.js",
-        "plugins/opspal-core/test/hooks/unit/universal-agent-governance-cross-plugin.test.js",
-        "plugins/opspal-core/test/hooks/unit/universal-agent-governance.test.js"
       ],
       "covered": true,
       "allowReason": null
@@ -1570,6 +1257,19 @@
       "matcher": "sfdc-state-discovery",
       "matchedTests": [
         "plugins/opspal-core/test/hooks/unit/post-discovery-field-dictionary.test.js",
+        "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
+      ],
+      "covered": true,
+      "allowReason": null
+    },
+    {
+      "hookPath": "plugins/opspal-salesforce/hooks/post-operation-observe.sh",
+      "plugin": "opspal-salesforce",
+      "eventType": "PostToolUse",
+      "matcher": "Bash",
+      "matchedTests": [
+        "plugins/opspal-core/test/hooks/integration/post-operation-observe.integration.test.js",
+        "plugins/opspal-core/test/hooks/unit/post-operation-observe.test.js",
         "plugins/opspal-core/test/hooks/unit/salesforce.test.js"
       ],
       "covered": true,

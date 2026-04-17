@@ -40,16 +40,16 @@ Override: `[DIRECT]` to skip routing.
 ## 🔌 Installed Plugins
 
 - ✅ **opspal-ai-consult** (v1.4.15) - 2 agents, 6 scripts, 3 commands, 1 hooks
-- ✅ **opspal-attio** (v2.0.1) - 29 agents, 26 scripts, 28 commands, 20 hooks
-- ✅ **opspal-core** (v2.55.21) - 80 agents, 360 scripts, 126 commands, 94 hooks
+- ✅ **opspal-attio** (v2.0.2) - 29 agents, 26 scripts, 28 commands, 20 hooks
+- ✅ **opspal-core** (v2.55.29) - 80 agents, 360 scripts, 126 commands, 94 hooks
 - ✅ **opspal-data-hygiene** (v1.2.5) - 2 agents, 7 scripts, 1 commands, 1 hooks
 - ✅ **opspal-gtm-planning** (v2.3.12) - 13 agents, 2 scripts, 16 commands, 4 hooks
-- ✅ **opspal-hubspot** (v3.9.34) - 59 agents, 103 scripts, 33 commands, 15 hooks
+- ✅ **opspal-hubspot** (v3.9.35) - 59 agents, 103 scripts, 33 commands, 15 hooks
 - ✅ **opspal-marketo** (v2.6.43) - 30 agents, 32 scripts, 30 commands, 24 hooks
 - ✅ **opspal-mcp-client** (v1.1.0) - 3 agents, 3 commands, 3 hooks
 - ✅ **opspal-monday** (v1.4.11) - 6 agents, 3 scripts, 1 commands, 2 hooks
 - ✅ **opspal-okrs** (v3.0.13) - 14 agents, 4 scripts, 14 commands, 4 hooks
-- ✅ **opspal-salesforce** (v3.87.19) - 94 agents, 596 scripts, 59 commands, 45 hooks
+- ✅ **opspal-salesforce** (v3.87.23) - 94 agents, 596 scripts, 59 commands, 45 hooks
 
 **Last synced**: 2026-04-14
 
@@ -268,9 +268,9 @@ Use RevPal branding for all client-facing outputs. Use `/generate-pdf` with `--t
 | Metric | Count |
 |--------|-------|
 | Plugins | 9 |
-| Agents | 327 |
+| Agents | 298 |
 | Commands | 310 |
-| Skills | 177 |
+| Skills | 164 |
 | Hooks | 226 |
-| Scripts | 1881 |
+| Scripts | 1844 |
 <!-- OPSPAL_MANAGED_END section="footer" -->

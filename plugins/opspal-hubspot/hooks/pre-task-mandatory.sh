@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Pre-Task Mandatory Hook - Enforces agent usage for critical HubSpot operations
-# This version REQUIRES agents for high-risk operations (no bypass)
+# Pre-Task Advisory Hook - Suggests agent usage for critical HubSpot operations
+# This version emits ADVISORY guidance only (no hard deny) per 2026-04-01 P1-9 routing policy.
+# Routing enforcement is suggestion-only; downstream specialist agents enforce safety.
 #
-# Version: 1.1.0 (Error Handler Integration)
-# Date: 2025-11-24
+# Version: 1.2.0 (Advisory-Only Migration — reflection 9e6373b8)
+# Date: 2026-04-17
 
 if [[ "${HOOK_DEBUG:-}" == "true" ]]; then
     set -x
@@ -159,59 +160,59 @@ check_high_risk() {
     return 1
 }
 
-# Function to display mandatory agent requirement
+# Function to display suggested agent requirement (advisory-only per 2026-04-01 P1-9)
 display_mandatory_requirement() {
     local category="$1"
     local required_agent="${REQUIRED_AGENTS[$category]}"
 
     echo "" >&2
-    echo -e "${RED}${BLINK}╔════════════════════════════════════════════════════════╗${NC}" >&2
-    echo -e "${RED}${BOLD}║           🛑 AGENT REQUIRED - STOP! 🛑                ║${NC}" >&2
-    echo -e "${RED}${BLINK}╚════════════════════════════════════════════════════════╝${NC}" >&2
+    echo -e "${YELLOW}╔════════════════════════════════════════════════════════╗${NC}" >&2
+    echo -e "${YELLOW}${BOLD}║      [ADVISORY] SPECIALIST AGENT SUGGESTED            ║${NC}" >&2
+    echo -e "${YELLOW}╚════════════════════════════════════════════════════════╝${NC}" >&2
     echo "" >&2
 
-    echo -e "${YELLOW}${BOLD}HIGH-RISK HUBSPOT OPERATION DETECTED${NC}" >&2
+    echo -e "${YELLOW}${BOLD}HIGH-RISK HUBSPOT OPERATION DETECTED (advisory routing)${NC}" >&2
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
 
     # Show risk category
     case "$category" in
         "production_workflow")
-            echo -e "${RED}⚠️  PRODUCTION WORKFLOW MODIFICATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  PRODUCTION WORKFLOW MODIFICATION${NC}" >&2
             echo "   Risk: Can impact active campaigns and automations" >&2
             echo "   Potential Issues: Broken automation, incorrect enrollments" >&2
             ;;
         "delete_operations")
-            echo -e "${RED}⚠️  DESTRUCTIVE OPERATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  DESTRUCTIVE OPERATION${NC}" >&2
             echo "   Risk: Permanent data/configuration loss" >&2
             echo "   Potential Issues: Lost contacts, broken workflows, data corruption" >&2
             ;;
         "bulk_operations")
-            echo -e "${RED}⚠️  BULK DATA OPERATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  BULK DATA OPERATION${NC}" >&2
             echo "   Risk: API rate limits, data corruption" >&2
             echo "   Potential Issues: Partial updates, duplicate records, rate limiting" >&2
             ;;
         "integration_setup")
-            echo -e "${RED}⚠️  INTEGRATION CONFIGURATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  INTEGRATION CONFIGURATION${NC}" >&2
             echo "   Risk: Data sync issues, authentication failures" >&2
             echo "   Potential Issues: Broken integrations, data loss, security exposure" >&2
             ;;
         "data_migration")
-            echo -e "${RED}⚠️  DATA MIGRATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  DATA MIGRATION${NC}" >&2
             echo "   Risk: Large-scale data corruption" >&2
             echo "   Potential Issues: Data loss, incorrect mappings, broken associations" >&2
             ;;
         *)
-            echo -e "${RED}⚠️  CRITICAL OPERATION${NC}" >&2
+            echo -e "${YELLOW}⚠️  CRITICAL OPERATION${NC}" >&2
             echo "   Risk: Portal-wide impact" >&2
             ;;
     esac
 
     echo "" >&2
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}" >&2
-    echo -e "${GREEN}${BOLD}REQUIRED AGENT(S):${NC} ${PURPLE}$required_agent${NC}" >&2
+    echo -e "${GREEN}${BOLD}SUGGESTED AGENT(S):${NC} ${PURPLE}$required_agent${NC}" >&2
     echo "" >&2
 
-    echo -e "${YELLOW}This operation CANNOT proceed without the proper agent.${NC}" >&2
+    echo -e "${YELLOW}This operation is STRONGLY RECOMMENDED to use the suggested agent.${NC}" >&2
     echo -e "${YELLOW}The agent will:${NC}" >&2
     echo "  ✓ Validate prerequisites and portal state" >&2
     echo "  ✓ Check API rate limits" >&2
@@ -221,7 +222,7 @@ display_mandatory_requirement() {
     echo "  ✓ Document changes" >&2
 
     echo "" >&2
-    log_event "HIGH_RISK_BLOCKED" "$category: $TASK_INPUT"
+    log_event "HIGH_RISK_ADVISORY" "$category: $TASK_INPUT"
 }
 
 # Function to check agent bypass attempts
@@ -249,11 +250,14 @@ check_bypass_attempt() {
 # Main execution
 main() {
     # Check for bypass attempts first
+    # [ADVISORY] Per routing advisory-only policy (2026-04-01 P1-9), bypass attempts
+    # are logged and surfaced as advisory guidance rather than hard denials.
     if check_bypass_attempt "$TASK_INPUT"; then
+        echo "[ADVISORY] HUBSPOT_BYPASS_ADVISORY: Bypass semantics detected in task input." >&2
         emit_pretool_response \
-          "deny" \
-          "HUBSPOT_BYPASS_ATTEMPT: Attempting to bypass safety checks is not allowed." \
-          "Task input requested bypass semantics. Use the required HubSpot agent flow instead."
+          "allow" \
+          "[ADVISORY] HUBSPOT_BYPASS_ADVISORY: Bypass semantics detected. Routing checks are advisory only — use the required HubSpot agent flow for high-risk operations." \
+          "Task input requested bypass semantics. Proceeding with advisory guidance; use the appropriate HubSpot agent for data safety."
         exit 0
     fi
 
@@ -262,22 +266,22 @@ main() {
     RISK_CATEGORY=$(check_high_risk "$TASK_INPUT") || _risk_rc=$?
 
     if [ "$_risk_rc" -eq 0 ] && [ -n "$RISK_CATEGORY" ]; then
-        # High-risk operation - MANDATORY agent use
+        # High-risk operation - SUGGESTED agent use (advisory only per 2026-04-01 P1-9 remediation)
         display_mandatory_requirement "$RISK_CATEGORY"
 
         echo "" >&2
-        echo -e "${BOLD}${RED}This operation is BLOCKED until you use the required agent.${NC}" >&2
+        echo -e "${BOLD}${YELLOW}[ADVISORY] This operation SHOULD use the required agent for safety.${NC}" >&2
         echo "" >&2
-        echo -e "${GREEN}To proceed, use:${NC}" >&2
+        echo -e "${GREEN}SUGGESTED: use:${NC}" >&2
         echo -e "${CYAN}  Agent tool with subagent_type='${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'${NC}" >&2
         echo "" >&2
         echo -e "${YELLOW}Or check the agent matrix: /agent-matrix${NC}" >&2
-        echo -e "${RED}${BOLD}Operation blocked. Please use the required agent.${NC}" >&2
+        echo -e "${YELLOW}Proceeding with advisory warning — routing is suggestion-only.${NC}" >&2
 
         emit_pretool_response \
-          "deny" \
-          "HUBSPOT_AGENT_REQUIRED: High-risk HubSpot operation requires agent '${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'." \
-          "Risk category: ${RISK_CATEGORY}. Route through the required HubSpot specialist before retrying."
+          "allow" \
+          "[ADVISORY] HUBSPOT_AGENT_SUGGESTED: High-risk HubSpot operation should use agent '${REQUIRED_AGENTS[$RISK_CATEGORY]%% with*}'." \
+          "Risk category: ${RISK_CATEGORY}. STRONGLY RECOMMENDED: route through the required HubSpot specialist. Proceeding autonomously per advisory-only routing policy."
         exit 0
     fi
     # Non-high-risk operations pass through.

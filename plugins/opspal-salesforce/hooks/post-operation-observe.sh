@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# STATUS: STAGED — not registered by design (experimental or pending governance dispatcher)
+# STATUS: ACTIVE — registered in .claude-plugin/hooks.json PostToolUse
 set -euo pipefail
 # Post-Operation Observer Hook
 #
@@ -21,6 +21,20 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+resolve_workspace_root() {
+  if [[ -n "${CLAUDE_PROJECT_ROOT:-}" ]]; then
+    echo "${CLAUDE_PROJECT_ROOT}"
+    return 0
+  fi
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null || true)
+  if [[ -n "$root" ]]; then
+    echo "$root"
+    return 0
+  fi
+  pwd
+}
+
 # Source standardized error handler for centralized logging
 if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
     ERROR_HANDLER="${CLAUDE_PLUGIN_ROOT}/opspal-core/hooks/lib/error-handler.sh"
@@ -36,6 +50,13 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 set +e  # Don't exit on errors (graceful degradation)
+# Belt-and-suspenders: disable nounset as well. This hook runs in PostToolUse
+# where ORG, ORG_SLUG, OPERATION_TYPE, OPERATION_CONTEXT, and CLAUDE_AGENT_NAME
+# are not guaranteed to be exported. With -u active, any unset reference causes
+# `[` to error on stderr and return 1, which silently exits the hook without
+# writing an observation. The five ${VAR:-} guards below are kept regardless so
+# the code is safe if -u is ever re-enabled.
+set +u
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -75,14 +96,14 @@ detect_plugin_root() {
 
 detect_org() {
   # Priority 1: Environment variable
-  if [ -n "$ORG" ]; then
-    echo "$ORG"
+  if [ -n "${ORG:-}" ]; then
+    echo "${ORG:-}"
     return 0
   fi
 
   # Priority 1b: ORG_SLUG environment variable (new org-centric)
-  if [ -n "$ORG_SLUG" ]; then
-    echo "$ORG_SLUG"
+  if [ -n "${ORG_SLUG:-}" ]; then
+    echo "${ORG_SLUG:-}"
     return 0
   fi
 
@@ -133,8 +154,8 @@ detect_org() {
 
 detect_operation_type() {
   # Priority 1: Environment variable
-  if [ -n "$OPERATION_TYPE" ]; then
-    echo "$OPERATION_TYPE"
+  if [ -n "${OPERATION_TYPE:-}" ]; then
+    echo "${OPERATION_TYPE:-}"
     return 0
   fi
 
@@ -194,10 +215,10 @@ extract_context() {
   local context_json="{}"
 
   # If OPERATION_CONTEXT is already set as JSON, use it
-  if [ -n "$OPERATION_CONTEXT" ]; then
+  if [ -n "${OPERATION_CONTEXT:-}" ]; then
     # Validate JSON
-    if echo "$OPERATION_CONTEXT" | jq empty 2>/dev/null; then
-      echo "$OPERATION_CONTEXT"
+    if echo "${OPERATION_CONTEXT}" | jq empty 2>/dev/null; then
+      echo "${OPERATION_CONTEXT}"
       return 0
     fi
   fi
@@ -331,8 +352,8 @@ CMD=(node "$OBSERVER_SCRIPT" \
   --outcome "${OPERATION_OUTCOME:-success}")
 
 # Add agent if available
-if [ -n "$CLAUDE_AGENT_NAME" ]; then
-  CMD+=(--agent "$CLAUDE_AGENT_NAME")
+if [ -n "${CLAUDE_AGENT_NAME:-}" ]; then
+  CMD+=(--agent "${CLAUDE_AGENT_NAME}")
 fi
 
 # Add context if non-empty
@@ -341,8 +362,8 @@ if [ "$CONTEXT" != "{}" ] && [ "$CONTEXT" != '{"objects": [], "fields": [], "wor
 fi
 
 # Add notes if available
-if [ -n "$OPERATION_NOTES" ]; then
-  CMD+=(--notes "$OPERATION_NOTES")
+if [ -n "${OPERATION_NOTES:-}" ]; then
+  CMD+=(--notes "${OPERATION_NOTES}")
 fi
 
 # Debug output
@@ -376,7 +397,9 @@ OBSERVER_EXIT=$?
 ENABLE_AUTO_RUNBOOK="${ENABLE_AUTO_RUNBOOK:-1}"
 if [[ "$ENABLE_AUTO_RUNBOOK" = "1" ]] && [[ $OBSERVER_EXIT -eq 0 ]]; then
     # Find the observation file just written (most recent in the org's observations dir)
-    OBS_FILE=$(ls -t "$PLUGIN_ROOT/instances/$ORG_ALIAS/observations/"*.json 2>/dev/null | head -1)
+    WORKSPACE_ROOT=$(resolve_workspace_root)
+    ORG_SLUG_VAL="${ORG_SLUG:-$ORG_ALIAS}"
+    OBS_FILE=$(ls -t "$WORKSPACE_ROOT/orgs/$ORG_SLUG_VAL/platforms/salesforce/$ORG_ALIAS/observations/"*.json 2>/dev/null | head -1)
 
     # Locate the core plugin's incremental updater
     CORE_PLUGIN=""
@@ -412,14 +435,14 @@ if [[ "$OPERATION" == "flow_deployment" || "$OPERATION" == "deploy" ]]; then
 
     if [ "$ENABLE_STATE_VERIFY" = "1" ] && [ -f "$STATE_SYNCHRONIZER" ]; then
         # Check if we have snapshot info from pre-deployment
-        if [ -n "$FLOW_SNAPSHOT_ID" ] && [ -n "$FLOW_SNAPSHOT_ORG" ]; then
+        if [ -n "${FLOW_SNAPSHOT_ID:-}" ] && [ -n "${FLOW_SNAPSHOT_ORG:-}" ]; then
             if [ "$DEBUG" = "1" ]; then
                 echo -e "${YELLOW}🔍 Verifying post-deployment state...${NC}"
-                echo -e "   Snapshot ID: $FLOW_SNAPSHOT_ID"
+                echo -e "   Snapshot ID: ${FLOW_SNAPSHOT_ID}"
             fi
 
             # Run verification
-            VERIFY_RESULT=$(timeout 10s node "$STATE_SYNCHRONIZER" "$FLOW_SNAPSHOT_ORG" verify "$FLOW_SNAPSHOT_ID" --json 2>&1) || true
+            VERIFY_RESULT=$(timeout 10s node "$STATE_SYNCHRONIZER" "${FLOW_SNAPSHOT_ORG}" verify "${FLOW_SNAPSHOT_ID}" --json 2>&1) || true
             VERIFY_SUCCESS=$(echo "$VERIFY_RESULT" | jq -r '.success // false' 2>/dev/null || echo "false")
             STATE_CHANGED=$(echo "$VERIFY_RESULT" | jq -r '.stateChanged // false' 2>/dev/null || echo "false")
 
@@ -437,7 +460,7 @@ if [[ "$OPERATION" == "flow_deployment" || "$OPERATION" == "deploy" ]]; then
                 if [ "$DEBUG" = "1" ]; then
                     VERIFY_ERROR=$(echo "$VERIFY_RESULT" | jq -r '.error // "Unknown error"' 2>/dev/null || echo "Unknown error")
                     echo -e "${YELLOW}⚠️  State verification failed: $VERIFY_ERROR${NC}"
-                    echo -e "   Rollback available: node $STATE_SYNCHRONIZER $FLOW_SNAPSHOT_ORG rollback $FLOW_SNAPSHOT_ID"
+                    echo -e "   Rollback available: node $STATE_SYNCHRONIZER ${FLOW_SNAPSHOT_ORG} rollback ${FLOW_SNAPSHOT_ID}"
                 fi
             fi
         elif [ "$DEBUG" = "1" ]; then

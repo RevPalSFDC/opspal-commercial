@@ -17,6 +17,7 @@ module.exports = {
     '**/__tests__/**/*.test.js',
     '**/__tests__/**/*.spec.js',
     '**/test/task-graph/**/*.test.js',
+    '**/test/hooks/**/*.test.js',  // Hook unit and integration tests
     '**/test/*.test.js'  // Root-level test files
   ],
 
