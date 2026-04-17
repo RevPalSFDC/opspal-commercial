@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const LEGACY_LONG = /mcp__notebooklm__source_add_(text|url|drive)/g;
-const LEGACY_SHORT = /\bsource_add_(text|url|drive)\b/g;
+const LEGACY_LONG = /mcp__notebooklm__source_add_(text|url|drive)/;
+const LEGACY_SHORT = /\bsource_add_(text|url|drive)\b/;
 
 const FILES_MUST_BE_UPDATED = [
   'agents/notebooklm-knowledge-manager.md',
