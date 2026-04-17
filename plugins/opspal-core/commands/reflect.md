@@ -1,7 +1,7 @@
 ---
 name: reflect
 description: Analyze session for errors, feedback, and generate improvement playbook
-argument-hint: "[options]"
+argument-hint: "[--debug-log <path>]"
 allowed-tools:
   - Read
   - Grep
@@ -600,6 +600,18 @@ Provide output in this exact structure:
 
 Before and after generating the reflection JSON, you MUST perform these steps in order:
 
+### Argument Parsing
+
+Parse `$ARGUMENTS` for recognized flags. Currently supported:
+
+- `--debug-log <path>` — External Claude Code debug log to triage instead of (or in addition to) the live session. When present:
+  - Set `DEBUG_LOG_PATH=<path>` for use in Step 0c and Step 0d.
+  - Set `reflection.source = "debug-log-triage"` in the final JSON.
+  - Include `reflection.debug_log_path` with the absolute path.
+  - The usual ambient/hybrid session-context path is still followed, but the debug log becomes the authoritative source for friction events.
+
+If no args are supplied, proceed in normal live-session mode.
+
 ### Step 0: Load Auto-Captured Session Context (Hybrid Mode)
 BEFORE analyzing the current session, load any auto-captured session context.
 
@@ -623,6 +635,48 @@ node "$PLUGIN_ROOT/scripts/lib/debugging-context-extractor.js" extract --window=
 ```
 
 If the file exists and returns data, include the `debugging_context` and `instrumentation_gaps` sections in the reflection JSON.
+
+### Step 0c: Compute Friction Score (NEW)
+
+After extracting debugging context, compute the session's friction score. The scorer aggregates hook denies, slow hooks, streaming stalls, MCP reconnects, overloaded-API fallbacks, routing advisories, and span errors into a single weighted number.
+
+```bash
+# Normal live-session mode (current routing + hook + trace data):
+node "$PLUGIN_ROOT/scripts/lib/friction-scorer.js" score --format json > /tmp/friction-score.json
+
+# Debug-log triage mode (when --debug-log <path> was provided):
+if [ -n "$DEBUG_LOG_PATH" ]; then
+  node "$PLUGIN_ROOT/scripts/lib/friction-scorer.js" score --debug-log "$DEBUG_LOG_PATH" --format json > /tmp/friction-score.json
+fi
+```
+
+Include these two fields in the final reflection JSON:
+
+- `friction_score.value` — numeric score (0+)
+- `friction_score.severity` — `"low"` (0-19), `"medium"` (20-49), or `"high"` (50+)
+- `friction_score.breakdown` — counts per signal type
+- `friction_score.top_events` — up to 20 highest-weight events for the LLM to reason about
+
+If the scorer errors or returns no signals, omit the field; do not fail the reflection.
+
+### Step 0d: Debug Log Friction Triage (when --debug-log provided)
+
+When `$DEBUG_LOG_PATH` is set, also parse the log with `claude-log-parser` to surface friction patterns as candidate `issues[]` for the reflection:
+
+```bash
+node "$PLUGIN_ROOT/scripts/lib/claude-log-parser.js" --include-debug --json > /tmp/debug-log-triage.json 2>/dev/null || true
+# Or, for a specific file, use the single-line parsing pattern shown in
+# friction-scorer.js — both approaches produce frictionSignals[].
+```
+
+For each distinct friction type present in the log (e.g., `hook_deny` count >= 5, `streaming_stall` present, `mcp_reconnect` >= 2), add an auto-generated entry to `reflection.issues[]` with:
+
+- `category` = mapped taxonomy (e.g., `hook_deny` → `permissions`, `streaming_stall` → `timing/race`, `mcp_reconnect` → `external-api`)
+- `priority` = P1 when count >= 5 or severity is "high"; P2 otherwise
+- `description` = "<count> <type> events observed" + representative raw line
+- `detected_by` = `"debug-log-triage"`
+
+This makes `/reflect --debug-log <path>` a first-class intake path for customer-reported session issues.
 
 **Ambient Reflection Handoff** (NEW):
 If `~/.claude/ambient-reflections/.last-manual-flush.json` exists, load it before analyzing the session:
