@@ -1354,71 +1354,6 @@
           "blocking": false
         }
       ]
-    },
-    "attio": {
-      "description": "Attio CRM routing patterns",
-      "patterns": [
-        {
-          "id": "record-management",
-          "keywords": [
-            "attio.*people",
-            "attio.*person",
-            "attio.*contact",
-            "attio.*company",
-            "attio.*companies"
-          ],
-          "agent": "opspal-attio:attio-orchestrator",
-          "complexity": 0.5,
-          "blocking": false
-        },
-        {
-          "id": "deals-pipeline",
-          "keywords": [
-            "attio.*deal",
-            "attio.*pipeline",
-            "attio.*list",
-            "attio.*stage"
-          ],
-          "agent": "opspal-attio:attio-deals-manager",
-          "complexity": 0.6,
-          "blocking": false
-        },
-        {
-          "id": "discovery",
-          "keywords": [
-            "attio.*discover",
-            "attio.*explore",
-            "attio.*workspace",
-            "attio.*schema"
-          ],
-          "agent": "opspal-attio:attio-workspace-discovery",
-          "complexity": 0.5,
-          "blocking": false
-        },
-        {
-          "id": "data-hygiene",
-          "keywords": [
-            "attio.*dedup",
-            "attio.*duplicate",
-            "attio.*data.*quality",
-            "attio.*hygiene"
-          ],
-          "agent": "opspal-attio:attio-data-hygiene-specialist",
-          "complexity": 0.6,
-          "blocking": false
-        },
-        {
-          "id": "governance",
-          "keywords": [
-            "attio.*governance",
-            "attio.*audit",
-            "attio.*compliance"
-          ],
-          "agent": "opspal-attio:attio-governance-enforcer",
-          "complexity": 0.7,
-          "blocking": true
-        }
-      ]
     }
   },
   "deploymentHierarchy": {
@@ -1536,12 +1471,7 @@
       "/qbr": "opspal-core:board-pack-orchestrator",
       "/impact-analysis": "opspal-core:cross-platform-impact-analyzer",
       "/integration-health": "opspal-core:live-wire-sync-test-orchestrator",
-      "/gtm-start": "opspal-gtm-planning:gtm-planning-orchestrator",
-      "/attio-auth": "opspal-attio:attio-orchestrator",
-      "/attio-workspace": "opspal-attio:attio-workspace-discovery",
-      "/attio-dedup": "opspal-attio:attio-data-hygiene-specialist",
-      "/attio-audit": "opspal-attio:attio-governance-enforcer",
-      "/attio-preflight": "opspal-attio:attio-orchestrator"
+      "/gtm-start": "opspal-gtm-planning:gtm-planning-orchestrator"
     }
   }
 }
