@@ -1,21 +1,20 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought major improvements to session analysis and platform reliability. The new session friction scoring helps you identify and resolve workflow bottlenecks more effectively, while enhanced debugging tools make troubleshooting faster. Platform stability improvements ensure smoother license management and cleaner documentation handling.",
-  "published_at": "2026-04-17T14:34:12.873Z",
+  "summary": "This week focused on platform reliability improvements and enhanced troubleshooting capabilities. OpsPal now provides better session performance insights to help you identify and resolve workflow bottlenecks. We also streamlined the platform's internal organization and fixed several issues that could cause workflow interruptions.",
+  "published_at": "2026-04-17T19:21:10.671Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-17",
   "has_breaking": false,
-  "total_commits": 43,
+  "total_commits": 45,
   "entries": [
     {
       "category": "new",
       "plugin": "Reflect",
-      "headline": "New session friction scoring identifies workflow bottlenecks",
+      "headline": "New session performance scoring shows workflow bottlenecks",
       "details": [
-        "Automatically scores how smoothly your sessions run",
-        "Enhanced debugging tools help you troubleshoot issues faster",
-        "Detailed session logs show exactly where problems occur"
+        "Track how smoothly your automation workflows run and identify areas causing delays",
+        "Get detailed troubleshooting information when workflows don't perform as expected"
       ],
       "commits": [
         "356774e"
@@ -24,11 +23,10 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Documentation now stays clean and organized automatically",
+      "headline": "Documentation stays clean and organized automatically",
       "details": [
-        "Removes outdated content that clutters your workspace",
-        "Eliminates duplicate sections that appear multiple times",
-        "Keeps important information at the top where you need it"
+        "Platform removes duplicate content and outdated information from your workspace documentation",
+        "Important sections always appear at the top for easier navigation"
       ],
       "commits": [
         "3b24dc2"
@@ -37,11 +35,10 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "License management now works smoothly without interruptions",
+      "headline": "Resolved license renewal interruptions",
       "details": [
-        "Eliminates repeated license activation prompts",
-        "Provides clear warnings when your license expires soon",
-        "Streamlined process prevents workflow disruptions"
+        "Fixed issue where license renewals could get stuck in endless loops",
+        "You now get clear warnings 48 hours before your license expires"
       ],
       "commits": [
         "d9f1c3d",
@@ -51,11 +48,10 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Skills library updated and better organized",
+      "headline": "Organized and enhanced automation skill library",
       "details": [
-        "Fixed naming inconsistencies across skill templates",
-        "Moved test content out of your main workspace",
-        "Added missing templates for easier skill creation"
+        "Updated 98 automation skills with clearer names and better organization",
+        "All skills now follow consistent formatting for easier discovery and use"
       ],
       "commits": [
         "9d4de94"
