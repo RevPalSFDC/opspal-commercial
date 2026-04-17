@@ -12,7 +12,7 @@
 | Commands | 310 |
 | Skills | 164 |
 | Hooks | 226 |
-| Scripts | 1856 |
+| Scripts | 1844 |
 
 ## Regeneration
 
@@ -31,13 +31,13 @@
 |--------|---------|--------|--------|------------------|----------|--------|-------|---------|
 | `opspal-ai-consult` | 1.4.15 | active | 2 | 0 | 3 | 1 | 1 | 6 |
 | `opspal-attio` | 2.0.2 | active | 0 | 0 | 28 | 0 | 21 | 0 |
-| `opspal-core` | 2.55.28 | active | 80 | 11 | 126 | 49 | 107 | 605 |
+| `opspal-core` | 2.55.28 | active | 80 | 11 | 126 | 49 | 107 | 594 |
 | `opspal-gtm-planning` | 2.3.12 | active | 13 | 1 | 16 | 7 | 4 | 2 |
 | `opspal-hubspot` | 3.9.35 | active | 59 | 6 | 33 | 23 | 15 | 109 |
 | `opspal-marketo` | 2.6.43 | active | 30 | 24 | 30 | 17 | 25 | 33 |
 | `opspal-monday` | 1.4.11 | experimental | 6 | 0 | 1 | 3 | 2 | 3 |
 | `opspal-okrs` | 3.0.13 | active | 14 | 1 | 14 | 9 | 4 | 4 |
-| `opspal-salesforce` | 3.87.23 | active | 94 | 21 | 59 | 55 | 47 | 1094 |
+| `opspal-salesforce` | 3.87.23 | active | 94 | 21 | 59 | 55 | 47 | 1093 |
 
 ## Registry
 

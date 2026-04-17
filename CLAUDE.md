@@ -272,5 +272,5 @@ Use RevPal branding for all client-facing outputs. Use `/generate-pdf` with `--t
 | Commands | 310 |
 | Skills | 164 |
 | Hooks | 226 |
-| Scripts | 1856 |
+| Scripts | 1844 |
 <!-- OPSPAL_MANAGED_END section="footer" -->

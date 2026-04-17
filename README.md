@@ -95,7 +95,7 @@ git pull origin main
 | Commands | 310 |
 | Skills | 164 |
 | Hooks | 226 |
-| Scripts | 1856 |
+| Scripts | 1844 |
 
 
 ## Plugin Overview

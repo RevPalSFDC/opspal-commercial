@@ -7041,12 +7041,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/batch/index.js"
         },
         {
-          "name": "benchmark-retriever",
-          "file": "lib/benchmark-retriever.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/benchmark-retriever.js"
-        },
-        {
           "name": "bluf-data-extractor",
           "file": "lib/bluf-data-extractor.js",
           "extension": ".js",
@@ -7141,12 +7135,6 @@
           "file": "lib/claudemd-section-parser.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/claudemd-section-parser.js"
-        },
-        {
-          "name": "cohort-analysis-engine",
-          "file": "lib/cohort-analysis-engine.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/cohort-analysis-engine.js"
         },
         {
           "name": "cohort-fix-planner",
@@ -7767,12 +7755,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/funnel-data-validator.js"
         },
         {
-          "name": "funnel-diagnostics-engine",
-          "file": "lib/funnel-diagnostics-engine.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/funnel-diagnostics-engine.js"
-        },
-        {
           "name": "geographic-entity-resolver",
           "file": "lib/geographic-entity-resolver.js",
           "extension": ".js",
@@ -8247,12 +8229,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/metadata-loader.js"
         },
         {
-          "name": "methodology-generator",
-          "file": "lib/methodology-generator.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/methodology-generator.js"
-        },
-        {
           "name": "metric-semantic-log",
           "file": "lib/metric-semantic-log.js",
           "extension": ".js",
@@ -8625,12 +8601,6 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/proposal-enhancement-reviewer.js"
         },
         {
-          "name": "proposal-persona-engine",
-          "file": "lib/proposal-persona-engine.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/proposal-persona-engine.js"
-        },
-        {
           "name": "protected-asset-runtime",
           "file": "lib/protected-asset-runtime.js",
           "extension": ".js",
@@ -8743,12 +8713,6 @@
           "file": "lib/retry-skill-queue.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/retry-skill-queue.js"
-        },
-        {
-          "name": "revops-kpi-knowledge-base",
-          "file": "lib/revops-kpi-knowledge-base.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/revops-kpi-knowledge-base.js"
         },
         {
           "name": "roi-skill-metrics-updater",
@@ -9027,46 +8991,16 @@
           "sourcePath": "plugins/opspal-core/scripts/lib/sales-activity-analyzer.js"
         },
         {
-          "name": "sales-funnel-metrics-collector",
-          "file": "lib/sales-funnel-metrics-collector.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/sales-funnel-metrics-collector.js"
-        },
-        {
           "name": "schema-registry",
           "file": "lib/schema-registry.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/schema-registry.js"
         },
         {
-          "name": "bayesian-confidence",
-          "file": "lib/scoring/bayesian-confidence.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/scoring/bayesian-confidence.js"
-        },
-        {
-          "name": "contextual-weighter",
-          "file": "lib/scoring/contextual-weighter.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/scoring/contextual-weighter.js"
-        },
-        {
           "name": "index",
           "file": "lib/scoring/index.js",
           "extension": ".js",
           "sourcePath": "plugins/opspal-core/scripts/lib/scoring/index.js"
-        },
-        {
-          "name": "signal-correlation-matrix",
-          "file": "lib/scoring/signal-correlation-matrix.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/scoring/signal-correlation-matrix.js"
-        },
-        {
-          "name": "smart-scorer",
-          "file": "lib/scoring/smart-scorer.js",
-          "extension": ".js",
-          "sourcePath": "plugins/opspal-core/scripts/lib/scoring/smart-scorer.js"
         },
         {
           "name": "scratchpad-manager",
@@ -23624,12 +23558,6 @@
           "sourcePath": "plugins/opspal-salesforce/scripts/backup.sh"
         },
         {
-          "name": "validation-rule-manager",
-          "file": "backups/eval-fixes-20250829-194904/validation-rule-manager.sh",
-          "extension": ".sh",
-          "sourcePath": "plugins/opspal-salesforce/scripts/backups/eval-fixes-20250829-194904/validation-rule-manager.sh"
-        },
-        {
           "name": "baseline-revops-audit",
           "file": "baseline-revops-audit.py",
           "extension": ".py",
@@ -29908,6 +29836,6 @@
     "commands": 310,
     "skills": 164,
     "hooks": 226,
-    "scripts": 1856
+    "scripts": 1844
   }
 }
