@@ -25,7 +25,7 @@ jobs:
           echo "Removed $ENC_COUNT encrypted asset(s)"
 
       - name: Push to Desktop mirror
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@v1.7.3
         env:
           SSH_DEPLOY_KEY: ${{ secrets.DESKTOP_MIRROR_DEPLOY_KEY }}
         with:
