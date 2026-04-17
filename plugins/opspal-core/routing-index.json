@@ -1,10 +1,10 @@
 {
   "version": "2.0.0",
-  "buildDate": "2026-04-17T10:38:28.683Z",
+  "buildDate": "2026-04-17T11:55:12.106Z",
   "totalAgents": 297,
   "totalAgentsFull": 298,
   "totalCommands": 282,
-  "totalHooks": 273,
+  "totalHooks": 272,
   "byKeyword": {
     "gemini": [
       "gemini-consult",
@@ -47581,13 +47581,6 @@
         "description": "",
         "file": null,
         "matcher": "Bash"
-      },
-      {
-        "plugin": "opspal-salesforce",
-        "name": "unknown",
-        "description": "",
-        "file": null,
-        "matcher": "Bash"
       }
     ],
     "UserPromptSubmit": [
@@ -49292,7 +49285,7 @@
     "totalAgents": 297,
     "totalAgentsFull": 298,
     "totalCommands": 282,
-    "totalHooks": 273,
+    "totalHooks": 272,
     "totalRoutingRules": 0,
     "totalKeywords": 2600,
     "totalKeywordsFull": 2600,
@@ -49304,7 +49297,7 @@
     "agentsWithToolsFull": 298,
     "avgKeywordsPerAgent": "15.30",
     "hooksByEvent": {
-      "PostToolUse": 35,
+      "PostToolUse": 34,
       "UserPromptSubmit": 1,
       "PreToolUse": 37,
       "PermissionRequest": 1,
