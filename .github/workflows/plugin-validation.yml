@@ -177,6 +177,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install plugin-local dependencies
+        run: |
+          for p in plugins/*/package.json; do
+            dir=$(dirname "$p")
+            has_deps=$(node -e "const j=require('./$p'); process.exit(j.dependencies && Object.keys(j.dependencies).length ? 0 : 1)" 2>/dev/null && echo yes || echo no)
+            if [ "$has_deps" = "yes" ]; then
+              echo "Installing deps in $dir"
+              (cd "$dir" && npm install --no-audit --no-fund --prefer-offline --silent) || echo "WARN: npm install failed in $dir (non-fatal for test runtime)"
+            fi
+          done
+
       - name: Run runtime fidelity gates
         env:
           CI: 'true'
