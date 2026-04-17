@@ -1,21 +1,21 @@
 {
   "slug": "2026-W16",
   "title": "Week of April 13, 2026",
-  "summary": "This week brought significant improvements to OpsPal's core platform stability and Salesforce integration capabilities. We enhanced session diagnostics to help you troubleshoot workflow issues more effectively, streamlined platform documentation to reduce clutter, and expanded Salesforce permissions management for smoother automation deployments.",
-  "published_at": "2026-04-17T01:07:18.412Z",
+  "summary": "This week brought major improvements to session analysis and platform reliability. The new session friction scoring helps you identify and resolve workflow bottlenecks more effectively, while enhanced debugging tools make troubleshooting faster. Platform stability improvements ensure smoother license management and cleaner documentation handling.",
+  "published_at": "2026-04-17T14:34:12.873Z",
   "week_start": "2026-04-13",
   "week_end": "2026-04-17",
   "has_breaking": false,
-  "total_commits": 55,
+  "total_commits": 43,
   "entries": [
     {
       "category": "new",
       "plugin": "Reflect",
-      "headline": "New session diagnostics help troubleshoot workflow friction",
+      "headline": "New session friction scoring identifies workflow bottlenecks",
       "details": [
-        "Track workflow performance in real-time sessions",
-        "Enhanced debug logging shows detailed workflow execution paths",
-        "Correlated trace logs help identify bottlenecks across your automations"
+        "Automatically scores how smoothly your sessions run",
+        "Enhanced debugging tools help you troubleshoot issues faster",
+        "Detailed session logs show exactly where problems occur"
       ],
       "commits": [
         "356774e"
@@ -24,11 +24,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Cleaner platform documentation with reduced redundancy",
+      "headline": "Documentation now stays clean and organized automatically",
       "details": [
-        "Removed outdated content that cluttered your workspace documentation",
-        "Eliminated duplicate sections that appeared multiple times",
-        "Reorganized headers for better navigation and clarity"
+        "Removes outdated content that clutters your workspace",
+        "Eliminates duplicate sections that appear multiple times",
+        "Keeps important information at the top where you need it"
       ],
       "commits": [
         "3b24dc2"
@@ -37,20 +37,11 @@
     {
       "category": "fixed",
       "plugin": "Core Platform",
-      "headline": "Smarter workflow routing based on data characteristics",
-      "details": null,
-      "commits": [
-        "d24af3a"
-      ]
-    },
-    {
-      "category": "fixed",
-      "plugin": "Core Platform",
-      "headline": "Resolved license activation loops that disrupted workflows",
+      "headline": "License management now works smoothly without interruptions",
       "details": [
-        "Streamlined license confirmation process prevents endless retry loops",
-        "Improved session validation reduces false authentication failures",
-        "License expiry warnings now appear 48 hours before renewal needed"
+        "Eliminates repeated license activation prompts",
+        "Provides clear warnings when your license expires soon",
+        "Streamlined process prevents workflow disruptions"
       ],
       "commits": [
         "d9f1c3d",
@@ -60,27 +51,14 @@
     {
       "category": "improved",
       "plugin": "Skills",
-      "headline": "Enhanced automation templates for better workflow creation",
+      "headline": "Skills library updated and better organized",
       "details": [
-        "Updated skill templates for go-to-market planning and Salesforce workflows",
-        "Reorganized template library for easier discovery",
-        "Added missing template files for faster automation setup"
+        "Fixed naming inconsistencies across skill templates",
+        "Moved test content out of your main workspace",
+        "Added missing templates for easier skill creation"
       ],
       "commits": [
         "9d4de94"
-      ]
-    },
-    {
-      "category": "improved",
-      "plugin": "Salesforce",
-      "headline": "Better Salesforce permissions management for workflow deployments",
-      "details": [
-        "Enhanced validation ensures your Salesforce workflows have proper access rights",
-        "Automatic permission set assignment reduces manual setup steps",
-        "Improved field-level security handling for smoother data operations"
-      ],
-      "commits": [
-        "620ca48"
       ]
     }
   ]
