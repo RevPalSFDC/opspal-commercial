@@ -15,6 +15,11 @@ class ClaudeLogParser {
     this.verbose = options.verbose || false;
     this.hours = options.hours || 24;
     this.errorType = options.errorType || null;
+    // Include [DEBUG]-level line analysis. Claude Code's own debug output
+    // contains friction signals (hook denies, streaming stalls, MCP
+    // reconnects, slow hooks) that are invisible at ERROR/WARN levels.
+    // Off by default to keep existing callers' output tight.
+    this.includeDebug = options.includeDebug || false;
 
     this.logDir = path.join(
       process.env.HOME || process.env.USERPROFILE,
@@ -26,7 +31,10 @@ class ClaudeLogParser {
       errors: [],
       warnings: [],
       patterns: new Map(),
-      timeline: []
+      timeline: [],
+      // Friction signals extracted from DEBUG lines (only populated when
+      // includeDebug is true). Each entry has { timestamp, type, detail, source }.
+      frictionSignals: []
     };
   }
 
@@ -137,6 +145,59 @@ class ClaudeLogParser {
     } else if (this.isWarning(line)) {
       this.extractPlainTextWarning(line, source);
     }
+
+    // DEBUG-level friction signals (opt-in). Runs independently of the
+    // error/warning extraction so a single line can surface as both an
+    // error AND a friction signal (e.g., a DEBUG line noting a 500ms
+    // timeout plus a hook deny).
+    if (this.includeDebug) {
+      const signal = this.classifyFrictionSignal(line);
+      if (signal) {
+        this.results.frictionSignals.push({
+          timestamp: this.extractTimestamp(line) || new Date().toISOString(),
+          type: signal.type,
+          detail: signal.detail,
+          raw: line.length > 300 ? line.slice(0, 297) + '...' : line,
+          source
+        });
+      }
+    }
+  }
+
+  /**
+   * Classify a plain-text log line into a friction-signal category.
+   * Returns null when the line does not match any known signal.
+   *
+   * Categories surfaced in debug-log triage:
+   *   hook_deny       - PreToolUse hook rejected a tool call
+   *   streaming_stall - gap between streaming events
+   *   mcp_reconnect   - MCP transport reconnect / terminal error
+   *   slow_hook       - PreToolUse chain exceeded its soft budget
+   *   overloaded      - Anthropic API overloaded_error fallback
+   *   tool_search_disabled - Deferred tool search unavailable in subagent
+   */
+  classifyFrictionSignal(line) {
+    let m;
+    if (/Hook denied tool use|Bash tool permission denied/.test(line)) {
+      return { type: 'hook_deny', detail: line.match(/for\s+(\w+)/)?.[1] || null };
+    }
+    if ((m = line.match(/Streaming stall detected:\s*([\d.]+)s\s+gap/))) {
+      return { type: 'streaming_stall', detail: { gap_seconds: parseFloat(m[1]) } };
+    }
+    if (/Terminal connection error|Maximum reconnection attempts/.test(line)) {
+      const server = line.match(/MCP server\s+"([^"]+)"/)?.[1] || null;
+      return { type: 'mcp_reconnect', detail: { server } };
+    }
+    if ((m = line.match(/Slow PreToolUse hooks?:\s*(\d+)ms/))) {
+      return { type: 'slow_hook', detail: { elapsed_ms: parseInt(m[1], 10) } };
+    }
+    if (/overloaded_error|"type":"overloaded_error"/.test(line)) {
+      return { type: 'overloaded', detail: null };
+    }
+    if (/ToolSearchTool is not available/.test(line)) {
+      return { type: 'tool_search_disabled', detail: null };
+    }
+    return null;
   }
 
   /**
@@ -461,6 +522,10 @@ class ClaudeLogParser {
    * Get JSON report
    */
   getJSONReport() {
+    const frictionByType = {};
+    for (const sig of this.results.frictionSignals) {
+      frictionByType[sig.type] = (frictionByType[sig.type] || 0) + 1;
+    }
     return {
       timestamp: new Date().toISOString(),
       timeframe: `${this.hours} hours`,
@@ -468,12 +533,15 @@ class ClaudeLogParser {
         totalErrors: this.results.errors.length,
         totalWarnings: this.results.warnings.length,
         uniqueErrorTypes: this.results.patterns.size,
+        totalFrictionSignals: this.results.frictionSignals.length,
+        frictionByType,
         passed: this.results.errors.length === 0
       },
       errors: this.results.errors,
       warnings: this.results.warnings,
       patterns: Array.from(this.results.patterns.values()),
-      timeline: this.results.timeline
+      timeline: this.results.timeline,
+      frictionSignals: this.results.frictionSignals
     };
   }
 }
@@ -483,7 +551,8 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const options = {
     verbose: args.includes('--verbose') || args.includes('-v'),
-    json: args.includes('--json')
+    json: args.includes('--json'),
+    includeDebug: args.includes('--include-debug')
   };
 
   // Get hours if specified
