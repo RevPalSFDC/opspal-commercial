@@ -84,65 +84,101 @@ async function runAllTests() {
   }));
 
   results.push(await runTest('Allows deploy report lifecycle commands to pass through without pre-deploy validation', async () => {
-    const result = await tester.run({
-      input: {
-        hook_event_name: 'PreToolUse',
-        tool_name: 'Bash',
-        tool_input: {
-          command: 'sf project deploy report --job-id 0Af000000000123AAA --target-org peregrine-sandbox --json'
-        }
-      }
+    const binDir = createTempCliBin({
+      sf: '#!/usr/bin/env bash\nexit 0\n'
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Lifecycle deploy commands should stay runnable');
-    assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
-    assert.strictEqual(result.output, null, 'Lifecycle deploy commands should not emit dispatcher JSON by default');
-    assert(!result.stderr.includes('DEPLOY BLOCKED'), 'Should not trigger direct deploy routing for report commands');
-    assert(!result.stderr.includes('Deployment validation failed'), 'Should not trigger comprehensive validation for report commands');
+    try {
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sf project deploy report --job-id 0Af000000000123AAA --target-org peregrine-sandbox --json'
+          }
+        },
+        env: {
+          PATH: pathWithoutSalesforceCli([binDir]),
+          SF_DISABLE_AUTO_DISCOVERY: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Lifecycle deploy commands should stay runnable');
+      assert.strictEqual(result.parseError, null, 'Should not emit invalid stdout');
+      assert.strictEqual(result.output, null, 'Lifecycle deploy commands should not emit dispatcher JSON by default');
+      assert(!result.stderr.includes('DEPLOY BLOCKED'), 'Should not trigger direct deploy routing for report commands');
+      assert(!result.stderr.includes('Deployment validation failed'), 'Should not trigger comprehensive validation for report commands');
+    } finally {
+      fs.rmSync(binDir, { recursive: true, force: true });
+    }
   }));
 
   results.push(await runTest('Blocks direct Salesforce deploy commands outside agent context', async () => {
-    const result = await tester.run({
-      input: {
-        hook_event_name: 'PreToolUse',
-        tool_name: 'Bash',
-        tool_input: {
-          command: 'sf project deploy start --source-dir force-app/main/default/layouts'
-        }
-      }
+    const binDir = createTempCliBin({
+      sf: '#!/usr/bin/env bash\nexit 0\n'
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
-    assert(result.stderr.includes('DEPLOY ADVISORY'), 'Should explain the deploy advisory');
-    const output = result.output || {};
-    const hookOutput = output.hookSpecificOutput || {};
-    // The child hook emits advisory allow which the dispatcher merges into its JSON
-    assert(
-      hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
-      'Should contain an advisory signal in the merged output'
-    );
+    try {
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sf project deploy start --source-dir force-app/main/default/layouts'
+          }
+        },
+        env: {
+          PATH: pathWithoutSalesforceCli([binDir]),
+          SF_DISABLE_AUTO_DISCOVERY: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
+      assert(result.stderr.includes('DEPLOY ADVISORY'), 'Should explain the deploy advisory');
+      const output = result.output || {};
+      const hookOutput = output.hookSpecificOutput || {};
+      // The child hook emits advisory allow which the dispatcher merges into its JSON
+      assert(
+        hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
+        'Should contain an advisory signal in the merged output'
+      );
+    } finally {
+      fs.rmSync(binDir, { recursive: true, force: true });
+    }
   }));
 
   // sfdx bypass prevention tests
   results.push(await runTest('Advises on sfdx project deploy start (same as sf deploy)', async () => {
-    const result = await tester.run({
-      input: {
-        hook_event_name: 'PreToolUse',
-        tool_name: 'Bash',
-        tool_input: {
-          command: 'sfdx project deploy start --source-dir force-app/main/default/layouts'
-        }
-      }
+    const binDir = createTempCliBin({
+      sfdx: '#!/usr/bin/env bash\nexit 0\n'
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
-    assert(result.stderr.includes('DEPLOY ADVISORY'), 'sfdx deploy should get advisory just like sf deploy');
-    const output = result.output || {};
-    const hookOutput = output.hookSpecificOutput || {};
-    assert(
-      hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
-      'Should contain an advisory signal for sfdx deploy commands'
-    );
+    try {
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sfdx project deploy start --source-dir force-app/main/default/layouts'
+          }
+        },
+        env: {
+          PATH: pathWithoutSalesforceCli([binDir]),
+          SF_DISABLE_AUTO_DISCOVERY: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Dispatcher should exit 0 (child emits advisory JSON)');
+      assert(result.stderr.includes('DEPLOY ADVISORY'), 'sfdx deploy should get advisory just like sf deploy');
+      const output = result.output || {};
+      const hookOutput = output.hookSpecificOutput || {};
+      assert(
+        hookOutput.permissionDecision === 'allow' || (result.stdout || '').includes('PRODUCTION_ADVISORY'),
+        'Should contain an advisory signal for sfdx deploy commands'
+      );
+    } finally {
+      fs.rmSync(binDir, { recursive: true, force: true });
+    }
   }));
 
   results.push(await runTest('Translates supported sf discovery commands to sfdx when only sfdx is available', async () => {
@@ -242,24 +278,36 @@ async function runAllTests() {
 
   results.push(await runTest('Validates sfdx data query through SOQL validator', async () => {
     // sfdx data query should trigger the same SOQL validation as sf data query
-    const result = await tester.run({
-      input: {
-        hook_event_name: 'PreToolUse',
-        tool_name: 'Bash',
-        tool_input: {
-          command: 'sfdx data query --query "SELECT ApiName FROM FlowVersionView" --json'
-        }
-      }
+    const binDir = createTempCliBin({
+      sfdx: '#!/usr/bin/env bash\nexit 0\n'
     });
 
-    assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
-    // The SOQL validator should fire and correct ApiName -> DeveloperName
-    if (result.output?.hookSpecificOutput?.permissionDecisionReason) {
-      assert(
-        result.output.hookSpecificOutput.permissionDecisionReason.includes('DeveloperName') ||
-        result.output.hookSpecificOutput.updatedInput,
-        'sfdx data query should trigger SOQL field corrections'
-      );
+    try {
+      const result = await tester.run({
+        input: {
+          hook_event_name: 'PreToolUse',
+          tool_name: 'Bash',
+          tool_input: {
+            command: 'sfdx data query --query "SELECT ApiName FROM FlowVersionView" --json'
+          }
+        },
+        env: {
+          PATH: pathWithoutSalesforceCli([binDir]),
+          SF_DISABLE_AUTO_DISCOVERY: '1'
+        }
+      });
+
+      assert.strictEqual(result.exitCode, 0, 'Should exit with 0');
+      // The SOQL validator should fire and correct ApiName -> DeveloperName
+      if (result.output?.hookSpecificOutput?.permissionDecisionReason) {
+        assert(
+          result.output.hookSpecificOutput.permissionDecisionReason.includes('DeveloperName') ||
+          result.output.hookSpecificOutput.updatedInput,
+          'sfdx data query should trigger SOQL field corrections'
+        );
+      }
+    } finally {
+      fs.rmSync(binDir, { recursive: true, force: true });
     }
   }));
 

@@ -2,6 +2,12 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.29 — 2026-04-17
+
+### Fixed
+- `test/hooks/unit/salesforce-pre-bash-dispatcher.test.js`: 4 subtests ("Allows deploy report lifecycle", "Blocks direct Salesforce deploy commands", "Advises on sfdx project deploy start", "Validates sfdx data query through SOQL validator") now stub `sf`/`sfdx` binaries via `createTempCliBin` + PATH override. Previously they inherited the CI runner's bare PATH (no `sf` installed), causing the dispatcher to short-circuit to SF_CLI_NOT_FOUND deny before the deploy/SOQL logic under test could fire. Brings the test file to parity with the 3 tests that were already stubbing correctly (tests 5, 7, 8).
+
+
 ## 2.55.26 — 2026-04-17
 
 ### Changed
