@@ -2,6 +2,11 @@
 
 All notable changes to this plugin will be documented in this file.
 
+## 2.55.22 — 2026-04-17
+
+### Fixed
+- Renamed NotebookLM MCP tool references from legacy `source_add_text/url/drive` to current `notebook_add_text/url/drive` in notebooklm-knowledge-manager agent, 4 commands (notebook-init, notebook-sync, generate-runbook, setup-notebooklm), and routing-index. Agent calls to NotebookLM had been failing with "tool not found" since the upstream MCP rename. (Reflection `e417944f-c14b-4f00-bd9c-1c497b80998a`.)
+
 ## [2.55.12] - 2026-04-13 (License Activation Loss — Permanent Fix)
 
 ### Fixed — License Activation Restore Loop (root cause)

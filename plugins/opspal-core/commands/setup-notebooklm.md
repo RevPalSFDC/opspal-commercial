@@ -195,7 +195,7 @@ cat ~/.notebooklm-mcp/auth.json | jq '.last_refresh'
 
 Once setup completes, these MCP tools become available:
 - `notebook_create`, `notebook_list`, `notebook_query`
-- `source_add_text`, `source_add_url`, `source_add_drive`
+- `notebook_add_text`, `notebook_add_url`, `notebook_add_drive`
 - `studio_briefing_create`, `studio_audio_create`
 - `research_initiate_drive`, `research_poll`
 - `refresh_auth`

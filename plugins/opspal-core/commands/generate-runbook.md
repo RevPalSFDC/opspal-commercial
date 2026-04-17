@@ -8,7 +8,7 @@ allowed-tools:
   - Write
   - Grep
   - Glob
-  - mcp__notebooklm__source_add_text
+  - mcp__notebooklm__notebook_add_text
   - mcp__notebooklm__source_list
 thinking-mode: enabled
 ---
@@ -404,7 +404,7 @@ if [ -f "$REGISTRY_PATH" ]; then
     RUNBOOK_CONTENT=$(cat "$RUNBOOK_PATH")
 
     # Use MCP tool to add/update source
-    # Tool: source_add_text
+    # Tool: notebook_add_text
     # Params:
     #   - notebook_id: {notebook_id}
     #   - title: "Operational Runbook - {date}"
@@ -481,7 +481,7 @@ if [ -f "$REGISTRY_PATH" ]; then
       echo "   📄 Syncing: $FILENAME ($TIER tier)"
 
       # Use MCP tool to add source
-      # Tool: source_add_text
+      # Tool: notebook_add_text
       # Params:
       #   - notebook_id: {notebook_id}
       #   - title: "{org} - {title_base}"
@@ -563,7 +563,7 @@ fi
 
 **MCP Tool Call** (when notebook exists):
 ```
-Tool: source_add_text
+Tool: notebook_add_text
 Params:
   - notebook_id: {notebook_id from registry}
   - title: "Operational Runbook - {YYYY-MM-DD}"
@@ -581,7 +581,7 @@ Params:
 
 **MCP Tool Calls for Artifacts** (for each artifact found):
 ```
-Tool: source_add_text
+Tool: notebook_add_text
 Params:
   - notebook_id: {notebook_id from registry}
   - title: "{org} - {artifact_filename_without_extension}"
