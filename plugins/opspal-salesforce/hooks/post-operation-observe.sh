@@ -50,6 +50,13 @@ if [[ -f "$ERROR_HANDLER" ]]; then
 fi
 
 set +e  # Don't exit on errors (graceful degradation)
+# Belt-and-suspenders: disable nounset as well. This hook runs in PostToolUse
+# where ORG, ORG_SLUG, OPERATION_TYPE, OPERATION_CONTEXT, and CLAUDE_AGENT_NAME
+# are not guaranteed to be exported. With -u active, any unset reference causes
+# `[` to error on stderr and return 1, which silently exits the hook without
+# writing an observation. The five ${VAR:-} guards below are kept regardless so
+# the code is safe if -u is ever re-enabled.
+set +u
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -89,14 +96,14 @@ detect_plugin_root() {
 
 detect_org() {
   # Priority 1: Environment variable
-  if [ -n "$ORG" ]; then
-    echo "$ORG"
+  if [ -n "${ORG:-}" ]; then
+    echo "${ORG:-}"
     return 0
   fi
 
   # Priority 1b: ORG_SLUG environment variable (new org-centric)
-  if [ -n "$ORG_SLUG" ]; then
-    echo "$ORG_SLUG"
+  if [ -n "${ORG_SLUG:-}" ]; then
+    echo "${ORG_SLUG:-}"
     return 0
   fi
 
@@ -147,8 +154,8 @@ detect_org() {
 
 detect_operation_type() {
   # Priority 1: Environment variable
-  if [ -n "$OPERATION_TYPE" ]; then
-    echo "$OPERATION_TYPE"
+  if [ -n "${OPERATION_TYPE:-}" ]; then
+    echo "${OPERATION_TYPE:-}"
     return 0
   fi
 
@@ -208,10 +215,10 @@ extract_context() {
   local context_json="{}"
 
   # If OPERATION_CONTEXT is already set as JSON, use it
-  if [ -n "$OPERATION_CONTEXT" ]; then
+  if [ -n "${OPERATION_CONTEXT:-}" ]; then
     # Validate JSON
-    if echo "$OPERATION_CONTEXT" | jq empty 2>/dev/null; then
-      echo "$OPERATION_CONTEXT"
+    if echo "${OPERATION_CONTEXT}" | jq empty 2>/dev/null; then
+      echo "${OPERATION_CONTEXT}"
       return 0
     fi
   fi
@@ -345,8 +352,8 @@ CMD=(node "$OBSERVER_SCRIPT" \
   --outcome "${OPERATION_OUTCOME:-success}")
 
 # Add agent if available
-if [ -n "$CLAUDE_AGENT_NAME" ]; then
-  CMD+=(--agent "$CLAUDE_AGENT_NAME")
+if [ -n "${CLAUDE_AGENT_NAME:-}" ]; then
+  CMD+=(--agent "${CLAUDE_AGENT_NAME}")
 fi
 
 # Add context if non-empty
